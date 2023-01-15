@@ -1,0 +1,104 @@
+{
+  "Files": [
+    {
+      "Name": "cab-a8ced3917984720fad059379f13cc5d1",
+      "Assets": [
+        {
+          "PathID": -6151308918181526733,
+          "Name": "ZSyncTransform",
+          "Type": "MonoScript"
+        },
+        {
+          "PathID": -5565882275749893421,
+          "Name": "ZNetView",
+          "Type": "MonoScript"
+        },
+        {
+          "PathID": -4538569269219213075,
+          "Name": "SE_Stats",
+          "Type": "MonoScript"
+        },
+        {
+          "PathID": 5352657857748747756,
+          "Name": "ItemDrop",
+          "Type": "MonoScript"
+        },
+        {
+          "PathID": 6525060100287227145,
+          "Name": "GlobalWind",
+          "Type": "MonoScript"
+        },
+        {
+          "PathID": -8572105629171281244,
+          "Name": "SilverBackpack_Cloth",
+          "Type": "Mesh"
+        },
+        {
+          "PathID": -7650615893578544089,
+          "Name": "SilverBackpack_MaskMap",
+          "Type": "Texture2D"
+        },
+        {
+          "PathID": -7333736019039781063,
+          "Name": "IronBackpack_Normal",
+          "Type": "Texture2D"
+        },
+        {
+          "PathID": -5799513675127741234,
+          "Name": "SilverBackpack_Icon",
+          "Type": "Texture2D"
+        },
+        {
+          "PathID": -2021984201922567111,
+          "Name": "SilverBackpack_Normal",
+          "Type": "Texture2D"
+        },
+        {
+          "PathID": -651748240657146175,
+          "Name": "IronBackpack",
+          "Type": "Mesh"
+        },
+        {
+          "PathID": 668122056528738508,
+          "Name": "IronBackpack_BaseMap",
+          "Type": "Texture2D"
+        },
+        {
+          "PathID": 1725779984147400902,
+          "Name": "IronBackpack_Cloth",
+          "Type": "Mesh"
+        },
+        {
+          "PathID": 3299532168469684971,
+          "Name": "IronBackpack_MaskMap",
+          "Type": "Texture2D"
+        },
+        {
+          "PathID": 4403005081020053474,
+          "Name": "IronBackpack_Icon",
+          "Type": "Texture2D"
+        },
+        {
+          "PathID": 4488582196180047956,
+          "Name": "IronBackpack_Pickup",
+          "Type": "Mesh"
+        },
+        {
+          "PathID": 4564685677414056845,
+          "Name": "SilverBackpack_Pickup",
+          "Type": "Mesh"
+        },
+        {
+          "PathID": 5666272717721976656,
+          "Name": "SilverBackpack",
+          "Type": "Mesh"
+        },
+        {
+          "PathID": 7644514853427813030,
+          "Name": "SilverBackpack_BaseMap",
+          "Type": "Texture2D"
+        }
+      ]
+    }
+  ]
+}
