@@ -40,9 +40,6 @@ namespace AdventureBackpacks
         public string DisplayName => _displayName;
         public string Version => _version;
         public BaseUnityPlugin Instance => _instance;
-       
-        //Dependency Strings
-        public const string eaqsGUID = "randyknapp.mods.equipmentandquickslots";
         
         //Class Properties
         public static ILogIt Log => _log;

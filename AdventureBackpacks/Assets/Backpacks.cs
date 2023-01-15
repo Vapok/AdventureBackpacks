@@ -3,11 +3,11 @@ using System.Reflection;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using ItemManager;
-using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
+using Vapok.Common.Tools;
 
 namespace AdventureBackpacks.Assets
 {
@@ -19,7 +19,7 @@ namespace AdventureBackpacks.Assets
         private const string ArcticBackpackPrefab = "CapeSilverBackpack";
         private const string RuggedBackpackName = "$vapok_mod_item_rugged_backpack";
         private const string ArcticBackpackName = "$vapok_mod_item_arctic_backpack";
-        private const string BackpackInventoryName = "$vapok_mod_ui_backpack_inventoryname";
+        private const string UiInventoryName = "$vapok_mod_ui_backpack_inventoryname";
         
         private static Item _ruggedBackpack;
         private static Item _arcticBackpack;
@@ -30,7 +30,7 @@ namespace AdventureBackpacks.Assets
         private static List<string> _backpackTypes = new List<string>();
         private static bool _opening = false;
         private static Container _backpackContainer;
-        private static ItemDrop _backpackEquipped; //Backpack currently equipped.
+        private static ItemDrop.ItemData _backpackEquipped; //Backpack currently equipped.
 
         public static List<string> BackpackTypes => _backpackTypes;
 
@@ -41,6 +41,8 @@ namespace AdventureBackpacks.Assets
         }
 
         public static Container BackpackContainer => _backpackContainer;
+
+        public static string BackpacksInventoryName => UiInventoryName;
 
         public static void LoadAssets()
         {
@@ -128,7 +130,7 @@ namespace AdventureBackpacks.Assets
             if (name.Equals(RuggedBackpackName))
             {
                 return new Inventory(
-                    BackpackInventoryName,
+                    UiInventoryName,
                     null,
                     (int)ConfigRegistry.RuggedBackpackSize.Value.x,
                     (int)ConfigRegistry.RuggedBackpackSize.Value.y
@@ -138,7 +140,7 @@ namespace AdventureBackpacks.Assets
             if (name.Equals(ArcticBackpackName))
             {
                 return new Inventory(
-                    BackpackInventoryName,
+                    UiInventoryName,
                     null,
                     (int)ConfigRegistry.RuggedBackpackSize.Value.x,
                     (int)ConfigRegistry.ArcticBackpackSize.Value.y
@@ -170,7 +172,115 @@ namespace AdventureBackpacks.Assets
 
             // Return null if no backpacks are found.
             return null;
+        }
+        
+        private static void Update()
+        {
+            if (!Player.m_localPlayer || !ZNetScene.instance)
+                return;
 
+            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && CanOpenBackpack())
+            {
+                _opening = true;
+                OpenBackpack();
+            }
+
+            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && CanOpenBackpack())
+            {
+                QuickDropBackpack();
+            }
+
+        }
+        
+        public static bool CanOpenBackpack()
+        {
+            _backpackEquipped = GetEquippedBackpack();
+
+            // Return true if GetEquippedBackpack() does not return null.
+            if (_backpackEquipped != null)
+            {
+                return true;
+            }
+
+            // Return false if GetEquippedBackpack() returns null.
+            _log.Message("No backpack equipped. Can't open any.");
+            return false;
+
+        }
+        
+        public static void OpenBackpack()
+        {
+            
+            if (Player.m_localPlayer == null)
+                return;
+            
+            _backpackContainer = Player.m_localPlayer.gameObject.GetComponent<Container>();
+            if (_backpackContainer == null)
+                _backpackContainer = Player.m_localPlayer.gameObject.AddComponent<Container>();
+
+            _backpackContainer.m_inventory = _backpackEquipped.Data().GetOrCreate<BackpackComponent>().GetInventory();
+            InventoryGui.instance.Show(_backpackContainer);
+        }
+        
+        public static void EjectBackpack(ItemDrop.ItemData item, Player player, Inventory backpackInventory)
+        {
+            if (item == null || player == null || backpackInventory == null)
+                return;
+            
+            var playerInventory = player.GetInventory();
+
+            // Move the backpack to the player's Inventory if there's room.
+            if (playerInventory.HaveEmptySlot())
+            {
+                playerInventory.MoveItemToThis(backpackInventory, item);
+            }
+
+            // Otherwise drop the backpack.
+            else
+            {
+                _log.Message("Are you trying to put a backpack in a backpack?  What am I? A Bag of Holding?");
+
+                // Remove the backpack item from the Inventory instance and then drop the backpack item in front of the player.
+                backpackInventory.RemoveItem(item);
+                
+                var transform = player.transform;
+                
+                if (transform == null)
+                    return;
+                
+                var itemDrop = ItemDrop.DropItem(item, 1, transform.position + transform.forward + transform.up, transform.rotation);
+                itemDrop.Save();
+            }
+
+            //Save Backpack Inventory
+            var backpackComponent = item.Data().GetOrCreate<BackpackComponent>();
+            backpackComponent.Save(backpackInventory);
+
+        }
+       
+        private static void QuickDropBackpack()
+        {
+            _log.Message("Quick dropping backpack.");
+
+            if (Player.m_localPlayer == null)
+                return;
+            
+            var player = Player.m_localPlayer;
+            var backpack = GetEquippedBackpack();
+
+            if (backpack == null)
+                return;
+            
+            // Unequip and remove backpack from player's back
+            // We need to unequip the item BEFORE we drop it, otherwise when we pick it up again the game thinks
+            // we had it equipped all along and fails to update player model, resulting in invisible backpack.
+            player.RemoveEquipAction(backpack);
+            player.UnequipItem(backpack, true);
+            player.m_inventory.RemoveItem(backpack);
+
+            // This drops a copy of the backpack itemDrop.itemData
+            var itemDrop = ItemDrop.DropItem(backpack, 1, player.transform.position + player.transform.forward + player.transform.up, player.transform.rotation);
+            itemDrop.Save();
         }
     }
 }

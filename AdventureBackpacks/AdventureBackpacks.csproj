@@ -76,7 +76,11 @@
         <Compile Include="Assets\Backpacks.cs" />
         <Compile Include="Components\BackpackComponent.cs" />
         <Compile Include="Configuration\ConfigRegistry.cs" />
+        <Compile Include="Patches\GuiBar.cs" />
+        <Compile Include="Patches\Humanoid.cs" />
+        <Compile Include="Patches\Inventory.cs" />
         <Compile Include="Patches\InventoryGui.cs" />
+        <Compile Include="Patches\ItemDrop.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AdventureBackpacks.cs" />
     </ItemGroup>

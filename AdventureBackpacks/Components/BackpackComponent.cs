@@ -96,17 +96,13 @@ namespace AdventureBackpacks.Components
                 }
 
                 //Check to see if we have old EIDF Component Data
-                var oldBackpackData = Item.Data(OldPluginID);
-                if (oldBackpackData != null)
+                if (Item.m_customData.ContainsKey(OldPluginCustomData))
                 {
-                    if ( oldBackpackData.ItemData.m_customData.ContainsKey(OldPluginCustomData))
-                    {
-                        var oldBackpack = oldBackpackData.ItemData.m_customData[OldPluginCustomData];
+                    var oldBackpack = Item.m_customData[OldPluginCustomData];
 
-                        BackpackInventory = Backpacks.NewInventoryInstance(name);
-                        Value = oldBackpack;
-                        Deserialize(Value);
-                    }
+                    BackpackInventory = Backpacks.NewInventoryInstance(name);
+                    Value = oldBackpack;
+                    Deserialize(Value);
                 }
             }
         }
