@@ -19,6 +19,6 @@ Source: [Github](https://github.com/Vapok/AdventureBackpacks)
 
 Discord: [RandyKnapp's Mod Community](https://discord.gg/randyknappmods)
 
-Patch notes: [Github Patchnotes](https://github.com/RandyKnapp/ValheimMods/blob/main/EpicLoot/patchnotes.md)
+Patch notes: [Github Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/PATCHNOTES.md)
 
 

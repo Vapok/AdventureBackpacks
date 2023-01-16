@@ -4,6 +4,7 @@ using System.Reflection;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using ItemManager;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -302,6 +303,27 @@ namespace AdventureBackpacks.Assets
             _backpackContainer.m_inventory = _backpackEquipped.GetInventory();
             
             InventoryGui.instance.Show(_backpackContainer);
+        }
+        
+        public static bool CheckForInception(Inventory __instance, ItemDrop.ItemData item)
+        {
+            if (__instance.m_name.Equals(Backpacks.BackpacksInventoryName))
+            {
+                // If the item is a backpack...
+                if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
+                {
+                    if (Player.m_localPlayer != null)
+                    {
+                        Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception");    
+                    }
+
+                    // Nope!
+                    AdventureBackpacks.Log.Message("You can't put a backpack inside a backpack, silly!");
+                    return false;
+                }
+            }
+
+            return true;
         }
         
         public static void EjectBackpack(ItemDrop.ItemData item, Player player, Inventory backpackInventory)
