@@ -118,6 +118,7 @@
     <ItemGroup>
         <Compile Include="Abstractions\ILogIt.cs" />
         <Compile Include="Abstractions\IPluginInfo.cs" />
+        <Compile Include="Managers\Configuration\ConfigSyncBase.cs" />
         <Compile Include="Managers\Creature\CreatureManager.cs" />
         <Compile Include="Managers\CustomDataManager.cs" />
         <Compile Include="Managers\Item\ItemManager.cs" />

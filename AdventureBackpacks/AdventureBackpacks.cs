@@ -20,6 +20,7 @@ using HarmonyLib;
 using JetBrains.Annotations;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
+using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Managers.LocalizationManager;
 using Vapok.Common.Tools;
 
@@ -45,6 +46,7 @@ namespace AdventureBackpacks
         
         //Class Privates
         private static AdventureBackpacks _instance;
+        private static ConfigSyncBase _config;
         private static ILogIt _log;
         private Harmony _harmony;
         
@@ -61,7 +63,8 @@ namespace AdventureBackpacks
             Localizer.Load();
             
             //Register Configuration Settings
-            ConfigRegistry.InitializeConfigurationSettings(_instance);
+            _config = new ConfigRegistry(_instance);
+            _config.InitializeConfigurationSettings();
             
             //Load Assets
             Backpacks.LoadAssets();
