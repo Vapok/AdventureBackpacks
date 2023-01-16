@@ -4,6 +4,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vapok.Common", "Vapok.Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureBackpacks", "AdventureBackpacks\AdventureBackpacks.csproj", "{997CB563-FCC7-44B7-8F71-069747D27CC5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module Files", "Module Files", "{125A2AE5-FB75-4EED-B971-3E0C9C056DA0}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		manifest.json = manifest.json
+		icon.png = icon.png
+		PATCHNOTES.md = PATCHNOTES.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
