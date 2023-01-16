@@ -2,9 +2,18 @@
 using System.Diagnostics;
 using BepInEx.Logging;
 using Vapok.Common.Abstractions;
+using Vapok.Common.Managers.Configuration;
 
 namespace Vapok.Common.Managers;
 
+public enum LogLevels
+{
+    Debug,
+    Info,
+    Warning,
+    Error,
+    Fatal
+}
 public class LogManager
 {
     private static LogManager? _instance;
@@ -64,11 +73,18 @@ internal class Logger : ILogIt
 
     public void Debug(string message)
     {
-        LogIt(LogLevel.Debug, message);
+        if (ConfigSyncBase.LoggingEnabled == null || ConfigSyncBase.LogLevel ==null || (ConfigSyncBase.LoggingEnabled.Value && ConfigSyncBase.LogLevel.Value <= LogLevels.Debug))
+        {
+            LogIt(LogLevel.Debug, message);    
+        }
+        
     }
     public void Info(string message)
     {
-        LogIt(LogLevel.Info, message);
+        if (ConfigSyncBase.LoggingEnabled == null || ConfigSyncBase.LogLevel ==null ||(ConfigSyncBase.LoggingEnabled.Value && ConfigSyncBase.LogLevel.Value <= LogLevels.Info))
+        {
+            LogIt(LogLevel.Info, message);
+        }
     }
     public void Message(string message)
     {
@@ -76,15 +92,24 @@ internal class Logger : ILogIt
     }
     public void Warning(string message)
     {
-        LogIt(LogLevel.Warning, message);
+        if (ConfigSyncBase.LoggingEnabled == null || ConfigSyncBase.LogLevel ==null || (ConfigSyncBase.LoggingEnabled.Value && ConfigSyncBase.LogLevel.Value <= LogLevels.Warning))
+        {
+            LogIt(LogLevel.Warning, message);
+        }
     }
     public void Error(string message)
     {
-        LogIt(LogLevel.Error, message);
+        if (ConfigSyncBase.LoggingEnabled == null || ConfigSyncBase.LogLevel ==null || (ConfigSyncBase.LoggingEnabled.Value && ConfigSyncBase.LogLevel.Value <= LogLevels.Error))
+        {
+            LogIt(LogLevel.Error, message);
+        }
     }
     public void Fatal(string message)
     {
-        LogIt(LogLevel.Fatal, message);
+        if (ConfigSyncBase.LoggingEnabled == null || ConfigSyncBase.LogLevel ==null || (ConfigSyncBase.LoggingEnabled.Value && ConfigSyncBase.LogLevel.Value <= LogLevels.Fatal))
+        {
+            LogIt(LogLevel.Fatal, message);    
+        }
     }
 
     private void LogIt(LogLevel level, string message)

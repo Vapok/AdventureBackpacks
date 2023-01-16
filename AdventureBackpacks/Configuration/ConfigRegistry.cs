@@ -1,13 +1,12 @@
 ﻿using AdventureBackpacks.Assets;
-using BepInEx;
 using BepInEx.Configuration;
-using ServerSync;
 using UnityEngine;
 using Vapok.Common.Abstractions;
+using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Configuration
 {
-    internal static class ConfigRegistry
+    internal class ConfigRegistry : ConfigSyncBase
     {
         //Configuration Entry Privates
         internal static ConfigEntry<KeyCode> HotKeyOpen { get; private set; }
@@ -23,24 +22,14 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<bool> FreezingRugged { get; private set;}
         internal static ConfigEntry<bool> FreezingArctic { get; private set;}
 
-        private static ConfigFile _config;
-        private static ConfigSync _configSync;
-
-
-        internal static void InitializeConfigurationSettings(IPluginInfo _mod)
+        public ConfigRegistry(IPluginInfo mod): base(mod)
         {
-            //Init Config File and Server Sync
+            
+        }
+        public override void InitializeConfigurationSettings()
+        {
             if (_config == null)
-                _config = _mod.Instance.Config;
-            
-            if (_configSync == null)
-                _configSync = new ConfigSync(_mod.PluginId)
-                {
-                    DisplayName = _mod.DisplayName, CurrentVersion = _mod.Version, MinimumRequiredVersion = _mod.Version
-                };
-            
-            //Save on Set
-            _config.SaveOnConfigSet = true;
+                return;
             
             //User Configs
             HotKeyOpen = _config.Bind("Local Config", "Open Backpack", KeyCode.I,
@@ -113,26 +102,15 @@ namespace AdventureBackpacks.Configuration
                         null,
                         new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
 
-            CarryBonusRugged.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
-            SpeedModRugged.SettingChanged += Backpacks.UpdateItemDataConfigValues;
-            CarryBonusArctic.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
-            SpeedModArctic.SettingChanged += Backpacks.UpdateItemDataConfigValues;
-            FreezingRugged.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
-            FreezingArctic.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            CarryBonusRugged!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            SpeedModRugged!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+            CarryBonusArctic!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            SpeedModArctic!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+            FreezingRugged!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            FreezingArctic!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
 
         }
         
-        private static ConfigEntry<T> SyncedConfig<T>(string group, string configName, T value, string description, bool synchronizedSetting = true) => SyncedConfig(group, configName, value, new ConfigDescription(description), synchronizedSetting);
-        
-        private static ConfigEntry<T> SyncedConfig<T>(string group, string configName, T value, ConfigDescription description, bool synchronizedSetting = true)
-        {
-            var configEntry = _config.Bind(group, configName, value, description);
-
-            var syncedConfigEntry = _configSync.AddConfigEntry(configEntry);
-            syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
-
-            return configEntry;
-        }
         
     }
 }
