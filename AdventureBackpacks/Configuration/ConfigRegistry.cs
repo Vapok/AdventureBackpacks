@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using AdventureBackpacks.Assets;
+using BepInEx;
 using BepInEx.Configuration;
 using ServerSync;
 using UnityEngine;
@@ -111,6 +112,13 @@ namespace AdventureBackpacks.Configuration
                         new ConfigDescription("Wearing the backpack protects you against freezing/cold, just like capes.",
                         null,
                         new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
+
+            CarryBonusRugged.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            SpeedModRugged.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+            CarryBonusArctic.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            SpeedModArctic.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+            FreezingRugged.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            FreezingArctic.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
 
         }
         

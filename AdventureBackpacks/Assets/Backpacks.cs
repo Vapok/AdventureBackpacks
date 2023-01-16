@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
@@ -7,7 +8,6 @@ using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
-using Vapok.Common.Tools;
 
 namespace AdventureBackpacks.Assets
 {
@@ -30,8 +30,8 @@ namespace AdventureBackpacks.Assets
         private static List<string> _backpackTypes = new List<string>();
         private static bool _opening;
         private static Container _backpackContainer;
-        private static ItemDrop.ItemData _backpackEquipped; //Backpack currently equipped.
-
+        private static BackpackComponent _backpackEquipped; //Backpack currently equipped.
+        private static HitData.DamageModPair _frostResistance = new() { m_type = HitData.DamageType.Frost, m_modifier = HitData.DamageModifier.Resistant};
         public static List<string> BackpackTypes => _backpackTypes;
 
         public static bool Opening
@@ -49,7 +49,7 @@ namespace AdventureBackpacks.Assets
             _log = AdventureBackpacks.Log;
             _log.Info($"Embedded resources: {string.Join(",", Assembly.GetExecutingAssembly().GetManifestResourceNames())}");
             
-            var frostResistance = new HitData.DamageModPair() { m_type = HitData.DamageType.Frost, m_modifier = HitData.DamageModifier.Resistant};
+            
             
             BackpackTypes.Add(RuggedBackpackName);
             BackpackTypes.Add(ArcticBackpackName);
@@ -71,7 +71,7 @@ namespace AdventureBackpacks.Assets
             _ruggedBackpackEffect.Effect.m_startMessage = "$vapok_mod_se_ruggedbackpackeffects_start";
             ((SE_Stats)_ruggedBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusRugged.Value;
             if (ConfigRegistry.FreezingRugged.Value)
-                ((SE_Stats)_ruggedBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { frostResistance };
+                ((SE_Stats)_ruggedBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
 
             _ruggedBackpackEffect.AddSEToPrefab(_ruggedBackpackEffect,RuggedBackpackPrefab);
 
@@ -106,17 +106,17 @@ namespace AdventureBackpacks.Assets
             ((SE_Stats)_arcticBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusArctic.Value;
             
             if (ConfigRegistry.FreezingArctic.Value)
-                ((SE_Stats)_arcticBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { frostResistance };
+                ((SE_Stats)_arcticBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
 
             _arcticBackpackEffect.AddSEToPrefab(_arcticBackpackEffect,ArcticBackpackPrefab);
 
-            //Adjust Rugged ItemData
+            //Adjust Arctic ItemData
             var arcticItemItemDrop = _arcticBackpack.Prefab.GetComponent<ItemDrop>();
             var arcticItemData = arcticItemItemDrop.m_itemData;
             if (arcticItemData != null)
             {
                 arcticItemData.m_shared.m_maxDurability = 1000f;
-                arcticItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value;
+                arcticItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value;
             }
             
             arcticItemItemDrop.Save();
@@ -125,6 +125,102 @@ namespace AdventureBackpacks.Assets
             _arcticBackpack.Prefab.GetComponent<ZNetView>().m_persistent = true;
         }
 
+        public static void UpdateStatusEffectConfigValues(object sender, EventArgs e)
+        {
+            ((SE_Stats)_ruggedBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusRugged.Value;
+
+            if (ConfigRegistry.FreezingRugged.Value)
+            {
+                if (!((SE_Stats)_ruggedBackpackEffect.Effect).m_mods.Contains(_frostResistance))
+                    ((SE_Stats)_ruggedBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
+            }
+            else
+            {
+                if (((SE_Stats)_ruggedBackpackEffect.Effect).m_mods.Contains(_frostResistance))
+                    ((SE_Stats)_ruggedBackpackEffect.Effect).m_mods.Remove(_frostResistance);
+            }
+            
+            ((SE_Stats)_arcticBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusArctic.Value;
+            
+            if (ConfigRegistry.FreezingArctic.Value)
+            {
+                if (!((SE_Stats)_arcticBackpackEffect.Effect).m_mods.Contains(_frostResistance))
+                    ((SE_Stats)_arcticBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
+            }
+            else
+            {
+                if (((SE_Stats)_arcticBackpackEffect.Effect).m_mods.Contains(_frostResistance))
+                    ((SE_Stats)_arcticBackpackEffect.Effect).m_mods.Remove(_frostResistance);
+            }
+        }
+
+        public static void UpdateItemDataConfigValues(object sender, EventArgs e)
+        {
+            //Adjust Rugged ItemData
+            var ruggedItemItemDrop = _ruggedBackpack.Prefab.GetComponent<ItemDrop>();
+            var ruggedItemData = ruggedItemItemDrop.m_itemData;
+            if (ruggedItemData != null)
+            {
+                ruggedItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value;
+            }
+            ruggedItemItemDrop.Save();
+            
+            //Adjust Arctic ItemData
+            var arcticItemItemDrop = _arcticBackpack.Prefab.GetComponent<ItemDrop>();
+            var arcticItemData = arcticItemItemDrop.m_itemData;
+            if (arcticItemData != null)
+            {
+                arcticItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value;
+            }
+            arcticItemItemDrop.Save();
+
+            if (Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null)
+                return;
+
+            void SearchInventory(List<ItemDrop.ItemData> inventory)
+            {
+                if (inventory == null)
+                    return;
+                
+                // Go through all the equipped items, match them for any of the names in backpackTypes.
+                // If a match is found, return the backpack ItemData object.
+                foreach (var item in inventory)
+                {
+                    if (item == null)
+                        continue;
+                
+                    if (BackpackTypes.Contains(item.m_shared.m_name))
+                    {
+                        switch (item.m_shared.m_name)
+                        {
+                            case RuggedBackpackName:
+                                item.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value;
+                                break;
+                            case ArcticBackpackName:
+                                item.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value;
+                                break;
+                        }
+                    }
+                }
+            }
+            
+            // Get a list of all  items.
+            var inventory = Player.m_localPlayer.GetInventory();
+
+            if (inventory != null)
+            {
+                SearchInventory(inventory.m_inventory);    
+            }
+
+            // Get a list of all equipped items.
+            var equipped = Player.m_localPlayer.GetInventory().GetEquipedtems();
+
+            if (equipped != null)
+            {
+                SearchInventory(equipped);    
+            }
+        }
+        
         public static Inventory NewInventoryInstance(string name)
         {
             if (name.Equals(RuggedBackpackName))
@@ -150,7 +246,7 @@ namespace AdventureBackpacks.Assets
             return null;
         }
         
-        public static ItemDrop.ItemData GetEquippedBackpack()
+        public static BackpackComponent GetEquippedBackpack()
         {
             if (Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null)
                 return null;
@@ -166,12 +262,17 @@ namespace AdventureBackpacks.Assets
             {
                 if (BackpackTypes.Contains(item.m_shared.m_name))
                 {
-                    return item.Data().GetOrCreate<BackpackComponent>().Item;
+                    return item.Data().GetOrCreate<BackpackComponent>();
                 }
             }
 
             // Return null if no backpacks are found.
             return null;
+        }
+
+        public static void ResetBackpackContainer()
+        {
+            _backpackContainer = null;
         }
         
         public static bool CanOpenBackpack()
@@ -198,7 +299,7 @@ namespace AdventureBackpacks.Assets
             if (_backpackContainer == null)
                 _backpackContainer = Player.m_localPlayer.gameObject.AddComponent<Container>();
 
-            _backpackContainer.m_inventory = _backpackEquipped.Data().GetOrCreate<BackpackComponent>().GetInventory();
+            _backpackContainer.m_inventory = _backpackEquipped.GetInventory();
             
             InventoryGui.instance.Show(_backpackContainer);
         }
@@ -255,12 +356,12 @@ namespace AdventureBackpacks.Assets
             // Unequip and remove backpack from player's back
             // We need to unequip the item BEFORE we drop it, otherwise when we pick it up again the game thinks
             // we had it equipped all along and fails to update player model, resulting in invisible backpack.
-            player.RemoveEquipAction(backpack);
-            player.UnequipItem(backpack, true);
-            player.m_inventory.RemoveItem(backpack);
+            player.RemoveEquipAction(backpack.Item);
+            player.UnequipItem(backpack.Item, true);
+            player.m_inventory.RemoveItem(backpack.Item);
 
             // This drops a copy of the backpack itemDrop.itemData
-            var itemDrop = ItemDrop.DropItem(backpack, 1, player.transform.position + player.transform.forward + player.transform.up, player.transform.rotation);
+            var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position + player.transform.forward + player.transform.up, player.transform.rotation);
             itemDrop.Save();
         }
     }
