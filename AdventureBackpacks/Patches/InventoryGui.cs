@@ -8,7 +8,6 @@ namespace AdventureBackpacks.Patches;
 
 internal class InventoryGuiPatches
 {
-    // This patch is from Aedenthorn's BackpackRedux.
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
     static class InventoryGuiUpdatePatch
     {

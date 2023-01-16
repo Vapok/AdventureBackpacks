@@ -41,6 +41,8 @@ public class HumanoidPatches
                 {
                     inventoryGui.CloseContainer();
                 }
+
+                Backpacks.ResetBackpackContainer();
             }
         }
 

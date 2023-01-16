@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using HarmonyLib;
@@ -12,21 +13,18 @@ public static class InventoryPatches
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
     {
-        // Saving the backpack every time it's changed is marginally more expensive than the alternative, but it's safer and a lot tidier.
-        // The alternative would be to patch every method involved in moving the backpack out of the inventory, which includes dropitem, 4 overloaded moveinventorytothis methods, and more.
-        // When you drop an item, you remove the original instance and drop a cloned instance. A solution to this is to serialize the Inventory instance into the ItemData m_crafterName before it's moved.
         static void Postfix(Inventory __instance)
         {
             if (__instance == null)
                 return;
-            
+
             // If the inventory changed belongs to a backpack...
             if (__instance.m_name == Backpacks.BackpacksInventoryName)
             {
                 var backpack = Backpacks.GetEquippedBackpack();
                 
                 if (backpack != null) 
-                    backpack.Data().GetOrCreate<BackpackComponent>().Save();
+                    backpack.Save();
             }
         }
     }
