@@ -325,42 +325,6 @@ namespace AdventureBackpacks.Assets
 
             return true;
         }
-        
-        public static void EjectBackpack(ItemDrop.ItemData item, Player player, Inventory backpackInventory)
-        {
-            if (item == null || player == null || backpackInventory == null)
-                return;
-            
-            var playerInventory = player.GetInventory();
-
-            // Move the backpack to the player's Inventory if there's room.
-            if (playerInventory.HaveEmptySlot())
-            {
-                playerInventory.MoveItemToThis(backpackInventory, item);
-            }
-
-            // Otherwise drop the backpack.
-            else
-            {
-                _log.Message("Are you trying to put a backpack in a backpack?  What am I? A Bag of Holding?");
-
-                // Remove the backpack item from the Inventory instance and then drop the backpack item in front of the player.
-                backpackInventory.RemoveItem(item);
-                
-                var transform = player.transform;
-                
-                if (transform == null)
-                    return;
-                
-                var itemDrop = ItemDrop.DropItem(item, 1, transform.position + transform.forward + transform.up, transform.rotation);
-                itemDrop.Save();
-            }
-
-            //Save Backpack Inventory
-            var backpackComponent = item.Data().GetOrCreate<BackpackComponent>();
-            backpackComponent.Save(backpackInventory);
-
-        }
        
         public static void QuickDropBackpack()
         {
