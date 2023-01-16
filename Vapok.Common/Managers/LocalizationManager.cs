@@ -9,6 +9,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using JetBrains.Annotations;
 using UnityEngine;
+using Vapok.Common.Managers.Configuration;
 using YamlDotNet.Serialization;
 
 
@@ -58,7 +59,7 @@ public class Localizer
 		{
 			text = textProcessors.Aggregate(text, (current, kv) => current.Replace("{" + kv.Key + "}", kv.Value()));
 		}
-		Debug.Log($"Localization Update: Key: {key} Value: [{text}]");
+		
 		localization.AddWord(key, text);
 	}
 
