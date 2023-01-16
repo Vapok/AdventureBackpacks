@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.0.2.0
+ * Localization Updates was very chatty.  Muted.
+ * Arctic Backpack sizing was set to rugged on the X axis.  Opps.
+ * Also, BepInEx version was set wrong. Reset.
 # 1.0.1.0
  * Adds in Weightless Compatibility with Epic Loot to ensure maximum epicness.  (also you're cheating... lol)
  * Resolves a Bag Duplication that was occuring when trying to insert a backpack into a backpack. (The gods are watching you.)

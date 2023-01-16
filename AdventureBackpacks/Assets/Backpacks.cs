@@ -239,7 +239,7 @@ namespace AdventureBackpacks.Assets
                 return new Inventory(
                     UiInventoryName,
                     null,
-                    (int)ConfigRegistry.RuggedBackpackSize.Value.x,
+                    (int)ConfigRegistry.ArcticBackpackSize.Value.x,
                     (int)ConfigRegistry.ArcticBackpackSize.Value.y
                 );
             }
