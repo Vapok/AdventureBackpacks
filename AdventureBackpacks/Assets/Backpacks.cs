@@ -28,7 +28,7 @@ namespace AdventureBackpacks.Assets
 
         private static ILogIt _log;
         private static List<string> _backpackTypes = new List<string>();
-        private static bool _opening = false;
+        private static bool _opening;
         private static Container _backpackContainer;
         private static ItemDrop.ItemData _backpackEquipped; //Backpack currently equipped.
 
@@ -174,24 +174,6 @@ namespace AdventureBackpacks.Assets
             return null;
         }
         
-        private static void Update()
-        {
-            if (!Player.m_localPlayer || !ZNetScene.instance)
-                return;
-
-            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && CanOpenBackpack())
-            {
-                _opening = true;
-                OpenBackpack();
-            }
-
-            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && CanOpenBackpack())
-            {
-                QuickDropBackpack();
-            }
-
-        }
-        
         public static bool CanOpenBackpack()
         {
             _backpackEquipped = GetEquippedBackpack();
@@ -211,14 +193,13 @@ namespace AdventureBackpacks.Assets
         public static void OpenBackpack()
         {
             
-            if (Player.m_localPlayer == null)
-                return;
-            
             _backpackContainer = Player.m_localPlayer.gameObject.GetComponent<Container>();
+            
             if (_backpackContainer == null)
                 _backpackContainer = Player.m_localPlayer.gameObject.AddComponent<Container>();
 
             _backpackContainer.m_inventory = _backpackEquipped.Data().GetOrCreate<BackpackComponent>().GetInventory();
+            
             InventoryGui.instance.Show(_backpackContainer);
         }
         
@@ -258,7 +239,7 @@ namespace AdventureBackpacks.Assets
 
         }
        
-        private static void QuickDropBackpack()
+        public static void QuickDropBackpack()
         {
             _log.Message("Quick dropping backpack.");
 
