@@ -4,9 +4,7 @@
  */
 
 using System;
-using System.Linq;
 using AdventureBackpacks.Assets;
-using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 
@@ -16,7 +14,6 @@ namespace AdventureBackpacks.Components
 {
     public class BackpackComponent : CustomItemData
     {
-        public static string OldPluginID = "JotunnBackpacks";
         public static string OldPluginCustomData = "JotunnBackpacks#JotunnBackpacks.BackpackComponent";
 
         public Inventory BackpackInventory;
@@ -59,7 +56,7 @@ namespace AdventureBackpacks.Components
             _log.Debug($"[Deserialize()] Starting..");
             try
             {
-                if (BackpackInventory is null)
+                if (BackpackInventory == null)
                 {
                     _log.Debug($"[Deserialize()] backpack null");
                     // Figure out which backpack type we are deserializing data for by accessing the ItemData of the base class.
@@ -73,9 +70,6 @@ namespace AdventureBackpacks.Components
                 // Deserialising saved inventory data and storing it into the newly initialised Inventory instance.
                 ZPackage pkg = new ZPackage(data);
                 BackpackInventory.Load(pkg);
-
-                Save(BackpackInventory);
-
             }
             catch (Exception ex)
             {
@@ -90,30 +84,45 @@ namespace AdventureBackpacks.Components
             // Check whether the item created is of a type contained in backpackTypes
             if (Backpacks.BackpackTypes.Contains(name))
             {
-                if (BackpackInventory != null)
+                if (BackpackInventory == null)
                 {
-                    return;
-                }
-
-                //Check to see if we have old EIDF Component Data
-                if (Item.m_customData.ContainsKey(OldPluginCustomData))
-                {
-                    var oldBackpack = Item.m_customData[OldPluginCustomData];
-
                     BackpackInventory = Backpacks.NewInventoryInstance(name);
-                    Value = oldBackpack;
-                    Deserialize(Value);
+                    
+                    if (!string.IsNullOrEmpty(Value))
+                    {
+                        Deserialize(Value);
+                    }
+
+                    //Check to see if we have old Jotunn Backpack Component Data
+                    if (Item.m_customData.ContainsKey(OldPluginCustomData) && string.IsNullOrEmpty(Value))
+                    {
+                        var oldBackpack = Item.m_customData[OldPluginCustomData];
+                        Value = oldBackpack;
+                        Deserialize(Value);
+                    }
+                    else
+                    {
+                        _log.Debug($"[Load] Backpack null, creating...");
+                        Serialize();
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(Value))
+                    {
+                        Serialize();
+                    }
                 }
             }
         }
-
+    
         public override void Load()
         {
             _log.Debug($"[Load] Starting");
 
             if (!string.IsNullOrEmpty(Value))
             {
-                _log.Debug($"[FirstLoad] Value = {Value}");
+                _log.Debug($"[Load] Value = {Value}");
                 Deserialize(Value);
             }
             else
@@ -124,6 +133,8 @@ namespace AdventureBackpacks.Components
                     var name = Item.m_shared.m_name;
                     BackpackInventory = Backpacks.NewInventoryInstance(name);
                 }
+                
+                Serialize();
             }
         }
 
@@ -143,27 +154,6 @@ namespace AdventureBackpacks.Components
         public CustomItemData Clone()
         {
             return MemberwiseClone() as CustomItemData;
-        }
-    }
-
-    public static class BackpackExtensions
-    {
-        public static GameObject InitializeCustomData(this ItemDrop.ItemData itemData)
-        {
-            var prefab = itemData.m_dropPrefab;
-            if (prefab != null)
-            {
-                var itemDropPrefab = prefab.GetComponent<ItemDrop>();
-                var instanceData = itemData.Data().GetOrCreate<BackpackComponent>();
-
-                var prefabData = itemDropPrefab.m_itemData.Data().GetOrCreate<BackpackComponent>();
-
-                instanceData.Save(prefabData.BackpackInventory);
-                
-                return itemDropPrefab.gameObject;
-            }
-
-            return null;
         }
     }
 }

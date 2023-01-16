@@ -13,7 +13,6 @@
  * 
  */
 
-using System.Collections.Generic;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Configuration;
 using BepInEx;
@@ -47,6 +46,7 @@ namespace AdventureBackpacks
         //Class Privates
         private static AdventureBackpacks _instance;
         private static ILogIt _log;
+        private Harmony _harmony;
         
         [UsedImplicitly]
         // This the main function of the mod. BepInEx will call this.
@@ -69,8 +69,32 @@ namespace AdventureBackpacks
             //Enable BoneReorder
             BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
             
-            Harmony harmony = new Harmony(Info.Metadata.GUID);
-            harmony.PatchAll();
+            _harmony = new Harmony(Info.Metadata.GUID);
+            _harmony.PatchAll();
+        }
+        
+        private void Update()
+        {
+            if (!Player.m_localPlayer || !ZNetScene.instance)
+                return;
+
+            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && Backpacks.CanOpenBackpack())
+            {
+                Backpacks.Opening = true;
+                Backpacks.OpenBackpack();
+            }
+
+            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && Backpacks.CanOpenBackpack())
+            {
+                Backpacks.QuickDropBackpack();
+            }
+
+        }
+        
+        private void OnDestroy()
+        {
+            _instance = null;
+            _harmony?.UnpatchSelf();
         }
     }
 }
