@@ -10,6 +10,7 @@ namespace AdventureBackpacks.Patches;
 public class ItemDropPatches
 {
     [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetWeight))]
+    [HarmonyBefore(new string[]{"randyknapp.mods.epicloot"})]
     static class GetWeightPatch
     {
         static void Postfix(ItemDrop.ItemData __instance, ref float __result)

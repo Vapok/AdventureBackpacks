@@ -4,6 +4,7 @@ using System.Reflection;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using ItemManager;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -304,40 +305,25 @@ namespace AdventureBackpacks.Assets
             InventoryGui.instance.Show(_backpackContainer);
         }
         
-        public static void EjectBackpack(ItemDrop.ItemData item, Player player, Inventory backpackInventory)
+        public static bool CheckForInception(Inventory __instance, ItemDrop.ItemData item)
         {
-            if (item == null || player == null || backpackInventory == null)
-                return;
-            
-            var playerInventory = player.GetInventory();
-
-            // Move the backpack to the player's Inventory if there's room.
-            if (playerInventory.HaveEmptySlot())
+            if (__instance.m_name.Equals(Backpacks.BackpacksInventoryName))
             {
-                playerInventory.MoveItemToThis(backpackInventory, item);
+                // If the item is a backpack...
+                if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
+                {
+                    if (Player.m_localPlayer != null)
+                    {
+                        Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception");    
+                    }
+
+                    // Nope!
+                    AdventureBackpacks.Log.Message("You can't put a backpack inside a backpack, silly!");
+                    return false;
+                }
             }
 
-            // Otherwise drop the backpack.
-            else
-            {
-                _log.Message("Are you trying to put a backpack in a backpack?  What am I? A Bag of Holding?");
-
-                // Remove the backpack item from the Inventory instance and then drop the backpack item in front of the player.
-                backpackInventory.RemoveItem(item);
-                
-                var transform = player.transform;
-                
-                if (transform == null)
-                    return;
-                
-                var itemDrop = ItemDrop.DropItem(item, 1, transform.position + transform.forward + transform.up, transform.rotation);
-                itemDrop.Save();
-            }
-
-            //Save Backpack Inventory
-            var backpackComponent = item.Data().GetOrCreate<BackpackComponent>();
-            backpackComponent.Save(backpackInventory);
-
+            return true;
         }
        
         public static void QuickDropBackpack()

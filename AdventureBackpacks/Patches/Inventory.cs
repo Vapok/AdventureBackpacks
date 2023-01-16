@@ -28,6 +28,41 @@ public static class InventoryPatches
             }
         }
     }
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.MoveItemToThis), new[] {typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int)})]
+    [HarmonyPriority(Priority.First)]
+    static class MoveItemToThisPatch
+    {
+        static bool Prefix(Inventory __0, ItemDrop.ItemData __1, int __2, int __3, int __4, Inventory __instance)
+        {
+            var fromInventory = __0;
+            var item = __1;
+            if (fromInventory == null || item == null)
+                return false;
+            
+            return Backpacks.CheckForInception(__instance, item);
+        }
+
+
+    }
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.MoveItemToThis), new[] {typeof(Inventory), typeof(ItemDrop.ItemData)})]
+    [HarmonyPriority(Priority.First)]
+    static class MoveItemToThisOtherPatch
+    {
+        static bool Prefix(Inventory __0, ItemDrop.ItemData __1, Inventory __instance)
+        {
+            var fromInventory = __0;
+            var item = __1;
+            if (fromInventory == null || item == null)
+                return false;
+            
+            return Backpacks.CheckForInception(__instance, item);
+        }
+
+
+    }
+
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.UpdateTotalWeight))]
     static class UpdateTotalWeightPatch
@@ -47,17 +82,6 @@ public static class InventoryPatches
                 // Go through all the items, match them for any of the names in backpackTypes.
                 foreach (ItemDrop.ItemData item in items)
                 {
-                    // If the item is a backpack...
-                    if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
-                    {
-                        // Chuck it out!
-                        AdventureBackpacks.Log.Message("You can't put a backpack inside a backpack, silly!");
-                        Backpacks.EjectBackpack(item, player, __instance);
-
-                        // There is only ever one backpack in the backpack inventory, so we don't need to continue the loop once we've chucked it out.
-                        // Besides, you'll get a "InvalidOperationExecution: Collection was modified; enumeration operation may not execute" error if you don't break the loop here :p
-                        break;
-                    }
                 }
             }
 
