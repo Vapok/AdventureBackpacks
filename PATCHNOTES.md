@@ -1,5 +1,8 @@
 # Adventure Backpacks Patchnotes
 
+# 1.0.1.0
+ * Adds in Weightless Compatibility with Epic Loot to ensure maximum epicness.  (also you're cheating... lol)
+ * Resolves a Bag Duplication that was occuring when trying to insert a backpack into a backpack. (The gods are watching you.)
 # 1.0.0.0
  * Initial Release of Adventure Backpacks
    * This is a full refactor and completely re-writen version of JotunnBackpacks.
