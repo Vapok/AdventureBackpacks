@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using HarmonyLib;

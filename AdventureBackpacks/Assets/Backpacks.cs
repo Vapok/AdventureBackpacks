@@ -51,8 +51,6 @@ namespace AdventureBackpacks.Assets
             _log = AdventureBackpacks.Log;
             _log.Info($"Embedded resources: {string.Join(",", Assembly.GetExecutingAssembly().GetManifestResourceNames())}");
             
-            
-            
             BackpackTypes.Add(RuggedBackpackName);
             BackpackTypes.Add(ArcticBackpackName);
             
@@ -66,7 +64,6 @@ namespace AdventureBackpacks.Assets
             _ruggedBackpack.Configurable = Configurability.Disabled;
             
             MaterialReplacer.RegisterGameObjectForShaderSwap(_ruggedBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
-            
             
             //Adding Rugged Status Effect
             _ruggedBackpackEffect = new CustomSE(Enums.StatusEffects.Stats, "SE_RuggedBackpack");
