@@ -483,13 +483,13 @@ public static class EffectManager
                 }
                 else
                 {
-                    Debug.LogWarning(
+                    LogManager.Log.Warning(
                         $"The prefab '{prefab.name}' does not have an ItemDrop, AOE, or EffectArea component. Cannot add the StatusEffect to the prefab.");
                 }
             }
             catch (Exception e)
             {
-                Debug.LogWarning(
+                LogManager.Log.Warning(
                     $"BROKE - {e.Message}");
             }
         }

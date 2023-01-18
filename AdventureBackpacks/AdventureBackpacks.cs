@@ -57,14 +57,14 @@ namespace AdventureBackpacks
             //I'm awake!
             _instance = this;
 
+            //Register Configuration Settings
+            _config = new ConfigRegistry(_instance);
+
             //Register Logger
             LogManager.Init(PluginId,out _log);
             
+            //Register Translations
             Localizer.Load();
-            
-            //Register Configuration Settings
-            _config = new ConfigRegistry(_instance);
-            _config.InitializeConfigurationSettings();
             
             //Load Assets
             Backpacks.LoadAssets();
@@ -72,8 +72,13 @@ namespace AdventureBackpacks
             //Enable BoneReorder
             BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
             
+            //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll();
+            
+            //???
+            
+            //Profit
         }
         
         private void Update()

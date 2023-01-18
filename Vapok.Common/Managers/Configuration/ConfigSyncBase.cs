@@ -6,12 +6,12 @@ namespace Vapok.Common.Managers.Configuration;
 
 public abstract class ConfigSyncBase
 {
-    protected static ConfigSyncBase? _instance;
+    private static ConfigSyncBase? _instance;
     protected static ConfigFile? _config;
-    protected static ConfigSync? _configSync;
+    private static ConfigSync? _configSync;
 
-    internal static ConfigEntry<bool>? LoggingEnabled { get; private set; }
-    internal static ConfigEntry<LogLevels>? LogLevel { get; private set;}
+    public static ConfigEntry<bool>? LoggingEnabled { get; private set; }
+    public static ConfigEntry<LogLevels>? LogLevel { get; private set;}
 
     
     protected ConfigSyncBase(IPluginInfo _mod)
@@ -40,13 +40,9 @@ public abstract class ConfigSyncBase
             new ConfigDescription("Minimum Log Level to Output",
                 null,
                 new ConfigAttributes { IsAdvanced = true}));
-
     }
 
-    public virtual void InitializeConfigurationSettings()
-    {
-
-    }
+    public abstract void InitializeConfigurationSettings();
 
     public static ConfigEntry<T>? SyncedConfig<T>(string group, string configName, T value, string description, bool synchronizedSetting = true) => SyncedConfig(group, configName, value, new ConfigDescription(description), synchronizedSetting);
         

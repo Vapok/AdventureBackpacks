@@ -11,6 +11,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using JetBrains.Annotations;
 using UnityEngine;
+using Vapok.Common.Managers;
 
 namespace ItemManager;
 
@@ -794,7 +795,7 @@ public class Item
 						}
 						else
 						{
-							Debug.LogWarning($"Custom crafting station '{(cfg == null || recipes.Count > 0 ? station.custom : cfg.customTable.Value)}' does not exist");
+							LogManager.Log.Warning($"Custom crafting station '{(cfg == null || recipes.Count > 0 ? station.custom : cfg.customTable.Value)}' does not exist");
 						}
 					}
 					else
@@ -1193,7 +1194,7 @@ public class Item
 			ItemDrop? item = objectDB.GetItemPrefab(name)?.GetComponent<ItemDrop>();
 			if (item == null)
 			{
-				Debug.LogWarning($"The required item '{name}' does not exist.");
+				LogManager.Log.Warning($"The required item '{name}' does not exist.");
 			}
 			return item;
 		}
@@ -1253,7 +1254,7 @@ public class Item
 			Character? character = netScene.GetPrefab(name)?.GetComponent<Character>();
 			if (character == null)
 			{
-				Debug.LogWarning($"The drop target character '{name}' does not exist.");
+				LogManager.Log.Warning($"The drop target character '{name}' does not exist.");
 			}
 			return character;
 		}

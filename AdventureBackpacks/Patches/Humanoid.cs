@@ -45,6 +45,5 @@ public class HumanoidPatches
                 Backpacks.ResetBackpackContainer();
             }
         }
-
     }
 }

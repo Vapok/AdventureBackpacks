@@ -59,7 +59,7 @@ public class Localizer
 		{
 			text = textProcessors.Aggregate(text, (current, kv) => current.Replace("{" + kv.Key + "}", kv.Value()));
 		}
-		
+		LogManager.Log.Debug($"Localization Update: Key: {key} Value: [{text}]");
 		localization.AddWord(key, text);
 	}
 

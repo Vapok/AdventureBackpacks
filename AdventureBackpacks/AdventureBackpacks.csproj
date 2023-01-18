@@ -40,6 +40,9 @@
         <Reference Include="assembly_guiutils">
           <HintPath>..\..\..\References\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
+        <Reference Include="assembly_utils">
+          <HintPath>..\..\..\References\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
+        </Reference>
         <Reference Include="assembly_valheim">
           <HintPath>..\..\..\References\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
         </Reference>

@@ -206,7 +206,7 @@ public class Location
 				string otherName = __instance.m_namedPrefabs[netView.name.GetStableHashCode()].name;
 				if (netView.name != otherName)
 				{
-					Debug.LogError($"Found hash collision for names of prefabs {netView.name} and {otherName} in {Assembly.GetExecutingAssembly()}. Skipping.");
+					LogManager.Log.Error($"Found hash collision for names of prefabs {netView.name} and {otherName} in {Assembly.GetExecutingAssembly()}. Skipping.");
 				}
 			}
 			else

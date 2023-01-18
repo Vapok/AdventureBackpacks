@@ -797,7 +797,7 @@ namespace Vapok.Common.Managers
 				return foreignInfos[mod] = new ForeignItemInfo(item, foreignItemData);
 			}
 
-			Debug.LogWarning($"Mod {mod} has an {typeof(ItemExtensions).FullName} class, but no Data(ItemDrop.ItemData) method could be called on it.");
+			LogManager.Log.Warning($"Mod {mod} has an {typeof(ItemExtensions).FullName} class, but no Data(ItemDrop.ItemData) method could be called on it.");
 			return foreignInfos[mod] = null;
 		}
 	}

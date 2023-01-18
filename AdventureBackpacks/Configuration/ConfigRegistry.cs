@@ -6,7 +6,7 @@ using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Configuration
 {
-    internal class ConfigRegistry : ConfigSyncBase
+    public class ConfigRegistry : ConfigSyncBase
     {
         //Configuration Entry Privates
         internal static ConfigEntry<KeyCode> HotKeyOpen { get; private set; }
@@ -24,9 +24,9 @@ namespace AdventureBackpacks.Configuration
 
         public ConfigRegistry(IPluginInfo mod): base(mod)
         {
-            
+            InitializeConfigurationSettings();
         }
-        public override void InitializeConfigurationSettings()
+        public sealed override void InitializeConfigurationSettings()
         {
             if (_config == null)
                 return;

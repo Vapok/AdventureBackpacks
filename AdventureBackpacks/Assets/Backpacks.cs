@@ -4,11 +4,12 @@ using System.Reflection;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using ItemManager;
-using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
+using Vapok.Common.Managers.PieceManager;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
+using CraftingTable = ItemManager.CraftingTable;
 
 namespace AdventureBackpacks.Assets
 {
@@ -64,6 +65,8 @@ namespace AdventureBackpacks.Assets
 
             _ruggedBackpack.Configurable = Configurability.Disabled;
             
+            MaterialReplacer.RegisterGameObjectForShaderSwap(_ruggedBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
+            
             
             //Adding Rugged Status Effect
             _ruggedBackpackEffect = new CustomSE(Enums.StatusEffects.Stats, "SE_RuggedBackpack");
@@ -98,6 +101,8 @@ namespace AdventureBackpacks.Assets
             _arcticBackpack.RequiredItems.Add("Silver",2);
 
             _arcticBackpack.Configurable = Configurability.Disabled;
+            
+            MaterialReplacer.RegisterGameObjectForShaderSwap(_arcticBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
             
             //Adding Arctic Status Effect
             _arcticBackpackEffect = new CustomSE(Enums.StatusEffects.Stats, "SE_ArcticBackpack");
@@ -224,25 +229,30 @@ namespace AdventureBackpacks.Assets
         
         public static Inventory NewInventoryInstance(string name)
         {
-            if (name.Equals(RuggedBackpackName))
+            Inventory newInventory = null;
+            switch (name)
             {
-                return new Inventory(
-                    UiInventoryName,
-                    null,
-                    (int)ConfigRegistry.RuggedBackpackSize.Value.x,
-                    (int)ConfigRegistry.RuggedBackpackSize.Value.y
-                );
+                case RuggedBackpackName:
+                    newInventory = new Inventory(
+                        UiInventoryName,
+                        null,
+                        (int)ConfigRegistry.RuggedBackpackSize.Value.x,
+                        (int)ConfigRegistry.RuggedBackpackSize.Value.y
+                    );
+                    break;
+                case ArcticBackpackName:
+                    newInventory = new Inventory(
+                        UiInventoryName,
+                        null,
+                        (int)ConfigRegistry.ArcticBackpackSize.Value.x,
+                        (int)ConfigRegistry.ArcticBackpackSize.Value.y
+                    );
+                    break;
             }
 
-            if (name.Equals(ArcticBackpackName))
-            {
-                return new Inventory(
-                    UiInventoryName,
-                    null,
-                    (int)ConfigRegistry.ArcticBackpackSize.Value.x,
-                    (int)ConfigRegistry.ArcticBackpackSize.Value.y
-                );
-            }
+            if (newInventory != null)
+                return newInventory;
+            
             _log.Warning($"Calling method with unknown item name");
             return null;
         }
