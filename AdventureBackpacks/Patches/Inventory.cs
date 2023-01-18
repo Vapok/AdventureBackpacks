@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using Vapok.Common.Managers;
 namespace AdventureBackpacks.Patches;
@@ -13,13 +14,13 @@ public static class InventoryPatches
     {
         static void Postfix(Inventory __instance)
         {
-            if (__instance == null)
+            if (__instance == null || Player.m_localPlayer == null)
                 return;
 
             // If the inventory changed belongs to a backpack...
-            if (__instance.m_name == Backpacks.BackpacksInventoryName)
+            if (__instance.IsBackPackInventory())
             {
-                var backpack = Backpacks.GetEquippedBackpack();
+                var backpack = Player.m_localPlayer.GetEquippedBackpack();
                 
                 if (backpack != null) 
                     backpack.Save();

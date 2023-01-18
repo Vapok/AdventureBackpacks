@@ -15,6 +15,7 @@
 
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Configuration;
+using AdventureBackpacks.Extensions;
 using BepInEx;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -86,15 +87,14 @@ namespace AdventureBackpacks
             if (!Player.m_localPlayer || !ZNetScene.instance)
                 return;
 
-            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && Backpacks.CanOpenBackpack())
+            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && Player.m_localPlayer.CanOpenBackpack())
             {
-                Backpacks.Opening = true;
-                Backpacks.OpenBackpack();
+                Player.m_localPlayer.OpenBackpack();
             }
 
-            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && Backpacks.CanOpenBackpack())
+            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && Player.m_localPlayer.CanOpenBackpack())
             {
-                Backpacks.QuickDropBackpack();
+                Player.m_localPlayer.QuickDropBackpack();
             }
 
         }

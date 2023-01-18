@@ -1,7 +1,5 @@
-﻿using AdventureBackpacks.Assets;
-using AdventureBackpacks.Components;
+﻿using AdventureBackpacks.Extensions;
 using HarmonyLib;
-using Vapok.Common.Managers;
 
 namespace AdventureBackpacks.Patches;
 
@@ -16,7 +14,7 @@ public class HumanoidPatches
         {
             if (__0 is null) return;
             
-            if (Backpacks.BackpackContainer == null || Player.m_localPlayer == null)
+            if ( Player.m_localPlayer == null)
                 return;
             
             var player = Player.m_localPlayer;
@@ -24,15 +22,13 @@ public class HumanoidPatches
             var item = __0;
 
             // Check if the item being unequipped is a backpack, and see if it is the same backpack the player is wearing
-            if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name)
-                && player.m_shoulderItem == item)
+            if (item.IsBackpack() && player.m_shoulderItem == item)
             {
-                var backpackInventory = Backpacks.BackpackContainer.m_inventory;
+                var backpackInventory = player.GetEquippedBackpack();
                 if (backpackInventory is null) return;
 
                 //Save Backpack
-                var backpackComponent = item.Data().GetOrCreate<BackpackComponent>();
-                backpackComponent.Save(backpackInventory);
+                backpackInventory.Save();
 
                 var inventoryGui = InventoryGui.instance;
 
@@ -40,9 +36,31 @@ public class HumanoidPatches
                 if (inventoryGui.IsContainerOpen())
                 {
                     inventoryGui.CloseContainer();
+                    InventoryGuiPatches.BackpackIsOpen = false;
                 }
 
-                Backpacks.ResetBackpackContainer();
+                InventoryGuiPatches.BackpackEquipped = false;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.EquipItem))]
+    static class HumanoidEquipItemPatch
+    {
+        static void Postfix(ItemDrop.ItemData __0, bool __result)
+        {
+            if (__0 is null) return;
+            
+            if ( Player.m_localPlayer == null && !__result)
+                return;
+            
+            var player = Player.m_localPlayer;
+
+            var item = __0;
+
+            if (item.IsBackpack())
+            {
+                InventoryGuiPatches.BackpackEquipped = true;
             }
         }
     }

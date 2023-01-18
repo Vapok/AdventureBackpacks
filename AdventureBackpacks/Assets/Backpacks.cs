@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
+using AdventureBackpacks.Extensions;
 using ItemManager;
 using Vapok.Common.Abstractions;
-using Vapok.Common.Managers;
 using Vapok.Common.Managers.PieceManager;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
@@ -30,19 +29,9 @@ namespace AdventureBackpacks.Assets
 
         private static ILogIt _log;
         private static List<string> _backpackTypes = new List<string>();
-        private static bool _opening;
-        private static Container _backpackContainer;
-        private static BackpackComponent _backpackEquipped; //Backpack currently equipped.
+
         private static HitData.DamageModPair _frostResistance = new() { m_type = HitData.DamageType.Frost, m_modifier = HitData.DamageModifier.Resistant};
         public static List<string> BackpackTypes => _backpackTypes;
-
-        public static bool Opening
-        {
-            get => _opening;
-            set => _opening = value;
-        }
-
-        public static Container BackpackContainer => _backpackContainer;
 
         public static string BackpacksInventoryName => UiInventoryName;
 
@@ -253,71 +242,13 @@ namespace AdventureBackpacks.Assets
             _log.Warning($"Calling method with unknown item name");
             return null;
         }
-        
-        public static BackpackComponent GetEquippedBackpack()
-        {
-            if (Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null)
-                return null;
-            
-            // Get a list of all equipped items.
-            List<ItemDrop.ItemData> equippedItems = Player.m_localPlayer.GetInventory().GetEquipedtems();
 
-            if (equippedItems is null) return null;
-
-            // Go through all the equipped items, match them for any of the names in backpackTypes.
-            // If a match is found, return the backpack ItemData object.
-            foreach (ItemDrop.ItemData item in equippedItems)
-            {
-                if (BackpackTypes.Contains(item.m_shared.m_name))
-                {
-                    return item.Data().GetOrCreate<BackpackComponent>();
-                }
-            }
-
-            // Return null if no backpacks are found.
-            return null;
-        }
-
-        public static void ResetBackpackContainer()
-        {
-            _backpackContainer = null;
-        }
-        
-        public static bool CanOpenBackpack()
-        {
-            _backpackEquipped = GetEquippedBackpack();
-
-            // Return true if GetEquippedBackpack() does not return null.
-            if (_backpackEquipped != null)
-            {
-                return true;
-            }
-
-            // Return false if GetEquippedBackpack() returns null.
-            _log.Message("No backpack equipped. Can't open any.");
-            return false;
-
-        }
-        
-        public static void OpenBackpack()
-        {
-            
-            _backpackContainer = Player.m_localPlayer.gameObject.GetComponent<Container>();
-            
-            if (_backpackContainer == null)
-                _backpackContainer = Player.m_localPlayer.gameObject.AddComponent<Container>();
-
-            _backpackContainer.m_inventory = _backpackEquipped.GetInventory();
-            
-            InventoryGui.instance.Show(_backpackContainer);
-        }
-        
         public static bool CheckForInception(Inventory __instance, ItemDrop.ItemData item)
         {
-            if (__instance.m_name.Equals(Backpacks.BackpacksInventoryName))
+            if (__instance.IsBackPackInventory())
             {
                 // If the item is a backpack...
-                if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
+                if (item.IsBackpack())
                 {
                     if (Player.m_localPlayer != null)
                     {
@@ -331,31 +262,6 @@ namespace AdventureBackpacks.Assets
             }
 
             return true;
-        }
-       
-        public static void QuickDropBackpack()
-        {
-            _log.Message("Quick dropping backpack.");
-
-            if (Player.m_localPlayer == null)
-                return;
-            
-            var player = Player.m_localPlayer;
-            var backpack = GetEquippedBackpack();
-
-            if (backpack == null)
-                return;
-            
-            // Unequip and remove backpack from player's back
-            // We need to unequip the item BEFORE we drop it, otherwise when we pick it up again the game thinks
-            // we had it equipped all along and fails to update player model, resulting in invisible backpack.
-            player.RemoveEquipAction(backpack.Item);
-            player.UnequipItem(backpack.Item, true);
-            player.m_inventory.RemoveItem(backpack.Item);
-
-            // This drops a copy of the backpack itemDrop.itemData
-            var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position + player.transform.forward + player.transform.up, player.transform.rotation);
-            itemDrop.Save();
         }
     }
 }

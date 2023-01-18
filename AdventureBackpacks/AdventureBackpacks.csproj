@@ -79,6 +79,9 @@
         <Compile Include="Assets\Backpacks.cs" />
         <Compile Include="Components\BackpackComponent.cs" />
         <Compile Include="Configuration\ConfigRegistry.cs" />
+        <Compile Include="Extensions\InventoryExtensions.cs" />
+        <Compile Include="Extensions\ItemDataExtensions.cs" />
+        <Compile Include="Extensions\PlayerExtensions.cs" />
         <Compile Include="Patches\GuiBar.cs" />
         <Compile Include="Patches\Humanoid.cs" />
         <Compile Include="Patches\Inventory.cs" />
