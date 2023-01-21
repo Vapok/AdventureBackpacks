@@ -1004,7 +1004,7 @@ class RegisterClientRPCPatch
 {
     private static void Postfix(ZNet __instance, ZNetPeer peer)
     {
-        if (!__instance.IsServer())
+        if (!__instance.IsServer() || __instance.m_adminList == null)
         {
             peer.m_rpc.Register<ZPackage>(BuildPiece._plugin?.Info.Metadata.Name + " PMAdminStatusSync",
                 RPC_InitialAdminSync);
