@@ -15,6 +15,7 @@
 
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Configuration;
+using AdventureBackpacks.Extensions;
 using BepInEx;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -57,14 +58,14 @@ namespace AdventureBackpacks
             //I'm awake!
             _instance = this;
 
+            //Register Configuration Settings
+            _config = new ConfigRegistry(_instance);
+
             //Register Logger
             LogManager.Init(PluginId,out _log);
             
+            //Register Translations
             Localizer.Load();
-            
-            //Register Configuration Settings
-            _config = new ConfigRegistry(_instance);
-            _config.InitializeConfigurationSettings();
             
             //Load Assets
             Backpacks.LoadAssets();
@@ -72,8 +73,13 @@ namespace AdventureBackpacks
             //Enable BoneReorder
             BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
             
+            //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll();
+            
+            //???
+            
+            //Profit
         }
         
         private void Update()
@@ -81,15 +87,14 @@ namespace AdventureBackpacks
             if (!Player.m_localPlayer || !ZNetScene.instance)
                 return;
 
-            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && Backpacks.CanOpenBackpack())
+            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && Player.m_localPlayer.CanOpenBackpack())
             {
-                Backpacks.Opening = true;
-                Backpacks.OpenBackpack();
+                Player.m_localPlayer.OpenBackpack();
             }
 
-            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && Backpacks.CanOpenBackpack())
+            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && Player.m_localPlayer.CanOpenBackpack())
             {
-                Backpacks.QuickDropBackpack();
+                Player.m_localPlayer.QuickDropBackpack();
             }
 
         }

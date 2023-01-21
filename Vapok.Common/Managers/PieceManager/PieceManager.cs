@@ -474,7 +474,7 @@ public class BuildPiece
                         piece.Prefab.GetComponent<StationExtension>().m_craftingStation = craftingTable.GetComponent<CraftingStation>();
                         break;
                     case CraftingTable.Custom:
-                        Debug.LogWarning($"Custom crafting station '{(cfg == null || piece.Extension.ExtensionStations.Count > 0 ? station.custom : cfg.customExtentionTable.Value)}' does not exist");
+                        LogManager.Log.Warning($"Custom crafting station '{(cfg == null || piece.Extension.ExtensionStations.Count > 0 ? station.custom : cfg.customExtentionTable.Value)}' does not exist");
                         break;
                     default:
                     {
@@ -506,7 +506,7 @@ public class BuildPiece
                         piece.Prefab.GetComponent<global::Piece>().m_craftingStation = craftingTable.GetComponent<CraftingStation>();
                         break;
                     case CraftingTable.Custom:
-                        Debug.LogWarning($"Custom crafting station '{(cfg == null || piece.Crafting.Stations.Count > 0 ? station.custom : cfg.customTable.Value)}' does not exist");
+                        LogManager.Log.Warning($"Custom crafting station '{(cfg == null || piece.Crafting.Stations.Count > 0 ? station.custom : cfg.customTable.Value)}' does not exist");
                         break;
                     default:
                     {
@@ -628,7 +628,7 @@ public class BuildPiece
                 ItemDrop? item = ObjectDB.instance.GetItemPrefab(r.itemName)?.GetComponent<ItemDrop>();
                 if (item == null)
                 {
-                    Debug.LogWarning($"The required item '{r.itemName}' does not exist.");
+                    LogManager.Log.Warning($"The required item '{r.itemName}' does not exist.");
                 }
 
                 return item;

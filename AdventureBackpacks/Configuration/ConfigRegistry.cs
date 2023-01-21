@@ -6,11 +6,12 @@ using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Configuration
 {
-    internal class ConfigRegistry : ConfigSyncBase
+    public class ConfigRegistry : ConfigSyncBase
     {
         //Configuration Entry Privates
         internal static ConfigEntry<KeyCode> HotKeyOpen { get; private set; }
         internal static ConfigEntry<KeyCode> HotKeyDrop { get; private set;}
+        internal static ConfigEntry<bool> CloseInventory { get; private set;}
         internal static ConfigEntry<bool> OutwardMode { get; private set;}
         internal static ConfigEntry<Vector2> RuggedBackpackSize { get; private set;}
         internal static ConfigEntry<Vector2> ArcticBackpackSize { get; private set;}
@@ -24,9 +25,9 @@ namespace AdventureBackpacks.Configuration
 
         public ConfigRegistry(IPluginInfo mod): base(mod)
         {
-            
+            InitializeConfigurationSettings();
         }
-        public override void InitializeConfigurationSettings()
+        public sealed override void InitializeConfigurationSettings()
         {
             if (_config == null)
                 return;
@@ -41,8 +42,13 @@ namespace AdventureBackpacks.Configuration
                     null,
                     new ConfigAttributes { Order = 2 }));
             
+            CloseInventory = _config.Bind(
+                "Local Config", "Close Inventory", true,
+                new ConfigDescription("If set to true, both backpack and inventory will close with Open Backpack keybind is pressed while Inventory is open.",
+                    null, new ConfigAttributes { Order = 1 }));
+            
             OutwardMode = _config.Bind(
-                "Local config", "Outward Mode", false,
+                "Local Config", "Outward Mode", false,
                 new ConfigDescription("You can use a hotkey to quickly drop your equipped backpack in order to run faster away from danger.",
                     null, new ConfigAttributes { Order = 1 }));
             

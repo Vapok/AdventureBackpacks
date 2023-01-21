@@ -18,7 +18,7 @@ public class LogManager
 {
     private static LogManager? _instance;
     private readonly Dictionary<string, Logger?> _loggers = new();
-
+    public static ILogIt Log = null!;
 
     public static void Init(string pluginName, out ILogIt? logger)
     {
@@ -31,6 +31,8 @@ public class LogManager
             return;
         
         _instance = new LogManager();
+
+        Log = GetLogger("vapok.mod.core")!;
     }
 
     public static void Destroy()

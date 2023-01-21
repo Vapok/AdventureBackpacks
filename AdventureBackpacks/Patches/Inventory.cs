@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using Vapok.Common.Managers;
-
 namespace AdventureBackpacks.Patches;
 
 
@@ -15,13 +14,13 @@ public static class InventoryPatches
     {
         static void Postfix(Inventory __instance)
         {
-            if (__instance == null)
+            if (__instance == null || Player.m_localPlayer == null)
                 return;
 
             // If the inventory changed belongs to a backpack...
-            if (__instance.m_name == Backpacks.BackpacksInventoryName)
+            if (__instance.IsBackPackInventory())
             {
-                var backpack = Backpacks.GetEquippedBackpack();
+                var backpack = Player.m_localPlayer.GetEquippedBackpack();
                 
                 if (backpack != null) 
                     backpack.Save();
@@ -42,8 +41,6 @@ public static class InventoryPatches
             
             return Backpacks.CheckForInception(__instance, item);
         }
-
-
     }
 
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.MoveItemToThis), new[] {typeof(Inventory), typeof(ItemDrop.ItemData)})]
@@ -59,35 +56,12 @@ public static class InventoryPatches
             
             return Backpacks.CheckForInception(__instance, item);
         }
-
-
     }
 
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.UpdateTotalWeight))]
     static class UpdateTotalWeightPatch
-    {
-        static void Prefix(Inventory __instance)
-        {
-            if (__instance == null)
-                return;
-
-            // If the current Inventory instance belongs to a backpack...
-            if (__instance.GetName() == Backpacks.BackpacksInventoryName)
-            {
-                // Get a list of all items in the backpack.
-                List<ItemDrop.ItemData> items = __instance.GetAllItems();
-                var player = Player.m_localPlayer;
-
-                // Go through all the items, match them for any of the names in backpackTypes.
-                foreach (ItemDrop.ItemData item in items)
-                {
-                }
-            }
-
-        }
-
-        static void Postfix(Inventory __instance)
+    { static void Postfix(Inventory __instance)
         {
             if (__instance == null || Player.m_localPlayer == null)
                 return;

@@ -6,13 +6,14 @@ namespace Vapok.Common.Managers.Configuration;
 
 public abstract class ConfigSyncBase
 {
-    protected static ConfigSyncBase? _instance;
+    private static ConfigSyncBase? _instance;
     protected static ConfigFile? _config;
-    protected static ConfigSync? _configSync;
+    private static ConfigSync? _configSync;
 
-    internal static ConfigEntry<bool>? LoggingEnabled { get; private set; }
-    internal static ConfigEntry<LogLevels>? LogLevel { get; private set;}
-
+    public static ConfigEntry<bool>?ServerEnforced { get; private set; }
+    public static ConfigEntry<LogLevels>? LogLevel { get; private set;}
+    
+    public static ConfigEntry<bool>? LoggingEnabled { get; private set; }
     
     protected ConfigSyncBase(IPluginInfo _mod)
     {
@@ -41,12 +42,15 @@ public abstract class ConfigSyncBase
                 null,
                 new ConfigAttributes { IsAdvanced = true}));
 
+        ServerEnforced = SyncedConfig("Server-Synced and Enforced Config", "Lock Config", false,
+            new ConfigDescription(
+                "[Server Only] The configuration is locked and may not be changed by clients once it has been synced from the server. Only valid for server config, will have no effect on clients.", null, new ConfigAttributes { Order = 50 }));
+
+        _configSync.AddLockingConfigEntry(ServerEnforced!);
+
     }
 
-    public virtual void InitializeConfigurationSettings()
-    {
-
-    }
+    public abstract void InitializeConfigurationSettings();
 
     public static ConfigEntry<T>? SyncedConfig<T>(string group, string configName, T value, string description, bool synchronizedSetting = true) => SyncedConfig(group, configName, value, new ConfigDescription(description), synchronizedSetting);
         

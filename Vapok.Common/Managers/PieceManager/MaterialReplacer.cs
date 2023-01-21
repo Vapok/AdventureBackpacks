@@ -85,7 +85,7 @@ namespace Vapok.Common.Managers.PieceManager
                     }
                     else
                     {
-                        Debug.LogWarning("No suitable material found to replace: " + matNames);
+                        LogManager.Log.Warning("No suitable material found to replace: " + matNames);
                         // Skip over this material in future
                         originalMaterials[matNames] = newMats[i];
                     }
@@ -96,7 +96,7 @@ namespace Vapok.Common.Managers.PieceManager
                     }
                     else
                     {
-                        Debug.LogWarning("No suitable material found to replace: " + matName);
+                        LogManager.Log.Warning("No suitable material found to replace: " + matName);
                         // Skip over this material in future
                         originalMaterials[matName] = renderer.material;
                     }

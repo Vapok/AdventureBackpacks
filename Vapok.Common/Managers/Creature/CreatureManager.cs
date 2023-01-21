@@ -199,7 +199,7 @@ public class Creature
 				}
 				if (ZNetScene.instance.GetPrefab(kv.Key) is not { } prefab)
 				{
-					Debug.LogWarning($"Found invalid prefab name {kv.Key} for creature {creature.Prefab.name}");
+					LogManager.Log.Warning($"Found invalid prefab name {kv.Key} for creature {creature.Prefab.name}");
 					return null;
 				}
 				return new CharacterDrop.Drop

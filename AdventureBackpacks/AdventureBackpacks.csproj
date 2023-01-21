@@ -9,7 +9,7 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>AdventureBackpacks</RootNamespace>
         <AssemblyName>AdventureBackpacks</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
@@ -39,6 +39,9 @@
         </Reference>
         <Reference Include="assembly_guiutils">
           <HintPath>..\..\..\References\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
+        </Reference>
+        <Reference Include="assembly_utils">
+          <HintPath>..\..\..\References\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
           <HintPath>..\..\..\References\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
@@ -76,6 +79,9 @@
         <Compile Include="Assets\Backpacks.cs" />
         <Compile Include="Components\BackpackComponent.cs" />
         <Compile Include="Configuration\ConfigRegistry.cs" />
+        <Compile Include="Extensions\InventoryExtensions.cs" />
+        <Compile Include="Extensions\ItemDataExtensions.cs" />
+        <Compile Include="Extensions\PlayerExtensions.cs" />
         <Compile Include="Patches\GuiBar.cs" />
         <Compile Include="Patches\Humanoid.cs" />
         <Compile Include="Patches\Inventory.cs" />
