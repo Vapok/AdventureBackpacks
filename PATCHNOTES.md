@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.0.3.0 
+ * Fixed Locking Server Config with Config Sync.  Set 'Lock Config' to True in Server config (set while server is off)
+ * Various Code Refactors and reorganization of methods.
+ * Added Config to allow inventory and bag to be closed with the same hotkey.
 # 1.0.2.0
  * Localization Updates was very chatty.  Muted.
  * Arctic Backpack sizing was set to rugged on the X axis.  Opps.
