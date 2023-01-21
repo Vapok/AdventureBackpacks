@@ -115,9 +115,26 @@ public class Localizer
 		{
 			localizationObjects.Add(new WeakReference<Localization>(__instance));
 		}
+		
+		
 		localizationLanguage.Add(__instance, language);
 
-		Dictionary<string, string> localizationFiles = Directory.GetFiles(Path.GetDirectoryName(Paths.PluginPath)!, $"{plugin.Info.Metadata.Name}.*", SearchOption.AllDirectories).Where(f => fileExtensions.IndexOf(Path.GetExtension(f)) >= 0).ToDictionary(f => Path.GetFileNameWithoutExtension(f).Split('.')[1], f => f);
+		Dictionary<string, string> localizationFiles = new();
+		
+		var languageFilesFound = Directory
+			.GetFiles(Path.GetDirectoryName(Paths.PluginPath)!, $"{plugin.Info.Metadata.Name}.*",
+				SearchOption.AllDirectories).Where(f => fileExtensions.IndexOf(Path.GetExtension(f)) >= 0);
+
+		foreach (var languageFile in languageFilesFound)
+		{
+			var languageKey = Path.GetFileNameWithoutExtension(languageFile).Split('.')[1];
+			if (localizationFiles.ContainsKey(languageKey))
+			{
+				LogManager.Log.Warning($"{languageKey} has already been added. {languageFile} not added.");
+				continue;
+			}
+			localizationFiles.Add(languageKey, languageFile);
+		}
 
 		if (LoadTranslationFromAssembly("English") is not { } englishAssemblyData)
 		{
