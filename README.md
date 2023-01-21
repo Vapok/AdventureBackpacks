@@ -12,11 +12,11 @@ stage of maturity. This includes a backpack progression that will start at Meado
 * v2.0.0 - To be determined!
 
 # Current Patch Notes
-# 1.0.2.0
-* Localization Updates was very chatty.  Muted.
-* Arctic Backpack sizing was set to rugged on the X axis.  Opps.
-* Also, BepInEx version was set wrong. Reset.
-* 
+# 1.0.3.0
+* Fixed Locking Server Config with Config Sync.  Set 'Lock Config' to True in Server config (set while server is off)
+* Various Code Refactors and reorganization of methods.
+* Added Config to allow inventory and bag to be closed with the same hotkey.
+
 ## Compatible Mods (Verified)
 * Epic Loot 0.9.3+
 * Equipment and Quickslots
