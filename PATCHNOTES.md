@@ -1,5 +1,8 @@
 # Adventure Backpacks Patchnotes
 
+# 1.0.4.0
+ * Fixed a rare error on Piece Manager where on local play, if there is no adminlist file, it would error in the console.
+ * Fixed, In the event that there are multiple language files found for the same language, LocalizationManager would fail thus failing to load the mod.
 # 1.0.3.0 
  * Fixed Locking Server Config with Config Sync.  Set 'Lock Config' to True in Server config (set while server is off)
  * Various Code Refactors and reorganization of methods.
