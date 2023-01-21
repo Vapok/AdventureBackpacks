@@ -10,9 +10,10 @@ public abstract class ConfigSyncBase
     protected static ConfigFile? _config;
     private static ConfigSync? _configSync;
 
-    public static ConfigEntry<bool>? LoggingEnabled { get; private set; }
+    public static ConfigEntry<bool>?ServerEnforced { get; private set; }
     public static ConfigEntry<LogLevels>? LogLevel { get; private set;}
-
+    
+    public static ConfigEntry<bool>? LoggingEnabled { get; private set; }
     
     protected ConfigSyncBase(IPluginInfo _mod)
     {
@@ -40,6 +41,13 @@ public abstract class ConfigSyncBase
             new ConfigDescription("Minimum Log Level to Output",
                 null,
                 new ConfigAttributes { IsAdvanced = true}));
+
+        ServerEnforced = SyncedConfig("Server-Synced and Enforced Config", "Lock Config", false,
+            new ConfigDescription(
+                "[Server Only] The configuration is locked and may not be changed by clients once it has been synced from the server. Only valid for server config, will have no effect on clients.", null, new ConfigAttributes { Order = 50 }));
+
+        _configSync.AddLockingConfigEntry(ServerEnforced!);
+
     }
 
     public abstract void InitializeConfigurationSettings();
