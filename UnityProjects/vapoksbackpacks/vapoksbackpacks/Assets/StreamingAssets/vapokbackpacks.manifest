@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1642945747
+CRC: 2863930824
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6ff9262bbbd228eb926020c510e92a7f
+    Hash: 7e23b7030c90cfb8045f38ed1277f2c4
   TypeTreeHash:
     serializedVersion: 2
     Hash: a7411ea27be4da1f8ee63eeac676da3f
@@ -62,7 +62,7 @@ SerializeReferenceClassIdentifiers:
   ClassName: ItemDrop/ItemData/SharedData
 Assets:
 - Assets/Sprite/SilverBackpack_Icon.asset
-- Assets/vapok/CapeSilverBackpack.prefab
+- Assets/vapok/Prefabs/CapeSilverBackpack.prefab
 - Assets/Sprite/IronBackpack_Icon.asset
-- Assets/vapok/CapeIronBackpack.prefab
+- Assets/vapok/Prefabs/CapeIronBackpack.prefab
 Dependencies: []

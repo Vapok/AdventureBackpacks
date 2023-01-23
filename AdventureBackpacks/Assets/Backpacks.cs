@@ -18,14 +18,18 @@ namespace AdventureBackpacks.Assets
         private const string BackpackAssetName = "vapokbackpacks";
         private const string RuggedBackpackPrefab = "CapeIronBackpack";
         private const string ArcticBackpackPrefab = "CapeSilverBackpack";
+        private const string MeadowsBackpackPrefab = "BackpackMeadows";
         private const string RuggedBackpackName = "$vapok_mod_item_rugged_backpack";
         private const string ArcticBackpackName = "$vapok_mod_item_arctic_backpack";
+        private const string MeadowsBackpackName = "$vapok_mod_item_backpack_meadows";
         private const string UiInventoryName = "$vapok_mod_ui_backpack_inventoryname";
         
         private static Item _ruggedBackpack;
         private static Item _arcticBackpack;
+        //private static Item _meadowsBackpack;
         private static CustomSE _ruggedBackpackEffect;
         private static CustomSE _arcticBackpackEffect;
+        //private static CustomSE _meadowsBackpackEffect;
 
         private static ILogIt _log;
         private static List<string> _backpackTypes = new List<string>();
@@ -40,8 +44,21 @@ namespace AdventureBackpacks.Assets
             _log = AdventureBackpacks.Log;
             _log.Info($"Embedded resources: {string.Join(",", Assembly.GetExecutingAssembly().GetManifestResourceNames())}");
             
+            
+            //Adding Backpack Names
             BackpackTypes.Add(RuggedBackpackName);
             BackpackTypes.Add(ArcticBackpackName);
+            //BackpackTypes.Add(MeadowsBackpackName);
+            
+            //Register Meadows Backpack
+            //_meadowsBackpack = new Item(BackpackAssetName, MeadowsBackpackPrefab, "Assets.Bundles");
+            //_meadowsBackpack.Crafting.Add(CraftingTable.Workbench,1);
+            //_meadowsBackpack.RequiredItems.Add("LeatherScraps",8);
+            //_meadowsBackpack.RequiredItems.Add("DeerHide",2);
+            //_meadowsBackpack.RequiredItems.Add("Wood",2);
+            //_meadowsBackpack.Configurable = Configurability.Disabled;
+            
+            //MaterialReplacer.RegisterGameObjectForShaderSwap(_meadowsBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
             
             //Register Rugged Backpack
             _ruggedBackpack = new Item(BackpackAssetName, RuggedBackpackPrefab, "Assets.Bundles");
@@ -218,6 +235,7 @@ namespace AdventureBackpacks.Assets
             Inventory newInventory = null;
             switch (name)
             {
+                case MeadowsBackpackName:
                 case RuggedBackpackName:
                     newInventory = new Inventory(
                         UiInventoryName,
