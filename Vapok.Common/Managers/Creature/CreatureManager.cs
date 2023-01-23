@@ -867,6 +867,7 @@ public class LocalizeKey
 
 public static class PrefabManager
 {
+	private static bool _initialized = false;
 	static PrefabManager()
 	{
 		Harmony harmony = new("org.bepinex.helpers.CreatureManager");
@@ -886,6 +887,11 @@ public static class PrefabManager
 		public string folderName;
 	}
 
+	public static void Init()
+	{
+		if (_initialized == false)
+			_initialized = true;
+	}
 	private static readonly Dictionary<BundleId, AssetBundle> bundleCache = new();
 
 	public static AssetBundle RegisterAssetBundle(string assetBundleFileName, string folderName = "assets")

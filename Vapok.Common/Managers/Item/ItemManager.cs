@@ -133,6 +133,7 @@ public class Item
 		public ConfigEntry<int>? maximumTableLevel;
 	}
 
+	private static bool _initialized = false;
 	private static readonly List<Item> registeredItems = new();
 	private static readonly Dictionary<ItemDrop, Item> itemDropMap = new();
 	private static Dictionary<Item, Dictionary<string, List<Recipe>>> activeRecipes = new();
@@ -171,6 +172,12 @@ public class Item
 	{
 		get => this[""].CraftAmount;
 		set => this[""].CraftAmount = value;
+	}
+
+	public static void Init()
+	{
+		if (_initialized == false)
+			_initialized = true;
 	}
 
 	[Description("Specifies the maximum required crafting station level to upgrade and repair the item.\nDefault is calculated from crafting station level and maximum quality.")]

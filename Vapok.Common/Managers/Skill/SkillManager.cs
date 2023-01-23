@@ -15,6 +15,7 @@ namespace Vapok.Common.Managers.Skill;
 [PublicAPI]
 public class Skill
 {
+	private static bool _initialized = false;
 	private static readonly Dictionary<Skills.SkillType, Skill> skills = new();
 	internal static readonly Dictionary<string, Skill> skillByName = new();
 
@@ -206,6 +207,12 @@ public class Skill
 		harmony.Patch(AccessTools.DeclaredMethod(typeof(Localization), nameof(Localization.LoadCSV)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(LocalizeKey), nameof(LocalizeKey.AddLocalizedKeys))));
 		harmony.Patch(AccessTools.DeclaredMethod(typeof(Terminal), nameof(Terminal.InitTerminal)), new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Skill), nameof(Patch_Terminal_InitTerminal_Prefix))), new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Skill), nameof(Patch_Terminal_InitTerminal))));
 		harmony.Patch(AccessTools.DeclaredMethod(typeof(Localization), nameof(Localization.SetupLanguage)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(LocalizationCache), nameof(LocalizationCache.LocalizationPostfix))));
+	}
+
+	public static void Init()
+	{
+		if (_initialized == false)
+			_initialized = true;
 	}
 
 	private class ConfigurationManagerAttributes

@@ -8,8 +8,6 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using JetBrains.Annotations;
-using UnityEngine;
-using Vapok.Common.Managers.Configuration;
 using YamlDotNet.Serialization;
 
 
@@ -18,6 +16,8 @@ namespace Vapok.Common.Managers.LocalizationManager;
 [PublicAPI]
 public class Localizer
 {
+	private static bool _initialized = false;
+	
 	private static readonly Dictionary<string, Dictionary<string, Func<string>>> PlaceholderProcessors = new();
 
 	private static readonly Dictionary<string, Dictionary<string, string>> loadedTexts = new();
@@ -182,9 +182,22 @@ public class Localizer
 	static Localizer()
 	{
 		Harmony harmony = new("org.bepinex.helpers.LocalizationManager");
+		harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(Patch_FejdStartup))));
 		harmony.Patch(AccessTools.DeclaredMethod(typeof(Localization), nameof(Localization.LoadCSV)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(LoadLocalization))));
 	}
 
+	public static void Init()
+	{
+		if (_initialized == false)
+			_initialized = true;
+	}
+
+	[HarmonyPriority(Priority.First)]
+	private static void Patch_FejdStartup()
+	{
+		Load();
+	}
+	
 	private static byte[]? LoadTranslationFromAssembly(string language)
 	{
 		foreach (string extension in fileExtensions)

@@ -1024,6 +1024,7 @@ class RegisterClientRPCPatch
 
 public static class PiecePrefabManager
 {
+    private static bool _initialized = false;
     static PiecePrefabManager()
     {
         Harmony harmony = new("org.bepinex.helpers.PieceManager");
@@ -1054,6 +1055,12 @@ public static class PiecePrefabManager
         harmony.Patch(AccessTools.DeclaredMethod(typeof(Localization), nameof(Localization.LoadCSV)),
             postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(LocalizeKey),
                 nameof(LocalizeKey.AddLocalizedKeys))));
+    }
+
+    public static void Init()
+    {
+        if (_initialized == false)
+            _initialized = true;
     }
 
     private struct BundleId

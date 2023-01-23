@@ -41,6 +41,8 @@ public struct Range
 [PublicAPI]
 public class Location
 {
+	private static bool _initialized = false;
+	
 	public bool CanSpawn = true;
 	public Heightmap.Biome Biome = Heightmap.Biome.Meadows;
 	[Description("If the location should spawn more towards the edge of the biome or towards the center.\nUse 'Edge' to make it spawn towards the edge.\nUse 'Median' to make it spawn towards the center.\nUse 'Everything' if it doesn't matter.")]
@@ -116,6 +118,12 @@ public class Location
 		this.location = location;
 		GroupName = location.name;
 		registeredLocations.Add(this);
+	}
+
+	public static void Init()
+	{
+		if (_initialized == false)
+			_initialized = true;
 	}
 
 	private byte[]? ReadEmbeddedFileBytes(string name)

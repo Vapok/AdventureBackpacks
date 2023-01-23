@@ -134,6 +134,7 @@
         <Compile Include="Shared\Enums.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Tools\BoneReorder.cs" />
+        <Compile Include="Tools\Initializer.cs" />
         <Compile Include="Tools\KeyPressTool.cs" />
     </ItemGroup>
     <ItemGroup>

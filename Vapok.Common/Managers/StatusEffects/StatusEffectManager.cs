@@ -364,6 +364,8 @@ public class LocalizeKey
 
 public static class EffectManager
 {
+    private static bool _initialized = false;
+    
     static EffectManager()
     {
         Harmony harmony = new("org.bepinex.helpers.StatusEffectManager");
@@ -372,6 +374,12 @@ public static class EffectManager
         harmony.Patch(AccessTools.DeclaredMethod(typeof(ZNetScene), nameof(ZNetScene.Awake)),
             postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(EffectManager),
                 nameof(Patch_ZNetSceneAwake))));
+    }
+
+    public static void Init()
+    {
+        if (_initialized == false)
+            _initialized = true;
     }
 
     private struct BundleId
