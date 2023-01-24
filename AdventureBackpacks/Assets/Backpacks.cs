@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using ItemManager;
 using Vapok.Common.Abstractions;
+using Vapok.Common.Managers;
 using Vapok.Common.Managers.PieceManager;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
@@ -22,22 +24,16 @@ namespace AdventureBackpacks.Assets
         private const string RuggedBackpackName = "$vapok_mod_item_rugged_backpack";
         private const string ArcticBackpackName = "$vapok_mod_item_arctic_backpack";
         private const string MeadowsBackpackName = "$vapok_mod_item_backpack_meadows";
-        private const string UiInventoryName = "$vapok_mod_ui_backpack_inventoryname";
         
         private static Item _ruggedBackpack;
         private static Item _arcticBackpack;
-        //private static Item _meadowsBackpack;
-        private static CustomSE _ruggedBackpackEffect;
-        private static CustomSE _arcticBackpackEffect;
-        //private static CustomSE _meadowsBackpackEffect;
+        private static Item _meadowsBackpack;
 
         private static ILogIt _log;
-        private static List<string> _backpackTypes = new List<string>();
+        private static List<string> _backpackTypes = new();
 
         private static HitData.DamageModPair _frostResistance = new() { m_type = HitData.DamageType.Frost, m_modifier = HitData.DamageModifier.Resistant};
         public static List<string> BackpackTypes => _backpackTypes;
-
-        public static string BackpacksInventoryName => UiInventoryName;
 
         public static void LoadAssets()
         {
@@ -48,17 +44,29 @@ namespace AdventureBackpacks.Assets
             //Adding Backpack Names
             BackpackTypes.Add(RuggedBackpackName);
             BackpackTypes.Add(ArcticBackpackName);
-            //BackpackTypes.Add(MeadowsBackpackName);
+            BackpackTypes.Add(MeadowsBackpackName);
             
             //Register Meadows Backpack
-            //_meadowsBackpack = new Item(BackpackAssetName, MeadowsBackpackPrefab, "Assets.Bundles");
-            //_meadowsBackpack.Crafting.Add(CraftingTable.Workbench,1);
-            //_meadowsBackpack.RequiredItems.Add("LeatherScraps",8);
-            //_meadowsBackpack.RequiredItems.Add("DeerHide",2);
-            //_meadowsBackpack.RequiredItems.Add("Wood",2);
-            //_meadowsBackpack.Configurable = Configurability.Disabled;
+            _meadowsBackpack = new Item(BackpackAssetName, MeadowsBackpackPrefab, "Assets.Bundles");
+            _meadowsBackpack.Crafting.Add(CraftingTable.Workbench,2);
+            _meadowsBackpack.RequiredItems.Add("CapeDeerHide",1);
+            _meadowsBackpack.RequiredItems.Add("DeerHide",8);
+            _meadowsBackpack.RequiredItems.Add("BoneFragments",2);
+            _meadowsBackpack.RequiredUpgradeItems.Add("LeatherScraps", 5);
+            _meadowsBackpack.RequiredUpgradeItems.Add("DeerHide",3);
+            _meadowsBackpack.Configurable = Configurability.Disabled;
+
+            //Adjust Rugged ItemData
+            var meadowItemItemDrop = _meadowsBackpack.Prefab.GetComponent<ItemDrop>();
+            var meadowItemData = meadowItemItemDrop.m_itemData;
+            if (meadowItemData != null)
+            {
+                meadowItemData.m_shared.m_armor = meadowItemData.m_shared.m_armorPerLevel;
+                meadowItemItemDrop.Save();
+            }
             
-            //MaterialReplacer.RegisterGameObjectForShaderSwap(_meadowsBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
+            
+            MaterialReplacer.RegisterGameObjectForShaderSwap(_meadowsBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
             
             //Register Rugged Backpack
             _ruggedBackpack = new Item(BackpackAssetName, RuggedBackpackPrefab, "Assets.Bundles");
@@ -66,32 +74,21 @@ namespace AdventureBackpacks.Assets
             _ruggedBackpack.RequiredItems.Add("LeatherScraps",8);
             _ruggedBackpack.RequiredItems.Add("DeerHide",2);
             _ruggedBackpack.RequiredItems.Add("Bronze",2);
+            _ruggedBackpack.RequiredUpgradeItems.Add("Bronze", 4);
+            _ruggedBackpack.RequiredUpgradeItems.Add("DeerHide", 4);
 
             _ruggedBackpack.Configurable = Configurability.Disabled;
             
             MaterialReplacer.RegisterGameObjectForShaderSwap(_ruggedBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
-            
-            //Adding Rugged Status Effect
-            _ruggedBackpackEffect = new CustomSE(Enums.StatusEffects.Stats, "SE_RuggedBackpack");
-            _ruggedBackpackEffect.Effect.m_name = "$vapok_mod_se_ruggedbackpack";
-            _ruggedBackpackEffect.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
-            _ruggedBackpackEffect.Effect.m_startMessage = "$vapok_mod_se_ruggedbackpackeffects_start";
-            ((SE_Stats)_ruggedBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusRugged.Value;
-            if (ConfigRegistry.FreezingRugged.Value)
-                ((SE_Stats)_ruggedBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
-
-            _ruggedBackpackEffect.AddSEToPrefab(_ruggedBackpackEffect,RuggedBackpackPrefab);
 
             //Adjust Rugged ItemData
             var ruggedItemItemDrop = _ruggedBackpack.Prefab.GetComponent<ItemDrop>();
             var ruggedItemData = ruggedItemItemDrop.m_itemData;
             if (ruggedItemData != null)
             {
-                ruggedItemData.m_shared.m_maxDurability = 1000f;
-                ruggedItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value;
+                ruggedItemData.m_shared.m_armor = ruggedItemData.m_shared.m_armorPerLevel;
+                ruggedItemItemDrop.Save();
             }
-            
-            ruggedItemItemDrop.Save();
             
             //Set Persistence
             _ruggedBackpack.Prefab.GetComponent<ZNetView>().m_persistent = true;
@@ -102,87 +99,28 @@ namespace AdventureBackpacks.Assets
             _arcticBackpack.RequiredItems.Add("LeatherScraps",8);
             _arcticBackpack.RequiredItems.Add("WolfPelt",2);
             _arcticBackpack.RequiredItems.Add("Silver",2);
+            _arcticBackpack.RequiredUpgradeItems.Add("Silver", 4);
+            _arcticBackpack.RequiredUpgradeItems.Add("WolfPelt", 4);
 
             _arcticBackpack.Configurable = Configurability.Disabled;
             
             MaterialReplacer.RegisterGameObjectForShaderSwap(_arcticBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
             
-            //Adding Arctic Status Effect
-            _arcticBackpackEffect = new CustomSE(Enums.StatusEffects.Stats, "SE_ArcticBackpack");
-            _arcticBackpackEffect.Effect.m_name = "$vapok_mod_se_arcticbackpack";
-            _arcticBackpackEffect.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
-            _arcticBackpackEffect.Effect.m_startMessage = "$vapok_mod_se_arcticbackpackeffects_start";
-            ((SE_Stats)_arcticBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusArctic.Value;
-            
-            if (ConfigRegistry.FreezingArctic.Value)
-                ((SE_Stats)_arcticBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
-
-            _arcticBackpackEffect.AddSEToPrefab(_arcticBackpackEffect,ArcticBackpackPrefab);
-
             //Adjust Arctic ItemData
             var arcticItemItemDrop = _arcticBackpack.Prefab.GetComponent<ItemDrop>();
             var arcticItemData = arcticItemItemDrop.m_itemData;
             if (arcticItemData != null)
             {
-                arcticItemData.m_shared.m_maxDurability = 1000f;
-                arcticItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value;
+                arcticItemData.m_shared.m_armor = arcticItemData.m_shared.m_armorPerLevel;
+                arcticItemItemDrop.Save();
             }
-            
-            arcticItemItemDrop.Save();
             
             //Set Persistence
             _arcticBackpack.Prefab.GetComponent<ZNetView>().m_persistent = true;
         }
 
-        public static void UpdateStatusEffectConfigValues(object sender, EventArgs e)
-        {
-            ((SE_Stats)_ruggedBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusRugged.Value;
-
-            if (ConfigRegistry.FreezingRugged.Value)
-            {
-                if (!((SE_Stats)_ruggedBackpackEffect.Effect).m_mods.Contains(_frostResistance))
-                    ((SE_Stats)_ruggedBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
-            }
-            else
-            {
-                if (((SE_Stats)_ruggedBackpackEffect.Effect).m_mods.Contains(_frostResistance))
-                    ((SE_Stats)_ruggedBackpackEffect.Effect).m_mods.Remove(_frostResistance);
-            }
-            
-            ((SE_Stats)_arcticBackpackEffect.Effect).m_addMaxCarryWeight = ConfigRegistry.CarryBonusArctic.Value;
-            
-            if (ConfigRegistry.FreezingArctic.Value)
-            {
-                if (!((SE_Stats)_arcticBackpackEffect.Effect).m_mods.Contains(_frostResistance))
-                    ((SE_Stats)_arcticBackpackEffect.Effect).m_mods = new List<HitData.DamageModPair> { _frostResistance };
-            }
-            else
-            {
-                if (((SE_Stats)_arcticBackpackEffect.Effect).m_mods.Contains(_frostResistance))
-                    ((SE_Stats)_arcticBackpackEffect.Effect).m_mods.Remove(_frostResistance);
-            }
-        }
-
         public static void UpdateItemDataConfigValues(object sender, EventArgs e)
         {
-            //Adjust Rugged ItemData
-            var ruggedItemItemDrop = _ruggedBackpack.Prefab.GetComponent<ItemDrop>();
-            var ruggedItemData = ruggedItemItemDrop.m_itemData;
-            if (ruggedItemData != null)
-            {
-                ruggedItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value;
-            }
-            ruggedItemItemDrop.Save();
-            
-            //Adjust Arctic ItemData
-            var arcticItemItemDrop = _arcticBackpack.Prefab.GetComponent<ItemDrop>();
-            var arcticItemData = arcticItemItemDrop.m_itemData;
-            if (arcticItemData != null)
-            {
-                arcticItemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value;
-            }
-            arcticItemItemDrop.Save();
-
             if (Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null)
                 return;
 
@@ -198,17 +136,11 @@ namespace AdventureBackpacks.Assets
                     if (item == null)
                         continue;
                 
-                    if (BackpackTypes.Contains(item.m_shared.m_name))
+                    if (item.IsBackpack())
                     {
-                        switch (item.m_shared.m_name)
-                        {
-                            case RuggedBackpackName:
-                                item.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value;
-                                break;
-                            case ArcticBackpackName:
-                                item.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value;
-                                break;
-                        }
+                        //UpdateStatusEffects(item);
+                        var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
+                        backpackItem.Load();
                     }
                 }
             }
@@ -230,15 +162,32 @@ namespace AdventureBackpacks.Assets
             }
         }
         
-        public static Inventory NewInventoryInstance(string name)
+        public static Inventory NewInventoryInstance(string name, int itemMQuality = 1)
         {
             Inventory newInventory = null;
+            var uiInventoryName = $"{name} $vapok_mod_level {itemMQuality}";
             switch (name)
             {
                 case MeadowsBackpackName:
+                    switch (itemMQuality)
+                    {
+                        case 1:
+                            newInventory = new Inventory(uiInventoryName, null, 2, 1);
+                            break;
+                        case 2:
+                            newInventory = new Inventory(uiInventoryName, null, 3, 1);
+                            break;
+                        case 3:
+                            newInventory = new Inventory(uiInventoryName, null, 4, 1);
+                            break;
+                        case 4:
+                            newInventory = new Inventory(uiInventoryName, null, 5, 1);
+                            break;
+                    }
+                    break;
                 case RuggedBackpackName:
                     newInventory = new Inventory(
-                        UiInventoryName,
+                        uiInventoryName,
                         null,
                         (int)ConfigRegistry.RuggedBackpackSize.Value.x,
                         (int)ConfigRegistry.RuggedBackpackSize.Value.y
@@ -246,7 +195,7 @@ namespace AdventureBackpacks.Assets
                     break;
                 case ArcticBackpackName:
                     newInventory = new Inventory(
-                        UiInventoryName,
+                        uiInventoryName,
                         null,
                         (int)ConfigRegistry.ArcticBackpackSize.Value.x,
                         (int)ConfigRegistry.ArcticBackpackSize.Value.y
@@ -261,25 +210,103 @@ namespace AdventureBackpacks.Assets
             return null;
         }
 
-        public static bool CheckForInception(Inventory __instance, ItemDrop.ItemData item)
+        public static bool CheckForInception(Inventory instance, ItemDrop.ItemData item)
         {
-            if (__instance.IsBackPackInventory())
+            if (instance.IsBackPackInventory() && Player.m_localPlayer != null)
             {
                 // If the item is a backpack...
                 if (item.IsBackpack())
                 {
-                    if (Player.m_localPlayer != null)
-                    {
-                        Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception");    
-                    }
+                    Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception");    
 
                     // Nope!
                     AdventureBackpacks.Log.Message("You can't put a backpack inside a backpack, silly!");
                     return false;
                 }
             }
-
             return true;
+        }
+
+        public static CustomSE UpdateStatusEffects(ItemDrop.ItemData itemData)
+        {
+            if (itemData == null)
+                return null;
+            
+            var backpackName = itemData.m_shared.m_name;
+            var backpackQuality = itemData.m_quality;
+            var statusEffects = new CustomSE(Enums.StatusEffects.Stats, $"SE_{backpackName}_{backpackQuality}");
+            
+            statusEffects.Effect.m_name = $"{backpackName} Level {backpackQuality} Effect";
+            statusEffects.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
+            statusEffects.Effect.m_startMessage = $"Your backpack feels useful.";
+
+            var modifierList = new List<HitData.DamageModPair>();
+            //Set Armor Default
+            itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel * backpackQuality;
+            switch (backpackName)
+            {
+                case MeadowsBackpackName:
+                    switch (backpackQuality)
+                    {
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                             modifierList.Add(_frostResistance);
+                            break;
+                    }
+                    ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 15 * backpackQuality;
+                    
+                    break;
+                case RuggedBackpackName:
+                    itemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value/backpackQuality;
+                    switch (backpackQuality)
+                    {
+                        case 1:
+                            
+                            break;
+                        case 2:
+                            modifierList.Add(_frostResistance);
+                            break;
+                        case 3:
+                            modifierList.Add(_frostResistance);
+                            break;
+                        case 4:
+                            modifierList.Add(_frostResistance);
+                            itemData.m_shared.m_movementModifier = 0;
+                            break;
+                    }
+                    ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 25 * backpackQuality;
+                    
+                    break;
+                case ArcticBackpackName:
+                    itemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value/backpackQuality;
+                    switch (backpackQuality)
+                    {
+                        case 1:
+                            break;
+                        case 2:
+                            modifierList.Add(_frostResistance);
+                            break;
+                        case 3:
+                            modifierList.Add(_frostResistance);
+                            break;
+                        case 4:
+                            modifierList.Add(_frostResistance);
+                            itemData.m_shared.m_movementModifier = 0;
+                            break;
+                    }
+                    ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 35 * backpackQuality;
+                    break;
+            }
+            itemData.m_shared.m_maxDurability = 1000f;
+            ((SE_Stats)statusEffects.Effect).m_mods = modifierList;
+
+            itemData.AddSEToItem(statusEffects);
+            return statusEffects;
         }
     }
 }

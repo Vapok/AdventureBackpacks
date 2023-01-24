@@ -398,9 +398,9 @@ MonoBehaviour:
       m_description: $vapok_mod_item_backpack_meadows_description
       m_maxStackSize: 1
       m_autoStack: 1
-      m_maxQuality: 1
+      m_maxQuality: 4
       m_scaleByQuality: 0
-      m_weight: 1
+      m_weight: 2
       m_scaleWeightByQuality: 0
       m_value: 0
       m_teleportable: 1
@@ -424,7 +424,7 @@ MonoBehaviour:
       m_armorMaterial: {fileID: 0}
       m_helmetHideHair: 1
       m_helmetHideBeard: 0
-      m_armor: 10
+      m_armor: 1
       m_armorPerLevel: 1
       m_damageModifiers: []
       m_blockPower: 10
@@ -433,7 +433,7 @@ MonoBehaviour:
       m_deflectionForcePerLevel: 0
       m_timedBlockBonus: 1.5
       m_animationState: 1
-      m_skillType: 1
+      m_skillType: 0
       m_toolTier: 0
       m_damages:
         m_damage: 0

@@ -108,12 +108,12 @@ namespace AdventureBackpacks.Configuration
                         null,
                         new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
 
-            CarryBonusRugged!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            CarryBonusRugged!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
             SpeedModRugged!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
-            CarryBonusArctic!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            CarryBonusArctic!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
             SpeedModArctic!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
-            FreezingRugged!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
-            FreezingArctic!.SettingChanged += Backpacks.UpdateStatusEffectConfigValues;
+            FreezingRugged!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+            FreezingArctic!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
 
         }
         
