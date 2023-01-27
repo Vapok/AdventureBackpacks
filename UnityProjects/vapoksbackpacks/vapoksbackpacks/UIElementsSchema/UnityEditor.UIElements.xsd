@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.UIElements.Debugger" elementFormDefault="qualified" targetNamespace="UnityEditor.UIElements" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.PackageManager.UI" elementFormDefault="qualified" targetNamespace="UnityEditor.UIElements" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
   <xs:simpleType name="PropertyControl_value-type_Type">
     <xs:restriction base="xs:string">
@@ -92,6 +92,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -158,6 +159,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -413,6 +415,7 @@
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="label" type="xs:string" use="optional" />
         <xs:attribute default="true" name="allow-scene-objects" type="xs:boolean" use="optional" />
+        <xs:attribute default="null" name="type" type="xs:string" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -463,7 +466,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="label" type="xs:string" use="optional" />
-        <xs:attribute default="" name="type" type="xs:string" use="optional" />
+        <xs:attribute default="null" name="type" type="xs:string" use="optional" />
         <xs:attribute default="" name="value" type="xs:string" use="optional" />
         <xs:attribute default="false" name="include-obsolete-values" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
@@ -514,7 +517,6 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="label" type="xs:string" use="optional" />
-        <xs:attribute default="" name="choices" type="xs:string" use="optional" />
         <xs:attribute default="0" name="value" type="xs:int" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
@@ -610,7 +612,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="label" type="xs:string" use="optional" />
-        <xs:attribute default="" name="type" type="xs:string" use="optional" />
+        <xs:attribute default="null" name="type" type="xs:string" use="optional" />
         <xs:attribute default="" name="value" type="xs:string" use="optional" />
         <xs:attribute default="false" name="include-obsolete-values" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />

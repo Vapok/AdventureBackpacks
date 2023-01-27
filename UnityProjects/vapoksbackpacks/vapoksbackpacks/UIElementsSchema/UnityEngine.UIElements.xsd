@@ -1,11 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.UIElements.Debugger" elementFormDefault="qualified" targetNamespace="UnityEngine.UIElements" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.PackageManager.UI" elementFormDefault="qualified" targetNamespace="UnityEngine.UIElements" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:complexType name="UXMLType">
     <xs:complexContent mixed="false">
       <xs:restriction base="xs:anyType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
           <xs:element ref="engine:VisualElement" />
         </xs:sequence>
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
@@ -95,6 +98,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -115,6 +119,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
         <xs:attribute default="0" name="delay" type="xs:long" use="optional" />
         <xs:attribute default="0" name="interval" type="xs:long" use="optional" />
         <xs:anyAttribute processContents="lax" />
@@ -127,6 +132,13 @@
       <xs:enumeration value="Vertical" />
       <xs:enumeration value="Horizontal" />
       <xs:enumeration value="VerticalAndHorizontal" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ScrollView_touch-scroll-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unrestricted" />
+      <xs:enumeration value="Elastic" />
+      <xs:enumeration value="Clamped" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="ScrollViewType">
@@ -150,6 +162,9 @@
         <xs:attribute default="false" name="show-vertical-scroller" type="xs:boolean" use="optional" />
         <xs:attribute default="20" name="horizontal-page-size" type="xs:float" use="optional" />
         <xs:attribute default="20" name="vertical-page-size" type="xs:float" use="optional" />
+        <xs:attribute default="Clamped" name="touch-scroll-type" type="engine:ScrollView_touch-scroll-type_Type" use="optional" />
+        <xs:attribute default="0.135" name="scroll-deceleration-rate" type="xs:float" use="optional" />
+        <xs:attribute default="0.1" name="elasticity" type="xs:float" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -211,6 +226,7 @@
         <xs:attribute default="0" name="low-value" type="xs:float" use="optional" />
         <xs:attribute default="10" name="high-value" type="xs:float" use="optional" />
         <xs:attribute default="0" name="page-size" type="xs:float" use="optional" />
+        <xs:attribute default="false" name="show-input-field" type="xs:boolean" use="optional" />
         <xs:attribute default="Horizontal" name="direction" type="engine:Slider_direction_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
@@ -245,6 +261,7 @@
         <xs:attribute default="0" name="low-value" type="xs:int" use="optional" />
         <xs:attribute default="10" name="high-value" type="xs:int" use="optional" />
         <xs:attribute default="0" name="page-size" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="show-input-field" type="xs:boolean" use="optional" />
         <xs:attribute default="Horizontal" name="direction" type="engine:SliderInt_direction_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
@@ -333,7 +350,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="TextField" substitutionGroup="engine:VisualElement" type="engine:TextFieldType" />
-  <xs:complexType name="TemplateContainerType">
+  <xs:complexType name="InstanceType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -352,7 +369,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="TemplateContainer" substitutionGroup="engine:VisualElement" type="engine:TemplateContainerType" />
+  <xs:element name="Instance" substitutionGroup="engine:VisualElement" type="engine:InstanceType" />
   <xs:complexType name="BoxType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -374,6 +391,37 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="Box" substitutionGroup="engine:VisualElement" type="engine:BoxType" />
+  <xs:simpleType name="HelpBox_message-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Info" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="Error" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="HelpBoxType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="engine:VisualElement" />
+        </xs:sequence>
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="message-type" type="engine:HelpBox_message-type_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="HelpBox" substitutionGroup="engine:VisualElement" type="engine:HelpBoxType" />
   <xs:complexType name="PopupWindowType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -392,11 +440,26 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="PopupWindow" substitutionGroup="engine:VisualElement" type="engine:PopupWindowType" />
+  <xs:simpleType name="ListView_selection-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Single" />
+      <xs:enumeration value="Multiple" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ListView_show-alternating-row-backgrounds_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="ContentOnly" />
+      <xs:enumeration value="All" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="ListViewType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -412,11 +475,58 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="30" name="item-height" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="show-border" type="xs:boolean" use="optional" />
+        <xs:attribute default="Single" name="selection-type" type="engine:ListView_selection-type_Type" use="optional" />
+        <xs:attribute default="None" name="show-alternating-row-backgrounds" type="engine:ListView_show-alternating-row-backgrounds_Type" use="optional" />
+        <xs:attribute default="false" name="reorderable" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="show-bound-collection-size" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="horizontal-scrolling" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ListView" substitutionGroup="engine:VisualElement" type="engine:ListViewType" />
+  <xs:simpleType name="TwoPaneSplitView_orientation_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Horizontal" />
+      <xs:enumeration value="Vertical" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="TwoPaneSplitViewType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:attribute default="0" name="fixed-pane-index" type="xs:int" use="optional" />
+        <xs:attribute default="100" name="fixed-pane-initial-dimension" type="xs:int" use="optional" />
+        <xs:attribute default="Horizontal" name="orientation" type="engine:TwoPaneSplitView_orientation_Type" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TwoPaneSplitView" substitutionGroup="engine:VisualElement" type="engine:TwoPaneSplitViewType" />
+  <xs:simpleType name="TreeView_selection-type_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Single" />
+      <xs:enumeration value="Multiple" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TreeView_show-alternating-row-backgrounds_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="ContentOnly" />
+      <xs:enumeration value="All" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="TreeViewType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -431,6 +541,9 @@
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="30" name="item-height" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="show-border" type="xs:boolean" use="optional" />
+        <xs:attribute default="Single" name="selection-type" type="engine:TreeView_selection-type_Type" use="optional" />
+        <xs:attribute default="None" name="show-alternating-row-backgrounds" type="engine:TreeView_show-alternating-row-backgrounds_Type" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
@@ -497,11 +610,43 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="TextElement" substitutionGroup="engine:VisualElement" type="engine:TextElementType" />
+  <xs:complexType name="TemplateType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute default="" name="path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="src" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Template" substitutionGroup="engine:VisualElement" type="engine:TemplateType" />
+  <xs:complexType name="StyleType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="" name="path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="src" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Style" substitutionGroup="engine:VisualElement" type="engine:StyleType" />
+  <xs:complexType name="AttributeOverridesType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute name="element-name" type="xs:string" use="required" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AttributeOverrides" substitutionGroup="engine:VisualElement" type="engine:AttributeOverridesType" />
   <xs:complexType name="ButtonType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -517,6 +662,7 @@
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
         <xs:anyAttribute processContents="lax" />
       </xs:restriction>
     </xs:complexContent>

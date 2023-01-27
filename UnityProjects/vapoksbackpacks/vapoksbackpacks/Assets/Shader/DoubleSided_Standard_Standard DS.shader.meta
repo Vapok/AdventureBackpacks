@@ -1,10 +1,10 @@
 fileFormatVersion: 2
 guid: 036f9f46f27ce9c43b7e875c8c5e5f1c
-timeCreated: 1673230661
-licenseType: Free
-NativeFormatImporter:
+ShaderImporter:
   externalObjects: {}
-  mainObjectFileID: 4800000
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: vapokbackpacks
+  assetBundleVariant: 

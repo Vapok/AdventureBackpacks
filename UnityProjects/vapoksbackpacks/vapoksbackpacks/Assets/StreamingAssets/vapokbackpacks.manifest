@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 619593651
+CRC: 2253576976
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 766c6870f9502b7fb171bc6d239173a8
+    Hash: 634cb895dd4b5047be8d88df17706cca
   TypeTreeHash:
     serializedVersion: 2
     Hash: 29a4a9fe6c619799d21870a5b7633092
@@ -61,9 +61,15 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: assembly_valheim
   ClassName: ItemDrop/ItemData/SharedData
 Assets:
+- Assets/vapok/Prefabs/BackpackMistlands.prefab
 - Assets/vapok/Prefabs/BackpackMeadows.prefab
+- Assets/vapok/Prefabs/BackpackPlains.prefab
 - Assets/Sprite/SilverBackpack_Icon.asset
+- Assets/Shader/DoubleSided_Standard_Standard DS.shader
 - Assets/vapok/Prefabs/CapeSilverBackpack.prefab
 - Assets/Sprite/IronBackpack_Icon.asset
+- Assets/vapok/Prefabs/BackpackSwamp.prefab
+- Assets/vapok/Prefabs/BackpackMountains.prefab
+- Assets/vapok/Prefabs/BackpackBlackForest.prefab
 - Assets/vapok/Prefabs/CapeIronBackpack.prefab
 Dependencies: []

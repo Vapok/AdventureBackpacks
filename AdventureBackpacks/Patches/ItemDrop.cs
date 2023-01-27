@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using HarmonyLib;
@@ -25,13 +27,20 @@ public class ItemDropPatches
 
                 if (Backpacks.BackpackTypes.Contains(__instance.m_shared.m_name))
                 {
+                    var backpack =
+                        BackpackFactory.BackpackItems.FirstOrDefault(x =>
+                            x.ItemName.Equals(__instance.m_shared.m_name));
+
+                    if (backpack == null)
+                        return;
+                    
                     // If the item in GetWeight() is a backpack, and it has been Extended(), call GetTotalWeight() on its Inventory.
                     // Note that GetTotalWeight() just returns a the value of m_totalWeight, and doesn't do any calculation on its own.
                     // If the Inventory has been changed at any point, it calls UpdateTotalWeight(), which should ensure that its m_totalWeight is accurate.
                     var inventoryWeight = __instance.Data().GetOrCreate<BackpackComponent>().GetInventory()?.GetTotalWeight() ?? 0;
 
                     // To the backpack's item weight, add the backpack's inventory weight multiplied by the weightMultiplier in the configs.
-                    __result += inventoryWeight * ConfigRegistry.WeightMultiplier.Value;
+                    __result += inventoryWeight * backpack.WeightMultiplier.Value;
                 }
             }
             catch (Exception e)

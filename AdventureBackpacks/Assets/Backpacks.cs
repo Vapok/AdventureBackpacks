@@ -1,123 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
-using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
-using ItemManager;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
-using Vapok.Common.Managers.PieceManager;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
-using CraftingTable = ItemManager.CraftingTable;
 
 namespace AdventureBackpacks.Assets
 {
     public static class Backpacks
     {
-        // Asset and prefab loading
-        private const string BackpackAssetName = "vapokbackpacks";
-        private const string RuggedBackpackPrefab = "CapeIronBackpack";
-        private const string ArcticBackpackPrefab = "CapeSilverBackpack";
-        private const string MeadowsBackpackPrefab = "BackpackMeadows";
-        private const string RuggedBackpackName = "$vapok_mod_item_rugged_backpack";
-        private const string ArcticBackpackName = "$vapok_mod_item_arctic_backpack";
-        private const string MeadowsBackpackName = "$vapok_mod_item_backpack_meadows";
-        
-        private static Item _ruggedBackpack;
-        private static Item _arcticBackpack;
-        private static Item _meadowsBackpack;
 
-        private static ILogIt _log;
+        private static ILogIt _log = AdventureBackpacks.Log;
         private static List<string> _backpackTypes = new();
 
         private static HitData.DamageModPair _frostResistance = new() { m_type = HitData.DamageType.Frost, m_modifier = HitData.DamageModifier.Resistant};
         public static List<string> BackpackTypes => _backpackTypes;
-
-        public static void LoadAssets()
-        {
-            _log = AdventureBackpacks.Log;
-            _log.Info($"Embedded resources: {string.Join(",", Assembly.GetExecutingAssembly().GetManifestResourceNames())}");
-            
-            
-            //Adding Backpack Names
-            BackpackTypes.Add(RuggedBackpackName);
-            BackpackTypes.Add(ArcticBackpackName);
-            BackpackTypes.Add(MeadowsBackpackName);
-            
-            //Register Meadows Backpack
-            _meadowsBackpack = new Item(BackpackAssetName, MeadowsBackpackPrefab, "Assets.Bundles");
-            _meadowsBackpack.Crafting.Add(CraftingTable.Workbench,2);
-            _meadowsBackpack.RequiredItems.Add("CapeDeerHide",1);
-            _meadowsBackpack.RequiredItems.Add("DeerHide",8);
-            _meadowsBackpack.RequiredItems.Add("BoneFragments",2);
-            _meadowsBackpack.RequiredUpgradeItems.Add("LeatherScraps", 5);
-            _meadowsBackpack.RequiredUpgradeItems.Add("DeerHide",3);
-            _meadowsBackpack.Configurable = Configurability.Disabled;
-
-            //Adjust Rugged ItemData
-            var meadowItemItemDrop = _meadowsBackpack.Prefab.GetComponent<ItemDrop>();
-            var meadowItemData = meadowItemItemDrop.m_itemData;
-            if (meadowItemData != null)
-            {
-                meadowItemData.m_shared.m_armor = meadowItemData.m_shared.m_armorPerLevel;
-                meadowItemItemDrop.Save();
-            }
-            
-            
-            MaterialReplacer.RegisterGameObjectForShaderSwap(_meadowsBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
-            
-            //Register Rugged Backpack
-            _ruggedBackpack = new Item(BackpackAssetName, RuggedBackpackPrefab, "Assets.Bundles");
-            _ruggedBackpack.Crafting.Add(CraftingTable.Workbench,1);
-            _ruggedBackpack.RequiredItems.Add("LeatherScraps",8);
-            _ruggedBackpack.RequiredItems.Add("DeerHide",2);
-            _ruggedBackpack.RequiredItems.Add("Bronze",2);
-            _ruggedBackpack.RequiredUpgradeItems.Add("Bronze", 4);
-            _ruggedBackpack.RequiredUpgradeItems.Add("DeerHide", 4);
-
-            _ruggedBackpack.Configurable = Configurability.Disabled;
-            
-            MaterialReplacer.RegisterGameObjectForShaderSwap(_ruggedBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
-
-            //Adjust Rugged ItemData
-            var ruggedItemItemDrop = _ruggedBackpack.Prefab.GetComponent<ItemDrop>();
-            var ruggedItemData = ruggedItemItemDrop.m_itemData;
-            if (ruggedItemData != null)
-            {
-                ruggedItemData.m_shared.m_armor = ruggedItemData.m_shared.m_armorPerLevel;
-                ruggedItemItemDrop.Save();
-            }
-            
-            //Set Persistence
-            _ruggedBackpack.Prefab.GetComponent<ZNetView>().m_persistent = true;
-            
-            //Register Arctic Backpack
-            _arcticBackpack = new Item(BackpackAssetName, ArcticBackpackPrefab, "Assets.Bundles");
-            _arcticBackpack.Crafting.Add(CraftingTable.Workbench,3);
-            _arcticBackpack.RequiredItems.Add("LeatherScraps",8);
-            _arcticBackpack.RequiredItems.Add("WolfPelt",2);
-            _arcticBackpack.RequiredItems.Add("Silver",2);
-            _arcticBackpack.RequiredUpgradeItems.Add("Silver", 4);
-            _arcticBackpack.RequiredUpgradeItems.Add("WolfPelt", 4);
-
-            _arcticBackpack.Configurable = Configurability.Disabled;
-            
-            MaterialReplacer.RegisterGameObjectForShaderSwap(_arcticBackpack.Prefab,MaterialReplacer.ShaderType.PieceShader);
-            
-            //Adjust Arctic ItemData
-            var arcticItemItemDrop = _arcticBackpack.Prefab.GetComponent<ItemDrop>();
-            var arcticItemData = arcticItemItemDrop.m_itemData;
-            if (arcticItemData != null)
-            {
-                arcticItemData.m_shared.m_armor = arcticItemData.m_shared.m_armorPerLevel;
-                arcticItemItemDrop.Save();
-            }
-            
-            //Set Persistence
-            _arcticBackpack.Prefab.GetComponent<ZNetView>().m_persistent = true;
-        }
 
         public static void UpdateItemDataConfigValues(object sender, EventArgs e)
         {
@@ -166,9 +67,19 @@ namespace AdventureBackpacks.Assets
         {
             Inventory newInventory = null;
             var uiInventoryName = $"{name} $vapok_mod_level {itemMQuality}";
-            switch (name)
+            var backpack = BackpackFactory.BackpackItems.FirstOrDefault(x => x.ItemName.Equals(name));
+            
+            if (backpack == null)
+                return null;
+            
+            switch (backpack.Biome)
             {
-                case MeadowsBackpackName:
+                case BackpackBiomes.Meadows:
+                case BackpackBiomes.BlackForest:
+                case BackpackBiomes.Swamp:
+                case BackpackBiomes.Mountains:
+                case BackpackBiomes.Plains:
+                case BackpackBiomes.Mistlands:
                     switch (itemMQuality)
                     {
                         case 1:
@@ -185,20 +96,12 @@ namespace AdventureBackpacks.Assets
                             break;
                     }
                     break;
-                case RuggedBackpackName:
+                case BackpackBiomes.None:
                     newInventory = new Inventory(
                         uiInventoryName,
                         null,
-                        (int)ConfigRegistry.RuggedBackpackSize.Value.x,
-                        (int)ConfigRegistry.RuggedBackpackSize.Value.y
-                    );
-                    break;
-                case ArcticBackpackName:
-                    newInventory = new Inventory(
-                        uiInventoryName,
-                        null,
-                        (int)ConfigRegistry.ArcticBackpackSize.Value.x,
-                        (int)ConfigRegistry.ArcticBackpackSize.Value.y
+                        (int)backpack.BackpackSize.Value.x,
+                        (int)backpack.BackpackSize.Value.y
                     );
                     break;
             }
@@ -243,9 +146,19 @@ namespace AdventureBackpacks.Assets
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default
             itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel * backpackQuality;
-            switch (backpackName)
+            var backpack = BackpackFactory.BackpackItems.FirstOrDefault(x => x.ItemName.Equals(backpackName));
+            
+            if (backpack == null)
+                return null;
+            
+            switch (backpack.Biome)
             {
-                case MeadowsBackpackName:
+                case BackpackBiomes.Meadows:
+                case BackpackBiomes.BlackForest:
+                case BackpackBiomes.Swamp:
+                case BackpackBiomes.Mountains:
+                case BackpackBiomes.Plains:
+                case BackpackBiomes.Mistlands:
                     switch (backpackQuality)
                     {
                         case 1:
@@ -261,8 +174,8 @@ namespace AdventureBackpacks.Assets
                     ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 15 * backpackQuality;
                     
                     break;
-                case RuggedBackpackName:
-                    itemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModRugged.Value/backpackQuality;
+                case BackpackBiomes.None:
+                    itemData.m_shared.m_movementModifier = backpack.SpeedMod.Value/backpackQuality;
                     switch (backpackQuality)
                     {
                         case 1:
@@ -281,25 +194,6 @@ namespace AdventureBackpacks.Assets
                     }
                     ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 25 * backpackQuality;
                     
-                    break;
-                case ArcticBackpackName:
-                    itemData.m_shared.m_movementModifier = ConfigRegistry.SpeedModArctic.Value/backpackQuality;
-                    switch (backpackQuality)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            modifierList.Add(_frostResistance);
-                            break;
-                        case 3:
-                            modifierList.Add(_frostResistance);
-                            break;
-                        case 4:
-                            modifierList.Add(_frostResistance);
-                            itemData.m_shared.m_movementModifier = 0;
-                            break;
-                    }
-                    ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 35 * backpackQuality;
                     break;
             }
             itemData.m_shared.m_maxDurability = 1000f;

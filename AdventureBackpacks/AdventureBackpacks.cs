@@ -16,6 +16,7 @@
 using System.Linq;
 using System.Reflection;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx;
@@ -70,7 +71,8 @@ namespace AdventureBackpacks
             LogManager.Init(PluginId,out _log);
             
             //Load Assets
-            Backpacks.LoadAssets();
+            var backpackFactory = new BackpackFactory(_log, _config);
+            backpackFactory.CreateAssets();
             
             //Enable BoneReorder
             BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
