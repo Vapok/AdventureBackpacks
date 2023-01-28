@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1642945747
+CRC: 4284840380
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6ff9262bbbd228eb926020c510e92a7f
+    Hash: 16375bb98a49d4052d5bde6fd589e170
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a7411ea27be4da1f8ee63eeac676da3f
+    Hash: a456979f0e08a52494f2dbe579db1edd
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -32,11 +32,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 927819712, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
+  Script: {fileID: 1109157524, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
+- Class: 114
   Script: {fileID: 825357479, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 114
   Script: {fileID: 1521249158, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
-- Class: 114
-  Script: {fileID: 1109157524, guid: c1b78fa918b030faf1c1f6f6164daeb2, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 137
@@ -46,6 +46,8 @@ ClassTypes:
 - Class: 198
   Script: {instanceID: 0}
 - Class: 199
+  Script: {instanceID: 0}
+- Class: 205
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
@@ -61,8 +63,15 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: assembly_valheim
   ClassName: ItemDrop/ItemData/SharedData
 Assets:
+- Assets/vapok/Prefabs/BackpackMistlands.prefab
+- Assets/vapok/Prefabs/BackpackMeadows.prefab
+- Assets/vapok/Prefabs/BackpackPlains.prefab
 - Assets/Sprite/SilverBackpack_Icon.asset
-- Assets/vapok/CapeSilverBackpack.prefab
+- Assets/Shader/DoubleSided_Standard_Standard DS.shader
+- Assets/vapok/Prefabs/CapeSilverBackpack.prefab
 - Assets/Sprite/IronBackpack_Icon.asset
-- Assets/vapok/CapeIronBackpack.prefab
+- Assets/vapok/Prefabs/BackpackSwamp.prefab
+- Assets/vapok/Prefabs/BackpackMountains.prefab
+- Assets/vapok/Prefabs/BackpackBlackForest.prefab
+- Assets/vapok/Prefabs/CapeIronBackpack.prefab
 Dependencies: []

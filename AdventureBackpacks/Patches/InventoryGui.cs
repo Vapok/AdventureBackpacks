@@ -1,9 +1,11 @@
 ﻿using System;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using UnityEngine;
+using Vapok.Common.Managers;
 using Vapok.Common.Tools;
 
 namespace AdventureBackpacks.Patches;
@@ -13,6 +15,35 @@ internal static class InventoryGuiPatches
     public static bool BackpackIsOpen = false;
     public static bool BackpackIsOpening = false;
     public static bool BackpackEquipped = false;
+    
+    //Upgrade Variables
+    public static bool DoingUpgrade = false;
+
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.DoCrafting))]
+    static class InventoryGuiDoCraftingPrefix
+    {
+        static void Prefix(InventoryGui __instance)
+        {
+            if (__instance == null)
+                return;
+            if (__instance.m_craftUpgradeItem != null || __instance.m_craftRecipe.m_item != null)
+            {
+                DoingUpgrade = true;
+            }
+        }
+
+        static void Postfix(InventoryGui __instance)
+        {
+            if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
+            {
+                var backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
+                backpack?.Load();
+                Player.m_localPlayer.UpdateEquipmentStatusEffects();
+            }
+            DoingUpgrade = false;
+        }
+        
+    }
     
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnSelectedItem))]
     static class InventoryGuiOnSelectedItem

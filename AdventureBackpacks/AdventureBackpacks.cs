@@ -13,16 +13,19 @@
  * 
  */
 
+using System;
+using System.Reflection;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx;
 using HarmonyLib;
+using ItemManager;
 using JetBrains.Annotations;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.Configuration;
-using Vapok.Common.Managers.LocalizationManager;
 using Vapok.Common.Tools;
 
 namespace AdventureBackpacks
@@ -34,7 +37,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "AdventureBackpacks";
-        private const string _version = "1.0.4";
+        private const string _version = "1.5.0";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -44,6 +47,8 @@ namespace AdventureBackpacks
         
         //Class Properties
         public static ILogIt Log => _log;
+        public static bool ValheimAwake = false;
+        public static Waiting Waiter;
         
         //Class Privates
         private static AdventureBackpacks _instance;
@@ -57,28 +62,29 @@ namespace AdventureBackpacks
         {
             //I'm awake!
             _instance = this;
+            
+            //Initialize Managers
+            Initializer.LoadManagers();
 
             //Register Configuration Settings
             _config = new ConfigRegistry(_instance);
 
             //Register Logger
             LogManager.Init(PluginId,out _log);
-            
-            //Register Translations
-            Localizer.Load();
-            
-            //Load Assets
-            Backpacks.LoadAssets();
-            
-            //Enable BoneReorder
-            BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+
+            PrefabManager.Initalized = true;
+
+            //Waiting For Startup
+            Waiter = new Waiting();
+
+            Waiter.StatusChanged += InitializeBackpacks;
             
             //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);
-            _harmony.PatchAll();
-            
+            _harmony.PatchAll(Assembly.GetExecutingAssembly());
+
             //???
-            
+
             //Profit
         }
         
@@ -98,11 +104,39 @@ namespace AdventureBackpacks
             }
 
         }
+
+        public void InitializeBackpacks(object send, EventArgs args)
+        {
+            if (ValheimAwake)
+                return;
+            
+            //Load Assets
+            var backpackFactory = new BackpackFactory(_log, _config);
+            backpackFactory.CreateAssets();
+            
+            //Setup Types
+            Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
+            
+            //Enable BoneReorder
+            BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+
+            ValheimAwake = true;
+        }
         
         private void OnDestroy()
         {
             _instance = null;
             _harmony?.UnpatchSelf();
+        }
+
+        public class Waiting
+        {
+            public void ValheimIsAwake(bool awakeFlag)
+            {
+                if (awakeFlag)
+                    StatusChanged?.Invoke(this, EventArgs.Empty);
+            }
+            public event EventHandler StatusChanged;            
         }
     }
 }

@@ -364,6 +364,8 @@ public class LocalizeKey
 
 public static class EffectManager
 {
+    private static bool _initialized = false;
+    
     static EffectManager()
     {
         Harmony harmony = new("org.bepinex.helpers.StatusEffectManager");
@@ -372,6 +374,12 @@ public static class EffectManager
         harmony.Patch(AccessTools.DeclaredMethod(typeof(ZNetScene), nameof(ZNetScene.Awake)),
             postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(EffectManager),
                 nameof(Patch_ZNetSceneAwake))));
+    }
+
+    public static void Init()
+    {
+        if (_initialized == false)
+            _initialized = true;
     }
 
     private struct BundleId
@@ -418,6 +426,43 @@ public static class EffectManager
         return customSE;
     }
 
+    public static ItemDrop.ItemData AddSEToItem(this ItemDrop.ItemData itemData, CustomSE customSE)
+    {
+        SE_Item statusEffectItem = new()
+        {
+            Effect = customSE.Effect, Type = customSE.Type
+        };
+
+        return AddSEToItem(itemData, statusEffectItem);
+    }
+    
+    private static ItemDrop.ItemData AddSEToItem(this ItemDrop.ItemData itemData, SE_Item customSE)
+    {
+        
+        switch (customSE.Type)
+        {
+            case EffectType.Equip:
+                itemData.m_shared.m_equipStatusEffect = customSE.Effect;
+                break;
+            case EffectType.Attack:
+                itemData.m_shared.m_attackStatusEffect = customSE.Effect;
+                break;
+            case EffectType.Consume:
+                itemData.m_shared.m_consumeStatusEffect = customSE.Effect;
+                break;
+            case EffectType.Set:
+                itemData.m_shared.m_setSize = 1;
+                itemData.m_shared.m_setName = customSE.Effect.name;
+                itemData.m_shared.m_setStatusEffect  = customSE.Effect;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return itemData;
+    }
+
+
     [HarmonyPriority(Priority.VeryHigh)]
     private static void Patch_ObjectDBInit(ObjectDB __instance)
     {
@@ -447,29 +492,7 @@ public static class EffectManager
                     prefab ? prefab.GetComponent<EffectArea>() : prefab.GetComponentInChildren<EffectArea>();
                 if (itemDrop)
                 {
-                    switch (valuePair.Key.Type)
-                    {
-                        case EffectType.Equip:
-                            itemDrop.m_itemData.m_shared.m_equipStatusEffect =
-                                valuePair.Key.Effect;
-                            break;
-                        case EffectType.Attack:
-                            itemDrop.m_itemData.m_shared.m_attackStatusEffect =
-                                valuePair.Key.Effect;
-                            break;
-                        case EffectType.Consume:
-                            itemDrop.m_itemData.m_shared.m_consumeStatusEffect =
-                                valuePair.Key.Effect;
-                            break;
-                        case EffectType.Set:
-                            itemDrop.m_itemData.m_shared.m_setSize = 1;
-                            itemDrop.m_itemData.m_shared.m_setName = valuePair.Key.Effect.name;
-                            itemDrop.m_itemData.m_shared.m_setStatusEffect =
-                                valuePair.Key.Effect;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    itemDrop.m_itemData.AddSEToItem(valuePair.Key);
                 }
 
                 else if (aoe)

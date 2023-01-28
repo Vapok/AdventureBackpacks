@@ -26,7 +26,7 @@ public static class PlayerExtensions
         // If a match is found, return the backpack ItemData object.
         foreach (ItemDrop.ItemData item in equippedItems)
         {
-            if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
+            if (item.TryGetBackpackItem(out var backpack))
             {
                 return item.Data().GetOrCreate<BackpackComponent>();
             }

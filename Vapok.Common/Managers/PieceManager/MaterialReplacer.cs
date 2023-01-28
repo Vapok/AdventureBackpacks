@@ -10,6 +10,7 @@ namespace Vapok.Common.Managers.PieceManager
     [PublicAPI]
     public static class MaterialReplacer
     {
+        private static bool _initialized = false;
         static MaterialReplacer()
         {
             originalMaterials = new Dictionary<string, Material>();
@@ -55,6 +56,11 @@ namespace Vapok.Common.Managers.PieceManager
             }
         }
 
+        public static void Init()
+        {
+            if (_initialized == false)
+                _initialized = true;
+        }
 
         [HarmonyPriority(Priority.VeryHigh)]
         private static void ReplaceAllMaterialsWithOriginal()

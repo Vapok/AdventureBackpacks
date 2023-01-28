@@ -5,16 +5,52 @@ Adventure Backpacks is a complete rewrite of the original Jotunn Backpacks 2.1.0
 that you've come to enjoy.
 
 ## Roadmap
-* v1.0.0 - Initial Release - Get existing functionality ported. (Completed)
-* v1.3.0 - Mistlands Backpack - Introduce a new Backpack that when crafted will include the Feather Fall effect.
-* v1.5.0 - Adventure Begins - Revamping all backpacks to be upgradable and offer new perks as upgrades happen. and offer backpacks at each 
-stage of maturity. This includes a backpack progression that will start at Meadows and continue through Mistlands
+* ~~v1.0.0 - Initial Release - Get existing functionality ported. (Completed)~~
+* ~~v1.3.0 - Mistlands Backpack - Introduce a new Backpack that when crafted will include the Feather Fall effect.~~ (yeah I just skipped right over this one)
+* **v1.5.0 - Adventure Begins - Revamping all backpacks to be upgradable and offer new perks as upgrades happen. and offer backpacks at each 
+stage of maturity. This includes a backpack progression that will start at Meadows and continue through Mistlands**
 * v2.0.0 - To be determined!
 
+# How to Use Adventure Backpacks
+* Play Valheim as you would As you craft items and explore materials you will learn new recipes for Adventuring Backpacks
+* The default hotkey is `I` to open the equipped backpack.
+* Each backpack is completely different in form, function, and size.  Upgrading backpacks will unlock additional features depending on the progresion that backpack is intended to be used with.
+* Check the Configuration for ALL the different ways that you can modify these packs.
+
+## Effects Used In This Mod
+* This mod utilizes the following effects depending on backpack and quality level:
+  * Carry Weight Modifications
+  * Speed Modifications
+  * Frost Resistence
+  * Waterproof
+  * Slow Fall
+  * Demister  (a future upgrade will provide a toggle key to turn off the Demister Ball)
+
+## Gear Introduced In This Mod
+* The 6 new backpacks are:
+    * **Satchel** - _A small backpack capable of holding things._
+    * **Rugged Backpack**  - _A rugged backpack, complete with buckles and fine leather straps._
+    * **Bloodbag Wetpack** - _A durable backpack sealed using waterproof blood bags._
+    * **Arctic Sherpa Pack** - _An arctic backpack, fit for long treks through the mountains._
+    * **Lox Hide Knappsack** - _An adventuring backpack made from extremely durable lox hide._
+    * **Explorers Wisppack** - _A finely crafted, mystical backpack. Complete with it's own Box of Holding. No one is quite sure how it works._
+
+
 # Current Patch Notes
-## 1.0.4.0
-* Fixed a rare error on Piece Manager where on local play, if there is no adminlist file, it would error in the console.
-* Fixed, In the event that there are multiple language files found for the same language, LocalizationManager would fail thus failing to load the mod.
+## 1.5.0.0
+
+* Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)
+    * The original two prefabs, have been identified as legacy items, that can no longer be built.  They will live on in your inventory as "Old".  Functionally, they'll exist as they have been.  But they aren't craftable, nor are they upgradeable.  (though they are configurable).
+    * The 6 new Prefabs, introduce the 6 new bags that are intended to be used as progression bags.
+    * The mod author would prefer that folks adventure in the world of Valheim and stumble across what it takes to craft the assortment of bags, however, those with less adventuring desires, may look at the configuration, where I do expose all of the recipes and what you have to touch in order to gain the recipes.  Yes, this also means that all of the bags are configurable for those that pack to the beat of a different drum.
+    * The 6 new backpacks are:
+        * **Satchel** - _A small backpack capable of holding things._
+        * **Rugged Backpack**  - _A rugged backpack, complete with buckles and fine leather straps._
+        * **Bloodbag Wetpack** - _A durable backpack sealed using waterproof blood bags._
+        * **Arctic Sherpa Pack** - _An arctic backpack, fit for long treks through the mountains._
+        * **Lox Hide Knappsack** - _An adventuring backpack made from extremely durable lox hide._
+        * **Explorers Wisppack** - _A finely crafted, mystical backpack. Complete with it's own Box of Holding. No one is quite sure how it works._
+    * Greatly Expanded and 100% completely configurable settings.
 
 ## Compatible Mods (Verified)
 * Epic Loot 0.9.3+

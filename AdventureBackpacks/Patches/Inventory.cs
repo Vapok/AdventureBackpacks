@@ -9,6 +9,24 @@ namespace AdventureBackpacks.Patches;
 
 public static class InventoryPatches
 {
+    /*
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(string), typeof(int), typeof(int), typeof(int), typeof(long), typeof(string) })]
+    static class InventoryAddItem
+    {
+        static void Postfix(ref ItemDrop.ItemData __result)
+        {
+            if ( __result != null && __result.IsBackpack())
+            {
+                var backpack = __result.Data().Get<BackpackComponent>();
+                if (backpack != null)
+                {
+                    backpack.Save(backpack.GetInventory());
+                }
+            }
+        }
+    }
+    */
+    
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
     {
@@ -68,7 +86,7 @@ public static class InventoryPatches
             
             var player = Player.m_localPlayer;
             
-            if (__instance.GetName() == Backpacks.BackpacksInventoryName)
+            if (__instance.GetName().Contains("$vapok_mod_level"))
             {
                 // When the equipped backpack inventory total weight is updated, the player inventory total weight should also be updated.
                 if (player)
@@ -99,7 +117,7 @@ public static class InventoryPatches
                         if (item == null)
                             continue;
                         
-                        if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
+                        if (item.TryGetBackpackItem(out var backpack))
                         {
                             if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable())
                             {

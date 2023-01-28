@@ -133,6 +133,7 @@ public class Item
 		public ConfigEntry<int>? maximumTableLevel;
 	}
 
+	private static bool _initialized = false;
 	private static readonly List<Item> registeredItems = new();
 	private static readonly Dictionary<ItemDrop, Item> itemDropMap = new();
 	private static Dictionary<Item, Dictionary<string, List<Recipe>>> activeRecipes = new();
@@ -142,6 +143,8 @@ public class Item
 	private static Dictionary<Item, ConfigEntry<string>> itemDropConfigs = new();
 	private Dictionary<CharacterDrop, CharacterDrop.Drop> characterDrops = new();
 	private readonly Dictionary<ConfigEntryBase, Action> statsConfigs = new();
+
+	public string SectionName = string.Empty;
 
 	public static Configurability DefaultConfigurability = Configurability.Full;
 	public Configurability? Configurable = null;
@@ -171,6 +174,12 @@ public class Item
 	{
 		get => this[""].CraftAmount;
 		set => this[""].CraftAmount = value;
+	}
+
+	public static void Init()
+	{
+		if (_initialized == false)
+			_initialized = true;
 	}
 
 	[Description("Specifies the maximum required crafting station level to upgrade and repair the item.\nDefault is calculated from crafting station level and maximum quality.")]
@@ -361,7 +370,7 @@ public class Item
 
 			foreach (Item item in registeredItems.Where(i => i.configurability != Configurability.Disabled))
 			{
-				string nameKey = item.Prefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_name;
+				string nameKey = string.IsNullOrEmpty(item.SectionName) ? item.Prefab.GetComponent<ItemDrop>().m_itemData.m_shared.m_name : item.SectionName;
 				string englishName = new Regex("['[\"\\]]").Replace(english.Localize(nameKey), "").Trim();
 				string localizedName = Localization.instance.Localize(nameKey).Trim();
 
@@ -1458,6 +1467,7 @@ public static class LocalizationCache
 [PublicAPI]
 public static class PrefabManager
 {
+	public static bool Initalized = false;
 	static PrefabManager()
 	{
 		Harmony harmony = new("org.bepinex.helpers.ItemManager");

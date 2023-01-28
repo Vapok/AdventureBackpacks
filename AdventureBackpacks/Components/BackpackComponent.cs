@@ -7,28 +7,28 @@ using System;
 using AdventureBackpacks.Assets;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
+using Vapok.Common.Managers.StatusEffects;
 
-
-// Setting this .cs file to the same namespace as JotunnBackpacks.cs, so that I can call methods from within JotunnBackpacks.cs here.
 namespace AdventureBackpacks.Components
 {
     public class BackpackComponent : CustomItemData
     {
         public static string OldPluginCustomData = "JotunnBackpacks#JotunnBackpacks.BackpackComponent";
 
-        public Inventory BackpackInventory;
+        private Inventory _backpackInventory;
+        private CustomSE _statusEffects;
 
         private ILogIt _log = AdventureBackpacks.Log;
 
         public void SetInventory(Inventory inventoryInstance)
         {
-            BackpackInventory = inventoryInstance;
-            Save(BackpackInventory); // This writes the new data to the ItemData object, which will be saved whenever game saves the ItemData object.
+            _backpackInventory = inventoryInstance;
+            Save(_backpackInventory); 
         }
 
         public Inventory GetInventory()
         {
-            return BackpackInventory;
+            return _backpackInventory;
         }
 
         public string Serialize()
@@ -37,10 +37,10 @@ namespace AdventureBackpacks.Components
             // Store the Inventory as a ZPackage
             ZPackage pkg = new ZPackage();
 
-            if (BackpackInventory == null)
-                BackpackInventory = Backpacks.NewInventoryInstance(Item.m_shared.m_name);
+            if (_backpackInventory == null)
+                _backpackInventory = Backpacks.NewInventoryInstance(Item.m_shared.m_name, Item.m_quality);
 
-            BackpackInventory.Save(pkg);
+            _backpackInventory.Save(pkg);
 
             string data = pkg.GetBase64();
             Value = data;
@@ -56,20 +56,21 @@ namespace AdventureBackpacks.Components
             _log.Debug($"[Deserialize()] Starting..");
             try
             {
-                if (BackpackInventory == null)
-                {
-                    _log.Debug($"[Deserialize()] backpack null");
-                    // Figure out which backpack type we are deserializing data for by accessing the ItemData of the base class.
-                    var type = Item.m_shared.m_name;
-                    BackpackInventory = Backpacks.NewInventoryInstance(type);
-                }
+                //Always Fetch new Inventory Instance to resize backpack.
+                //We're going to load the data anyways.
+                var type = Item.m_shared.m_name;
+                _backpackInventory = Backpacks.NewInventoryInstance(type, Item.m_quality);
 
                 //Save data to Value
                 Value = data;
+                
                 _log.Debug($"[Deserialize()] Value = {Value}");
                 // Deserialising saved inventory data and storing it into the newly initialised Inventory instance.
                 ZPackage pkg = new ZPackage(data);
-                BackpackInventory.Load(pkg);
+                _backpackInventory.Load(pkg);
+                
+                //Update Status Effects
+                _statusEffects = Backpacks.UpdateStatusEffects(Item);
             }
             catch (Exception ex)
             {
@@ -81,12 +82,13 @@ namespace AdventureBackpacks.Components
         {
             var name = Item.m_shared.m_name;
             _log.Debug($"[FirstLoad] {name}");
+            
             // Check whether the item created is of a type contained in backpackTypes
             if (Backpacks.BackpackTypes.Contains(name))
             {
-                if (BackpackInventory == null)
+                if (_backpackInventory == null)
                 {
-                    BackpackInventory = Backpacks.NewInventoryInstance(name);
+                    _backpackInventory = Backpacks.NewInventoryInstance(name, Item.m_quality);
                     
                     if (!string.IsNullOrEmpty(Value))
                     {
@@ -127,11 +129,11 @@ namespace AdventureBackpacks.Components
             }
             else
             {
-                if (BackpackInventory == null)
+                if (_backpackInventory == null)
                 {
                     _log.Debug($"[Load] Backpack null, creating...");
                     var name = Item.m_shared.m_name;
-                    BackpackInventory = Backpacks.NewInventoryInstance(name);
+                    _backpackInventory = Backpacks.NewInventoryInstance(name, Item.m_quality);
                 }
                 
                 Serialize();
@@ -147,7 +149,7 @@ namespace AdventureBackpacks.Components
         public void Save(Inventory backpack)
         {
             _log.Debug($"[Save(Inventory)] Starting backpack count {backpack.m_inventory.Count}");
-            BackpackInventory = backpack;
+            _backpackInventory = backpack;
             Save();
         }
 
