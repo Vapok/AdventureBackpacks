@@ -10,7 +10,6 @@ internal class BackpackBlackForest : BackpackItem
 {
     public BackpackBlackForest(string prefabName, string itemName) : base(prefabName, itemName)
     {
-        Biome = BackpackBiomes.BlackForest;
         RegisterConfigSettings();
         
         Item.Configurable = Configurability.Recipe;
@@ -30,6 +29,7 @@ internal class BackpackBlackForest : BackpackItem
 
     internal sealed override void RegisterConfigSettings()
     {
+        RegisterBackpackBiome(BackpackBiomes.BlackForest);
         RegisterBackpackSize(1,3,2);
         RegisterBackpackSize(2,4,2);
         RegisterBackpackSize(3,5,2);

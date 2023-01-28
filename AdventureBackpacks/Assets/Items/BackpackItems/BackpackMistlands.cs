@@ -11,7 +11,6 @@ internal class BackpackMistlands : BackpackItem
 {
     public BackpackMistlands(string prefabName, string itemName) : base(prefabName, itemName)
     {
-        Biome = BackpackBiomes.Mistlands;
         RegisterConfigSettings();
         
         Item.Configurable = Configurability.Recipe;
@@ -27,11 +26,12 @@ internal class BackpackMistlands : BackpackItem
         AddUpgradeIngredient("Eitr", 2);
         AddUpgradeIngredient("Softtissue", 5);
         
-        RegisterShaderSwap();
+        //RegisterShaderSwap();
 
     }
     internal sealed override void RegisterConfigSettings()
     {
+        RegisterBackpackBiome(BackpackBiomes.Mistlands);
         RegisterBackpackSize(1,4,4);
         RegisterBackpackSize(2,5,4);
         RegisterBackpackSize(3,6,4);

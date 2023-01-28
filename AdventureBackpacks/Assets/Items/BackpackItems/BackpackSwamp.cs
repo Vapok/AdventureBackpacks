@@ -10,7 +10,6 @@ internal class BackpackSwamp : BackpackItem
 {
     public BackpackSwamp(string prefabName, string itemName) : base(prefabName, itemName)
     {
-        Biome = BackpackBiomes.Swamp;
         RegisterConfigSettings();
         
         Item.Configurable = Configurability.Recipe;
@@ -31,6 +30,7 @@ internal class BackpackSwamp : BackpackItem
 
     internal sealed override void RegisterConfigSettings()
     {
+        RegisterBackpackBiome(BackpackBiomes.Swamp);
         RegisterBackpackSize(1,2,3);
         RegisterBackpackSize(2,3,3);
         RegisterBackpackSize(3,4,3);

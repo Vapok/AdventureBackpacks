@@ -13,7 +13,6 @@ internal interface IBackpackItem : IAssetItem
 }
 internal abstract class BackpackItem : AssetItem, IBackpackItem
 {
-    private BackpackBiomes _backpackBiome;
     private static ConfigSyncBase _config;
     private static ILogIt _logger;
     private string _configSection;
@@ -24,6 +23,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ConfigEntry<int> CarryBonus { get; private set;}
     internal ConfigEntry<float> SpeedMod { get; private set;}
     internal ConfigEntry<bool> EnableFreezing { get; private set;}
+    internal ConfigEntry<BackpackBiomes> BackpackBiome { get; private set;}
 
    
     
@@ -35,12 +35,6 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {Localization.instance.Localize(itemName)}" : configSection;
         Item.SectionName = _configSection;
         BackpackSize = new();
-    }
-
-    internal BackpackBiomes Biome
-    {
-        get => _backpackBiome;
-        set => _backpackBiome = value;
     }
 
     internal static void SetConfig(ConfigSyncBase configSync)
@@ -80,6 +74,14 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
                 new ConfigAttributes { IsAdminOnly = true, Order = 2 }));
         
         WeightMultiplier!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+    }
+
+    internal virtual void RegisterBackpackBiome(BackpackBiomes defaultValue = BackpackBiomes.None)
+    {
+        BackpackBiome = ConfigSyncBase.SyncedConfig(_configSection, "Backpack Biome", defaultValue,
+            new ConfigDescription("The Biome this bag will draw it's effects from.",
+                null, 
+                new ConfigAttributes { IsAdminOnly = true, Order = 6 }));
     }
 
     internal virtual void RegisterCarryBonus(int defaultValue = 0)

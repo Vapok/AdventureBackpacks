@@ -10,7 +10,6 @@ internal class BackpackPlains : BackpackItem
 {
     public BackpackPlains(string prefabName, string itemName) : base(prefabName, itemName)
     {
-        Biome = BackpackBiomes.Plains;
         RegisterConfigSettings();
         Item.Configurable = Configurability.Recipe;
         AssignCraftingTable(CraftingTable.Forge,3);
@@ -29,6 +28,7 @@ internal class BackpackPlains : BackpackItem
 
     internal sealed override void RegisterConfigSettings()
     {
+        RegisterBackpackBiome(BackpackBiomes.Plains);
         RegisterBackpackSize(1,3,4);
         RegisterBackpackSize(2,4,4);
         RegisterBackpackSize(3,5,4);

@@ -41,6 +41,10 @@ namespace AdventureBackpacks.Configuration
                 "Local Config", "Outward Mode", false,
                 new ConfigDescription("You can use a hotkey to quickly drop your equipped backpack in order to run faster away from danger.",
                     null, new ConfigAttributes { Order = 1 }));
+            
+            Assets.Effects.Demister.Configuration.RegisterEffectConfiguration(_config);
+            Assets.Effects.FeatherFall.Configuration.RegisterEffectConfiguration(_config);
+            Assets.Effects.Waterproof.Configuration.RegisterEffectConfiguration(_config);
         }
     }
 }

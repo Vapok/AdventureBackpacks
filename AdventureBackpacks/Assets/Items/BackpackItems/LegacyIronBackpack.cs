@@ -10,12 +10,12 @@ internal class LegacyIronBackpack: BackpackItem
 {
     public LegacyIronBackpack(string prefabName, string itemName) : base(prefabName, itemName)
     {
-        Biome = BackpackBiomes.None;
         RegisterConfigSettings();
     }
 
     internal sealed override void RegisterConfigSettings()
     {
+        RegisterBackpackBiome();
         RegisterBackpackSize();
         RegisterWeightMultiplier();
         RegisterCarryBonus(25);
