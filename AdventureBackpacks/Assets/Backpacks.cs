@@ -113,7 +113,7 @@ namespace AdventureBackpacks.Assets
                     Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception");    
 
                     // Nope!
-                    AdventureBackpacks.Log.Message("You can't put a backpack inside a backpack, silly!");
+                    AdventureBackpacks.Log.Message("Odin says, 'You can't put a backpack inside a backpack!'");
                     return false;
                 }
             }
@@ -129,9 +129,9 @@ namespace AdventureBackpacks.Assets
             var backpackQuality = itemData.m_quality;
             var statusEffects = new CustomSE(Enums.StatusEffects.Stats, $"SE_{backpackName}_{backpackQuality}");
             
-            statusEffects.Effect.m_name = $"{backpackName} Level {backpackQuality} Effect";
+            statusEffects.Effect.m_name = $"{backpackName} $vapok_mod_level {backpackQuality} $vapok_mod_effect";
             statusEffects.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
-            statusEffects.Effect.m_startMessage = $"Your backpack feels useful.";
+            statusEffects.Effect.m_startMessage = $"$vapok_mod_useful_backpack";
 
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default

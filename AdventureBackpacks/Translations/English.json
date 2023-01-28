@@ -11,7 +11,7 @@
   "vapok_mod_item_backpack_mountains": "Arctic Sherpa Pack",
   "vapok_mod_item_backpack_mountains_description": "An arctic backpack, fit for long treks through the mountains.",
 
-  "vapok_mod_item_backpack_plains": "Lox Hide Backpack",
+  "vapok_mod_item_backpack_plains": "Lox Hide Knappsack",
   "vapok_mod_item_backpack_plains_description": "An adventuring backpack made from extremely durable lox hide.",
 
   "vapok_mod_item_backpack_mistlands": "Explorers Wisppack",
@@ -24,6 +24,8 @@
   "vapok_mod_item_arctic_backpack_description": "An arctic backpack, fit for long treks through the mountains.",
   
   "vapok_mod_no_inception": "You have angered the gods!",
+  "vapok_mod_useful_backpack": "Your backpack feels useful.",
   "vapok_mod_you_droped_bag": "You dropped a backpack!",
-  "vapok_mod_level": "Level"
+  "vapok_mod_level": "Level",
+  "vapok_mod_effect": "Effect"
 }

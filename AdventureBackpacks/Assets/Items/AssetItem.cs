@@ -73,6 +73,7 @@ internal abstract class AssetItem : IAssetItem
         var itemData = itemDrop.m_itemData;
         if (itemData != null)
         {
+            itemDrop.m_autoPickup = true;
             itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel;
             itemDrop.Save();
         }
