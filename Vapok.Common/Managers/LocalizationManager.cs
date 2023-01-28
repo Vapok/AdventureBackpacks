@@ -182,7 +182,7 @@ public class Localizer
 	static Localizer()
 	{
 		Harmony harmony = new("org.bepinex.helpers.LocalizationManager");
-		harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(Patch_FejdStartup))));
+		harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(Patch_FejdStartup))));
 		harmony.Patch(AccessTools.DeclaredMethod(typeof(Localization), nameof(Localization.LoadCSV)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(LoadLocalization))));
 	}
 

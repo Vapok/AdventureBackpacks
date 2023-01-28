@@ -77,6 +77,10 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Assets\Backpacks.cs" />
+        <Compile Include="Assets\Effects\BackpackEffects.cs" />
+        <Compile Include="Assets\Effects\Demister.cs" />
+        <Compile Include="Assets\Effects\FeatherFall.cs" />
+        <Compile Include="Assets\Effects\Waterproof.cs" />
         <Compile Include="Assets\Factories\AssetFactory.cs" />
         <Compile Include="Assets\Factories\BackpackFactory.cs" />
         <Compile Include="Assets\Items\AssetItem.cs" />
@@ -94,6 +98,7 @@
         <Compile Include="Extensions\InventoryExtensions.cs" />
         <Compile Include="Extensions\ItemDataExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
+        <Compile Include="Patches\FejdStartup.cs" />
         <Compile Include="Patches\GuiBar.cs" />
         <Compile Include="Patches\Humanoid.cs" />
         <Compile Include="Patches\Inventory.cs" />

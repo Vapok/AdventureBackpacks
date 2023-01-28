@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Linq;
 using AdventureBackpacks.Assets;
-using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
-using AdventureBackpacks.Configuration;
 using HarmonyLib;
 using Vapok.Common.Managers;
 
@@ -25,14 +22,8 @@ public class ItemDropPatches
                 if (string.IsNullOrEmpty(__instance.m_shared.m_name))
                     return;
 
-                if (Backpacks.BackpackTypes.Contains(__instance.m_shared.m_name))
+                if (__instance.TryGetBackpackItem(out var backpack))
                 {
-                    var backpack =
-                        BackpackFactory.BackpackItems.FirstOrDefault(x =>
-                            x.ItemName.Equals(__instance.m_shared.m_name));
-
-                    if (backpack == null)
-                        return;
                     
                     // If the item in GetWeight() is a backpack, and it has been Extended(), call GetTotalWeight() on its Inventory.
                     // Note that GetTotalWeight() just returns a the value of m_totalWeight, and doesn't do any calculation on its own.

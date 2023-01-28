@@ -1,6 +1,4 @@
-﻿using AdventureBackpacks.Assets;
-
-namespace AdventureBackpacks.Extensions;
+﻿namespace AdventureBackpacks.Extensions;
 
 public static class InventoryExtensions
 {

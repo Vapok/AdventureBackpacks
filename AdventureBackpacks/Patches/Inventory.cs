@@ -117,7 +117,7 @@ public static class InventoryPatches
                         if (item == null)
                             continue;
                         
-                        if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
+                        if (item.TryGetBackpackItem(out var backpack))
                         {
                             if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable())
                             {

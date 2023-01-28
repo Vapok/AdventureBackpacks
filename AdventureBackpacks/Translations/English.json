@@ -2,10 +2,25 @@
   "vapok_mod_item_backpack_meadows": "Satchel",
   "vapok_mod_item_backpack_meadows_description": "A small backpack capable of holding things.",
 
-  "vapok_mod_item_rugged_backpack": "Rugged Backpack",
+  "vapok_mod_item_backpack_blackforest": "Rugged Backpack",
+  "vapok_mod_item_backpack_blackforest_description": "A rugged backpack, complete with buckles and fine leather straps.",
+
+  "vapok_mod_item_backpack_swamp": "Bloodbag Wetpack",
+  "vapok_mod_item_backpack_swamp_description": "A durable backpack sealed using waterproof blood bags.",
+
+  "vapok_mod_item_backpack_mountains": "Arctic Sherpa Pack",
+  "vapok_mod_item_backpack_mountains_description": "An arctic backpack, fit for long treks through the mountains.",
+
+  "vapok_mod_item_backpack_plains": "Lox Hide Backpack",
+  "vapok_mod_item_backpack_plains_description": "An adventuring backpack made from extremely durable lox hide.",
+
+  "vapok_mod_item_backpack_mistlands": "Explorers Wisppack",
+  "vapok_mod_item_backpack_mistlands_description": "A finely crafted, mystical backpack. Complete with it's own Box of Holding. No one is quite sure how it works.",
+
+  "vapok_mod_item_rugged_backpack": "Old Rugged Backpack",
   "vapok_mod_item_rugged_backpack_description": "A rugged backpack, complete with buckles and fine leather straps.",
 
-  "vapok_mod_item_arctic_backpack": "Arctic Backpack",
+  "vapok_mod_item_arctic_backpack": "Old Arctic Backpack",
   "vapok_mod_item_arctic_backpack_description": "An arctic backpack, fit for long treks through the mountains.",
   
   "vapok_mod_no_inception": "You have angered the gods!",

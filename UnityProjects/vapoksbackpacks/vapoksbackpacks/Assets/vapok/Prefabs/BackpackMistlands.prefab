@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 2694559769380649786}
   - component: {fileID: 7088537994428211125}
   - component: {fileID: 6156204872837119040}
+  - component: {fileID: 3604301455658093}
   m_Layer: 0
   m_Name: BackpackMistlands
   m_TagString: Untagged
@@ -5305,6 +5306,34 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!205 &3604301455658093
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9010046819183149280}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 0.099999994
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.01965857
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 199079456659794502, guid: d2e6ea3663f6a3a499a9a31e3cdf70e8,
+        type: 3}
+    - renderer: {fileID: 23311591451028941, guid: d2e6ea3663f6a3a499a9a31e3cdf70e8,
+        type: 3}
+    - renderer: {fileID: 199955372638615769, guid: d2e6ea3663f6a3a499a9a31e3cdf70e8,
+        type: 3}
+    - renderer: {fileID: 199161136868006784, guid: d2e6ea3663f6a3a499a9a31e3cdf70e8,
+        type: 3}
+    - renderer: {fileID: 199482322046698935, guid: d2e6ea3663f6a3a499a9a31e3cdf70e8,
+        type: 3}
+  m_Enabled: 1
 --- !u!1001 &3502009805230699551
 PrefabInstance:
   m_ObjectHideFlags: 0

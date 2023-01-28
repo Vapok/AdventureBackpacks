@@ -1,5 +1,4 @@
-﻿using AdventureBackpacks.Assets;
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;

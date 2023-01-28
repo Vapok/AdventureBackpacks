@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
+using BepInEx;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -16,9 +18,33 @@ namespace AdventureBackpacks.Assets
 
         private static ILogIt _log = AdventureBackpacks.Log;
         private static List<string> _backpackTypes = new();
-
-        private static HitData.DamageModPair _frostResistance = new() { m_type = HitData.DamageType.Frost, m_modifier = HitData.DamageModifier.Resistant};
         public static List<string> BackpackTypes => _backpackTypes;
+
+        public static void LoadBackpackTypes(List<string> backpackTypes)
+        {
+            _backpackTypes = backpackTypes;
+        }
+
+        internal static bool TryGetBackpackItem(this ItemDrop.ItemData itemData, out BackpackItem backpack)
+        {
+            backpack = null;
+            
+            if (itemData == null)
+                return false;
+
+            return TryGetBackpackItemByName(itemData.m_shared.m_name, out backpack);
+        }
+
+        internal static bool TryGetBackpackItemByName(string name, out BackpackItem backpack)
+        {
+            backpack = null;
+            
+            if (name.IsNullOrWhiteSpace())
+                return false;
+            
+            backpack = BackpackFactory.BackpackItems.FirstOrDefault(x => x.ItemName.Equals(name));
+            return backpack != null;
+        }
 
         public static void UpdateItemDataConfigValues(object sender, EventArgs e)
         {
@@ -67,50 +93,14 @@ namespace AdventureBackpacks.Assets
         {
             Inventory newInventory = null;
             var uiInventoryName = $"{name} $vapok_mod_level {itemMQuality}";
-            var backpack = BackpackFactory.BackpackItems.FirstOrDefault(x => x.ItemName.Equals(name));
             
-            if (backpack == null)
+            if (!TryGetBackpackItemByName(name, out var backpack))
                 return null;
+            var backpackSize = backpack.GetInventorySize(itemMQuality);
             
-            switch (backpack.Biome)
-            {
-                case BackpackBiomes.Meadows:
-                case BackpackBiomes.BlackForest:
-                case BackpackBiomes.Swamp:
-                case BackpackBiomes.Mountains:
-                case BackpackBiomes.Plains:
-                case BackpackBiomes.Mistlands:
-                    switch (itemMQuality)
-                    {
-                        case 1:
-                            newInventory = new Inventory(uiInventoryName, null, 2, 1);
-                            break;
-                        case 2:
-                            newInventory = new Inventory(uiInventoryName, null, 3, 1);
-                            break;
-                        case 3:
-                            newInventory = new Inventory(uiInventoryName, null, 4, 1);
-                            break;
-                        case 4:
-                            newInventory = new Inventory(uiInventoryName, null, 5, 1);
-                            break;
-                    }
-                    break;
-                case BackpackBiomes.None:
-                    newInventory = new Inventory(
-                        uiInventoryName,
-                        null,
-                        (int)backpack.BackpackSize.Value.x,
-                        (int)backpack.BackpackSize.Value.y
-                    );
-                    break;
-            }
-
-            if (newInventory != null)
-                return newInventory;
+            newInventory = new Inventory(uiInventoryName, null, backpackSize.x, backpackSize.y);
             
-            _log.Warning($"Calling method with unknown item name");
-            return null;
+            return newInventory;
         }
 
         public static bool CheckForInception(Inventory instance, ItemDrop.ItemData item)
@@ -146,56 +136,12 @@ namespace AdventureBackpacks.Assets
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default
             itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel * backpackQuality;
-            var backpack = BackpackFactory.BackpackItems.FirstOrDefault(x => x.ItemName.Equals(backpackName));
             
-            if (backpack == null)
+            if (!itemData.TryGetBackpackItem(out var backpack))
                 return null;
             
-            switch (backpack.Biome)
-            {
-                case BackpackBiomes.Meadows:
-                case BackpackBiomes.BlackForest:
-                case BackpackBiomes.Swamp:
-                case BackpackBiomes.Mountains:
-                case BackpackBiomes.Plains:
-                case BackpackBiomes.Mistlands:
-                    switch (backpackQuality)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                             modifierList.Add(_frostResistance);
-                            break;
-                    }
-                    ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 15 * backpackQuality;
-                    
-                    break;
-                case BackpackBiomes.None:
-                    itemData.m_shared.m_movementModifier = backpack.SpeedMod.Value/backpackQuality;
-                    switch (backpackQuality)
-                    {
-                        case 1:
-                            
-                            break;
-                        case 2:
-                            modifierList.Add(_frostResistance);
-                            break;
-                        case 3:
-                            modifierList.Add(_frostResistance);
-                            break;
-                        case 4:
-                            modifierList.Add(_frostResistance);
-                            itemData.m_shared.m_movementModifier = 0;
-                            break;
-                    }
-                    ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = 25 * backpackQuality;
-                    
-                    break;
-            }
+            backpack.UpdateStatusEffects(backpackQuality, statusEffects, modifierList, itemData);
+            
             itemData.m_shared.m_maxDurability = 1000f;
             ((SE_Stats)statusEffects.Effect).m_mods = modifierList;
 

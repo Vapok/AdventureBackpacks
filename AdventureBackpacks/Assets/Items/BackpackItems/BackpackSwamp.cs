@@ -1,4 +1,8 @@
-﻿using AdventureBackpacks.Assets.Factories;
+﻿using System.Collections.Generic;
+using AdventureBackpacks.Assets.Effects;
+using AdventureBackpacks.Assets.Factories;
+using ItemManager;
+using Vapok.Common.Managers.StatusEffects;
 
 namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
@@ -8,14 +12,49 @@ internal class BackpackSwamp : BackpackItem
     {
         Biome = BackpackBiomes.Swamp;
         RegisterConfigSettings();
+        
+        Item.Configurable = Configurability.Recipe;
+        AssignCraftingTable(CraftingTable.Workbench,2);
+        
+        Item.MaximumRequiredStationLevel = 5;
+        
+        AddRecipeIngredient("Bloodbag",10);
+        AddRecipeIngredient("Root",4);
+        AddRecipeIngredient("Guck",4);
+        
+        AddUpgradeIngredient("Bloodbag", 2);
+        AddUpgradeIngredient("Iron", 5);
+        
+        RegisterShaderSwap();
+
     }
 
     internal sealed override void RegisterConfigSettings()
     {
-        //RegisterBackpackSize();
+        RegisterBackpackSize(1,2,3);
+        RegisterBackpackSize(2,3,3);
+        RegisterBackpackSize(3,4,3);
+        RegisterBackpackSize(4,5,3);
         RegisterWeightMultiplier();
-        //RegisterCarryBonus();
-        //RegisterSpeedMod();
-        //RegisterEnableFreezing();
+        RegisterCarryBonus(15);
+        RegisterSpeedMod();
+    }
+
+    internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
+    {
+        itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
+        switch (quality)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+        ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;
+
     }
 }

@@ -33,8 +33,7 @@ internal abstract class AssetItem : IAssetItem
             Configurable = Configurability.Disabled
         };
         
-        _item.Prefab.GetComponent<ZNetView>().m_persistent = true;
-        
+        SetPersistence();
         ResetPrefabArmor();
     }
 
@@ -61,6 +60,11 @@ internal abstract class AssetItem : IAssetItem
     internal void RegisterShaderSwap(MaterialReplacer.ShaderType shaderType = MaterialReplacer.ShaderType.PieceShader)
     {
         MaterialReplacer.RegisterGameObjectForShaderSwap(_item.Prefab,shaderType);
+    }
+
+    internal void SetPersistence()
+    {
+        _item.Prefab.GetComponent<ZNetView>().m_persistent = true;
     }
 
     internal void ResetPrefabArmor()
