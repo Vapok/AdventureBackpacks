@@ -26,6 +26,16 @@ stage of maturity. This includes a backpack progression that will start at Meado
   * Slow Fall
   * Demister  (a future upgrade will provide a toggle key to turn off the Demister Ball)
 
+## Gear Introduced In This Mod
+* The 6 new backpacks are:
+    * **Satchel** - _A small backpack capable of holding things._
+    * **Rugged Backpack**  - _A rugged backpack, complete with buckles and fine leather straps._
+    * **Bloodbag Wetpack** - _A durable backpack sealed using waterproof blood bags._
+    * **Arctic Sherpa Pack** - _An arctic backpack, fit for long treks through the mountains._
+    * **Lox Hide Knappsack** - _An adventuring backpack made from extremely durable lox hide._
+    * **Explorers Wisppack** - _A finely crafted, mystical backpack. Complete with it's own Box of Holding. No one is quite sure how it works._
+
+
 # Current Patch Notes
 ## 1.5.0.0
 
