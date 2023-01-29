@@ -3,6 +3,8 @@
 # 1.5.1.0
  * Fixed an annoying bug on the Level 4 Explorer's Wisppack where the Demister would activate on every equipment change. Annoying!
  * Adjusted some shaders.
+ * Adding fresh Russian Translation File thanks to BIATLONIST!  
+   * (Have you translated this into your language?  Let me know, and I'll add it the releases!)
 
 # 1.5.0.0
  * Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)
