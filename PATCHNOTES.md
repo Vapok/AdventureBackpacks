@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.5.3.0
+* Found another instance of Feather Fall not working. Fixed.
+* Found a bug in the Epic Loot Augmenter when changing enchants.  Fixed.
+
 # 1.5.2.0
 * Fixing the Wisplight and Feathfall breaking because of previous fix. These now function as expected.
 * Adding in French Translation Files (Thanks Renard!!)

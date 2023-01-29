@@ -61,6 +61,7 @@ public static class FeatherFall
 
     
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
+    [HarmonyBefore(new string[]{"randyknapp.mods.epicloot"})]
     public static class FeatherFall_Humanoid_UpdateEquipmentStatusEffects_Patch
     {
         [UsedImplicitly]
@@ -79,12 +80,6 @@ public static class FeatherFall
                 
                 if (hasFeatherFall && shouldHaveFeatherFall)
                     return;
-
-                if (hasFeatherFall && !shouldHaveFeatherFall)
-                {
-                    __instance.m_eqipmentStatusEffects.Remove(slowFall);
-                    __instance.m_seman.RemoveStatusEffect(slowFall);
-                }
                 
                 if (!hasFeatherFall && shouldHaveFeatherFall)
                 {
