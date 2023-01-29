@@ -1,13 +1,12 @@
 # Adventure Backpacks by Vapok
 
-This Valheim mod seeks to introduce the concept of Backpacks throughout the Valheim progression. Currently, 
-Adventure Backpacks is a complete rewrite of the original Jotunn Backpacks 2.1.0+, which preserves the Rugged and Artic Backpacks
-that you've come to enjoy.
+This Valheim mod seeks to introduce the concept of Backpacks throughout the Valheim progression. 
+Starting as a wee Viking, rummaging through the tranquil fields of the Meadows, you'll happen upon materials 
+that you think will eventually lead to a more meaningful destiny.  From Deer Hide capes and beyond, you'll soon 
+learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye wanderer of the wanders! 
 
 ## Roadmap
-* ~~v1.0.0 - Initial Release - Get existing functionality ported. (Completed)~~
-* ~~v1.3.0 - Mistlands Backpack - Introduce a new Backpack that when crafted will include the Feather Fall effect.~~ (yeah I just skipped right over this one)
-* **v1.5.0 - Adventure Begins - Revamping all backpacks to be upgradable and offer new perks as upgrades happen. and offer backpacks at each 
+* **v1.5.0 - Adventure Awaits - Revamped all backpacks to be upgradable and offer new perks as upgrades happen. and offer backpacks at each 
 stage of maturity. This includes a backpack progression that will start at Meadows and continue through Mistlands**
 * v2.0.0 - To be determined!
 
@@ -37,8 +36,11 @@ stage of maturity. This includes a backpack progression that will start at Meado
 
 
 # Current Patch Notes
-## 1.5.0.0
+## 1.5.1.0
+* Fixed an annoying bug on the Level 4 Explorer's Wisppack where the Demister would activate on every equipment change. Annoying!
+* Adjusted some shaders.
 
+## 1.5.0.0
 * Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)
     * The original two prefabs, have been identified as legacy items, that can no longer be built.  They will live on in your inventory as "Old".  Functionally, they'll exist as they have been.  But they aren't craftable, nor are they upgradeable.  (though they are configurable).
     * The 6 new Prefabs, introduce the 6 new bags that are intended to be used as progression bags.
