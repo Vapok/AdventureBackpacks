@@ -40,6 +40,26 @@ public static class FeatherFall
     }
 
     
+    public static bool ShouldHaveFeatherFall(Humanoid human)
+    {
+        if (human is Player player)
+        {
+            var equippedBackpack = player.GetEquippedBackpack();
+            
+            if (equippedBackpack == null || !Configuration.EnabledEffect.Value)
+                return false;
+            
+            var itemData = equippedBackpack.Item;
+            
+            itemData.TryGetBackpackItem(out var backpack);
+                
+            return backpack.BackpackBiome.Value == Configuration.EffectBiome.Value && itemData.m_quality >= Configuration.QualityLevel.Value;  
+        }
+
+        return false;
+    }
+
+    
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
     public static class FeatherFall_Humanoid_UpdateEquipmentStatusEffects_Patch
     {
@@ -53,20 +73,19 @@ public static class FeatherFall
                 {
                     return;
                 }
-                
-                EquipmentEffectCache.Reset(player);
 
-                var equippedBackpack = Player.m_localPlayer.GetEquippedBackpack();
-
-                if (equippedBackpack == null || !Configuration.EnabledEffect.Value)
-                    return;
-            
-                var itemData = equippedBackpack.Item;
-            
-                itemData.TryGetBackpackItem(out var backpack);
-
-                var shouldHaveFeatherFall = backpack.BackpackBiome.Value == Configuration.EffectBiome.Value && itemData.m_quality >= Configuration.QualityLevel.Value;  
+                var shouldHaveFeatherFall = ShouldHaveFeatherFall(__instance);  
                 var hasFeatherFall = player.m_eqipmentStatusEffects.Contains(slowFall);
+                
+                if (hasFeatherFall && shouldHaveFeatherFall)
+                    return;
+
+                if (hasFeatherFall && !shouldHaveFeatherFall)
+                {
+                    __instance.m_eqipmentStatusEffects.Remove(slowFall);
+                    __instance.m_seman.RemoveStatusEffect(slowFall);
+                }
+                
                 if (!hasFeatherFall && shouldHaveFeatherFall)
                 {
                     player.m_eqipmentStatusEffects.Add(slowFall);

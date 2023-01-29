@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.5.1.0
+ * Fixed an annoying bug on the Level 4 Explorer's Wisppack where the Demister would activate on every equipment change. Annoying!
+ * Adjusted some shaders.
+
 # 1.5.0.0
  * Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)
    * The original two prefabs, have been identified as legacy items, that can no longer be built.  They will live on in your inventory as "Old".  Functionally, they'll exist as they have been.  But they aren't craftable, nor are they upgradeable.  (though they are configurable).
