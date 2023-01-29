@@ -1,5 +1,10 @@
 # Adventure Backpacks Patchnotes
 
+# 1.5.4.0
+* French words have characters that are not allowed in BepInEx configs that was causing major start issues. 
+  * I have fixed this by sanitizing words before making configs.
+* Cleaned up the way I was patching Status Effects. More Robust and won't conflict with other mods.
+
 # 1.5.3.0
 * Found another instance of Feather Fall not working. Fixed.
 * Found a bug in the Epic Loot Augmenter when changing enchants.  Fixed.

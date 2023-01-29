@@ -1,4 +1,6 @@
-﻿using BepInEx.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using BepInEx.Configuration;
 using ServerSync;
 using Vapok.Common.Abstractions;
 
@@ -59,12 +61,20 @@ public abstract class ConfigSyncBase
         if (_config == null || _configSync == null)
             return null;
         
-        var configEntry = _config.Bind(group, configName, value, description);
+        var configEntry = _config.Bind(RemoveInvalidCharacters(group), RemoveInvalidCharacters(configName), value, description);
 
         var syncedConfigEntry = _configSync.AddConfigEntry(configEntry);
         syncedConfigEntry.SynchronizedConfig = synchronizedSetting;
 
         return configEntry;
+    }
+
+    private static string RemoveInvalidCharacters(string sectionName)
+    {
+        var invalidCharacters = new List<char> { '\n', '\t', '"', '\'', '[', ']' };
+        
+        invalidCharacters.ForEach(c => sectionName = sectionName.Replace(c.ToString(),String.Empty));
+        return sectionName;
     }
 
 }

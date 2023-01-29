@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AdventureBackpacks.Assets.Factories;
+﻿using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -38,7 +37,6 @@ public static class FeatherFall
         }
 
     }
-
     
     public static bool ShouldHaveFeatherFall(Humanoid human)
     {
@@ -58,7 +56,6 @@ public static class FeatherFall
 
         return false;
     }
-
     
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
     [HarmonyBefore(new string[]{"randyknapp.mods.epicloot"})]
@@ -75,7 +72,7 @@ public static class FeatherFall
                     return;
                 }
 
-                var shouldHaveFeatherFall = ShouldHaveFeatherFall(__instance) || EquipmentEffectCache.HasStatusEffect(slowFall);;  
+                var shouldHaveFeatherFall = ShouldHaveFeatherFall(__instance);  
                 var hasFeatherFall = player.m_eqipmentStatusEffects.Contains(slowFall);
                 
                 if (hasFeatherFall && shouldHaveFeatherFall)

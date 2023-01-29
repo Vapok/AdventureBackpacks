@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AdventureBackpacks.Assets.Factories;
+﻿using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -11,7 +9,6 @@ namespace AdventureBackpacks.Assets.Effects;
 
 public static class Demister
 {
-
     public static class Configuration
     {
         public static ConfigEntry<bool> EnabledEffect { get; private set;}
@@ -74,8 +71,7 @@ public static class Demister
                     return;
                 }
                 
-                var shouldHaveDemister = ShouldHaveDemister(__instance) || EquipmentEffectCache.HasStatusEffect(deMister);
-                
+                var shouldHaveDemister = ShouldHaveDemister(__instance);
                 var hasDemister = player.m_eqipmentStatusEffects.Contains(deMister);
                 
                 if (hasDemister && shouldHaveDemister)
