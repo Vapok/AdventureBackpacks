@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
@@ -39,6 +40,25 @@ public static class Demister
         }
 
     }
+
+    public static bool ShouldHaveDemister(Humanoid human)
+    {
+        if (human is Player player)
+        {
+            var equippedBackpack = player.GetEquippedBackpack();
+            
+            if (equippedBackpack == null || !Configuration.EnabledEffect.Value)
+                return false;
+            
+            var itemData = equippedBackpack.Item;
+            
+            itemData.TryGetBackpackItem(out var backpack);
+                
+            return backpack.BackpackBiome.Value == Configuration.EffectBiome.Value && itemData.m_quality >= Configuration.QualityLevel.Value;  
+        }
+
+        return false;
+    }
     
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
     public static class DemisterHumanoidUpdateEquipmentStatusEffectsPatch
@@ -54,20 +74,20 @@ public static class Demister
                     return;
                 }
                 
-                EquipmentEffectCache.Reset(player);
-
-                var equippedBackpack = Player.m_localPlayer.GetEquippedBackpack();
-
-                if (equippedBackpack == null || !Configuration.EnabledEffect.Value)
+                var shouldHaveDemister = ShouldHaveDemister(__instance);
+                
+                var hasDemister = player.m_eqipmentStatusEffects.Contains(deMister);
+                
+                if (hasDemister && shouldHaveDemister)
                     return;
-            
-                var itemData = equippedBackpack.Item;
-            
-                itemData.TryGetBackpackItem(out var backpack);
 
-                var shouldHaveFeatherFall = backpack.BackpackBiome.Value == Configuration.EffectBiome.Value && itemData.m_quality >= Configuration.QualityLevel.Value;  
-                var hasFeatherFall = player.m_eqipmentStatusEffects.Contains(deMister);
-                if (!hasFeatherFall && shouldHaveFeatherFall)
+                if (hasDemister && !shouldHaveDemister)
+                {
+                    __instance.m_eqipmentStatusEffects.Remove(deMister);
+                    __instance.m_seman.RemoveStatusEffect(deMister);
+                }
+                
+                if (!hasDemister && shouldHaveDemister)
                 {
                     player.m_eqipmentStatusEffects.Add(deMister);
                     player.m_seman.AddStatusEffect(deMister);
