@@ -23,6 +23,9 @@ internal class BackpackMountains : BackpackItem
         AddUpgradeIngredient("WolfPelt", 5);
         AddUpgradeIngredient("Silver", 5);
         
+        Item.DropsFrom.Add("Fenring_Cultist", 0.02f, 1);
+        Item.DropsFrom.Add("Fenring", 0.08f, 1);
+        
         RegisterShaderSwap();
 
     }
