@@ -58,6 +58,7 @@ public static class FeatherFall
     }
     
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
+    [HarmonyBefore(new string[]{"randyknapp.mods.epicloot"})]
     public static class FeatherFall_Humanoid_UpdateEquipmentStatusEffects_Patch
     {
         [UsedImplicitly]

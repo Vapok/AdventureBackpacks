@@ -26,7 +26,7 @@ internal static class InventoryGuiPatches
         {
             if (__instance == null)
                 return;
-            if (__instance.m_craftUpgradeItem != null || __instance.m_craftRecipe.m_item != null)
+            if (__instance.m_craftUpgradeItem != null || (__instance.m_craftRecipe != null && __instance.m_craftRecipe.m_item != null))
             {
                 DoingUpgrade = true;
             }
