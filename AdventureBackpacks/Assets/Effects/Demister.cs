@@ -74,7 +74,7 @@ public static class Demister
                     return;
                 }
                 
-                var shouldHaveDemister = ShouldHaveDemister(__instance);
+                var shouldHaveDemister = ShouldHaveDemister(__instance) || EquipmentEffectCache.HasStatusEffect(deMister);
                 
                 var hasDemister = player.m_eqipmentStatusEffects.Contains(deMister);
                 

@@ -74,7 +74,7 @@ public static class FeatherFall
                     return;
                 }
 
-                var shouldHaveFeatherFall = ShouldHaveFeatherFall(__instance);  
+                var shouldHaveFeatherFall = ShouldHaveFeatherFall(__instance) || EquipmentEffectCache.HasStatusEffect(slowFall);;  
                 var hasFeatherFall = player.m_eqipmentStatusEffects.Contains(slowFall);
                 
                 if (hasFeatherFall && shouldHaveFeatherFall)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using JetBrains.Annotations;
 
@@ -15,17 +16,20 @@ public enum EquipmentEffects
 }
 
 public static class EquipmentEffectCache
-{
+{ 
+    public static HashSet<StatusEffect> activeEffects = new();
+    public static HashSet<StatusEffect> backpackEffects = new();
+  
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
-    public static class BackpackEffectsHumanoidUpdateEquipmentStatusEffectsPatch
+    public static class UpdateStatusEffects
     {
-        public static HashSet<StatusEffect> activeEffects = new();
 
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
         public static bool Prefix(Humanoid __instance)
         {
           activeEffects = new HashSet<StatusEffect>();
+          backpackEffects = new HashSet<StatusEffect>();
 
             var deMister = ObjectDB.instance.GetStatusEffect("Demister");
             var slowFall = ObjectDB.instance.GetStatusEffect("SlowFall");
@@ -64,21 +68,21 @@ public static class EquipmentEffectCache
               
               if (eqipmentStatusEffect.Equals(deMister) && Demister.ShouldHaveDemister(__instance))
               {
-                if (!activeEffects.Contains(eqipmentStatusEffect)) 
-                  activeEffects.Add(eqipmentStatusEffect);
+                if (!backpackEffects.Contains(eqipmentStatusEffect)) 
+                  backpackEffects.Add(eqipmentStatusEffect);
               }
               
               
               if (eqipmentStatusEffect.Equals(slowFall) && FeatherFall.ShouldHaveFeatherFall(__instance))
               {
-                if (!activeEffects.Contains(eqipmentStatusEffect)) 
-                  activeEffects.Add(eqipmentStatusEffect);
+                if (!backpackEffects.Contains(eqipmentStatusEffect)) 
+                  backpackEffects.Add(eqipmentStatusEffect);
               }
             }
 
             foreach (StatusEffect eqipmentStatusEffect in __instance.m_eqipmentStatusEffects)
             {
-              if (!activeEffects.Contains(eqipmentStatusEffect))
+              if (!activeEffects.Contains(eqipmentStatusEffect) && !backpackEffects.Contains(eqipmentStatusEffect))
                 __instance.m_seman.RemoveStatusEffect(eqipmentStatusEffect.name);
             }
             
@@ -87,11 +91,20 @@ public static class EquipmentEffectCache
               if (!__instance.m_eqipmentStatusEffects.Contains(statusEffect))
                 __instance.m_seman.AddStatusEffect(statusEffect);
             }
-            
+
+            foreach (var backpackEffect in backpackEffects)
+            {
+              if (!activeEffects.Contains(backpackEffect))
+                activeEffects.Add(backpackEffect);
+            }
             __instance.m_eqipmentStatusEffects.Clear();
             __instance.m_eqipmentStatusEffects.UnionWith((IEnumerable<StatusEffect>) activeEffects);
 
             return false;
         }
+    }
+    public static bool HasStatusEffect(StatusEffect statusEffect)
+    {
+      return activeEffects.Contains(statusEffect);
     }
 }
