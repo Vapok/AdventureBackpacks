@@ -80,12 +80,6 @@ public static class Demister
                 
                 if (hasDemister && shouldHaveDemister)
                     return;
-
-                if (hasDemister && !shouldHaveDemister)
-                {
-                    __instance.m_eqipmentStatusEffects.Remove(deMister);
-                    __instance.m_seman.RemoveStatusEffect(deMister);
-                }
                 
                 if (!hasDemister && shouldHaveDemister)
                 {
