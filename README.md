@@ -36,6 +36,11 @@ stage of maturity. This includes a backpack progression that will start at Meado
 
 
 # Current Patch Notes
+
+## 1.5.2.0
+* Fixing the Wisplight and Feathfall breaking because of previous fix. These now function as expected.
+* Adding in French Translation Files (Thanks Renard!!)
+
 ## 1.5.1.0
 * Fixed an annoying bug on the Level 4 Explorer's Wisppack where the Demister would activate on every equipment change. Annoying!
 * Adjusted some shaders.
