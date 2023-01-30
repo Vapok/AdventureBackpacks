@@ -1,0 +1,31 @@
+{
+  "vapok_mod_item_backpack_meadows": "Tornister",
+  "vapok_mod_item_backpack_meadows_description": "Eine kleine Tasche, die Dinge beinhalten kann.",
+
+  "vapok_mod_item_backpack_blackforest": "Grober Rucksack",
+  "vapok_mod_item_backpack_blackforest_description": "Ein robuster Rucksack mit Schnallen und feinen Lederriemen.",
+
+  "vapok_mod_item_backpack_swamp": "Blutsack-Wetpack",
+  "vapok_mod_item_backpack_swamp_description": "Ein haltbarer Rucksack, sicher verschlossen durch die Einarbeitung wasserdichter Blutsäcke.",
+
+  "vapok_mod_item_backpack_mountains": "Arktischer Sherpa-Beutel",
+  "vapok_mod_item_backpack_mountains_description": "Ein arktischer Rucksack, geeignet für lange Wanderungen in den Bergen.",
+
+  "vapok_mod_item_backpack_plains": "Loxfell-Rucksack",
+  "vapok_mod_item_backpack_plains_description": "Ein Abenteurer-Rucksack, der aus widerstandsfähigem Loxfell gefertigt wurde.",
+
+  "vapok_mod_item_backpack_mistlands": "Rucksack des Explorators",
+  "vapok_mod_item_backpack_mistlands_description": "Ein fein gearbeiteter, mystischer Rucksack mit ganz eigener Handhabung. Niemand weiß genau, wie er funktioniert.",
+
+  "vapok_mod_item_rugged_backpack": "Vielseitiger Rucksack",
+  "vapok_mod_item_rugged_backpack_description": "Ein vielseitiger Rucksack, an jedes Terrain angepasst.",
+  
+  "vapok_mod_item_arctic_backpack": "Arktischer Rucksack",
+  "vapok_mod_item_arctic_backpack_description": "Ein Arktis-Rucksack für lange Bergwanderungen im Winter.",
+  
+  "vapok_mod_no_inception": "Du hast die Götter erzürnt!",
+  "vapok_mod_useful_backpack": "Dein Rucksack fühlt sich nützlich.",
+  "vapok_mod_you_droped_bag": "Du hast einen Rucksack fallen lassen!",
+  "vapok_mod_level": "Level",
+  "vapok_mod_effect": "Effekt"
+}
