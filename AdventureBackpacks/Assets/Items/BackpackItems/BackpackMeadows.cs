@@ -12,7 +12,8 @@ internal class BackpackMeadows : BackpackItem
     {
         RegisterConfigSettings();
         
-        Item.Configurable = Configurability.Recipe;
+        Item.Configurable = Configurability.Recipe | Configurability.Drop;
+        
         AssignCraftingTable(CraftingTable.Workbench,2);
         
         Item.MaximumRequiredStationLevel = 3;

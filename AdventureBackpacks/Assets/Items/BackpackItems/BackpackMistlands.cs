@@ -3,7 +3,7 @@ using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
 using Vapok.Common.Managers.StatusEffects;
-using Vapok.Common.Shared;
+
 
 namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
@@ -13,7 +13,8 @@ internal class BackpackMistlands : BackpackItem
     {
         RegisterConfigSettings();
         
-        Item.Configurable = Configurability.Recipe;
+        Item.Configurable = Configurability.Recipe | Configurability.Drop;
+        
         AssignCraftingTable(CraftingTable.BlackForge,1);
         
         Item.MaximumRequiredStationLevel = 2;
@@ -45,6 +46,8 @@ internal class BackpackMistlands : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(30);
         RegisterSpeedMod();
+        FeatherFall.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
+        Effects.Demister.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 4);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)

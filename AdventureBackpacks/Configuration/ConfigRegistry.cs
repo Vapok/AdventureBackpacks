@@ -1,4 +1,5 @@
-﻿using BepInEx.Configuration;
+﻿using System;
+using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
@@ -12,9 +13,14 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<KeyCode> HotKeyDrop { get; private set;}
         internal static ConfigEntry<bool> CloseInventory { get; private set;}
         internal static ConfigEntry<bool> OutwardMode { get; private set;}
+        
+        public static Waiting Waiter;
 
         public ConfigRegistry(IPluginInfo mod): base(mod)
         {
+            //Waiting For Startup
+            Waiter = new Waiting();
+
             InitializeConfigurationSettings();
         }
         public sealed override void InitializeConfigurationSettings()
@@ -48,4 +54,15 @@ namespace AdventureBackpacks.Configuration
             Assets.Effects.ColdResistance.Configuration.RegisterEffectConfiguration();
         }
     }
+    
+    public class Waiting
+    {
+        public void ConfigurationComplete(bool configDone)
+        {
+            if (configDone)
+                StatusChanged?.Invoke(this, EventArgs.Empty);
+        }
+        public event EventHandler StatusChanged;            
+    }
+
 }

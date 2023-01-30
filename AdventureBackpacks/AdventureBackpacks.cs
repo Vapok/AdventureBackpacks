@@ -14,6 +14,7 @@
 using System;
 using System.Reflection;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
@@ -61,6 +62,9 @@ namespace AdventureBackpacks
             //I'm awake!
             _instance = this;
             
+            //Waiting For Startup
+            Waiter = new Waiting();
+            
             //Initialize Managers
             Initializer.LoadManagers();
 
@@ -71,9 +75,6 @@ namespace AdventureBackpacks
             LogManager.Init(PluginId,out _log);
 
             PrefabManager.Initalized = true;
-
-            //Waiting For Startup
-            Waiter = new Waiting();
 
             Waiter.StatusChanged += InitializeBackpacks;
             
@@ -117,6 +118,8 @@ namespace AdventureBackpacks
             
             //Enable BoneReorder
             BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+            
+            ConfigRegistry.Waiter.ConfigurationComplete(true);
 
             ValheimAwake = true;
         }

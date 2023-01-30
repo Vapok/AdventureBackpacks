@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -9,20 +10,17 @@ using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Assets.Effects;
 
-
 public static class ColdResistance
 {
     public static class Configuration
     {
         public static ConfigEntry<bool> EnabledEffect { get; private set;}
         public static Dictionary<BackpackBiomes,ConfigEntry<int>> BiomeQualityLevels { get; private set;}
-        public static ConfigEntry<BackpackBiomes> EffectBiome { get; private set;}
         
         public static string _configSection = $"Effect: Cold Resistance";
 
         public static void RegisterEffectConfiguration()
         {
-            
             BiomeQualityLevels = new();
             
             EnabledEffect = ConfigSyncBase.SyncedConfig(_configSection, "Effect Enabled", true,
@@ -30,33 +28,33 @@ public static class ColdResistance
                     null, // range between 0f and 1f will make it display as a percentage slider
                     new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
 
+            //Waiting For Startup
+            ConfigRegistry.Waiter.StatusChanged += FillBiomeSettings;
+        }
+
+        private static void FillBiomeSettings(object sender, EventArgs e)
+        {
             foreach (BackpackBiomes backpackBiome in Enum.GetValues(typeof(BackpackBiomes)))
             {
                 RegisterEffectBiomeQuality(backpackBiome);
             }
         }
 
-        public static void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 1)
+        public static void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 0)
         {
             if (biome == BackpackBiomes.None)
                 return;
             
+            var qualityLevel = ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {biome.ToString()}", defaultQuality,
+                new ConfigDescription("Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
+                    new AcceptableValueRange<int>(0, 5),
+                    new ConfigAttributes { IsAdminOnly = true, Order = 2 }));
+            
             if (!BiomeQualityLevels.ContainsKey(biome))
             {
-                var qualityLevel = ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {biome.ToString()}", defaultQuality,
-                    new ConfigDescription("Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
-                        new AcceptableValueRange<int>(0, 4),
-                        new ConfigAttributes { IsAdminOnly = true, Order = 2 }));
-
                 BiomeQualityLevels.Add(biome, qualityLevel);
             }
-            else
-            {
-                BiomeQualityLevels[biome].Value = defaultQuality;
-            }
-                
         }
-
     }
 
     public static bool ShouldHaveColdResistance(Humanoid human)

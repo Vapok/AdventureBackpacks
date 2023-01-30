@@ -12,7 +12,7 @@ internal class BackpackMountains : BackpackItem
     {
         RegisterConfigSettings();
         
-        Item.Configurable = Configurability.Recipe;
+        Item.Configurable = Configurability.Recipe | Configurability.Drop;
         AssignCraftingTable(CraftingTable.Forge,3);
         
         Item.MaximumRequiredStationLevel = 7;
