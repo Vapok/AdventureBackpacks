@@ -12,7 +12,7 @@ internal class BackpackMountains : BackpackItem
     {
         RegisterConfigSettings();
         
-        Item.Configurable = Configurability.Recipe;
+        Item.Configurable = Configurability.Recipe | Configurability.Drop;
         AssignCraftingTable(CraftingTable.Forge,3);
         
         Item.MaximumRequiredStationLevel = 7;
@@ -55,7 +55,7 @@ internal class BackpackMountains : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;

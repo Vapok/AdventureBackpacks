@@ -12,7 +12,7 @@ internal class BackpackSwamp : BackpackItem
     {
         RegisterConfigSettings();
         
-        Item.Configurable = Configurability.Recipe;
+        Item.Configurable = Configurability.Recipe | Configurability.Drop;
         AssignCraftingTable(CraftingTable.Workbench,2);
         
         Item.MaximumRequiredStationLevel = 5;
@@ -43,11 +43,14 @@ internal class BackpackSwamp : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(15);
         RegisterSpeedMod();
+        Waterproof.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 2);
+        ColdResistance.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
         itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
+
         switch (quality)
         {
             case 1:
@@ -56,7 +59,7 @@ internal class BackpackSwamp : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;

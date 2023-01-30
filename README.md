@@ -36,24 +36,14 @@ stage of maturity. This includes a backpack progression that will start at Meado
 
 
 # Current Patch Notes
-## 1.5.4.0
-* French words have characters that are not allowed in BepInEx configs that was causing major start issues.
-    * I have fixed this by sanitizing words before making configs.
-* Cleaned up the way I was patching Status Effects. More Robust and won't conflict with other mods.
-
-## 1.5.3.0
-* Found another instance of Feather Fall not working. Fixed.
-* Found a bug in the Epic Loot Augmenter when changing enchants.  Fixed.
-
-## 1.5.2.0
-* Fixing the Wisplight and Feathfall breaking because of previous fix. These now function as expected.
-* Adding in French Translation Files (Thanks Renard!!)
-
-## 1.5.1.0
-* Fixed an annoying bug on the Level 4 Explorer's Wisppack where the Demister would activate on every equipment change. Annoying!
-* Adjusted some shaders.
-* Adding fresh Russian Translation File thanks to BIATLONIST!
-  * (Have you translated this into your language?  Let me know, and I'll add it the releases!)
+# 1.5.5.0
+* Adding in German Translation thanks to Tyrone.
+* Adding in Cold Resistance as a configurable Status Effect.
+* Added Drops and Drop Configurations to that Bags can be added to loot tables.
+* Added in additional configuration options for Effects that allow effects to be more configurable to multiple bags.
+* Added in Module Compatibility to Smoothbrain's Blacksmithing (allowing quality level 5 for effects)
+* Added in Module Compatibility to Golden's TorchesAndCapes Environment changes.  Effects now work along side this mod being enabled.
+* Fixed a few minor bugs
 
 
 ## 1.5.0.0

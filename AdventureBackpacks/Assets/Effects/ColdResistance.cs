@@ -10,14 +10,14 @@ using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Assets.Effects;
 
-public static class FeatherFall
+public static class ColdResistance
 {
     public static class Configuration
     {
         public static ConfigEntry<bool> EnabledEffect { get; private set;}
         public static Dictionary<BackpackBiomes,ConfigEntry<int>> BiomeQualityLevels { get; private set;}
-
-        public static string _configSection = $"Effect: Feather Fall";
+        
+        public static string _configSection = $"Effect: Cold Resistance";
 
         public static void RegisterEffectConfiguration()
         {
@@ -27,7 +27,7 @@ public static class FeatherFall
                 new ConfigDescription("Enables the effect.",
                     null, // range between 0f and 1f will make it display as a percentage slider
                     new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
-            
+
             //Waiting For Startup
             ConfigRegistry.Waiter.StatusChanged += FillBiomeSettings;
         }
@@ -39,6 +39,7 @@ public static class FeatherFall
                 RegisterEffectBiomeQuality(backpackBiome);
             }
         }
+
         public static void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 0)
         {
             if (biome == BackpackBiomes.None)
@@ -50,13 +51,13 @@ public static class FeatherFall
                     new ConfigAttributes { IsAdminOnly = true, Order = 2 }));
             
             if (!BiomeQualityLevels.ContainsKey(biome))
-            { 
+            {
                 BiomeQualityLevels.Add(biome, qualityLevel);
             }
         }
     }
-    
-    public static bool ShouldHaveFeatherFall(Humanoid human)
+
+    public static bool ShouldHaveColdResistance(Humanoid human)
     {
         if (human is Player player)
         {
@@ -84,37 +85,26 @@ public static class FeatherFall
 
         return false;
     }
+
+
     
-    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
-    [HarmonyBefore(new string[]{"randyknapp.mods.epicloot"})]
-    public static class FeatherFall_Humanoid_UpdateEquipmentStatusEffects_Patch
+    [HarmonyPatch(typeof(EnvMan), nameof(EnvMan.IsCold))]
+    public static class UpdateStatusEffects
     {
         [UsedImplicitly]
-        public static void Postfix(Humanoid __instance)
+        [HarmonyPriority(Priority.First)]
+        public static bool Prefix(EnvMan __instance, ref bool __result)
         {
-            if (__instance is Player player)
+            if (Player.m_localPlayer == null)
+                return true;
+            
+            if (ShouldHaveColdResistance(Player.m_localPlayer))
             {
-                var slowFall = ObjectDB.instance.GetStatusEffect("SlowFall");
-                if (slowFall == null)
-                {
-                    return;
-                }
-
-                var shouldHaveFeatherFall = ShouldHaveFeatherFall(__instance);  
-                var hasFeatherFall = player.m_eqipmentStatusEffects.Contains(slowFall);
-                
-                if (hasFeatherFall && shouldHaveFeatherFall)
-                    return;
-                
-                if (!hasFeatherFall && shouldHaveFeatherFall)
-                {
-                    player.m_eqipmentStatusEffects.Add(slowFall);
-                    player.m_seman.AddStatusEffect(slowFall);
-                }
+                __result = false;
+                return false;
             }
+            
+            return true;
         }
     }
-    
 }
-
-

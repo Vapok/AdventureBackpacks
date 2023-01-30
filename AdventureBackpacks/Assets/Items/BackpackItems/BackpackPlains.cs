@@ -11,7 +11,7 @@ internal class BackpackPlains : BackpackItem
     public BackpackPlains(string prefabName, string itemName) : base(prefabName, itemName)
     {
         RegisterConfigSettings();
-        Item.Configurable = Configurability.Recipe;
+        Item.Configurable = Configurability.Recipe | Configurability.Drop;
         AssignCraftingTable(CraftingTable.Forge,3);
         
         Item.MaximumRequiredStationLevel = 7;
@@ -56,7 +56,7 @@ internal class BackpackPlains : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;

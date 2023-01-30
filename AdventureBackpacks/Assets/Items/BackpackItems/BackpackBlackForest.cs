@@ -12,7 +12,8 @@ internal class BackpackBlackForest : BackpackItem
     {
         RegisterConfigSettings();
         
-        Item.Configurable = Configurability.Recipe;
+        Item.Configurable = Configurability.Recipe | Configurability.Drop;
+        
         AssignCraftingTable(CraftingTable.Forge,1);
         
         Item.MaximumRequiredStationLevel = 3;
@@ -42,6 +43,7 @@ internal class BackpackBlackForest : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(10);
         RegisterSpeedMod();
+        ColdResistance.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
@@ -56,7 +58,7 @@ internal class BackpackBlackForest : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 itemData.m_shared.m_setName = "troll";
                 itemData.m_shared.m_setSize = 4;
                 itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");

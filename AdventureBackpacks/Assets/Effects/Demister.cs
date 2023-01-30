@@ -1,4 +1,7 @@
-﻿using AdventureBackpacks.Assets.Factories;
+﻿using System;
+using System.Collections.Generic;
+using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -12,30 +15,46 @@ public static class Demister
     public static class Configuration
     {
         public static ConfigEntry<bool> EnabledEffect { get; private set;}
-        public static ConfigEntry<int> QualityLevel { get; private set;}
-        public static ConfigEntry<BackpackBiomes> EffectBiome { get; private set;}
+        public static Dictionary<BackpackBiomes,ConfigEntry<int>> BiomeQualityLevels { get; private set;}
 
-        public static void RegisterEffectConfiguration(ConfigFile config)
+        public static string _configSection = $"Effect: Demister";
+
+        public static void RegisterEffectConfiguration()
         {
-            var _configSection = $"Effect: Demister";
+            BiomeQualityLevels = new();
             
             EnabledEffect = ConfigSyncBase.SyncedConfig(_configSection, "Effect Enabled", true,
                 new ConfigDescription("Enables the effect.",
                     null, // range between 0f and 1f will make it display as a percentage slider
                     new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
-
-            QualityLevel = ConfigSyncBase.SyncedConfig(_configSection, "Carry Bonus", 4,
-                new ConfigDescription("Increases your carry capacity by this much (multiplied by item level) while wearing the backpack.",
-                    new AcceptableValueRange<int>(1, 4),
+            
+            //Waiting For Startup
+            ConfigRegistry.Waiter.StatusChanged += FillBiomeSettings;
+        }
+        
+        private static void FillBiomeSettings(object sender, EventArgs e)
+        {
+            foreach (BackpackBiomes backpackBiome in Enum.GetValues(typeof(BackpackBiomes)))
+            {
+                RegisterEffectBiomeQuality(backpackBiome);
+            }
+        }
+        
+        public static void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 0)
+        {
+            if (biome == BackpackBiomes.None)
+                return;
+            
+            var qualityLevel = ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {biome.ToString()}", defaultQuality,
+                new ConfigDescription("Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
+                    new AcceptableValueRange<int>(0, 5),
                     new ConfigAttributes { IsAdminOnly = true, Order = 2 }));
             
-            EffectBiome = ConfigSyncBase.SyncedConfig(_configSection, "Backpack Biome", BackpackBiomes.Mistlands,
-                new ConfigDescription("The Backpack Biome this effect will apply it's effects on.",
-                    null, 
-                    new ConfigAttributes { IsAdminOnly = true, Order = 3 }));
-
+            if (!BiomeQualityLevels.ContainsKey(biome))
+            {
+                BiomeQualityLevels.Add(biome, qualityLevel);
+            }
         }
-
     }
 
     public static bool ShouldHaveDemister(Humanoid human)
@@ -50,8 +69,18 @@ public static class Demister
             var itemData = equippedBackpack.Item;
             
             itemData.TryGetBackpackItem(out var backpack);
+
+            var backpackBiome = backpack.BackpackBiome.Value;
+
+            if (Configuration.BiomeQualityLevels.ContainsKey(backpackBiome))
+            {
+                var configQualityForBiome = Configuration.BiomeQualityLevels[backpackBiome].Value;
+
+                if (configQualityForBiome == 0 || backpackBiome == BackpackBiomes.None)
+                    return false;
                 
-            return backpack.BackpackBiome.Value == Configuration.EffectBiome.Value && itemData.m_quality >= Configuration.QualityLevel.Value;  
+                return itemData.m_quality >= configQualityForBiome;  
+            }
         }
 
         return false;

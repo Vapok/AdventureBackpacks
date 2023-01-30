@@ -51,6 +51,10 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     
     internal virtual Vector2i GetInventorySize(int quality)
     {
+        //Blacksmithing from Blaxxun is allowing items to go higher than my original intent.
+        //If quantity entering here is higher than 4, let's Clamp it at 4.
+        quality = Mathf.Clamp(quality, 1, 4);
+        
         return new Vector2i(Mathf.Clamp((int)BackpackSize[quality].Value.x,1,8),(int)BackpackSize[quality].Value.y);    
     }
     

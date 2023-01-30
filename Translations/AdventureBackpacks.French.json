@@ -1,0 +1,31 @@
+{
+  "vapok_mod_item_backpack_meadows": "Sac à dos",
+  "vapok_mod_item_backpack_meadows_description": "Un petit sac capable de contenir quelques affaires",
+
+  "vapok_mod_item_backpack_blackforest": "Sac à dos robuste",
+  "vapok_mod_item_backpack_blackforest_description": "Un sac à dos robuste, renforcé de boucles et de fines lanières de cuir.",
+
+  "vapok_mod_item_backpack_swamp": "Sac imperméable",
+  "vapok_mod_item_backpack_swamp_description": "Un sac à dos résistant, imperméabilisé avec des poches de sang.",
+
+  "vapok_mod_item_backpack_mountains": "Sac de sherpa",
+  "vapok_mod_item_backpack_mountains_description": "Un sac à dos arctique, adapté pour de longues randonnées en montagne.",
+
+  "vapok_mod_item_backpack_plains": "Sac renforcé en cuir de lox",
+  "vapok_mod_item_backpack_plains_description": "Un sac d'aventurier fait avec du cuir de lox extrêmement résistant.",
+
+  "vapok_mod_item_backpack_mistlands": "Sac-feu-follet d'explorateur",
+  "vapok_mod_item_backpack_mistlands_description": "Un sac à dos mystique, finement ouvragé. Conçu avec sa propre poche sans fond. Personne ne sait vraiment comment il fonctionne.",
+
+  "vapok_mod_item_rugged_backpack": "Ancien sac à dos robuste",
+  "vapok_mod_item_rugged_backpack_description": "Un sac à dos robuste, renforcé de boucles et de fines lanières de cuir.",
+
+  "vapok_mod_item_arctic_backpack": "Ancien sac arctique",
+  "vapok_mod_item_arctic_backpack_description": "Un sac à dos arctique, adapté pour de longues randonnées en montagne.",
+  
+  "vapok_mod_no_inception": "Vous avez provoqué la colère des dieux !",
+  "vapok_mod_useful_backpack": "Votre sac à dos a l'air utile...",
+  "vapok_mod_you_droped_bag": "Vous avez laissé tomber votre sac !",
+  "vapok_mod_level": "Niveau",
+  "vapok_mod_effect": "Effet"
+}

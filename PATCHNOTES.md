@@ -1,5 +1,14 @@
 # Adventure Backpacks Patchnotes
 
+# 1.5.5.0
+* Adding in German Translation thanks to Tyrone.
+* Adding in Cold Resistance as a configurable Status Effect.
+* Added Drops and Drop Configurations to that Bags can be added to loot tables.
+* Added in additional configuration options for Effects that allow effects to be more configurable to multiple bags.
+* Added in Module Compatibility to Smoothbrain's Blacksmithing (allowing quality level 5 for effects)
+* Added in Module Compatibility to Golden's TorchesAndCapes Environment changes.  Effects now work along side this mod being enabled.
+* Fixed a few minor bugs
+
 # 1.5.4.0
 * French words have characters that are not allowed in BepInEx configs that was causing major start issues. 
   * I have fixed this by sanitizing words before making configs.
