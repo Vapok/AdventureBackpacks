@@ -73,12 +73,16 @@ public static class ColdResistance
             itemData.TryGetBackpackItem(out var backpack);
 
             var backpackBiome = backpack.BackpackBiome.Value;
-            var configQualityForBiome = Configuration.BiomeQualityLevels[backpackBiome].Value;
 
-            if (configQualityForBiome == 0 || backpackBiome == BackpackBiomes.None)
-                return false;
+            if (Configuration.BiomeQualityLevels.ContainsKey(backpackBiome))
+            {
+                var configQualityForBiome = Configuration.BiomeQualityLevels[backpackBiome].Value;
+
+                if (configQualityForBiome == 0 || backpackBiome == BackpackBiomes.None)
+                    return false;
                 
-            return itemData.m_quality >= configQualityForBiome;  
+                return itemData.m_quality >= configQualityForBiome;  
+            }
         }
 
         return false;
