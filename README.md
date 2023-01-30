@@ -39,10 +39,11 @@ stage of maturity. This includes a backpack progression that will start at Meado
 # 1.5.5.0
 * Adding in German Translation thanks to Tyrone.
 * Adding in Cold Resistance as a configurable Status Effect.
+* Big Shoutout to Agrivar/carpenteer for his assistance in testing reported bugs! Appreciate it!
+    * Added in additional configuration options for Effects that allow effects to be more configurable to multiple bags.
+    * Added in Module Compatibility to Smoothbrain's Blacksmithing (allowing quality level 5 for effects)
+    * Added in Module Compatibility to Golden's TorchesAndCapes Environment changes.  Effects now work along side this mod being enabled.
 * Added Drops and Drop Configurations to that Bags can be added to loot tables.
-* Added in additional configuration options for Effects that allow effects to be more configurable to multiple bags.
-* Added in Module Compatibility to Smoothbrain's Blacksmithing (allowing quality level 5 for effects)
-* Added in Module Compatibility to Golden's TorchesAndCapes Environment changes.  Effects now work along side this mod being enabled.
 * Fixed a few minor bugs
 
 
