@@ -60,7 +60,7 @@ internal class BackpackMistlands : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;

@@ -48,6 +48,7 @@ internal class BackpackSwamp : BackpackItem
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
         itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
+
         switch (quality)
         {
             case 1:
@@ -56,7 +57,7 @@ internal class BackpackSwamp : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;

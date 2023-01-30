@@ -39,6 +39,7 @@ internal class BackpackMeadows : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(5);
         RegisterSpeedMod();
+        ColdResistance.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
@@ -53,7 +54,7 @@ internal class BackpackMeadows : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;

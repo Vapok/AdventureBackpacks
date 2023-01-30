@@ -16,7 +16,7 @@ public static class Waterproof
         public static ConfigEntry<int> QualityLevel { get; private set;}
         public static ConfigEntry<BackpackBiomes> EffectBiome { get; private set;}
 
-        public static void RegisterEffectConfiguration(ConfigFile config)
+        public static void RegisterEffectConfiguration()
         {
             var _configSection = $"Effect: Waterproof";
             

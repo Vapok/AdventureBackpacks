@@ -15,7 +15,7 @@ public static class Demister
         public static ConfigEntry<int> QualityLevel { get; private set;}
         public static ConfigEntry<BackpackBiomes> EffectBiome { get; private set;}
 
-        public static void RegisterEffectConfiguration(ConfigFile config)
+        public static void RegisterEffectConfiguration()
         {
             var _configSection = $"Effect: Demister";
             
@@ -24,8 +24,8 @@ public static class Demister
                     null, // range between 0f and 1f will make it display as a percentage slider
                     new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
 
-            QualityLevel = ConfigSyncBase.SyncedConfig(_configSection, "Carry Bonus", 4,
-                new ConfigDescription("Increases your carry capacity by this much (multiplied by item level) while wearing the backpack.",
+            QualityLevel = ConfigSyncBase.SyncedConfig(_configSection, "Effective Quality Level", 4,
+                new ConfigDescription("Quality Level needed to apply effect to backpack.",
                     new AcceptableValueRange<int>(1, 4),
                     new ConfigAttributes { IsAdminOnly = true, Order = 2 }));
             

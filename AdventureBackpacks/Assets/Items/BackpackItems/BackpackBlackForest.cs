@@ -56,7 +56,7 @@ internal class BackpackBlackForest : BackpackItem
                 break;
             case 3:
                 break;
-            case 4:
+            default:
                 itemData.m_shared.m_setName = "troll";
                 itemData.m_shared.m_setSize = 4;
                 itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");

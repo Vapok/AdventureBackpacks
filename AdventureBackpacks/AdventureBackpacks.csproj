@@ -78,6 +78,7 @@
     <ItemGroup>
         <Compile Include="Assets\Backpacks.cs" />
         <Compile Include="Assets\Effects\BackpackEffects.cs" />
+        <Compile Include="Assets\Effects\ColdResistance.cs" />
         <Compile Include="Assets\Effects\Demister.cs" />
         <Compile Include="Assets\Effects\FeatherFall.cs" />
         <Compile Include="Assets\Effects\Waterproof.cs" />
