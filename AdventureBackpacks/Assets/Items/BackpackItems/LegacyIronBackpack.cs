@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using AdventureBackpacks.Assets.Effects;
-using AdventureBackpacks.Assets.Factories;
-using UnityEngine;
 using Vapok.Common.Managers.StatusEffects;
 
 namespace AdventureBackpacks.Assets.Items.BackpackItems;

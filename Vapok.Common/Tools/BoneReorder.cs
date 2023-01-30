@@ -4,7 +4,6 @@ using HarmonyLib;
 using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
-using Logger = UnityEngine.Logger;
 
 namespace Vapok.Common.Tools
 {
