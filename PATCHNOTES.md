@@ -1,5 +1,8 @@
 # Adventure Backpacks Patchnotes
 
+# 1.5.6.0
+* Adding in Korean Translation thanks to hanawa07!
+
 # 1.5.5.0
 * Adding in German Translation thanks to Tyrone.
 * Adding in Cold Resistance as a configurable Status Effect.  
