@@ -36,16 +36,11 @@ stage of maturity. This includes a backpack progression that will start at Meado
 
 
 # Current Patch Notes
-# 1.5.5.0
-* Adding in German Translation thanks to Tyrone.
-* Adding in Cold Resistance as a configurable Status Effect.
-* Big Shoutout to Agrivar/carpenteer for his assistance in testing reported bugs! Appreciate it!
-    * Added in additional configuration options for Effects that allow effects to be more configurable to multiple bags.
-    * Added in Module Compatibility to Smoothbrain's Blacksmithing (allowing quality level 5 for effects)
-    * Added in Module Compatibility to Golden's TorchesAndCapes Environment changes.  Effects now work along side this mod being enabled.
-* Added Drops and Drop Configurations to that Bags can be added to loot tables.
-* Fixed a few minor bugs
-
+# 1.5.6.0
+* Adding in Korean Translation thanks to hanawa07!
+* When using the Configuration Manager, there was a weird interaction dealing with the Drop Chance that was making it impossible to edit the drop chance.
+    * I have changed the way the drop chance is configured in Configuration Manager, and the value needs to be a fraction of a number.
+    * As an example: 1 = 100%.  0.02 = 2%.
 
 ## 1.5.0.0
 * Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)

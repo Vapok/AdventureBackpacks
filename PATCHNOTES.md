@@ -1,5 +1,11 @@
 # Adventure Backpacks Patchnotes
 
+# 1.5.6.0
+* Adding in Korean Translation thanks to hanawa07!
+* When using the Configuration Manager, there was a weird interaction dealing with the Drop Chance that was making it impossible to edit the drop chance.
+  * I have changed the way the drop chance is configured in Configuration Manager, and the value needs to be a fraction of a number.
+  * As an example: 1 = 100%.  0.02 = 2%.
+
 # 1.5.5.0
 * Adding in German Translation thanks to Tyrone.
 * Adding in Cold Resistance as a configurable Status Effect.  
