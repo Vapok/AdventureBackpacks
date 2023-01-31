@@ -1128,14 +1128,26 @@ public class Item
 			GUILayout.EndHorizontal();
 			GUILayout.BeginHorizontal();
 
+			GUILayout.Label("Chance value is in fractions.");
+
+			GUILayout.EndHorizontal();
+			GUILayout.BeginHorizontal();
+			
+			GUILayout.Label("A value 1=100%, A value of 0.02=2%");
+
+			GUILayout.EndHorizontal();
+			GUILayout.BeginHorizontal();
+
 			GUILayout.Label("Chance: ");
 			float chance = drop.chance;
-			if (float.TryParse(GUILayout.TextField((chance * 100).ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45 }), out float newChance) && !Mathf.Approximately(newChance / 100, chance) && !locked)
+			if (float.TryParse(GUILayout.TextField((chance).ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45}), out float newChance) && !locked)
 			{
 				chance = newChance;
 				wasUpdated = true;
 			}
-			GUILayout.Label("% Amount: ");
+			
+
+			GUILayout.Label(" Amount: ");
 
 			int min = drop.min;
 			if (int.TryParse(GUILayout.TextField(min.ToString(), new GUIStyle(GUI.skin.textField) { fixedWidth = 35 }), out int newMin) && newMin != min && !locked)
