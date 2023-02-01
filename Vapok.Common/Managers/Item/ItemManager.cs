@@ -1128,26 +1128,26 @@ public class Item
 			GUILayout.EndHorizontal();
 			GUILayout.BeginHorizontal();
 
-			GUILayout.Label("Chance value is in fractions.");
-
-			GUILayout.EndHorizontal();
-			GUILayout.BeginHorizontal();
-			
-			GUILayout.Label("A value 1=100%, A value of 0.02=2%");
-
-			GUILayout.EndHorizontal();
-			GUILayout.BeginHorizontal();
-
 			GUILayout.Label("Chance: ");
 			float chance = drop.chance;
-			if (float.TryParse(GUILayout.TextField((chance).ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45}), out float newChance) && !locked)
+			if (float.TryParse(GUILayout.HorizontalSlider(chance,0.0f,1.0f, new GUIStyle(GUI.skin.horizontalSlider)  { fixedWidth = 100 },new GUIStyle(GUI.skin.horizontalSliderThumb)).ToString(CultureInfo.InvariantCulture), out float newChance) && !locked)
 			{
 				chance = newChance;
 				wasUpdated = true;
 			}
 			
+			if (float.TryParse(GUILayout.TextField(chance.ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45 }), out float newChance2) &&  !locked)
+			{
+				chance = newChance2;
+				wasUpdated = true;
+			}
+			
+			GUILayout.Label($" {Math.Round(chance * 100,2)}% ");
+			
+			GUILayout.EndHorizontal();
+			GUILayout.BeginHorizontal();
 
-			GUILayout.Label(" Amount: ");
+			GUILayout.Label("Amount: ");
 
 			int min = drop.min;
 			if (int.TryParse(GUILayout.TextField(min.ToString(), new GUIStyle(GUI.skin.textField) { fixedWidth = 35 }), out int newMin) && newMin != min && !locked)
@@ -1179,7 +1179,9 @@ public class Item
 				wasUpdated = true;
 				newDrops.Add(new DropTarget { min = 1, max = 1, creature = "", chance = 1 });
 			}
-
+			
+			GUILayout.Label("                                 ");
+			
 			GUILayout.EndHorizontal();
 		}
 		GUILayout.EndVertical();
