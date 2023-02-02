@@ -24,13 +24,10 @@ internal class BackpackBlackForest : BackpackItem
         AddUpgradeIngredient("TrollHide", 3);
         AddUpgradeIngredient("Bronze", 3);
         
-        Item.DropsFrom.Add("Greydwarf", 0.02f, 1);
-        Item.DropsFrom.Add("Greydwarf_Elite", 0.04f, 1);
-        Item.DropsFrom.Add("Greydwarf_Shaman", 0.04f, 1);
-        Item.DropsFrom.Add("Troll", 0.10f, 1);
-
-        RegisterShaderSwap();
-
+        Item.DropsFrom.Add("Greydwarf", 0.002f, 1);
+        Item.DropsFrom.Add("Greydwarf_Elite", 0.004f, 1);
+        Item.DropsFrom.Add("Greydwarf_Shaman", 0.004f, 1);
+        Item.DropsFrom.Add("Troll", 0.01f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

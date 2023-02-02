@@ -27,6 +27,19 @@ public class Localizer
 	private static readonly List<WeakReference<Localization>> localizationObjects = new();
 
 	private static BaseUnityPlugin? _plugin;
+	
+	public static Waiting Waiter = null!;
+	
+	public class Waiting
+	{
+		public void TranslationsLoaded(bool loadDone)
+		{
+			if (loadDone)
+				StatusChanged?.Invoke(this, EventArgs.Empty);
+		}
+		public event EventHandler StatusChanged = null!;            
+	}
+
 
 	private static BaseUnityPlugin plugin
 	{
@@ -181,8 +194,10 @@ public class Localizer
 
 	static Localizer()
 	{
-		Harmony harmony = new("org.bepinex.helpers.LocalizationManager");
-		harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(Patch_FejdStartup))));
+		//Waiting For Startup
+		Waiter = new Waiting(); 
+		Harmony harmony = new("org.bepinex.helpers.LocalizationManager"); 
+		harmony.Patch(AccessTools.DeclaredMethod(typeof(FejdStartup), nameof(FejdStartup.Awake)), prefix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(Patch_FejdStartup)))); 
 		harmony.Patch(AccessTools.DeclaredMethod(typeof(Localization), nameof(Localization.LoadCSV)), postfix: new HarmonyMethod(AccessTools.DeclaredMethod(typeof(Localizer), nameof(LoadLocalization))));
 	}
 
@@ -196,6 +211,7 @@ public class Localizer
 	private static void Patch_FejdStartup()
 	{
 		Load();
+		Waiter.TranslationsLoaded(true);
 	}
 	
 	private static byte[]? LoadTranslationFromAssembly(string language)

@@ -7,6 +7,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using JetBrains.Annotations;
 using Vapok.Common.Managers.Configuration;
+using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Assets.Effects;
 
@@ -26,7 +27,7 @@ public static class FeatherFall
             EnabledEffect = ConfigSyncBase.SyncedConfig(_configSection, "Effect Enabled", true,
                 new ConfigDescription("Enables the effect.",
                     null, // range between 0f and 1f will make it display as a percentage slider
-                    new ConfigAttributes { IsAdminOnly = true, Order = 1 }));
+                    new ConfigurationManagerAttributes { Order = 1 }));
             
             //Waiting For Startup
             ConfigRegistry.Waiter.StatusChanged += FillBiomeSettings;
@@ -47,7 +48,7 @@ public static class FeatherFall
             var qualityLevel = ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {biome.ToString()}", defaultQuality,
                 new ConfigDescription("Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
                     new AcceptableValueRange<int>(0, 5),
-                    new ConfigAttributes { IsAdminOnly = true, Order = 2 }));
+                    new ConfigurationManagerAttributes { Order = 2 }));
             
             if (!BiomeQualityLevels.ContainsKey(biome))
             { 

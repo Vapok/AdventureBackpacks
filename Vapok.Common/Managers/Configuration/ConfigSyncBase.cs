@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BepInEx.Configuration;
 using ServerSync;
 using Vapok.Common.Abstractions;
+using Vapok.Common.Shared;
 
 namespace Vapok.Common.Managers.Configuration;
 
@@ -36,17 +37,17 @@ public abstract class ConfigSyncBase
         _config.SaveOnConfigSet = true;
         
         LoggingEnabled = _config.Bind("Log Output Configuration", "Logging Enabled", true,
-            new ConfigDescription("Toggles Log Output", null, new ConfigAttributes{ IsAdvanced = true}));
+            new ConfigDescription("Toggles Log Output", null, new ConfigurationManagerAttributes{ IsAdvanced = true}));
             
         LogLevel = _config.Bind(
             "Log Output Configuration", "Log Level", LogLevels.Warning,
             new ConfigDescription("Minimum Log Level to Output",
                 null,
-                new ConfigAttributes { IsAdvanced = true}));
+                new ConfigurationManagerAttributes { IsAdvanced = true}));
 
         ServerEnforced = SyncedConfig("Server-Synced and Enforced Config", "Lock Config", false,
             new ConfigDescription(
-                "[Server Only] The configuration is locked and may not be changed by clients once it has been synced from the server. Only valid for server config, will have no effect on clients.", null, new ConfigAttributes { Order = 50 }));
+                "[Server Only] The configuration is locked and may not be changed by clients once it has been synced from the server. Only valid for server config, will have no effect on clients.", null, new ConfigurationManagerAttributes { Order = 50 }));
 
         _configSync.AddLockingConfigEntry(ServerEnforced!);
 
