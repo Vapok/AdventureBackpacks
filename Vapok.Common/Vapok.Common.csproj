@@ -130,7 +130,7 @@
         <Compile Include="Managers\PieceManager\SnapPointMaker.cs" />
         <Compile Include="Managers\Skill\SkillManager.cs" />
         <Compile Include="Managers\StatusEffects\StatusEffectManager.cs" />
-        <Compile Include="Shared\ConfigAttributes.cs" />
+        <Compile Include="Shared\ConfigurationManagerAttributes.cs" />
         <Compile Include="Shared\Enums.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Tools\BoneReorder.cs" />

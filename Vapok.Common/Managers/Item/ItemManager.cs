@@ -141,6 +141,7 @@ public class Item
 	private static Dictionary<Recipe, ConfigEntryBase?> hiddenUpgradeRecipes = new();
 	private static Dictionary<Item, Dictionary<string, ItemConfig>> itemCraftConfigs = new();
 	private static Dictionary<Item, ConfigEntry<string>> itemDropConfigs = new();
+	private static ConfigEntry<bool> itemDropEnabledConfig = null!;
 	private Dictionary<CharacterDrop, CharacterDrop.Drop> characterDrops = new();
 	private readonly Dictionary<ConfigEntryBase, Action> statsConfigs = new();
 
@@ -479,8 +480,12 @@ public class Item
 
 					if ((item.configurability & Configurability.Drop) != 0)
 					{
+						
+						ConfigEntry<bool> dropsEnabledConfig = itemDropEnabledConfig = config(englishName, "Drops Enabled", true, new ConfigDescription($"Enables {englishName} drops", null, new ConfigurationManagerAttributes { Category = localizedName, Browsable = (item.configurationVisible & Configurability.Drop) != 0 }));
 						ConfigEntry<string> dropConfig = itemDropConfigs[item] = config(englishName, "Drops from", new SerializedDrop(item.DropsFrom.Drops).ToString(), new ConfigDescription($"Creatures {englishName} drops from", null, new ConfigurationManagerAttributes { CustomDrawer = drawDropsConfigTable, Category = localizedName, Browsable = (item.configurationVisible & Configurability.Drop) != 0 }));
-						dropConfig.SettingChanged += (_, _) => item.UpdateCharacterDrop();
+						
+						dropsEnabledConfig.SettingChanged += (_, _) => item.UpdateCharacterDrop(dropsEnabledConfig.Value);
+						dropConfig.SettingChanged += (_, _) => item.UpdateCharacterDrop(dropsEnabledConfig.Value);
 					}
 
 					for (int i = 0; i < item.Conversions.Count; ++i)
@@ -959,7 +964,7 @@ public class Item
 		}
 	}
 
-	public void UpdateCharacterDrop()
+	public void UpdateCharacterDrop(bool enabled = true)
 	{
 		if (ZNetScene.instance)
 		{
@@ -971,7 +976,8 @@ public class Item
 				}
 			}
 
-			AssignDropToCreature();
+			if (enabled)
+				AssignDropToCreature();
 		}
 	}
 
@@ -1130,19 +1136,21 @@ public class Item
 
 			GUILayout.Label("Chance: ");
 			float chance = drop.chance;
-			if (float.TryParse(GUILayout.HorizontalSlider(chance,0.0f,1.0f, new GUIStyle(GUI.skin.horizontalSlider)  { fixedWidth = 100 },new GUIStyle(GUI.skin.horizontalSliderThumb)).ToString(CultureInfo.InvariantCulture), out float newChance) && !locked)
+			
+			if (float.TryParse(GUILayout.HorizontalSlider(chance,0.0f,1.0f, new GUIStyle(GUI.skin.horizontalSlider)  { fixedWidth = 100 },new GUIStyle(GUI.skin.horizontalSliderThumb)).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float newChance) && !locked)
 			{
 				chance = newChance;
 				wasUpdated = true;
 			}
 			
-			if (float.TryParse(GUILayout.TextField(chance.ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45 }), out float newChance2) &&  !locked)
+			if (float.TryParse(GUILayout.TextField(chance.ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45 }), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float newChance2) &&  !locked)
 			{
 				chance = newChance2;
 				wasUpdated = true;
 			}
 			
-			GUILayout.Label($" {Math.Round(chance * 100,2)}% ");
+			double temp = Double.Parse(chance.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
+			GUILayout.Label($" {Math.Round(temp * 100,2).ToString(CultureInfo.InvariantCulture)}% ");
 			
 			GUILayout.EndHorizontal();
 			GUILayout.BeginHorizontal();

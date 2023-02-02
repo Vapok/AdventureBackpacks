@@ -24,13 +24,10 @@ internal class BackpackSwamp : BackpackItem
         AddUpgradeIngredient("Bloodbag", 2);
         AddUpgradeIngredient("Iron", 5);
         
-        Item.DropsFrom.Add("Draugr", 0.02f, 1);
-        Item.DropsFrom.Add("Draugr_Ranged", 0.04f, 1);
-        Item.DropsFrom.Add("Draugr_Elite", 0.04f, 1);
-        Item.DropsFrom.Add("Troll", 0.08f, 1);
-        
-        RegisterShaderSwap();
-
+        Item.DropsFrom.Add("Draugr", 0.002f, 1);
+        Item.DropsFrom.Add("Draugr_Ranged", 0.004f, 1);
+        Item.DropsFrom.Add("Draugr_Elite", 0.004f, 1);
+        Item.DropsFrom.Add("Troll", 0.008f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

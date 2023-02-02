@@ -25,9 +25,7 @@ internal class BackpackMeadows : BackpackItem
         AddUpgradeIngredient("LeatherScraps", 5);
         AddUpgradeIngredient("DeerHide", 3);
         
-        Item.DropsFrom.Add("Greyling", 0.02f, 1);
-        
-        RegisterShaderSwap();
+        Item.DropsFrom.Add("Greyling", 0.002f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

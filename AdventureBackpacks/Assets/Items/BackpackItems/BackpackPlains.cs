@@ -23,12 +23,10 @@ internal class BackpackPlains : BackpackItem
         AddUpgradeIngredient("LoxPelt", 2);
         AddUpgradeIngredient("BlackMetal", 5);
 
-        Item.DropsFrom.Add("Goblin", 0.02f, 1);
-        Item.DropsFrom.Add("GoblinArcher", 0.02f, 1);
-        Item.DropsFrom.Add("GoblinBrute", 0.02f, 1);
-        Item.DropsFrom.Add("GoblinShaman", 0.02f, 1);
-        
-        RegisterShaderSwap();
+        Item.DropsFrom.Add("Goblin", 0.002f, 1);
+        Item.DropsFrom.Add("GoblinArcher", 0.002f, 1);
+        Item.DropsFrom.Add("GoblinBrute", 0.002f, 1);
+        Item.DropsFrom.Add("GoblinShaman", 0.002f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

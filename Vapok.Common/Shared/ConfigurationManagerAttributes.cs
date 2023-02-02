@@ -6,6 +6,8 @@ using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 
+namespace Vapok.Common.Shared;
+
 /// <summary>
 ///     Class that specifies how a setting should be displayed inside the ConfigurationManager settings window.
 ///     
@@ -32,43 +34,77 @@ using Vapok.Common.Managers;
 ///     You can read more and see examples in the readme at https://github.com/BepInEx/BepInEx.ConfigurationManager
 ///     You can optionally remove fields that you won't use from this class, it's the same as leaving them null.
 /// </remarks>
-public class ConfigAttributes
+public class ConfigurationManagerAttributes
 {
     private ILogIt? _log = LogManager.GetLogger("vapok.mods.core"); 
-    public ConfigAttributes()
+    public ConfigurationManagerAttributes()
     {
         EntryColor = new Color(1f, 0.631f, 0.235f, 1f); // Valheim orange
         DescriptionColor = Color.white;
     }
 
+
     /// <summary>
-    ///     Show this setting in the settings screen at all? If false, don't show.
+    /// Should the setting be shown as a percentage (only use with value range settings).
+    /// </summary>
+    public bool? ShowRangeAsPercent;
+
+    /// <summary>
+    /// Custom setting editor (OnGUI code that replaces the default editor provided by ConfigurationManager).
+    /// See below for a deeper explanation. Using a custom drawer will cause many of the other fields to do nothing.
+    /// </summary>
+    public System.Action<BepInEx.Configuration.ConfigEntryBase> CustomDrawer = null!;
+
+    /// <summary>
+    /// Show this setting in the settings screen at all? If false, don't show.
     /// </summary>
     public bool? Browsable;
 
     /// <summary>
-    ///     If set, a "Default" button will be shown next to the setting to allow resetting to default.
+    /// Category the setting is under. Null to be directly under the plugin.
     /// </summary>
-    public object? DefaultValue;
+    public string Category = null!;
 
     /// <summary>
-    ///     Force the "Reset" button to not be displayed, even if a valid DefaultValue is available. 
+    /// If set, a "Default" button will be shown next to the setting to allow resetting to default.
+    /// </summary>
+    public object DefaultValue = null!;
+
+    /// <summary>
+    /// Force the "Reset" button to not be displayed, even if a valid DefaultValue is available. 
     /// </summary>
     public bool? HideDefaultButton;
 
     /// <summary>
-    ///     Order of the setting on the settings list relative to other settings in a category.
-    ///     0 by default, higher number is higher on the list.
+    /// Force the setting name to not be displayed. Should only be used with a <see cref="CustomDrawer"/> to get more space.
+    /// Can be used together with <see cref="HideDefaultButton"/> to gain even more space.
+    /// </summary>
+    public bool? HideSettingName;
+
+    /// <summary>
+    /// Optional description shown when hovering over the setting.
+    /// Not recommended, provide the description when creating the setting instead.
+    /// </summary>
+    public string Description = null!;
+
+    /// <summary>
+    /// Name of the setting.
+    /// </summary>
+    public string DispName = null!;
+
+    /// <summary>
+    /// Order of the setting on the settings list relative to other settings in a category.
+    /// 0 by default, higher number is higher on the list.
     /// </summary>
     public int? Order;
 
     /// <summary>
-    ///     Only show the value, don't allow editing it.
+    /// Only show the value, don't allow editing it.
     /// </summary>
     public bool? ReadOnly;
 
     /// <summary>
-    ///     If true, don't show the setting by default. User has to turn on showing advanced settings or search for it.
+    /// If true, don't show the setting by default. User has to turn on showing advanced settings or search for it.
     /// </summary>
     public bool? IsAdvanced;
 
@@ -118,8 +154,8 @@ public class ConfigAttributes
     /// </summary>
     internal object? LocalValue { get; set; }
 
-    private static readonly PropertyInfo[] _myProperties = typeof(ConfigAttributes).GetProperties(BindingFlags.Instance | BindingFlags.Public);
-    private static readonly FieldInfo[] _myFields = typeof(ConfigAttributes).GetFields(BindingFlags.Instance | BindingFlags.Public);
+    private static readonly PropertyInfo[] _myProperties = typeof(ConfigurationManagerAttributes).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+    private static readonly FieldInfo[] _myFields = typeof(ConfigurationManagerAttributes).GetFields(BindingFlags.Instance | BindingFlags.Public);
 
     /// <summary>
     ///     Set config values from an attribute array
@@ -127,7 +163,7 @@ public class ConfigAttributes
     /// <param name="attribs">Array of attribute values</param>
     public void SetFromAttributes(object[] attribs)
     {
-        if (attribs == null || attribs.Length == 0)
+        if (attribs.Length == 0)
         {
             return;
         }
@@ -139,13 +175,13 @@ public class ConfigAttributes
                 case null: break;
 
                 case DisplayNameAttribute da:
-                    //DispName = da.DisplayName;
+                    DispName = da.DisplayName;
                     break;
                 case CategoryAttribute ca:
-                    //Category = ca.Category;
+                    Category = ca.Category;
                     break;
                 case DescriptionAttribute de:
-                    //Description = de.Description;
+                    Description = de.Description;
                     break;
                 case DefaultValueAttribute def:
                     DefaultValue = def.Value;
@@ -157,9 +193,9 @@ public class ConfigAttributes
                     Browsable = bro.Browsable;
                     break;
 
-                // case Action<BepInEx.Configuration.ConfigEntryBase> newCustomDraw:
-                // CustomDrawer = _ => newCustomDraw(this);
-                // break;
+                //case Action<BepInEx.Configuration.ConfigEntryBase> newCustomDraw:
+                //CustomDrawer = _ => newCustomDraw(this);
+                //break;
                 case string str:
                     switch (str)
                     {

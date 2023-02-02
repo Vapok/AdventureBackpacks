@@ -21,6 +21,7 @@ using JetBrains.Annotations;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.Configuration;
+using Vapok.Common.Managers.LocalizationManager;
 using Vapok.Common.Tools;
 
 namespace AdventureBackpacks
@@ -32,7 +33,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "AdventureBackpacks";
-        private const string _version = "1.5.6";
+        private const string _version = "1.5.7";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -72,7 +73,7 @@ namespace AdventureBackpacks
 
             PrefabManager.Initalized = true;
 
-            Waiter.StatusChanged += InitializeBackpacks;
+            Localizer.Waiter.StatusChanged += InitializeBackpacks;
             
             //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);

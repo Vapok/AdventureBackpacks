@@ -36,11 +36,12 @@ stage of maturity. This includes a backpack progression that will start at Meado
 
 
 # Current Patch Notes
-# 1.5.6.0
-* Adding in Korean Translation thanks to hanawa07!
-* When using the Configuration Manager, there was a weird interaction dealing with the Drop Chance that was making it impossible to edit the drop chance.
-    * I have changed the way the drop chance is configured in Configuration Manager, and the value needs to be a fraction of a number.
-    * As an example: 1 = 100%.  0.02 = 2%.
+# 1.5.7.0
+* We have finally identified the issue with the drop rates.  The issue stemmed from Non-English OS based players (where decimals are represented as 0,00, not 0.00) were experiencing an issue with a Culture variation issue.
+    * I couldn't detect it because I only run in English mode, and so it worked for me Apologies to my non-English friends out there.
+    * **_NOTE: PLEASE DELETE YOUR CONFIGURATION ON BOTH SERVER AND CLIENT WHEN UPDATING TO 1.5.7_**
+* Revamped the Configuration Section to use non-localized section names in the configuration file, while still showing localized labels in the Configuration Manager UI.
+* Turned off materials shader replacer, which was causing a flicker.
 
 ## 1.5.0.0
 * Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)

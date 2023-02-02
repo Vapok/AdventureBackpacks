@@ -27,14 +27,11 @@ internal class BackpackMistlands : BackpackItem
         AddUpgradeIngredient("Eitr", 2);
         AddUpgradeIngredient("Softtissue", 5);
         
-        Item.DropsFrom.Add("Dverger", 0.02f, 1);
-        Item.DropsFrom.Add("DvergerMage", 0.02f, 1);
-        Item.DropsFrom.Add("DvergerMageFire", 0.02f, 1);
-        Item.DropsFrom.Add("DvergerMageIce", 0.02f, 1);
-        Item.DropsFrom.Add("DvergerMageSupport", 0.02f, 1);
-
-        //RegisterShaderSwap();
-
+        Item.DropsFrom.Add("Dverger", 0.002f, 1);
+        Item.DropsFrom.Add("DvergerMage", 0.002f, 1);
+        Item.DropsFrom.Add("DvergerMageFire", 0.002f, 1);
+        Item.DropsFrom.Add("DvergerMageIce", 0.002f, 1);
+        Item.DropsFrom.Add("DvergerMageSupport", 0.002f, 1);
     }
     internal sealed override void RegisterConfigSettings()
     {
