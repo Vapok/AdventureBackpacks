@@ -13,6 +13,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using Vapok.Common.Managers;
 
+
 namespace ItemManager;
 
 [PublicAPI]
@@ -1109,7 +1110,7 @@ public class Item
 			cfg.BoxedValue = new SerializedRequirements(newReqs).ToString();
 		}
 	}
-
+	
 	private static void drawDropsConfigTable(ConfigEntryBase cfg)
 	{
 		bool locked = cfg.Description.Tags.Select(a => a.GetType().Name == "ConfigurationManagerAttributes" ? (bool?)a.GetType().GetField("ReadOnly")?.GetValue(a) : null).FirstOrDefault(v => v != null) ?? false;
@@ -1133,24 +1134,25 @@ public class Item
 
 			GUILayout.EndHorizontal();
 			GUILayout.BeginHorizontal();
-
-			GUILayout.Label("Chance: ");
+			
+			GUILayout.Label($"Chance: ");
 			float chance = drop.chance;
 			
-			if (float.TryParse(GUILayout.HorizontalSlider(chance,0.0f,1.0f, new GUIStyle(GUI.skin.horizontalSlider)  { fixedWidth = 100 },new GUIStyle(GUI.skin.horizontalSliderThumb)).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float newChance) && !locked)
+			if (float.TryParse(GUILayout.HorizontalSlider(chance, 0, 1,
+				    new GUIStyle(GUI.skin.horizontalSlider) { fixedWidth = 100 },
+				    new GUIStyle(GUI.skin.horizontalSliderThumb)).ToString(CultureInfo.InvariantCulture), NumberStyles.Any, CultureInfo.InvariantCulture, out float newChance) && !locked)
 			{
 				chance = newChance;
 				wasUpdated = true;
 			}
 			
-			if (float.TryParse(GUILayout.TextField(chance.ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45 }), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out float newChance2) &&  !locked)
+			if (float.TryParse(GUILayout.TextField(newChance.ToString(CultureInfo.InvariantCulture), new GUIStyle(GUI.skin.textField) { fixedWidth = 45 }), NumberStyles.Any, CultureInfo.InvariantCulture, out float newChance2) &&  !locked)
 			{
 				chance = newChance2;
 				wasUpdated = true;
 			}
 			
-			double temp = Double.Parse(chance.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture);
-			GUILayout.Label($" {Math.Round(temp * 100,2).ToString(CultureInfo.InvariantCulture)}% ");
+			GUILayout.Label($"{(chance*100).ToString(CultureInfo.InvariantCulture)}%");
 			
 			GUILayout.EndHorizontal();
 			GUILayout.BeginHorizontal();
@@ -1271,7 +1273,7 @@ public class Item
 				{
 					max = min;
 				}
-				return new DropTarget { creature = parts[0], chance = parts.Length > 1 && float.TryParse(parts[1], out float chance) ? chance : 1, min = min, max = max };
+				return new DropTarget { creature = parts[0], chance = parts.Length > 1 && float.TryParse(parts[1],NumberStyles.Any,CultureInfo.InvariantCulture, out float chance) ? chance : 1, min = min, max = max };
 			}).ToList();
 		}
 

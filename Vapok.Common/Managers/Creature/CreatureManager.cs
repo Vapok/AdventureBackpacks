@@ -249,7 +249,7 @@ public class Creature
 					return new Drop
 					{
 						Amount = amount,
-						DropChance = parts.Length > 2 && float.TryParse(parts[2], out float chance) ? chance : 100,
+						DropChance = parts.Length > 2 && float.TryParse(parts[2], NumberStyles.Any, CultureInfo.InvariantCulture, out float chance) ? chance : 100,
 						DropOnePerPlayer = parts.Length > 3 && parts[3] == "onePerPlayer",
 						MultiplyDropByLevel = parts.Length > 4 && parts[4] == "multiplyByLevel"
 					};
