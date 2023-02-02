@@ -74,7 +74,7 @@ Author: [Vapok](https://github.com/Vapok)
 
 Source: [Github](https://github.com/Vapok/AdventureBackpacks)
 
-Discord: [RandyKnapp's Mod Community](https://discord.gg/randyknappmods)
+Discord: [Vapok's Mod's Community](https://discord.gg/5YAJkRFBXt)
 
 Patch notes: [Github Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/PATCHNOTES.md)
 
