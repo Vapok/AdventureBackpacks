@@ -11,7 +11,8 @@ public enum BackpackEffect
     FeatherFall,
     ColdResistance,
     Demister,
-    WaterResistance
+    WaterResistance,
+    FrostResistance
 }
 public class EffectsFactory : FactoryBase
 {
@@ -30,6 +31,7 @@ public class EffectsFactory : FactoryBase
         _effectList.Add(BackpackEffect.ColdResistance, new ColdResistance("Cold Immunity", "When activated keeps you from feeling cold. Does not prevent freezing."));
         _effectList.Add(BackpackEffect.Demister, new Effects.Demister("Demister", "When activated provides you with the Wisplight Effect, which clears mist from a small area around you while in the Mistlands."));
         _effectList.Add(BackpackEffect.WaterResistance, new Waterproof("Water Resistance", "When activated allows you to stay dry from the rain. Will still get wet if swimming."));
+        _effectList.Add(BackpackEffect.FrostResistance, new FrostResistance("Frost Resistance", "When activated allows you to stay warm in freezing conditions, negating the freezing debuff."));
 
         foreach (BackpackEffect effect in Enum.GetValues(typeof(BackpackEffect)))
         {   

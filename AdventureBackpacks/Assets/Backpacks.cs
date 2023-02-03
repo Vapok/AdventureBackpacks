@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
@@ -139,6 +140,10 @@ namespace AdventureBackpacks.Assets
             
             if (!itemData.TryGetBackpackItem(out var backpack))
                 return null;
+            
+            //Apply Frost Resistance If Configured.
+            if (FrostResistance.ShouldHaveFrostResistance(itemData))
+                modifierList.Add(BackpackEffects.FrostResistance);
             
             backpack.UpdateStatusEffects(backpackQuality, statusEffects, modifierList, itemData);
             

@@ -37,11 +37,11 @@ internal class BackpackMountains : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(20);
         RegisterSpeedMod();
+        EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
-        modifierList.Add(BackpackEffects.FrostResistance);
         itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
         
         switch (quality)
