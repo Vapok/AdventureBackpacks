@@ -1,4 +1,5 @@
 ﻿using System;
+using AdventureBackpacks.Assets.Factories;
 using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
@@ -49,11 +50,6 @@ namespace AdventureBackpacks.Configuration
                 "Local Config", "Outward Mode", false,
                 new ConfigDescription("You can use a hotkey to quickly drop your equipped backpack in order to run faster away from danger.",
                     null, new ConfigurationManagerAttributes { Order = 1 }));
-            
-            Assets.Effects.Demister.Configuration.RegisterEffectConfiguration();
-            Assets.Effects.FeatherFall.Configuration.RegisterEffectConfiguration();
-            Assets.Effects.Waterproof.Configuration.RegisterEffectConfiguration();
-            Assets.Effects.ColdResistance.Configuration.RegisterEffectConfiguration();
         }
     }
     

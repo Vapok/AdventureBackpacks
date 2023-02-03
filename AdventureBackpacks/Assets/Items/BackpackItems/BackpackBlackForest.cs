@@ -40,7 +40,7 @@ internal class BackpackBlackForest : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(10);
         RegisterSpeedMod();
-        ColdResistance.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
+        EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)

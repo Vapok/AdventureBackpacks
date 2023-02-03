@@ -43,8 +43,8 @@ internal class BackpackMistlands : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(30);
         RegisterSpeedMod();
-        FeatherFall.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
-        Effects.Demister.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 4);
+        EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
+        EffectsFactory.EffectList[BackpackEffect.Demister].RegisterEffectBiomeQuality(BackpackBiome.Value, 4);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)

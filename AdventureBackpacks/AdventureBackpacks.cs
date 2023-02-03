@@ -106,11 +106,15 @@ namespace AdventureBackpacks
             if (ValheimAwake)
                 return;
             
-            //Load Assets
+            //Register Effects
+            var effectsFactory = new EffectsFactory(_log, _config);
+            effectsFactory.RegisterEffects();
+            
+            //Register Assets
             var backpackFactory = new BackpackFactory(_log, _config);
             backpackFactory.CreateAssets();
             
-            //Setup Types
+            //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
             
             //Enable BoneReorder

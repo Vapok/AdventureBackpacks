@@ -80,10 +80,13 @@
         <Compile Include="Assets\Effects\BackpackEffects.cs" />
         <Compile Include="Assets\Effects\ColdResistance.cs" />
         <Compile Include="Assets\Effects\Demister.cs" />
+        <Compile Include="Assets\Effects\EffectsBase.cs" />
         <Compile Include="Assets\Effects\FeatherFall.cs" />
         <Compile Include="Assets\Effects\Waterproof.cs" />
         <Compile Include="Assets\Factories\AssetFactory.cs" />
         <Compile Include="Assets\Factories\BackpackFactory.cs" />
+        <Compile Include="Assets\Factories\EffectsFactory.cs" />
+        <Compile Include="Assets\Factories\FactoryBase.cs" />
         <Compile Include="Assets\Items\AssetItem.cs" />
         <Compile Include="Assets\Items\BackpackItem.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackBlackForest.cs" />

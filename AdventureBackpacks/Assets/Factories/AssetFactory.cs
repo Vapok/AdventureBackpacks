@@ -3,18 +3,10 @@ using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Assets.Factories;
 
-internal abstract class AssetFactory
+internal abstract class AssetFactory : FactoryBase
 {
-    private ILogIt _logger;
-    private ConfigSyncBase _config;
-    
-    internal ILogIt Log => _logger;
-    internal ConfigSyncBase Config => _config;
-    
-    internal AssetFactory(ILogIt logger, ConfigSyncBase configs)
+    internal AssetFactory(ILogIt logger, ConfigSyncBase configs) : base(logger,configs)
     {
-        _logger = logger;
-        _config = configs;
     }
 
     internal abstract void CreateAssets();
