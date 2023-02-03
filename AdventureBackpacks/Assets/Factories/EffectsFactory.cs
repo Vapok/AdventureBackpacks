@@ -12,7 +12,8 @@ public enum BackpackEffect
     ColdResistance,
     Demister,
     WaterResistance,
-    FrostResistance
+    FrostResistance,
+    TrollArmor
 }
 public class EffectsFactory : FactoryBase
 {
@@ -32,6 +33,7 @@ public class EffectsFactory : FactoryBase
         _effectList.Add(BackpackEffect.Demister, new Effects.Demister("Demister", "When activated provides you with the Wisplight Effect, which clears mist from a small area around you while in the Mistlands."));
         _effectList.Add(BackpackEffect.WaterResistance, new Waterproof("Water Resistance", "When activated allows you to stay dry from the rain. Will still get wet if swimming."));
         _effectList.Add(BackpackEffect.FrostResistance, new FrostResistance("Frost Resistance", "When activated allows you to stay warm in freezing conditions, negating the freezing debuff."));
+        _effectList.Add(BackpackEffect.TrollArmor, new TrollArmor("Troll Armor Set", "When activated the backpack acts as the Shoulder Set piece of the Troll Armor Set allowing the set to complete for the Sneak Effect"));
 
         foreach (BackpackEffect effect in Enum.GetValues(typeof(BackpackEffect)))
         {   

@@ -83,6 +83,7 @@
         <Compile Include="Assets\Effects\EffectsBase.cs" />
         <Compile Include="Assets\Effects\FeatherFall.cs" />
         <Compile Include="Assets\Effects\FrostResistance.cs" />
+        <Compile Include="Assets\Effects\TrollArmor.cs" />
         <Compile Include="Assets\Effects\Waterproof.cs" />
         <Compile Include="Assets\Factories\AssetFactory.cs" />
         <Compile Include="Assets\Factories\BackpackFactory.cs" />

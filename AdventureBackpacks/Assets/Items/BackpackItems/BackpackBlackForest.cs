@@ -40,6 +40,7 @@ internal class BackpackBlackForest : BackpackItem
         RegisterCarryBonus(10);
         RegisterSpeedMod();
         EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
+        EffectsFactory.EffectList[BackpackEffect.TrollArmor].RegisterEffectBiomeQuality(BackpackBiome.Value, 2);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
@@ -55,9 +56,6 @@ internal class BackpackBlackForest : BackpackItem
             case 3:
                 break;
             default:
-                itemData.m_shared.m_setName = "troll";
-                itemData.m_shared.m_setSize = 4;
-                itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;

@@ -58,9 +58,10 @@ public abstract class EffectsBase
                 new AcceptableValueRange<int>(0, 5),
                 new ConfigurationManagerAttributes { Order = 2 }));
         
-        if (!BiomeQualityLevels.ContainsKey(biome))
+        if (!BiomeQualityLevels.ContainsKey(biome) && qualityLevel != null)
         { 
             BiomeQualityLevels.Add(biome, qualityLevel);
+            qualityLevel.SettingChanged += Backpacks.UpdateItemDataConfigValues;
         }
     }
 }

@@ -141,9 +141,23 @@ namespace AdventureBackpacks.Assets
             if (!itemData.TryGetBackpackItem(out var backpack))
                 return null;
             
-            //Apply Frost Resistance If Configured.
+            //Apply Frost Resistance if configured.
             if (FrostResistance.ShouldHaveFrostResistance(itemData))
                 modifierList.Add(BackpackEffects.FrostResistance);
+            
+            //Apply Troll Armor Set if configured.
+            if (TrollArmor.ShouldHaveTrollArmorSet(itemData))
+            {
+                itemData.m_shared.m_setName = "troll";
+                itemData.m_shared.m_setSize = 4;
+                itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");
+            }
+            else
+            {
+                itemData.m_shared.m_setName = string.Empty;
+                itemData.m_shared.m_setSize = 0;
+                itemData.m_shared.m_setStatusEffect = null;
+            }
             
             backpack.UpdateStatusEffects(backpackQuality, statusEffects, modifierList, itemData);
             
