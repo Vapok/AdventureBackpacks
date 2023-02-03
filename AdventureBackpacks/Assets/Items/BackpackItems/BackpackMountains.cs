@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
 using Vapok.Common.Managers.StatusEffects;

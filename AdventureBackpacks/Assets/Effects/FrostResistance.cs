@@ -1,7 +1,4 @@
 ﻿using AdventureBackpacks.Assets.Factories;
-using AdventureBackpacks.Extensions;
-using HarmonyLib;
-using JetBrains.Annotations;
 
 namespace AdventureBackpacks.Assets.Effects;
 

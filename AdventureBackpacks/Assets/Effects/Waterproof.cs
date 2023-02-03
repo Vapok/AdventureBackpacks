@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using AdventureBackpacks.Assets.Factories;
-using AdventureBackpacks.Configuration;
+﻿using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
-using BepInEx.Configuration;
 using HarmonyLib;
 using JetBrains.Annotations;
-using Vapok.Common.Managers.Configuration;
-using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Assets.Effects;
 
