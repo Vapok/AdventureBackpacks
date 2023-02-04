@@ -53,7 +53,7 @@
           <HintPath>G:\Steam\steamapps\common\Valheim-Dev\BepInEx\core\BepInEx.Harmony.dll</HintPath>
         </Reference>
         <Reference Include="ServerSync">
-          <HintPath>..\lib\ServerSync.dll</HintPath>
+          <HintPath>..\..\References\ServerSync\ServerSync.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
@@ -70,6 +70,9 @@
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
           <HintPath>G:\Steam\steamapps\common\Valheim-Dev\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="Vapok.Common">
+          <HintPath>..\..\References\Vapok.Common\Vapok.Common.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\YamlDotNet.12.3.1\lib\net45\YamlDotNet.dll</HintPath>
@@ -112,12 +115,6 @@
         <Compile Include="Patches\ItemDrop.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AdventureBackpacks.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Vapok.Common\Vapok.Common.csproj">
-        <Project>{6215c559-83d3-4512-ad75-9f6dbd452083}</Project>
-        <Name>Vapok.Common</Name>
-      </ProjectReference>
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />
