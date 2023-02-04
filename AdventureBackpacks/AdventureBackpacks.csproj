@@ -52,9 +52,6 @@
         <Reference Include="BepInEx.Harmony">
           <HintPath>G:\Steam\steamapps\common\Valheim-Dev\BepInEx\core\BepInEx.Harmony.dll</HintPath>
         </Reference>
-        <Reference Include="ServerSync">
-          <HintPath>..\..\References\ServerSync\ServerSync.dll</HintPath>
-        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
@@ -73,9 +70,6 @@
         </Reference>
         <Reference Include="Vapok.Common">
           <HintPath>..\..\References\Vapok.Common\Vapok.Common.dll</HintPath>
-        </Reference>
-        <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-          <HintPath>..\packages\YamlDotNet.12.3.1\lib\net45\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
