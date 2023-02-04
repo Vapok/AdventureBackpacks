@@ -22,8 +22,13 @@
 
   "vapok_mod_item_arctic_backpack": "Old Arctic Backpack",
   "vapok_mod_item_arctic_backpack_description": "An arctic backpack, fit for long treks through the mountains.",
-  
-  "vapok_mod_no_inception": "You have angered the gods!",
+
+  "vapok_mod_no_inception1": "Do not anger the gods.",
+  "vapok_mod_no_inception2": "You have been warned.",
+  "vapok_mod_no_inception3": "You have angered the gods!",
+  "vapok_mod_no_inception4": "Sigh... Thor will deal with you soon.",
+  "vapok_mod_no_inception5": "Thor has stripped you of your powers!!",
+    
   "vapok_mod_useful_backpack": "Your backpack feels useful.",
   "vapok_mod_you_droped_bag": "You dropped a backpack!",
   "vapok_mod_level": "Level",

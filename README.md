@@ -36,12 +36,11 @@ stage of maturity. This includes a backpack progression that will start at Meado
 
 
 # Current Patch Notes
-# 1.5.7.0
-* We have finally identified the issue with the drop rates.  The issue stemmed from Non-English OS based players (where decimals are represented as 0,00, not 0.00) were experiencing an issue with a Culture variation issue.
-    * I couldn't detect it because I only run in English mode, and so it worked for me Apologies to my non-English friends out there.
-    * **_NOTE: PLEASE DELETE YOUR CONFIGURATION ON BOTH SERVER AND CLIENT WHEN UPDATING TO 1.5.7_**
-* Revamped the Configuration Section to use non-localized section names in the configuration file, while still showing localized labels in the Configuration Manager UI.
-* Turned off materials shader replacer, which was causing a flicker.
+# 1.5.8.0
+* Added Frost Resistance as a Configurable Effect.
+* Added Troll Armor Set as a Configurable Effect.
+* Completely reworked the Effects System, introducing Factory pattern.
+* Reworked Backpack Inception. The gods have looked down upon you unfavorably.
 
 ## 1.5.0.0
 * Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)
@@ -74,7 +73,7 @@ Author: [Vapok](https://github.com/Vapok)
 
 Source: [Github](https://github.com/Vapok/AdventureBackpacks)
 
-Discord: [RandyKnapp's Mod Community](https://discord.gg/randyknappmods)
+Discord: [Vapok's Mod's Community](https://discord.gg/5YAJkRFBXt)
 
 Patch notes: [Github Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/PATCHNOTES.md)
 

@@ -22,8 +22,13 @@
 
   "vapok_mod_item_arctic_backpack": "Древний арктический рюкзак",
   "vapok_mod_item_arctic_backpack_description": "Древний арктический рюкзак, подходящий для длительных походов по горам.",
+
+  "vapok_mod_no_inception1": "Не злите богов.",
+  "vapok_mod_no_inception2": "Вы были предупреждены.",
+  "vapok_mod_no_inception3": "Вы злите богов!",
+  "vapok_mod_no_inception4": "Вздыхает... Тор скоро займется вами.",
+  "vapok_mod_no_inception5": "Тор лишил вас своих сил!!",
   
-  "vapok_mod_no_inception": "Ты разгневал богов!",
   "vapok_mod_useful_backpack": "Ваш рюкзак кажется полезным.",
   "vapok_mod_you_droped_bag": "Ты уронил рюкзак!",
   "vapok_mod_level": "Уровень",

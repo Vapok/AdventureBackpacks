@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
@@ -108,16 +109,81 @@ namespace AdventureBackpacks.Assets
             if (instance.IsBackPackInventory() && Player.m_localPlayer != null)
             {
                 // If the item is a backpack...
-                if (item.IsBackpack())
+                if (item.TryGetBackpackItem(out var backpack))
                 {
-                    Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception");    
+                    backpack.InceptionCounter++;
 
+                    switch (backpack.InceptionCounter)
+                    {
+                        case 1:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception1");
+                            break;
+                        case 2:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception2");
+                            break;
+                        case 5:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception3");
+                            break;
+                        case 10:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception4");
+
+                            var interval = new Random(42);
+                            var timeInterval = interval.Next(5000,20000);
+                            backpack.YardSaleTimer = new System.Timers.Timer(timeInterval);
+                            backpack.YardSaleTimer.AutoReset = false;
+                            backpack.YardSaleTimer.Enabled = false;
+                            backpack.YardSaleTimer.Elapsed += (sender,e) =>  YardSaleEvent(backpack);
+                            backpack.YardSaleTimer.Start();
+                            break;
+                    }
+                    
                     // Nope!
-                    AdventureBackpacks.Log.Message("Odin says, 'You can't put a backpack inside a backpack!'");
                     return false;
                 }
             }
             return true;
+        }
+
+        public static void PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData)
+        {
+            if (itemData.IsBackpack())
+            {
+                var backpack = itemData.Data().Get<BackpackComponent>();
+                if (backpack != null)
+                {
+
+                    void EmtpyInventory(Inventory inventory)
+                    {
+                        var inventoryCount = inventory.m_inventory.Count;
+
+                        while (inventory.m_inventory.Count > 0)
+                        {
+                            var item = inventory.m_inventory[0];
+                            
+                            var amount = inventory.CountItems(item.m_shared.m_name, -1);
+                            
+                            mLocalPlayer.DropItem(inventory,item,amount);
+                        }
+                    }
+                    var inventory = backpack.GetInventory();
+                    var playerInventory = mLocalPlayer.GetInventory();
+
+                    EmtpyInventory(inventory);
+                    EmtpyInventory(playerInventory);
+                    
+                    mLocalPlayer.UnequipAllItems();
+                    
+                    EmtpyInventory(playerInventory);
+                }
+            }
+            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception5");
+            AdventureBackpacks.PerformYardSale = false;
+        }
+        
+        private static void YardSaleEvent(BackpackItem backpack)
+        {
+            backpack.YardSaleTimer.Stop();
+            AdventureBackpacks.PerformYardSale = true;
         }
 
         public static CustomSE UpdateStatusEffects(ItemDrop.ItemData itemData)
@@ -139,6 +205,24 @@ namespace AdventureBackpacks.Assets
             
             if (!itemData.TryGetBackpackItem(out var backpack))
                 return null;
+            
+            //Apply Frost Resistance if configured.
+            if (FrostResistance.ShouldHaveFrostResistance(itemData))
+                modifierList.Add(BackpackEffects.FrostResistance);
+            
+            //Apply Troll Armor Set if configured.
+            if (TrollArmor.ShouldHaveTrollArmorSet(itemData))
+            {
+                itemData.m_shared.m_setName = "troll";
+                itemData.m_shared.m_setSize = 4;
+                itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");
+            }
+            else
+            {
+                itemData.m_shared.m_setName = string.Empty;
+                itemData.m_shared.m_setSize = 0;
+                itemData.m_shared.m_setStatusEffect = null;
+            }
             
             backpack.UpdateStatusEffects(backpackQuality, statusEffects, modifierList, itemData);
             

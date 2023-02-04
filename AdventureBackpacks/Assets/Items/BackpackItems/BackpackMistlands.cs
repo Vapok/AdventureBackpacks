@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
 using Vapok.Common.Managers.StatusEffects;
@@ -43,13 +42,13 @@ internal class BackpackMistlands : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(30);
         RegisterSpeedMod();
-        FeatherFall.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
-        Effects.Demister.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 4);
+        EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
+        EffectsFactory.EffectList[BackpackEffect.Demister].RegisterEffectBiomeQuality(BackpackBiome.Value, 4);
+        EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
-        modifierList.Add(BackpackEffects.FrostResistance);
         itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
         
         switch (quality)

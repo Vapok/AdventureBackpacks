@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
 using Vapok.Common.Managers.StatusEffects;
@@ -38,7 +37,7 @@ internal class BackpackMeadows : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(5);
         RegisterSpeedMod();
-        ColdResistance.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
+        EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)

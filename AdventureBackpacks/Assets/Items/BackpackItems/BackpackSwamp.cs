@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
 using Vapok.Common.Managers.StatusEffects;
@@ -40,8 +39,8 @@ internal class BackpackSwamp : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(15);
         RegisterSpeedMod();
-        Waterproof.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 2);
-        ColdResistance.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
+        EffectsFactory.EffectList[BackpackEffect.WaterResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 2);
+        EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)

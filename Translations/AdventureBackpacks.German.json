@@ -23,7 +23,12 @@
   "vapok_mod_item_arctic_backpack": "Arktischer Rucksack",
   "vapok_mod_item_arctic_backpack_description": "Ein Arktis-Rucksack für lange Bergwanderungen im Winter.",
   
-  "vapok_mod_no_inception": "Du hast die Götter erzürnt!",
+  "vapok_mod_no_inception1": "Ärgere die Götter nicht.",
+  "vapok_mod_no_inception2": "Du wurdest gewarnt.",
+  "vapok_mod_no_inception3": "Du hast die Götter erzürnt!",
+  "vapok_mod_no_inception4": "Seufz ... Thor wird sich bald um dich kümmern.",
+  "vapok_mod_no_inception5": "Thor hat dich deiner Kräfte beraubt!!",
+
   "vapok_mod_useful_backpack": "Dein Rucksack fühlt sich nützlich.",
   "vapok_mod_you_droped_bag": "Du hast einen Rucksack fallen lassen!",
   "vapok_mod_level": "Level",

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
 using Vapok.Common.Managers.StatusEffects;
@@ -40,7 +39,8 @@ internal class BackpackBlackForest : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(10);
         RegisterSpeedMod();
-        ColdResistance.Configuration.RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
+        EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
+        EffectsFactory.EffectList[BackpackEffect.TrollArmor].RegisterEffectBiomeQuality(BackpackBiome.Value, 2);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
@@ -56,9 +56,6 @@ internal class BackpackBlackForest : BackpackItem
             case 3:
                 break;
             default:
-                itemData.m_shared.m_setName = "troll";
-                itemData.m_shared.m_setSize = 4;
-                itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");
                 break;
         }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;
