@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Timers;
 using AdventureBackpacks.Assets.Factories;
 using BepInEx.Configuration;
 using UnityEngine;
@@ -18,6 +19,24 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     private static ILogIt _logger;
     private string _configSection;
     private string _localizedCategory;
+
+    public System.Timers.Timer InceptionTimer;
+    public System.Timers.Timer YardSaleTimer;
+    
+    public int InceptionCounter
+    {
+        get => _inceptionCounter;
+        set
+        {
+            _inceptionCounter = value;
+            if (value <= 0) return;
+            InceptionTimer.Stop();
+            InceptionTimer.Start();
+        }
+    }
+
+
+    private int _inceptionCounter = 0;
     
     //Config Settings
     internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize { get; private set;}
@@ -31,15 +50,28 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     
     internal ConfigSyncBase Config => _config;
     internal ILogIt Log => _logger;
-        
+
+
     protected BackpackItem(string prefabName, string itemName, string configSection = "") : base(prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
         _localizedCategory = Localization.instance.Localize(_configSection);
         Item.SectionName = _configSection;
         BackpackSize = new();
+
+        InceptionTimer = new System.Timers.Timer(10000);
+        InceptionTimer.AutoReset = false;
+        InceptionTimer.Enabled = false;
+        InceptionTimer.Elapsed += InceptionCounterReset;
+
     }
 
+    private void InceptionCounterReset(object source, ElapsedEventArgs e)
+    {
+        InceptionCounter = 0;
+        Log.Message("Odin walks away.");
+    }
+    
     internal static void SetConfig(ConfigSyncBase configSync)
     {
         _config = configSync;

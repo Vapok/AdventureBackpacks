@@ -23,7 +23,14 @@
   "vapok_mod_item_arctic_backpack": "Ancien sac arctique",
   "vapok_mod_item_arctic_backpack_description": "Un sac à dos arctique, adapté pour de longues randonnées en montagne.",
   
-  "vapok_mod_no_inception": "Vous avez provoqué la colère des dieux !",
+  "vapok_mod_no_inception": "Vous avez provoqué la colère des dieux!",
+
+  "vapok_mod_no_inception1": "Ne fâchez pas les dieux.",
+  "vapok_mod_no_inception2": "Tu étais prévenu.",
+  "vapok_mod_no_inception3": "Vous avez provoqué la colère des dieux !",
+  "vapok_mod_no_inception4": "Soupir... Thor s'occupera de vous bientôt.",
+  "vapok_mod_no_inception5": "Thor vous a dépouillé de vos pouvoirs !!",
+
   "vapok_mod_useful_backpack": "Votre sac à dos a l'air utile...",
   "vapok_mod_you_droped_bag": "Vous avez laissé tomber votre sac !",
   "vapok_mod_level": "Niveau",

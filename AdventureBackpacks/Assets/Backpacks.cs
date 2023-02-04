@@ -109,16 +109,81 @@ namespace AdventureBackpacks.Assets
             if (instance.IsBackPackInventory() && Player.m_localPlayer != null)
             {
                 // If the item is a backpack...
-                if (item.IsBackpack())
+                if (item.TryGetBackpackItem(out var backpack))
                 {
-                    Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception");    
+                    backpack.InceptionCounter++;
 
+                    switch (backpack.InceptionCounter)
+                    {
+                        case 1:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception1");
+                            break;
+                        case 2:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception2");
+                            break;
+                        case 5:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception3");
+                            break;
+                        case 10:
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception4");
+
+                            var interval = new Random(42);
+                            var timeInterval = interval.Next(5000,20000);
+                            backpack.YardSaleTimer = new System.Timers.Timer(timeInterval);
+                            backpack.YardSaleTimer.AutoReset = false;
+                            backpack.YardSaleTimer.Enabled = false;
+                            backpack.YardSaleTimer.Elapsed += (sender,e) =>  YardSaleEvent(backpack);
+                            backpack.YardSaleTimer.Start();
+                            break;
+                    }
+                    
                     // Nope!
-                    AdventureBackpacks.Log.Message("Odin says, 'You can't put a backpack inside a backpack!'");
                     return false;
                 }
             }
             return true;
+        }
+
+        public static void PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData)
+        {
+            if (itemData.IsBackpack())
+            {
+                var backpack = itemData.Data().Get<BackpackComponent>();
+                if (backpack != null)
+                {
+
+                    void EmtpyInventory(Inventory inventory)
+                    {
+                        var inventoryCount = inventory.m_inventory.Count;
+
+                        while (inventory.m_inventory.Count > 0)
+                        {
+                            var item = inventory.m_inventory[0];
+                            
+                            var amount = inventory.CountItems(item.m_shared.m_name, -1);
+                            
+                            mLocalPlayer.DropItem(inventory,item,amount);
+                        }
+                    }
+                    var inventory = backpack.GetInventory();
+                    var playerInventory = mLocalPlayer.GetInventory();
+
+                    EmtpyInventory(inventory);
+                    EmtpyInventory(playerInventory);
+                    
+                    mLocalPlayer.UnequipAllItems();
+                    
+                    EmtpyInventory(playerInventory);
+                }
+            }
+            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception5");
+            AdventureBackpacks.PerformYardSale = false;
+        }
+        
+        private static void YardSaleEvent(BackpackItem backpack)
+        {
+            backpack.YardSaleTimer.Stop();
+            AdventureBackpacks.PerformYardSale = true;
         }
 
         public static CustomSE UpdateStatusEffects(ItemDrop.ItemData itemData)

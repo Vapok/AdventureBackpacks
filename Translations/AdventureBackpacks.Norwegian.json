@@ -1,31 +1,36 @@
 {
-  "vapok_mod_item_backpack_meadows": "Satchel",
-  "vapok_mod_item_backpack_meadows_description": "A small backpack capable of holding things.",
+  "vapok_mod_item_backpack_meadows": "Sekk",
+  "vapok_mod_item_backpack_meadows_description": "En liten sekk som er i stand til å holde ting.",
 
-  "vapok_mod_item_backpack_blackforest": "Rugged Backpack",
-  "vapok_mod_item_backpack_blackforest_description": "A rugged backpack, complete with buckles and fine leather straps.",
+  "vapok_mod_item_backpack_blackforest": "Robust sekk",
+  "vapok_mod_item_backpack_blackforest_description": "En robust sekk med spenner og fine lærremmer.",
 
-  "vapok_mod_item_backpack_swamp": "Bloodbag Wetpack",
-  "vapok_mod_item_backpack_swamp_description": "A durable backpack sealed using waterproof blood bags.",
+  "vapok_mod_item_backpack_swamp": "Blodsekk Våtsekk",
+  "vapok_mod_item_backpack_swamp_description": "En slitesterk sekk som er forseglet med vanntette blodposer.",
 
-  "vapok_mod_item_backpack_mountains": "Arctic Sherpa Pack",
-  "vapok_mod_item_backpack_mountains_description": "An arctic backpack, fit for long treks through the mountains.",
+  "vapok_mod_item_backpack_mountains": "Arktisk Sherpa-sekk",
+  "vapok_mod_item_backpack_mountains_description": "En arktisk sekk, egnet for lange turer gjennom fjellene.",
 
-  "vapok_mod_item_backpack_plains": "Lox Hide Knappsack",
-  "vapok_mod_item_backpack_plains_description": "An adventuring backpack made from extremely durable lox hide.",
+  "vapok_mod_item_backpack_plains": "Lox Skinn Knappsack",
+  "vapok_mod_item_backpack_plains_description": "En eventyrsekk laget av svært slitesterkt lox skinn.",
 
-  "vapok_mod_item_backpack_mistlands": "Explorers Wisppack",
-  "vapok_mod_item_backpack_mistlands_description": "A finely crafted, mystical backpack. Complete with it's own Box of Holding. No one is quite sure how it works.",
+  "vapok_mod_item_backpack_mistlands": "Oppdagers Wisppack",
+  "vapok_mod_item_backpack_mistlands_description": "En fint håndlaget, mystisk sekk. Komplett med sin egen boks med oppbevaring. Ingen er helt sikre på hvordan det virker.",
 
-  "vapok_mod_item_rugged_backpack": "Allsidig Ryggsekk",
-  "vapok_mod_item_rugged_backpack_description": "En Allsidig ryggsekk, tilpasset alle terreng.",
-  
-  "vapok_mod_item_arctic_backpack": "Arktisk Ryggsekk",
-  "vapok_mod_item_arctic_backpack_description": "En Arktisk ryggsekk, for de lange fjellturene om vinteren.",
-  
-  "vapok_mod_no_inception": "You have angered the gods!",
-  "vapok_mod_useful_backpack": "Your backpack feels useful.",
-  "vapok_mod_you_droped_bag": "You dropped a backpack!",
-  "vapok_mod_level": "Level",
-  "vapok_mod_effect": "Effect"
+  "vapok_mod_item_rugged_backpack": "Gammel robust sekk",
+  "vapok_mod_item_rugged_backpack_description": "En robust sekk med spenner og fine lærremmer.",
+
+  "vapok_mod_item_arctic_backpack": "Gammel arktisk sekk",
+  "vapok_mod_item_arctic_backpack_description": "En arktisk sekk, egnet for lange turer gjennom fjellene.",
+
+  "vapok_mod_no_inception1": "Ikke irriter gudene.",
+  "vapok_mod_no_inception2": "Du har blitt advart.",
+  "vapok_mod_no_inception3": "Du har irritert gudene!",
+  "vapok_mod_no_inception4": "Sukk ... Thor vil ta seg av deg snart.",
+  "vapok_mod_no_inception5": "Thor har fratatt deg dine krefter!!",
+
+  "vapok_mod_useful_backpack": "Din sekk føles nyttig.",
+  "vapok_mod_you_droped_bag": "Du slapp en sekk!",
+  "vapok_mod_level": "Nivå",
+  "vapok_mod_effect": "Effekt"
 }

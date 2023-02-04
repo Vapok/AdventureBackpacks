@@ -33,7 +33,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "AdventureBackpacks";
-        private const string _version = "1.5.7";
+        private const string _version = "1.5.8";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -44,6 +44,7 @@ namespace AdventureBackpacks
         //Class Properties
         public static ILogIt Log => _log;
         public static bool ValheimAwake = false;
+        public static bool PerformYardSale = false;
         public static Waiting Waiter;
         
         //Class Privates
@@ -89,6 +90,13 @@ namespace AdventureBackpacks
             if (!Player.m_localPlayer || !ZNetScene.instance)
                 return;
 
+            if (PerformYardSale)
+            {
+                var backpack = Player.m_localPlayer.GetEquippedBackpack();
+                if (backpack != null)
+                    Backpacks.PerformYardSale(Player.m_localPlayer, backpack.Item);
+            }
+            
             if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && Player.m_localPlayer.CanOpenBackpack())
             {
                 Player.m_localPlayer.OpenBackpack();

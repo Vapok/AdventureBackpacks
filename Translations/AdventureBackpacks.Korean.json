@@ -23,7 +23,12 @@
    "vapok_mod_item_arctic_backpack": "오래된 북극 배낭",
    "vapok_mod_item_arctic_backpack_description": "산을 통과하는 긴 트레킹에 적합한 북극 배낭입니다.",
   
-   "vapok_mod_no_inception": "당신은 신들을 화나게 했습니다!",
+   "vapok_mod_no_inception1": "신들을 화나게 하지 마십시오.",
+   "vapok_mod_no_inception2": "당신은 경고를 받았습니다.",
+   "vapok_mod_no_inception3": "당신은 신들을 화나게 했습니다!",
+   "vapok_mod_no_inception4": "하아... 토르가 곧 당신을 처리할 겁니다.",
+   "vapok_mod_no_inception5": "토르가 너의 힘을 빼앗았다!!",
+
    "vapok_mod_useful_backpack": "당신의 배낭은 유용하다고 생각합니다.",
    "vapok_mod_you_droped_bag": "배낭을 떨어뜨렸습니다!",
    "vapok_mod_level": "레벨",
