@@ -126,8 +126,17 @@
       <Content Include="ILRepack.targets" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Target Name="Copy" AfterTargets="ILRepack">
+    <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;G:\Steam\steamapps\common\Valheim-Dev\BepInEx\plugins\$(ProjectName)\&quot; /q /y /i" />
+    </Target>
+    <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\plugins\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\Translations\*.json&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\plugins\Translations\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\LICENSE.md&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\manifest.json&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\PATCHNOTES.md&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\README.md&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\icon.png&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
     </Target>
     <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
