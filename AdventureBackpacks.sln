@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vapok.Common", "Vapok.Common\Vapok.Common.csproj", "{6215C559-83D3-4512-AD75-9F6DBD452083}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureBackpacks", "AdventureBackpacks\AdventureBackpacks.csproj", "{997CB563-FCC7-44B7-8F71-069747D27CC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module Files", "Module Files", "{125A2AE5-FB75-4EED-B971-3E0C9C056DA0}"
@@ -27,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6215C559-83D3-4512-AD75-9F6DBD452083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6215C559-83D3-4512-AD75-9F6DBD452083}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6215C559-83D3-4512-AD75-9F6DBD452083}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6215C559-83D3-4512-AD75-9F6DBD452083}.Release|Any CPU.Build.0 = Release|Any CPU
 		{997CB563-FCC7-44B7-8F71-069747D27CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{997CB563-FCC7-44B7-8F71-069747D27CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{997CB563-FCC7-44B7-8F71-069747D27CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
