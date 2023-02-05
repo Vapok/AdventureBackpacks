@@ -1,5 +1,15 @@
 # Adventure Backpacks Patchnotes
 
+# 1.5.9.0
+* New Feature Added: Right Click Quick Transfer
+  * This feature, when enabled (disabled by default), allows you to transfer contents between player inventory and containers by right clicking.
+* _**blumaye.quicktransfer**_ Module Compatibility Issue Discovered which could cause loss of backpacks and items in backpacks.
+  * Right Click Quick Transfer Feature meant to replace this mod.
+  * Recommended to remove _**blumaye.quicktransfer**_ mod
+* Added Inception checker on Inventory.AddItem()
+* Added Backpack Removal Guard on Inventory.RemoveItem()
+  * Backpack trashed or removed while containing items should no longer be able to be removed.
+
 # 1.5.8.0
 * Added Frost Resistance as a Configurable Effect.
 * Added Troll Armor Set as a Configurable Effect.

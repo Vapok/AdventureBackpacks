@@ -101,6 +101,7 @@
         <Compile Include="Extensions\InventoryExtensions.cs" />
         <Compile Include="Extensions\ItemDataExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
+        <Compile Include="Features\QuickTransfer.cs" />
         <Compile Include="Patches\FejdStartup.cs" />
         <Compile Include="Patches\GuiBar.cs" />
         <Compile Include="Patches\Humanoid.cs" />
@@ -120,7 +121,7 @@
       <Content Include="ILRepack.targets" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Target Name="CopyToDev" AfterTargets="ILRepack">
         <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;G:\Steam\steamapps\common\Valheim-Dev\BepInEx\plugins\$(ProjectName)\&quot; /q /y /i" />
     </Target>
     <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
