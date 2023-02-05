@@ -35,38 +35,38 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
-          <HintPath>G:\Steam\steamapps\common\Valheim-Dev\BepInEx\core\0Harmony.dll</HintPath>
+          <HintPath>..\..\References\BepInEx\5.4.1901\BepInEx\core\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
-          <HintPath>..\..\..\References\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.212.9\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-          <HintPath>..\..\..\References\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.212.9\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
-          <HintPath>..\..\..\References\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.212.9\assembly_valheim_publicized.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx">
-          <HintPath>G:\Steam\steamapps\common\Valheim-Dev\BepInEx\core\BepInEx.dll</HintPath>
+          <HintPath>..\..\References\BepInEx\5.4.1901\BepInEx\core\BepInEx.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx.Harmony">
-          <HintPath>G:\Steam\steamapps\common\Valheim-Dev\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+          <HintPath>..\..\References\BepInEx\5.4.1901\BepInEx\core\BepInEx.Harmony.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
-          <HintPath>G:\Steam\steamapps\common\Valheim-Dev\unstripped_corlib\UnityEngine.dll</HintPath>
+          <HintPath>..\..\References\BepInEx\5.4.1901\unstripped_corlib\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule">
-          <HintPath>G:\Steam\steamapps\common\Valheim-Dev\unstripped_corlib\UnityEngine.AnimationModule.dll</HintPath>
+          <HintPath>..\..\References\BepInEx\5.4.1901\unstripped_corlib\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AssetBundleModule">
-          <HintPath>G:\Steam\steamapps\common\Valheim-Dev\unstripped_corlib\UnityEngine.AssetBundleModule.dll</HintPath>
+          <HintPath>..\..\References\BepInEx\5.4.1901\unstripped_corlib\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-          <HintPath>G:\Steam\steamapps\common\Valheim-Dev\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
+          <HintPath>..\..\References\BepInEx\5.4.1901\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="Vapok.Common">
           <HintPath>..\..\References\Vapok.Common\Vapok.Common.dll</HintPath>
