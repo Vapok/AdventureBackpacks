@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
+using BepInEx.Bootstrap;
 using HarmonyLib;
 using Vapok.Common.Managers;
 namespace AdventureBackpacks.Patches;
@@ -46,6 +48,53 @@ public static class InventoryPatches
         }
     }
 
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(ItemDrop.ItemData) })]
+    [HarmonyPriority(Priority.First)]
+    static class RemoveItemPatch
+    {
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        {
+            if (item == null)
+                return false;
+
+            if (item.TryGetBackpackItem(out var backpackItem))
+            {
+                var backpack = item.Data().Get<BackpackComponent>();
+                if (backpack == null)
+                    return true;
+                var inventory = backpack.GetInventory();
+                
+                if (inventory != null && inventory.m_inventory.Count > 0)
+                {
+                    Player.m_localPlayer.Message(MessageHud.MessageType.TopLeft, "Backpack Not Empty. Can't Delete.");
+                    backpackItem.Log.Warning($"Deletion of Backpack attempted. Backpack is not empty. Empty backpack first.");
+                    return false;
+                }
+
+                if (Chainloader.PluginInfos.ContainsKey("blumaye.quicktransfer"))
+                {
+                    backpackItem.Log.Error($"Backpack may have been deleted. Do you have blumaye.quicktransfer installed?");
+                }
+            }
+
+            return true;
+        }
+    }
+
+    
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(ItemDrop.ItemData) })]
+    [HarmonyPriority(Priority.First)]
+    static class AddItemPatch
+    {
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        {
+            if (item == null)
+                return false;
+            
+            return Backpacks.CheckForInception(__instance, item);
+        }
+    }
+    
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.MoveItemToThis), new[] {typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int)})]
     [HarmonyPriority(Priority.First)]
     static class MoveItemToThisPatch

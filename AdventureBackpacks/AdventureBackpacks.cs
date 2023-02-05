@@ -14,6 +14,7 @@ using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
+using AdventureBackpacks.Features;
 using BepInEx;
 using HarmonyLib;
 using ItemManager;
@@ -46,6 +47,7 @@ namespace AdventureBackpacks
         public static bool ValheimAwake = false;
         public static bool PerformYardSale = false;
         public static Waiting Waiter;
+        public static ConfigSyncBase ActiveConfig => _config;
         
         //Class Privates
         private static AdventureBackpacks _instance;
@@ -75,6 +77,9 @@ namespace AdventureBackpacks
             PrefabManager.Initalized = true;
 
             Localizer.Waiter.StatusChanged += InitializeBackpacks;
+            
+            //Initialized Features
+            QuickTransfer.FeatureInitialized = true;
             
             //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);

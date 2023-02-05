@@ -144,7 +144,7 @@ namespace AdventureBackpacks.Assets
             return true;
         }
 
-        public static void PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData)
+        public static void PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false)
         {
             if (itemData.IsBackpack())
             {
@@ -166,14 +166,17 @@ namespace AdventureBackpacks.Assets
                         }
                     }
                     var inventory = backpack.GetInventory();
-                    var playerInventory = mLocalPlayer.GetInventory();
-
                     EmtpyInventory(inventory);
-                    EmtpyInventory(playerInventory);
+
+                    if (!backpackOnly)
+                    {
+                        var playerInventory = mLocalPlayer.GetInventory();
+                        EmtpyInventory(playerInventory);
                     
-                    mLocalPlayer.UnequipAllItems();
+                        mLocalPlayer.UnequipAllItems();
                     
-                    EmtpyInventory(playerInventory);
+                        EmtpyInventory(playerInventory);
+                    }
                 }
             }
             Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception5");
