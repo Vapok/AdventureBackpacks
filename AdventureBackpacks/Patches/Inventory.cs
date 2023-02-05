@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
@@ -11,23 +11,7 @@ namespace AdventureBackpacks.Patches;
 
 public static class InventoryPatches
 {
-    /*
-    [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(string), typeof(int), typeof(int), typeof(int), typeof(long), typeof(string) })]
-    static class InventoryAddItem
-    {
-        static void Postfix(ref ItemDrop.ItemData __result)
-        {
-            if ( __result != null && __result.IsBackpack())
-            {
-                var backpack = __result.Data().Get<BackpackComponent>();
-                if (backpack != null)
-                {
-                    backpack.Save(backpack.GetInventory());
-                }
-            }
-        }
-    }
-    */
+    private static bool _movingItemBetweenContainers = false;
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
@@ -50,37 +34,70 @@ public static class InventoryPatches
 
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(ItemDrop.ItemData) })]
     [HarmonyPriority(Priority.First)]
-    static class RemoveItemPatch
+    static class RemoveItem1Patch
     {
         static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
         {
             if (item == null)
                 return false;
 
-            if (item.TryGetBackpackItem(out var backpackItem))
-            {
-                var backpack = item.Data().Get<BackpackComponent>();
-                if (backpack == null)
-                    return true;
-                var inventory = backpack.GetInventory();
-                
-                if (inventory != null && inventory.m_inventory.Count > 0)
-                {
-                    Player.m_localPlayer.Message(MessageHud.MessageType.TopLeft, "Backpack Not Empty. Can't Delete.");
-                    backpackItem.Log.Warning($"Deletion of Backpack attempted. Backpack is not empty. Empty backpack first.");
-                    return false;
-                }
-
-                if (Chainloader.PluginInfos.ContainsKey("blumaye.quicktransfer"))
-                {
-                    backpackItem.Log.Error($"Backpack may have been deleted. Do you have blumaye.quicktransfer installed?");
-                }
-            }
-
-            return true;
+            return RemoveItemPrefix(__instance, item);
         }
     }
 
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(ItemDrop.ItemData), typeof(int) })]
+    [HarmonyPriority(Priority.First)]
+    static class RemoveItem2Patch
+    {
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        {
+            if (item == null)
+                return false;
+
+            return RemoveItemPrefix(__instance, item);
+        }
+    }
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveOneItem), new[] { typeof(ItemDrop.ItemData) })]
+    [HarmonyPriority(Priority.First)]
+    static class RemoveItem3Patch
+    {
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        {
+            if (item == null)
+                return false;
+
+            return RemoveItemPrefix(__instance, item);
+        }
+    }
+
+    private static bool RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
+    {
+        if (_movingItemBetweenContainers)
+        {
+            return true;
+        }
+            
+        if (item.TryGetBackpackItem(out var backpackItem))
+        {
+            var backpack = item.Data().Get<BackpackComponent>();
+            if (backpack == null)
+                return true;
+            var inventory = backpack.GetInventory();
+                
+            if (inventory != null && inventory.m_inventory.Count > 0)
+            {
+                return false;
+            }
+
+            if (Chainloader.PluginInfos.ContainsKey("blumaye.quicktransfer"))
+            {
+                backpackItem.Log.Error($"Backpack may have been deleted. Do you have blumaye.quicktransfer installed?");
+            }
+        }
+
+        return true;
+    }
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(ItemDrop.ItemData) })]
     [HarmonyPriority(Priority.First)]
@@ -94,6 +111,57 @@ public static class InventoryPatches
             return Backpacks.CheckForInception(__instance, item);
         }
     }
+
+    [HarmonyPatch(typeof(InventoryGrid), nameof(InventoryGrid.DropItem), new[] { typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int), typeof(Vector2i) })]
+    [HarmonyPriority(Priority.First)]
+    static class InventoryGridDropItemPatch
+    {
+        static bool Prefix(InventoryGrid __instance, Inventory fromInventory, ItemDrop.ItemData item, int amount, Vector2i pos)
+        {
+            ItemDrop.ItemData itemAt = __instance.m_inventory.GetItemAt(pos.x, pos.y);
+            if (itemAt == item)
+                return true;
+            if (itemAt == null || !(itemAt.m_shared.m_name != item.m_shared.m_name) && (item.m_shared.m_maxQuality <= 1 || itemAt.m_quality == item.m_quality) && itemAt.m_shared.m_maxStackSize != 1 || item.m_stack != amount)
+                return true;
+
+            if (itemAt.IsBackpack() && fromInventory.IsBackPackInventory())
+            {
+                return Backpacks.CheckForInception(fromInventory, itemAt);
+            }
+
+            if (item.IsBackpack() && __instance.m_inventory.IsBackPackInventory())
+            {
+                return Backpacks.CheckForInception(__instance.m_inventory, item);
+            }
+            
+            _movingItemBetweenContainers = true;
+
+            return true;
+        }
+    }
+    
+    
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.MoveAll), new[] { typeof(Inventory) })]
+    [HarmonyPriority(Priority.First)]
+    static class MoveAllPatch
+    {
+        static void Prefix(Inventory fromInventory, Inventory __instance)
+        {
+            if (fromInventory == null)
+                return;
+
+            if (!__instance.IsBackPackInventory())
+            {
+                _movingItemBetweenContainers = true;
+                return;
+            }
+        }
+        
+        static void Finalizer(Exception __exception)
+        {
+            _movingItemBetweenContainers = false;
+        }
+    }
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.MoveItemToThis), new[] {typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int), typeof(int), typeof(int)})]
     [HarmonyPriority(Priority.First)]
@@ -105,8 +173,19 @@ public static class InventoryPatches
             var item = __1;
             if (fromInventory == null || item == null)
                 return false;
+
+            if (!__instance.IsBackPackInventory())
+            {
+                _movingItemBetweenContainers = true;
+                return true;
+            }
             
             return Backpacks.CheckForInception(__instance, item);
+        }
+
+        static void Finalizer(Exception __exception)
+        {
+            _movingItemBetweenContainers = false;
         }
     }
 
@@ -120,8 +199,20 @@ public static class InventoryPatches
             var item = __1;
             if (fromInventory == null || item == null)
                 return false;
+
+            if (!__instance.IsBackPackInventory())
+            {
+                _movingItemBetweenContainers = true;
+                return true;
+            }
+
             
             return Backpacks.CheckForInception(__instance, item);
+        }
+
+        static void Finalizer(Exception __exception)
+        {
+            _movingItemBetweenContainers = false;
         }
     }
 
