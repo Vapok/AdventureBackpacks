@@ -47,11 +47,13 @@ public static class QuickTransfer
             if (item.m_equiped)
                 return true;
 
-            if (item.IsBackpack())
+            var containerInventory = __instance.m_currentContainer.GetInventory();
+            
+            if (item.IsBackpack() && containerInventory.IsBackPackInventory())
                 return true;
             
             var playerInventory = Player.m_localPlayer.GetInventory();
-            var containerInventory = __instance.m_currentContainer.GetInventory();
+            
             var itemMoved = true;
 
             if (playerInventory == null || containerInventory == null)
