@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
-using BepInEx.Bootstrap;
 using HarmonyLib;
 using Vapok.Common.Managers;
 namespace AdventureBackpacks.Patches;
@@ -12,6 +11,7 @@ namespace AdventureBackpacks.Patches;
 public static class InventoryPatches
 {
     private static bool _movingItemBetweenContainers = false;
+    private static bool _droppingOutside = false;
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
@@ -32,6 +32,43 @@ public static class InventoryPatches
         }
     }
 
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnDropOutside))]
+    [HarmonyPriority(Priority.First)]
+    static class OnDropOutsideItemPatch
+    {
+        static void Prefix(InventoryGui __instance)
+        {
+            if (__instance == null || __instance.m_dragItem == null)
+                return;
+            
+            if (__instance.m_dragItem.IsBackpack() && __instance.m_dragItem.m_stack == 0)
+                __instance.m_dragItem.m_stack = 1;
+
+            _droppingOutside = true;
+        }
+        
+        static void Finalizer(Exception __exception)
+        {
+            _droppingOutside = false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.DropItem), new[] { typeof(Inventory), typeof(ItemDrop.ItemData), typeof(int) })]
+    [HarmonyPriority(Priority.First)]
+    static class HumanoidDropItemPatch
+    {
+        static void Prefix(ItemDrop.ItemData item)
+        {
+            _droppingOutside = true;
+        }
+        
+        static void Finalizer(Exception __exception)
+        {
+            _droppingOutside = false;
+        }
+    }
+
+    
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(ItemDrop.ItemData) })]
     [HarmonyPriority(Priority.First)]
     static class RemoveItem1Patch
@@ -73,10 +110,16 @@ public static class InventoryPatches
 
     private static bool RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
     {
-        if (_movingItemBetweenContainers)
+        if (__instance == null || Player.m_localPlayer == null)
+            return true;
+        
+        if (_movingItemBetweenContainers || _droppingOutside)
         {
             return true;
         }
+        
+        if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping)
+            return true;
             
         if (item.TryGetBackpackItem(out var backpackItem))
         {
@@ -87,12 +130,7 @@ public static class InventoryPatches
                 
             if (inventory != null && inventory.m_inventory.Count > 0)
             {
-                return false;
-            }
-
-            if (Chainloader.PluginInfos.ContainsKey("blumaye.quicktransfer"))
-            {
-                backpackItem.Log.Error($"Backpack may have been deleted. Do you have blumaye.quicktransfer installed?");
+                Backpacks.PerformYardSale(Player.m_localPlayer, item, true);
             }
         }
 
@@ -124,6 +162,9 @@ public static class InventoryPatches
             if (itemAt == null || !(itemAt.m_shared.m_name != item.m_shared.m_name) && (item.m_shared.m_maxQuality <= 1 || itemAt.m_quality == item.m_quality) && itemAt.m_shared.m_maxStackSize != 1 || item.m_stack != amount)
                 return true;
 
+            if (AdventureBackpacks.PerformYardSale)
+                return true;
+            
             if (itemAt.IsBackpack() && fromInventory.IsBackPackInventory())
             {
                 return Backpacks.CheckForInception(fromInventory, itemAt);

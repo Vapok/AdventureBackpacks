@@ -69,7 +69,9 @@ public static class PlayerExtensions
 
         if (backpack == null)
             return;
-            
+
+        AdventureBackpacks.QuickDropping = true;
+        
         // Unequip and remove backpack from player's back
         // We need to unequip the item BEFORE we drop it, otherwise when we pick it up again the game thinks
         // we had it equipped all along and fails to update player model, resulting in invisible backpack.
@@ -82,5 +84,6 @@ public static class PlayerExtensions
         itemDrop.Save();
 
         InventoryGuiPatches.BackpackIsOpen = false;
+        AdventureBackpacks.QuickDropping = false;
     }
 }

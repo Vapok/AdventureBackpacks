@@ -176,11 +176,16 @@ namespace AdventureBackpacks.Assets
                         mLocalPlayer.UnequipAllItems();
                     
                         EmtpyInventory(playerInventory);
+                        
+                        Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception5");
+                        AdventureBackpacks.PerformYardSale = false;
+                    }
+                    else
+                    {
+                        Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_thor_saves_contents");
                     }
                 }
             }
-            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception5");
-            AdventureBackpacks.PerformYardSale = false;
         }
         
         private static void YardSaleEvent(BackpackItem backpack)
