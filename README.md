@@ -44,7 +44,7 @@ stage of maturity. This includes a backpack progression that will start at Meado
     * Recommended to remove _**blumaye.quicktransfer**_ mod
 * Added Inception checker on Inventory.AddItem()
 * Added Backpack Removal Guard on Inventory.RemoveItem()
-    * Backpack trashed or removed while containing items should no longer be able to be removed.
+    * Backpack trashed or removed while containing items can still be deleted, but contained items will be saved by Thor.
 
 ## 1.5.0.0
 * Initial Release of Adventuring Backpacks introducing 6 New Backpack Prefabs (4 New Models and Designs)
