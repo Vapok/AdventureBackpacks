@@ -68,6 +68,7 @@ stage of maturity. This includes a backpack progression that will start at Meado
 * JotunnBackpacks - (This will convert bags, but safe to revert back to JotunnBackpacks)
 
 ### Mod Author Details
+![Vapok Gaming](https://avatars.githubusercontent.com/u/1264136?s=180&v=4)
 
 Author: [Vapok](https://github.com/Vapok)
 
