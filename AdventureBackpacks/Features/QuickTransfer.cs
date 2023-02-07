@@ -3,6 +3,7 @@ using AdventureBackpacks.Extensions;
 using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using HarmonyLib;
+using UnityEngine;
 using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Shared;
 
@@ -30,8 +31,11 @@ public static class QuickTransfer
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnRightClickItem))]
     static class OnRightClickItemPatch
     {
-        static bool Prefix(InventoryGui __instance, ItemDrop.ItemData item)
+        static bool Prefix(InventoryGui __instance, InventoryGrid grid, ItemDrop.ItemData item)
         {
+            if (!FeatureInitialized)
+                return true;
+            
             if (Player.m_localPlayer == null || __instance == null || item == null)
                 return false;
 
@@ -40,7 +44,7 @@ public static class QuickTransfer
 
             if (Chainloader.PluginInfos.ContainsKey("blumaye.quicktransfer"))
             {
-                AdventureBackpacks.Log.Warning("blumaye.quicktransfer mod is enabled. Adventure Loot's Quick Transfer disabled.");
+                AdventureBackpacks.Log.Warning("blumaye.quicktransfer mod is enabled. Adventure Backpack's Quick Transfer disabled.");
                 return true;
             }
 
@@ -53,20 +57,28 @@ public static class QuickTransfer
                 return true;
             
             var playerInventory = Player.m_localPlayer.GetInventory();
-            
-            var itemMoved = true;
 
-            if (playerInventory == null || containerInventory == null)
+            if (playerInventory == null || containerInventory == null || grid == null)
                 return true;
 
-            if (playerInventory.ContainsItem(item) && containerInventory.HaveEmptySlot())
-                containerInventory.MoveItemToThis(playerInventory, item);
-            else if (containerInventory.ContainsItem(item) && playerInventory.HaveEmptySlot())
-                playerInventory.MoveItemToThis(containerInventory, item);
-            else
-                itemMoved = false;
+            Inventory fromInventory;
+            Inventory toInventory;
 
-            return !itemMoved;
+            if (grid.m_inventory == containerInventory)
+            {
+                fromInventory = containerInventory;
+                toInventory = playerInventory;
+            }
+            else
+            {
+                fromInventory = playerInventory;
+                toInventory = containerInventory;
+            }
+
+            toInventory.MoveItemToThis(fromInventory, item);
+            __instance.m_moveItemEffects.Create(__instance.transform.position, Quaternion.identity);
+
+            return false;
         }
     }
 }

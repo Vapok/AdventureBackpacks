@@ -1,5 +1,11 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.0.0
+* Updating for Valheim Version 0.213.4
+* Right Click Fast Item Transfer Fixes
+  * Stacking Items when bags are full are fixed.
+  * Added vanilla effects on item transfer for crisper feel.
+
 # 1.5.9.0
 * New Feature Added: Right Click Quick Transfer
     * This feature, when enabled (disabled by default), allows you to transfer contents between player inventory and containers by right clicking.
