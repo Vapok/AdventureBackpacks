@@ -1,5 +1,10 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.1.0 - Module Compatibility on Right Click Quick Transfer
+* Reworked Logic to make Right Click Quick Transfer friendly to other inventory mods.
+    * Adds Compatibility to **[Auto Split Stack](https://www.nexusmods.com/valheim/mods/76?tab=files&file_id=7184)**, as well as **[Quick Stack Sort](https://www.nexusmods.com/valheim/mods/2094?tab=description)**
+    * May add additional compatibility to other mods not tested.
+
 # 1.6.0.0
 * Updating for Valheim Version 0.213.4
 * Right Click Fast Item Transfer Fixes
