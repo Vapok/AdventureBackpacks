@@ -1,3 +1,4 @@
+using System;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx.Bootstrap;
@@ -13,7 +14,13 @@ public static class QuickTransfer
 {
     public static bool FeatureInitialized = false;
     public static ConfigEntry<bool> EnableQuickTransfer { get; private set;}
-    
+
+    private static InventoryGui _inventoryGuiInstance;
+    private static Inventory _fromInventory;
+    private static Inventory _toInventory;
+
+    private static bool _processingRightClick = false;
+
     static QuickTransfer()
     {
         ConfigRegistry.Waiter.StatusChanged += (_, _) => RegisterConfiguraitonFile();
@@ -25,58 +32,78 @@ public static class QuickTransfer
             new ConfigDescription("When enabled, can move items to/from player inventory to container, by right clicking.",
                 null,
                 new ConfigurationManagerAttributes { Order = 5 }));
-
     }
 
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnRightClickItem))]
+    [HarmonyPriority(Priority.First)]
     static class OnRightClickItemPatch
     {
-        static bool Prefix(InventoryGui __instance, InventoryGrid grid, ItemDrop.ItemData item)
+        static void Prefix(InventoryGui __instance, InventoryGrid grid, ItemDrop.ItemData item)
         {
             if (!FeatureInitialized)
-                return true;
+                return;
             
             if (Player.m_localPlayer == null || __instance == null || item == null)
-                return false;
+                return;
 
             if (__instance.m_currentContainer == null || !__instance.IsContainerOpen() || !EnableQuickTransfer.Value)
-                return true;
+                return;
 
             if (Chainloader.PluginInfos.ContainsKey("blumaye.quicktransfer"))
             {
                 AdventureBackpacks.Log.Warning("blumaye.quicktransfer mod is enabled. Adventure Backpack's Quick Transfer disabled.");
-                return true;
+                return;
             }
 
             if (item.m_equiped)
-                return true;
+                return;
 
             var containerInventory = __instance.m_currentContainer.GetInventory();
             
             if (item.IsBackpack() && containerInventory.IsBackPackInventory())
-                return true;
+                return;
             
             var playerInventory = Player.m_localPlayer.GetInventory();
 
             if (playerInventory == null || containerInventory == null || grid == null)
-                return true;
+                return;
 
-            Inventory fromInventory;
-            Inventory toInventory;
-
+            _inventoryGuiInstance = __instance;
+            
             if (grid.m_inventory == containerInventory)
             {
-                fromInventory = containerInventory;
-                toInventory = playerInventory;
+                _fromInventory = containerInventory;
+                _toInventory = playerInventory;
             }
             else
             {
-                fromInventory = playerInventory;
-                toInventory = containerInventory;
+                _fromInventory = playerInventory;
+                _toInventory = containerInventory;
             }
 
-            toInventory.MoveItemToThis(fromInventory, item);
-            __instance.m_moveItemEffects.Create(__instance.transform.position, Quaternion.identity);
+            _processingRightClick = true;
+        }
+
+        static void Finalizer(Exception __exception)
+        {
+            _processingRightClick = false;
+            _toInventory = null;
+            _fromInventory = null;
+            _inventoryGuiInstance = null;
+        }
+    }
+
+    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UseItem))]
+    [HarmonyPriority(Priority.First)]
+    static class UseItemPatch
+    {
+        static bool Prefix(ItemDrop.ItemData item)
+        {
+            if (!_processingRightClick)
+                return true;
+
+            _toInventory.MoveItemToThis(_fromInventory, item);
+            _inventoryGuiInstance.m_moveItemEffects.Create(_inventoryGuiInstance.transform.position, Quaternion.identity);
 
             return false;
         }
