@@ -1,0 +1,38 @@
+{
+  "vapok_mod_item_backpack_meadows": "Brašna",
+  "vapok_mod_item_backpack_meadows_description": "Malá brašna, do které se vejdou věci.",
+
+  "vapok_mod_item_backpack_blackforest": "Kožený batoh",
+  "vapok_mod_item_backpack_blackforest_description": "Kožený batoh s přezkami a jemnými koženými řemínky.",
+
+  "vapok_mod_item_backpack_swamp": "Voděodolný batoh",
+  "vapok_mod_item_backpack_swamp_description": "Voděodolný batoh uzavřený pomocí vodotěsných krevních vaků.",
+
+  "vapok_mod_item_backpack_mountains": "Zimní batoh",
+  "vapok_mod_item_backpack_mountains_description": "Zimní batoh vhodný na dlouhé túry po horách.",
+
+  "vapok_mod_item_backpack_plains": "Loxý batoh",
+  "vapok_mod_item_backpack_plains_description": "Dobrodružný batoh vyrobený z extrémně odolné kůže z loxu.",
+
+  "vapok_mod_item_backpack_mistlands": "Mystický batoh",
+  "vapok_mod_item_backpack_mistlands_description": "Precizně zpracovaný mystický batoh. S vlastní krabičkou na drobnosti. Nikdo si není jistý, jak funguje.",
+
+  "vapok_mod_item_rugged_backpack": "2 Kožený batoh",
+  "vapok_mod_item_rugged_backpack_description": "2 Kožený batoh s přezkami a jemnými koženými řemínky.",
+
+  "vapok_mod_item_arctic_backpack": "2 Zimní batoh",
+  "vapok_mod_item_arctic_backpack_description": "2 Zimní batoh vhodný na dlouhé túry po horách.",
+
+  "vapok_mod_no_inception1": "Nepokoušej bohy.",
+  "vapok_mod_no_inception2": "Byl jsi varován.",
+  "vapok_mod_no_inception3": "Rozhněval jsi bohy!",
+  "vapok_mod_no_inception4": "Povzdech... Thor se o tebe brzy postará.",
+  "vapok_mod_no_inception5": "Thor tě připravil o tvou moc!!!",
+
+  "vapok_mod_thor_saves_contents": "V tom batohu byly záhadné věci. Thor si je schoval pro sebe.",
+
+  "vapok_mod_useful_backpack": "Tvůj batoh se zdá být užitečný",
+  "vapok_mod_you_droped_bag": "Upustil jsi batoh na zem!",
+  "vapok_mod_level": "Level",
+  "vapok_mod_effect": "Effekt"
+}
