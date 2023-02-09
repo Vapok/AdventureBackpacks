@@ -14,38 +14,27 @@ public static class InventoryPatches
     private static bool _movingItemBetweenContainers = false;
     private static bool _droppingOutside = false;
 
-    public static Dictionary<Guid,Tuple<ItemDrop.ItemData, DateTime>> ItemsAddedCache = new();
+    public static Queue<KeyValuePair<ItemDrop.ItemData,DateTime>> ItemsAddedQueue = new();
 
-    private static bool TryGetItemFromCache(this ItemDrop.ItemData item, out Guid guid)
+    private static bool TryGetItemFromQueue(this ItemDrop.ItemData item)
     {
-        foreach (var cacheItem in ItemsAddedCache)
+        if (ItemsAddedQueue.Any(x => x.Key.Equals(item)))
         {
-            if (cacheItem.Value.Item1.Equals(item))
-            {
-                guid = cacheItem.Key;
-                AdventureBackpacks.Log.Debug($"Guid {guid} Found!");
-                return true;
-            }
+            AdventureBackpacks.Log.Debug($"Guid {item.m_shared.m_name} Found!");
+            return true;
         }
-        AdventureBackpacks.Log.Debug($"Guid Not Found!");
-        guid = Guid.Empty;
+        AdventureBackpacks.Log.Debug($"Item Not Found!");
         return false;
     }
+
     public static void ProcessItemsAddedCache()
     {
-        var keys = ItemsAddedCache.Keys.ToArray();
-        for (int i = 0; i < keys.Length; i++)
+        while (ItemsAddedQueue.Any() && DateTime.Now.Subtract(ItemsAddedQueue.Peek().Value).TotalSeconds > 0.5)
         {
-            var guid = keys[i];
-            var itemData = ItemsAddedCache[guid]; 
-            TimeSpan timeDifference = DateTime.Now.Subtract(itemData.Item2);
-            if (timeDifference.TotalSeconds > 0.5)
-            {
-                AdventureBackpacks.Log.Debug($"Process Cache Removing {guid} for Date {itemData.Item2} with a difference of {timeDifference.TotalSeconds} total seconds.");
-                ItemsAddedCache.Remove(guid);
-            }
+            AdventureBackpacks.Log.Debug($"Process Cache Removing {ItemsAddedQueue.Peek().Key.m_shared.m_name} for Date {ItemsAddedQueue.Peek().Value} with a difference of {DateTime.Now.Subtract(ItemsAddedQueue.Peek().Value).TotalSeconds} total seconds.");
+            ItemsAddedQueue.Dequeue();
         }
-    }
+    }    
 
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
@@ -159,9 +148,9 @@ public static class InventoryPatches
         if (item.TryGetBackpackItem(out var backpackItem))
         {
             AdventureBackpacks.Log.Debug($"Checking for Backpack {item.m_shared.m_name}");
-            if (TryGetItemFromCache(item, out var guid))
+            if (TryGetItemFromQueue(item))
             {
-                AdventureBackpacks.Log.Debug($"Exiting RemoveItem for {guid}");
+                AdventureBackpacks.Log.Debug($"Exiting RemoveItem for {item.m_shared.m_name}");
                 return true;
             }
             
@@ -195,12 +184,8 @@ public static class InventoryPatches
                 {
                     if (!_movingItemBetweenContainers)
                     {
-                        var guid = Guid.NewGuid();
-                        var tuple = new Tuple<ItemDrop.ItemData, DateTime>(item, DateTime.Now);
-                        AdventureBackpacks.Log.Debug($"Added Backpack {guid} at {tuple.Item2}");
-                        ItemsAddedCache.Add(guid,tuple);
+                        ItemsAddedQueue.Enqueue(new KeyValuePair<ItemDrop.ItemData, DateTime>(item,DateTime.Now));
                     }
-                        
                 }
                 __result = noInception;
             
