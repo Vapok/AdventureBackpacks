@@ -33,14 +33,16 @@ public static class InventoryPatches
     }
     public static void ProcessItemsAddedCache()
     {
-        for (int i = 0; i < ItemsAddedCache.Count; i++)
+        var keys = ItemsAddedCache.Keys.ToArray();
+        for (int i = 0; i < keys.Length; i++)
         {
-            var itemData = ItemsAddedCache.First();
-            TimeSpan timeDifference = DateTime.Now.Subtract(itemData.Value.Item2);
+            var guid = keys[i];
+            var itemData = ItemsAddedCache[guid]; 
+            TimeSpan timeDifference = DateTime.Now.Subtract(itemData.Item2);
             if (timeDifference.TotalSeconds > 0.5)
             {
-                AdventureBackpacks.Log.Debug($"Process Cache Removing {itemData.Key} for Date {itemData.Value.Item2} with a difference of {timeDifference.TotalSeconds} total seconds.");
-                ItemsAddedCache.Remove(itemData.Key);
+                AdventureBackpacks.Log.Debug($"Process Cache Removing {guid} for Date {itemData.Item2} with a difference of {timeDifference.TotalSeconds} total seconds.");
+                ItemsAddedCache.Remove(guid);
             }
         }
     }
