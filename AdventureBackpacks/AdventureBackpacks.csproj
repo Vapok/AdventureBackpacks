@@ -103,6 +103,7 @@
         <Compile Include="Extensions\ItemDataExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
         <Compile Include="Features\QuickTransfer.cs" />
+        <Compile Include="Patches\Door.cs" />
         <Compile Include="Patches\FejdStartup.cs" />
         <Compile Include="Patches\GuiBar.cs" />
         <Compile Include="Patches\Humanoid.cs" />
