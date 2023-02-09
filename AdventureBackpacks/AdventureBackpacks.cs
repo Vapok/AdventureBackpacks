@@ -15,6 +15,7 @@ using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
+using AdventureBackpacks.Patches;
 using BepInEx;
 using HarmonyLib;
 using ItemManager;
@@ -34,7 +35,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.6.1";
+        private const string _version = "1.6.2";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -113,6 +114,7 @@ namespace AdventureBackpacks
                 Player.m_localPlayer.QuickDropBackpack();
             }
 
+            InventoryPatches.ProcessItemsAddedCache();
         }
 
         public void InitializeBackpacks(object send, EventArgs args)

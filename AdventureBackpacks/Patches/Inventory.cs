@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
@@ -12,7 +13,38 @@ public static class InventoryPatches
 {
     private static bool _movingItemBetweenContainers = false;
     private static bool _droppingOutside = false;
-    
+
+    public static Dictionary<Guid,Tuple<ItemDrop.ItemData, DateTime>> ItemsAddedCache = new();
+
+    private static bool TryGetItemFromCache(this ItemDrop.ItemData item, out Guid guid)
+    {
+        foreach (var cacheItem in ItemsAddedCache)
+        {
+            if (cacheItem.Value.Item1.Equals(item))
+            {
+                guid = cacheItem.Key;
+                AdventureBackpacks.Log.Debug($"Guid {guid} Found!");
+                return true;
+            }
+        }
+        AdventureBackpacks.Log.Debug($"Guid Not Found!");
+        guid = Guid.Empty;
+        return false;
+    }
+    public static void ProcessItemsAddedCache()
+    {
+        for (int i = 0; i < ItemsAddedCache.Count; i++)
+        {
+            var itemData = ItemsAddedCache.First();
+            TimeSpan timeDifference = DateTime.Now.Subtract(itemData.Value.Item2);
+            if (timeDifference.TotalSeconds > 0.5)
+            {
+                AdventureBackpacks.Log.Debug($"Process Cache Removing {itemData.Key} for Date {itemData.Value.Item2} with a difference of {timeDifference.TotalSeconds} total seconds.");
+                ItemsAddedCache.Remove(itemData.Key);
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
     {
@@ -108,6 +140,7 @@ public static class InventoryPatches
         }
     }
 
+    
     private static bool RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
     {
         if (__instance == null || Player.m_localPlayer == null)
@@ -123,6 +156,13 @@ public static class InventoryPatches
             
         if (item.TryGetBackpackItem(out var backpackItem))
         {
+            AdventureBackpacks.Log.Debug($"Checking for Backpack {item.m_shared.m_name}");
+            if (TryGetItemFromCache(item, out var guid))
+            {
+                AdventureBackpacks.Log.Debug($"Exiting RemoveItem for {guid}");
+                return true;
+            }
+            
             var backpack = item.Data().Get<BackpackComponent>();
             if (backpack == null)
                 return true;
@@ -141,12 +181,31 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class AddItemPatch
     {
-        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item, ref bool __result)
         {
             if (item == null)
                 return false;
+
+            if (item.IsBackpack())
+            {
+                var noInception = Backpacks.CheckForInception(__instance, item);
+                if (noInception)
+                {
+                    if (!_movingItemBetweenContainers)
+                    {
+                        var guid = Guid.NewGuid();
+                        var tuple = new Tuple<ItemDrop.ItemData, DateTime>(item, DateTime.Now);
+                        AdventureBackpacks.Log.Debug($"Added Backpack {guid} at {tuple.Item2}");
+                        ItemsAddedCache.Add(guid,tuple);
+                    }
+                        
+                }
+                __result = noInception;
             
-            return Backpacks.CheckForInception(__instance, item);
+                return noInception;
+            }
+
+            return true;
         }
     }
 
