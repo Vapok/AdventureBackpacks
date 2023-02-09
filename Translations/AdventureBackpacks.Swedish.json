@@ -1,0 +1,40 @@
+{
+  "vapok_mod_item_backpack_meadows": "Säck",
+  "vapok_mod_item_backpack_meadows_description": "En liten säck som kan hålla saker.",
+
+  "vapok_mod_item_backpack_blackforest": "Robust Ryggsäck",
+  "vapok_mod_item_backpack_blackforest_description": "En robust ryggsäck, komplett med spännen och fina läderremmar.",
+
+  "vapok_mod_item_backpack_swamp": "Blodsäcksvåtväska",
+  "vapok_mod_item_backpack_swamp_description": "En hållbar ryggsäck förseglad med vattentäta blodpåsar.",
+
+  "vapok_mod_item_backpack_mountains": "Arktisk Sherpa-ryggsäck",
+  "vapok_mod_item_backpack_mountains_description": "En vinterryggsäck, lämplig för långa vandringar genom bergen.",
+
+  "vapok_mod_item_backpack_plains": "Ödleoxhudssäck",
+  "vapok_mod_item_backpack_plains_description": "An adventuring backpack made from extremely durable lox hide.",
+  "vapok_mod_item_backpack_plains_description": "En äventyrarryggsäck gjord av extremt tåligt ödleoxhud.",
+
+  "vapok_mod_item_backpack_mistlands": "Upptäckarens Älvsäck",
+  "vapok_mod_item_backpack_mistlands_description": "En mystisk ryggsäck av fint hantverk. Komplett med sin egen Förvaringslåda. Ingen är helt säker på hur den fungerar.",
+
+  "vapok_mod_item_rugged_backpack": "Gammal Robust Ryggsäck",
+  "vapok_mod_item_rugged_backpack_description": "A rugged backpack, complete with buckles and fine leather straps.",
+  "vapok_mod_item_rugged_backpack_description": "En robust ryggsäck, komplett med spännen och fina läderremmar.",
+
+  "vapok_mod_item_arctic_backpack": "Gammal Arktisk Ryggsäck",
+  "vapok_mod_item_arctic_backpack_description": "En vinterryggsäck, lämplig för långa vandringar genom bergen.",
+
+  "vapok_mod_no_inception1": "Förarga inte gudarna.",
+  "vapok_mod_no_inception2": "Du har blivit varnad.",
+  "vapok_mod_no_inception3": "Du har förargat gudarna!",
+  "vapok_mod_no_inception4": "Suck... Tor kommer ta hand om dig i sinom tid.",
+  "vapok_mod_no_inception5": "Tor har tagit dina krafter!!",
+
+  "vapok_mod_thor_saves_contents": "Den ryggsäcken hade saker i sig. Tor har sparat den åt dig.",
+  
+  "vapok_mod_useful_backpack": "Din ryggsäck känns användbar.",
+  "vapok_mod_you_droped_bag": "Du släppte en ryggsäck!",
+  "vapok_mod_level": "Nivå",
+  "vapok_mod_effect": "Effekt"
+}
