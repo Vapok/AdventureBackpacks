@@ -1,5 +1,15 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.2.0 - Bug Fixes and Mod Compatibility
+* The last udpate introduced a Language Translation issue where it stopped loading Translation files. 
+  * This has been resolved. Apologies to my non-english friends!
+* Adding in Language Translation Support for Czech
+* Additional Mod Compatibility changes.
+  * Quick Stack Store would cause Thor to empty backpacks when using the Take All / Store All commands.
+    * This has been fixed.
+    * This **might** also fix an item dupping issue that is being experienced with Multi-User-Chests (not validated yet)
+* This update also attempts to fix the Grid Not Displaying on Level 1 Wisppacks when opened on initial load of Valheim.
+
 # 1.6.1.0 - Module Compatibility on Right Click Quick Transfer
 * Reworked Logic to make Right Click Quick Transfer friendly to other inventory mods.
     * Adds Compatibility to **[Auto Split Stack](https://www.nexusmods.com/valheim/mods/76?tab=files&file_id=7184)**, as well as **[Quick Stack Sort](https://www.nexusmods.com/valheim/mods/2094?tab=description)**
