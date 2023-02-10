@@ -65,8 +65,6 @@ public static class PlayerExtensions
 
     public static void QuickDropBackpack(this Player player)
     {
-        AdventureBackpacks.Log.Message("Quick dropping backpack.");
-
         if (player == null)
             return;
         
@@ -76,7 +74,7 @@ public static class PlayerExtensions
             return;
 
         AdventureBackpacks.QuickDropping = true;
-        
+        AdventureBackpacks.Log.Message("Quick dropping backpack.");        
         // Unequip and remove backpack from player's back
         // We need to unequip the item BEFORE we drop it, otherwise when we pick it up again the game thinks
         // we had it equipped all along and fails to update player model, resulting in invisible backpack.
@@ -85,7 +83,7 @@ public static class PlayerExtensions
         player.m_inventory.RemoveItem(backpack.Item);
 
         // This drops a copy of the backpack itemDrop.itemData
-        var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position + player.transform.forward + player.transform.up, player.transform.rotation);
+        var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.up - player.transform.up, player.transform.rotation);
         itemDrop.Save();
 
         InventoryGuiPatches.BackpackIsOpen = false;
