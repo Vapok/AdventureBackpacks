@@ -11,23 +11,23 @@ namespace AdventureBackpacks.Patches;
 
 public static class InventoryPatches
 {
-    private static bool _movingItemBetweenContainers = false;
-    private static bool _droppingOutside = false;
+    private static bool _movingItemBetweenContainers;
+    private static bool _droppingOutside;
 
-    public static Queue<KeyValuePair<ItemDrop.ItemData,DateTime>> ItemsAddedQueue = new();
+    private static readonly Queue<KeyValuePair<ItemDrop.ItemData,DateTime>> ItemsAddedQueue = new();
 
-    private static bool TryGetItemFromQueue(this ItemDrop.ItemData item)
+    private static bool IsItemFromQueue(this ItemDrop.ItemData item)
     {
         if (ItemsAddedQueue.Any(x => x.Key.Equals(item)))
         {
-            AdventureBackpacks.Log.Debug($"Guid {item.m_shared.m_name} Found!");
+            AdventureBackpacks.Log.Debug($"Item {item.m_shared.m_name} Found!");
             return true;
         }
         AdventureBackpacks.Log.Debug($"Item Not Found!");
         return false;
     }
 
-    public static void ProcessItemsAddedCache()
+    public static void ProcessItemsAddedQueue()
     {
         while (ItemsAddedQueue.Any() && DateTime.Now.Subtract(ItemsAddedQueue.Peek().Value).TotalSeconds > 0.5)
         {
@@ -96,12 +96,10 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class RemoveItem1Patch
     {
-        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        static void Prefix(Inventory __instance, ItemDrop.ItemData item)
         {
-            if (item == null)
-                return false;
-
-            return RemoveItemPrefix(__instance, item);
+            if (item != null && __instance != null)
+                RemoveItemPrefix(__instance, item);
         }
     }
 
@@ -109,12 +107,10 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class RemoveItem2Patch
     {
-        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        static void Prefix(Inventory __instance, ItemDrop.ItemData item)
         {
-            if (item == null)
-                return false;
-
-            return RemoveItemPrefix(__instance, item);
+            if (item != null && __instance != null)
+                RemoveItemPrefix(__instance, item);
         }
     }
 
@@ -122,41 +118,39 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class RemoveItem3Patch
     {
-        static bool Prefix(Inventory __instance, ItemDrop.ItemData item)
+        static void Prefix(Inventory __instance, ItemDrop.ItemData item)
         {
-            if (item == null)
-                return false;
-
-            return RemoveItemPrefix(__instance, item);
+            if (item != null && __instance != null)
+                RemoveItemPrefix(__instance, item);
         }
     }
 
     
-    private static bool RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
+    private static void RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
     {
         if (__instance == null || Player.m_localPlayer == null)
-            return true;
+            return;
         
         if (_movingItemBetweenContainers || _droppingOutside)
         {
-            return true;
+            return;
         }
         
         if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping)
-            return true;
+            return;
             
         if (item.TryGetBackpackItem(out var backpackItem))
         {
             AdventureBackpacks.Log.Debug($"Checking for Backpack {item.m_shared.m_name}");
-            if (TryGetItemFromQueue(item))
+            if (IsItemFromQueue(item))
             {
                 AdventureBackpacks.Log.Debug($"Exiting RemoveItem for {item.m_shared.m_name}");
-                return true;
+                return;
             }
             
             var backpack = item.Data().Get<BackpackComponent>();
             if (backpack == null)
-                return true;
+                return;
             var inventory = backpack.GetInventory();
                 
             if (inventory != null && inventory.m_inventory.Count > 0)
@@ -164,8 +158,6 @@ public static class InventoryPatches
                 Backpacks.PerformYardSale(Player.m_localPlayer, item, true);
             }
         }
-
-        return true;
     }
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(ItemDrop.ItemData) })]
@@ -191,7 +183,7 @@ public static class InventoryPatches
             
                 return noInception;
             }
-
+            
             return true;
         }
     }
@@ -202,7 +194,8 @@ public static class InventoryPatches
     {
         static bool Prefix(InventoryGrid __instance, Inventory fromInventory, ItemDrop.ItemData item, int amount, Vector2i pos)
         {
-            ItemDrop.ItemData itemAt = __instance.m_inventory.GetItemAt(pos.x, pos.y);
+            var itemAt = __instance.m_inventory.GetItemAt(pos.x, pos.y);
+            
             if (itemAt == item)
                 return true;
             if (itemAt == null || !(itemAt.m_shared.m_name != item.m_shared.m_name) && (item.m_shared.m_maxQuality <= 1 || itemAt.m_quality == item.m_quality) && itemAt.m_shared.m_maxStackSize != 1 || item.m_stack != amount)
@@ -313,7 +306,7 @@ public static class InventoryPatches
             
             var player = Player.m_localPlayer;
             
-            if (__instance.GetName().Contains("$vapok_mod_level"))
+            if (__instance.IsBackPackInventory())
             {
                 // When the equipped backpack inventory total weight is updated, the player inventory total weight should also be updated.
                 if (player)
@@ -344,7 +337,7 @@ public static class InventoryPatches
                         if (item == null)
                             continue;
                         
-                        if (item.TryGetBackpackItem(out var backpack))
+                        if (item.IsBackpack())
                         {
                             if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable())
                             {

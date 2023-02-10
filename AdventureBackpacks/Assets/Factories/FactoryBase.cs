@@ -16,5 +16,4 @@ public abstract class FactoryBase
         _logger = logger;
         _config = configs;
     }
-   
 }

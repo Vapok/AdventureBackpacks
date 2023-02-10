@@ -12,26 +12,13 @@ namespace AdventureBackpacks.Patches;
 
 internal static class InventoryGuiPatches
 {
-    public static bool BackpackIsOpen = false;
-    public static bool BackpackIsOpening = false;
+    public static bool BackpackIsOpen;
+    public static bool BackpackIsOpening;
     public static bool BackpackEquipped = false;
-    
-    //Upgrade Variables
-    public static bool DoingUpgrade = false;
 
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.DoCrafting))]
     static class InventoryGuiDoCraftingPrefix
     {
-        static void Prefix(InventoryGui __instance)
-        {
-            if (__instance == null)
-                return;
-            if (__instance.m_craftUpgradeItem != null || (__instance.m_craftRecipe != null && __instance.m_craftRecipe.m_item != null))
-            {
-                DoingUpgrade = true;
-            }
-        }
-
         static void Postfix(InventoryGui __instance)
         {
             if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
@@ -40,9 +27,7 @@ internal static class InventoryGuiPatches
                 backpack?.Load();
                 Player.m_localPlayer.UpdateEquipmentStatusEffects();
             }
-            DoingUpgrade = false;
         }
-        
     }
     
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnSelectedItem))]
