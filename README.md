@@ -36,6 +36,8 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 
 ## Features of Backpacks
 * Each Backpack Biome can be fully configured for progression.
+  * Configure Sizing
+    * Each Quality Level of Backpack can have a different inventory grid size. Simply adjust the width and height in configuration for each quality level.
   * Configure Recipes
     * Default Recipes can be found in the configuration.
   * Configure Drops
@@ -43,6 +45,11 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
     * Drops are **DISABLED** by default. (as of version 1.6.3)
   * Configure Effects
     * Each Backpack Biome can be configured for any number of effects that are included in this mod.  There is nothing hardcoded about the effects.
+  * Configure Carry Weight Maximum
+    * Allows configuration for adjusting the additional carry weight allowed, per level of backpack.
+  * Configure Speed Modification
+    * Configure Speed Modification (slowness).
+      * Upon each quality upgrade of backpack, speed modification is reduced (never eliminated).
 * Backpack Inventory Protection Guard
   * Every backpack inventory is specially handled by Thor himself and is monitored for any interactions that might otherwise harm the existence of items in your backpacks.
   * Backpacks in Backpacks is not allowed and the only feature that is not configurable. This is how the Allfather dreamt of it.
@@ -64,6 +71,9 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Optional Right Click Quick Transfer (Fast Item Transfer)
   * Allows single right-click transfer of an item/stack of items between Player Inventory and any Open Container
   * This is the same functionality that's available as the stand-alone mod **Fast Item Transfer**
+* Outward Run Away Mode
+  * Pressing the Quick Drop keybind (default is `Y`), will immediately release the equipped backpack and drop it behind the player on the ground.
+  * This feature is optional, and is disabled out of the box.
        
 
 ## Effects Used In This Mod

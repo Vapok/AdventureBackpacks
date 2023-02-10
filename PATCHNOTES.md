@@ -7,6 +7,7 @@
   * Ensuring that mods are handling your backpacks appropriately to prevent item loss and/or item dupping.
 * Includes updated translations for Czech and Korean, as well as adds support for Swedish translation
 * Changed Default Size of Level 1 Explorer's Wisppack from 4x4 (16 Slot Inventory) to a 8x2 (16 Slot Inventory)
+* Quick Dropping (Outward Mode) now drops behind the Player running.
 * Enhanced and Expanded Readme File
 
 # 1.6.2.0 - Bug Fixes and Mod Compatibility
