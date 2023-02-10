@@ -53,8 +53,6 @@ public class HumanoidPatches
             
             if ( Player.m_localPlayer == null && !__result)
                 return;
-            
-            var player = Player.m_localPlayer;
 
             var item = __0;
 

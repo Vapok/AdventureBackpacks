@@ -35,7 +35,7 @@ internal class BackpackMistlands : BackpackItem
     internal sealed override void RegisterConfigSettings()
     {
         RegisterBackpackBiome(BackpackBiomes.Mistlands);
-        RegisterBackpackSize(1,4,4);
+        RegisterBackpackSize(1,8,2);
         RegisterBackpackSize(2,5,4);
         RegisterBackpackSize(3,6,4);
         RegisterBackpackSize(4,7,4);
@@ -51,18 +51,6 @@ internal class BackpackMistlands : BackpackItem
     {
         itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
         
-        switch (quality)
-        {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            default:
-                break;
-        }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;
-
     }
 }

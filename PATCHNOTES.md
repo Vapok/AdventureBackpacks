@@ -1,13 +1,23 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.3.0 - Key/Door Detection - Performance Tuning
+* Keys stored in **Equipped Backpack** are detected for purposes of entering through doors. (e.g. Swamp Key opens Crypts).
+  * Keys stored in backpacks NOT equipped, will be hidden from detection.
+* Improved Backpack Protection Guards and Mod Compatibility
+  * Ensuring that mods are handling your backpacks appropriately to prevent item loss and/or item dupping.
+* Includes updated translations for Czech and Korean, as well as adds support for Swedish translation
+* Changed Default Size of Level 1 Explorer's Wisppack from 4x4 (16 Slot Inventory) to a 8x2 (16 Slot Inventory)
+* Quick Dropping (Outward Mode) now drops behind the Player running.
+* Enhanced and Expanded Readme File
+
 # 1.6.2.0 - Bug Fixes and Mod Compatibility
-* The last udpate introduced a Language Translation issue where it stopped loading Translation files. 
+* The last update introduced a Language Translation issue where it stopped loading Translation files. 
   * This has been resolved. Apologies to my non-english friends!
 * Adding in Language Translation Support for Czech
 * Additional Mod Compatibility changes.
   * Quick Stack Store would cause Thor to empty backpacks when using the Take All / Store All commands.
     * This has been fixed.
-    * This **might** also fix an item dupping issue that is being experienced with Multi-User-Chests (not validated yet)
+    * This resolves an item dupping issue that is being experienced with Multi-User-Chests (not validated yet)
 * This update also attempts to fix the Grid Not Displaying on Level 1 Wisppacks when opened on initial load of Valheim.
 
 # 1.6.1.0 - Module Compatibility on Right Click Quick Transfer

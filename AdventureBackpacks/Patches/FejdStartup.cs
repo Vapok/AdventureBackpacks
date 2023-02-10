@@ -4,7 +4,6 @@ namespace AdventureBackpacks.Patches;
 
 public class FejdStartupPatches
 {
-
     [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Awake))]
     [HarmonyAfter("org.bepinex.helpers.LocalizationManager")]
     [HarmonyBefore("org.bepinex.helpers.ItemManager")]
@@ -15,5 +14,4 @@ public class FejdStartupPatches
             AdventureBackpacks.Waiter.ValheimIsAwake(true);
         }
     }
-
 }

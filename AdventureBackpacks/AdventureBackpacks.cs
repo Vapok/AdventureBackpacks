@@ -35,7 +35,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.6.2";
+        private const string _version = "1.6.3";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -114,7 +114,7 @@ namespace AdventureBackpacks
                 Player.m_localPlayer.QuickDropBackpack();
             }
 
-            InventoryPatches.ProcessItemsAddedCache();
+            InventoryPatches.ProcessItemsAddedQueue();
         }
 
         public void InitializeBackpacks(object send, EventArgs args)

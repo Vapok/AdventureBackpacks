@@ -43,18 +43,6 @@ internal class BackpackMountains : BackpackItem
     {
         itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
         
-        switch (quality)
-        {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            default:
-                break;
-        }
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;
-
     }
 }

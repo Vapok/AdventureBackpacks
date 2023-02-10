@@ -1,37 +1,37 @@
 {
-   "vapok_mod_item_backpack_meadows": "가방",
+   "vapok_mod_item_backpack_meadows": "작은 배낭",
    "vapok_mod_item_backpack_meadows_description": "물건을 담을 수 있는 작은 배낭입니다.",
  
    "vapok_mod_item_backpack_blackforest": "견고한 배낭",
-   "vapok_mod_item_backpack_blackforest_description": "버클과 고급 가죽 끈이 있는 견고한 배낭입니다.",
+   "vapok_mod_item_backpack_blackforest_description": "버클형 타입으로 고급가죽이 사용되었습니다. 튼튼해 보입니다.",
  
-   "vapok_mod_item_backpack_swamp": "피 주머니 웻팩",
-   "vapok_mod_item_backpack_swamp_description": "방수 혈액 주머니로 봉인된 내구성이 뛰어난 배낭입니다.",
+   "vapok_mod_item_backpack_swamp": "혈액이 묻은 배낭",
+   "vapok_mod_item_backpack_swamp_description": "혈액 주머니를 이용하여 제작된 방수형 배낭입니다.",
  
-   "vapok_mod_item_backpack_mountains": "북극 셰르파 팩",
-   "vapok_mod_item_backpack_mountains_description": "산을 통과하는 긴 트레킹에 적합한 북극 배낭입니다.",
+   "vapok_mod_item_backpack_mountains": "북극 셰르파 배낭",
+   "vapok_mod_item_backpack_mountains_description": "추위를 견딜수 있습니다. 산을 통과하는데 적합한 배낭입니다.",
  
-   "vapok_mod_item_backpack_plains": "록스 가죽 배낭",
-   "vapok_mod_item_backpack_plains_description": "매우 튼튼한 록스 가죽으로 만든 모험용 배낭입니다.",
+   "vapok_mod_item_backpack_plains": "록스가죽 배낭",
+   "vapok_mod_item_backpack_plains_description": "록스가죽보다 더 튼튼한 가죽은 없습니다. 이시대의 모험가에게 최고의 선물입니다.",
  
-   "vapok_mod_item_backpack_mistlands": "위스팩 탐험가",
-   "vapok_mod_item_backpack_mistlands_description": "정교하게 제작된 신비로운 백팩입니다. 자체 보관함과 함께 완성됩니다. 어떻게 작동하는지 아무도 모릅니다.",
+   "vapok_mod_item_backpack_mistlands": "위습 탐험가의 배낭",
+   "vapok_mod_item_backpack_mistlands_description": "신들이 감탄합니다! 매우 정교하게 만들어졌습니다. 자체 보관함과 함께 완성됩니다. 어떻게 작동하는지 아무도 모릅니다.",
  
-   "vapok_mod_item_rugged_backpack": "오래된 투박한 배낭",
-   "vapok_mod_item_rugged_backpack_description": "버클과 고급 가죽 끈이 있는 견고한 배낭입니다.",
+   "vapok_mod_item_rugged_backpack": "오래되고 투박한 배낭",
+   "vapok_mod_item_rugged_backpack_description": "버클형 타입으로 고급가죽이 사용되었습니다. 튼튼해 보입니다.",
  
-   "vapok_mod_item_arctic_backpack": "오래된 북극 배낭",
-   "vapok_mod_item_arctic_backpack_description": "산을 통과하는 긴 트레킹에 적합한 북극 배낭입니다.",
+   "vapok_mod_item_arctic_backpack": "북극 트레킹 배낭",
+   "vapok_mod_item_arctic_backpack_description": "추위를 견딜수 있습니다. 산을 통과하는데 적합한 배낭입니다.",
   
    "vapok_mod_no_inception1": "신들을 화나게 하지 마십시오.",
-   "vapok_mod_no_inception2": "당신은 경고를 받았습니다.",
-   "vapok_mod_no_inception3": "당신은 신들을 화나게 했습니다!",
-   "vapok_mod_no_inception4": "하아... 토르가 곧 당신을 처리할 겁니다.",
-   "vapok_mod_no_inception5": "토르가 너의 힘을 빼앗았다!!",
+   "vapok_mod_no_inception2": "당신은 경고 받았습니다.",
+   "vapok_mod_no_inception3": "신들이 분노합니다!",
+   "vapok_mod_no_inception4": "하아... 토르가 당신을 곧 처리할 겁니다.",
+   "vapok_mod_no_inception5": "토르가 당신의 힘을 빼앗아갑니다!!",
 
-   "vapok_mod_thor_saves_contents": "그 배낭에는 물건이 들어 있었다. 토르가 당신을 위해 저장했습니다.",
+   "vapok_mod_thor_saves_contents": "배낭에는 물건이 들어있었다. 토르는 당신을 위해 보관했습니다.",
 
-   "vapok_mod_useful_backpack": "당신의 배낭은 유용하다고 생각합니다.",
+   "vapok_mod_useful_backpack": "상당히 유용한 배낭이라고 생각합니다.",
    "vapok_mod_you_droped_bag": "배낭을 떨어뜨렸습니다!",
    "vapok_mod_level": "레벨",
    "vapok_mod_effect": "효과"
