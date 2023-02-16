@@ -1,0 +1,38 @@
+{
+  "vapok_mod_item_backpack_meadows": "Mochila Pequeña",
+  "vapok_mod_item_backpack_meadows_description": "Una pequeña mochila capaz de contener cosas.",
+
+  "vapok_mod_item_backpack_blackforest": "Mochila Robusta",
+  "vapok_mod_item_backpack_blackforest_description": "Una mochila robusta, completa con hebillas y correas de cuero fino.",
+
+  "vapok_mod_item_backpack_swamp": "Bolsa de Sangre",
+  "vapok_mod_item_backpack_swamp_description": "Una mochila duradera sellada con bolsas de sangre impermeables.",
+
+  "vapok_mod_item_backpack_mountains": "Mochila de Sherpa",
+  "vapok_mod_item_backpack_mountains_description": "Una mochila ártica, apta para largas caminatas por las montañas.",
+
+  "vapok_mod_item_backpack_plains": "Mochila de piel de Lox",
+  "vapok_mod_item_backpack_plains_description": "Una mochila para aventuras hecha de piel de Lox, es extremadamente resistente.",
+
+  "vapok_mod_item_backpack_mistlands": "Mochila Magica de Explorador",
+  "vapok_mod_item_backpack_mistlands_description": "Una mochila mística finamente elaborada. Completa con su propia caja de almacenamiento. Nadie está muy seguro de cómo funciona.",
+
+  "vapok_mod_item_rugged_backpack": "Mochila Antigua",
+  "vapok_mod_item_rugged_backpack_description": "Una mochila robusta, completa con hebillas y correas de cuero fino.",
+
+  "vapok_mod_item_arctic_backpack": "Mochila Ártica Antigua",
+  "vapok_mod_item_arctic_backpack_description": "Para excursiónes por las montanas",
+
+  "vapok_mod_no_inception1": "No enojes a los Dioses.",
+  "vapok_mod_no_inception2": "Se te a advertido.",
+  "vapok_mod_no_inception3": "¡Has enojado a los Dioses!",
+  "vapok_mod_no_inception4": "Suspiro... Thor se ocupará de ti pronto.",
+  "vapok_mod_no_inception5": "¡¡Thor te ha despojado de tus poderes!!",
+
+  "vapok_mod_thor_saves_contents": "Esa mochila tenía cosas adentro. Thor las guado por ti.",
+  
+  "vapok_mod_useful_backpack": "Tu mochila se siente útil.",
+  "vapok_mod_you_droped_bag": "Tiraste la mochila!",
+  "vapok_mod_level": "Nivel",
+  "vapok_mod_effect": "Efecto"
+}
