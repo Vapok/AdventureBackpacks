@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Translations", "Translation
 		Translations\AdventureBackpacks.Korean.json = Translations\AdventureBackpacks.Korean.json
 		Translations\AdventureBackpacks.Czech.json = Translations\AdventureBackpacks.Czech.json
 		Translations\AdventureBackpacks.Swedish.json = Translations\AdventureBackpacks.Swedish.json
+		Translations\AdventureBackpacks.Spanish.json = Translations\AdventureBackpacks.Spanish.json
 	EndProjectSection
 EndProject
 Global
