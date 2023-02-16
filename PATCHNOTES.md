@@ -1,12 +1,13 @@
 # Adventure Backpacks Patchnotes
 
-# 1.6.4.0 - Bug Fixes + Spanish Language Translation
+# 1.6.4.0 - Bug Fixes + Jewelcrafting Compatibility + Spanish Language Translation
 * Adds Spanish Language Translation File
   * Thanks to Esdac (on Discord) and lopezp9492 (GitHub) for contributions.
 * Fixes Take All Deletion of Backpacks when Targeted Container is Full
 * Fixes Gravestone Take All Duplications (same issue as above, but with Thor watching)
-* JewelCrafting removes status effects without regard for other mods that might be using it. Defensively guarded RemoveStatusEffects to ensure no unnecessary removal.
-* Configuration File is generated with split section names accidently.  Now section names in the config file itself should all be in English, and Configuration Manager should show localized Section Names.
+* Jewelcrafting consistently removes Status Effects repeatedly (whether it needs to or not), causing Backpack Wisplight to not function. 
+  * I have added in support to both prevent the removal, and optimize status effect identification. 
+* Configuration File is generated with split section names accidentally.  Now section names in the config file itself should all be in English, and Configuration Manager should show localized Section Names.
   * May or may not have an overall effect on random drops occuring.
   * I have tested Config setting Drops Enabled/Disabled extensively and it is absolutely disabling drops if not enabled.
 
