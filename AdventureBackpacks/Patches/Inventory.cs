@@ -367,19 +367,30 @@ public static class InventoryPatches
                 if (__instance == null || Player.m_localPlayer == null)
                     return;
 
+                // Get a list of all items on the player.
+                List<ItemDrop.ItemData> items = __instance.GetAllItems();
+                
                 // If the inventory being checked for teleportability is the Player's inventory, see whether it contains any backpacks, and then check the backpack inventories for teleportability too
                 if (__instance == Player.m_localPlayer.GetInventory())
                 {
-                    // Get a list of all items on the player.
-                    List<ItemDrop.ItemData> items = __instance.GetAllItems();
-
+                    //am I wearing a backpack?
+                    if (Player.m_localPlayer.IsBackpackEquipped())
+                    {
+                        var backpack = Player.m_localPlayer.GetEquippedBackpack();
+                        if (backpack != null && !backpack.GetInventory().IsTeleportable())
+                        {
+                            __result = false;
+                            return;
+                        }
+                    }
+                    
                     // Go through all the items, match them for any of the names in backpackTypes.
                     // For each match found, check if the Inventory of that backpack is teleportable.
                     foreach (ItemDrop.ItemData item in items)
                     {
                         if (item == null)
                             continue;
-                        
+                    
                         if (item.IsBackpack())
                         {
                             if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable())
