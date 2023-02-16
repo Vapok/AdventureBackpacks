@@ -23,35 +23,27 @@ public static class EquipmentEffectCache
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
         public static void Prefix(Humanoid __instance)
-        {
+        { 
           activeEffects = new HashSet<StatusEffect>();
           backpackEffects = new HashSet<StatusEffect>();
 
-            var deMister = ObjectDB.instance.GetStatusEffect("Demister");
-            var slowFall = ObjectDB.instance.GetStatusEffect("SlowFall");
+          var deMister = ObjectDB.instance.GetStatusEffect("Demister");
+          var slowFall = ObjectDB.instance.GetStatusEffect("SlowFall");
 
-            foreach (StatusEffect eqipmentStatusEffect in __instance.m_eqipmentStatusEffects)
-            {
-              
-              if (eqipmentStatusEffect.Equals(deMister) && Demister.ShouldHaveDemister(__instance))
-              {
-                if (!backpackEffects.Contains(eqipmentStatusEffect)) 
-                  backpackEffects.Add(eqipmentStatusEffect);
-              }
-              
-              
-              if (eqipmentStatusEffect.Equals(slowFall) && FeatherFall.ShouldHaveFeatherFall(__instance))
-              {
-                if (!backpackEffects.Contains(eqipmentStatusEffect)) 
-                  backpackEffects.Add(eqipmentStatusEffect);
-              }
-            }
+          void EnsureEffectsAdded(StatusEffect se, bool shouldHave)
+          {
+            if (shouldHave && !backpackEffects.Any( x => x.name.Equals(se.name)))
+              backpackEffects.Add(se);
+          }
+          
+          EnsureEffectsAdded(deMister,Demister.ShouldHaveDemister(__instance));
+          EnsureEffectsAdded(slowFall,FeatherFall.ShouldHaveFeatherFall(__instance));
 
-            foreach (var backpackEffect in backpackEffects)
-            {
-              if (!activeEffects.Contains(backpackEffect))
-                activeEffects.Add(backpackEffect);
-            }
+          foreach (var backpackEffect in backpackEffects)
+          {
+            if (!activeEffects.Any( x => x.name.Equals(backpackEffect.name)))
+              activeEffects.Add(backpackEffect);
+          }
         }
         
         [UsedImplicitly]
@@ -71,7 +63,7 @@ public static class EquipmentEffectCache
 
             foreach (var activeEffect in activeEffects)
             {
-              if (!__instance.m_eqipmentStatusEffects.Contains(activeEffect))
+              if (!__instance.m_eqipmentStatusEffects.Any( x => x.name.Equals(activeEffect.name)))
                 backpackEffects.Add(activeEffect);
             }
           
