@@ -19,6 +19,8 @@ public static class EquipmentEffectCache
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
     public static class UpdateStatusEffects
     {
+      private static StatusEffect effectDemister;
+      private static StatusEffect effectSlowfall;
 
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
@@ -27,8 +29,8 @@ public static class EquipmentEffectCache
           activeEffects = new HashSet<StatusEffect>();
           backpackEffects = new HashSet<StatusEffect>();
 
-          var deMister = ObjectDB.instance.GetStatusEffect("Demister");
-          var slowFall = ObjectDB.instance.GetStatusEffect("SlowFall");
+          effectDemister = effectDemister == null ? ObjectDB.instance.GetStatusEffect("Demister") : effectDemister;
+          effectSlowfall = effectSlowfall == null ? ObjectDB.instance.GetStatusEffect("SlowFall") : effectSlowfall;
 
           void EnsureEffectsAdded(StatusEffect se, bool shouldHave)
           {
@@ -36,8 +38,8 @@ public static class EquipmentEffectCache
               backpackEffects.Add(se);
           }
           
-          EnsureEffectsAdded(deMister,Demister.ShouldHaveDemister(__instance));
-          EnsureEffectsAdded(slowFall,FeatherFall.ShouldHaveFeatherFall(__instance));
+          EnsureEffectsAdded(effectDemister,Demister.ShouldHaveDemister(__instance));
+          EnsureEffectsAdded(effectSlowfall,FeatherFall.ShouldHaveFeatherFall(__instance));
 
           foreach (var backpackEffect in backpackEffects)
           {
@@ -101,5 +103,3 @@ public static class EquipmentEffectCache
       }
     }
 }
-
-
