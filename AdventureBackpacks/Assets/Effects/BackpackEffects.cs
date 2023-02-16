@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -14,7 +15,6 @@ public static class EquipmentEffectCache
 {
   private static HashSet<StatusEffect> activeEffects = new();
   private static HashSet<StatusEffect> backpackEffects = new();
-  private static bool runningUpdateEquipmentStatusEffects = false;
   
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
     public static class UpdateStatusEffects
@@ -22,9 +22,8 @@ public static class EquipmentEffectCache
 
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
-        public static bool Prefix(Humanoid __instance)
+        public static void Prefix(Humanoid __instance)
         {
-          runningUpdateEquipmentStatusEffects = true;
           activeEffects = new HashSet<StatusEffect>();
           backpackEffects = new HashSet<StatusEffect>();
 
@@ -53,23 +52,39 @@ public static class EquipmentEffectCache
               if (!activeEffects.Contains(backpackEffect))
                 activeEffects.Add(backpackEffect);
             }
-
-            return true;
         }
         
         [UsedImplicitly]
-        public static void Postfix(Humanoid __instance)
+        public static void Finalizer(Exception __exception, Humanoid __instance)
         {
-          backpackEffects = new HashSet<StatusEffect>();
-
-          foreach (var activeEffect in activeEffects)
+          if (__exception != null)
           {
-            if (!__instance.m_eqipmentStatusEffects.Contains(activeEffect))
-              backpackEffects.Add(activeEffect);
+            AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+            AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+            AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+            throw __exception;
           }
           
-          __instance.m_eqipmentStatusEffects.UnionWith(backpackEffects);
-            runningUpdateEquipmentStatusEffects = false;
+          try
+          {
+            backpackEffects = new HashSet<StatusEffect>();
+
+            foreach (var activeEffect in activeEffects)
+            {
+              if (!__instance.m_eqipmentStatusEffects.Contains(activeEffect))
+                backpackEffects.Add(activeEffect);
+            }
+          
+            __instance.m_eqipmentStatusEffects.UnionWith(backpackEffects);
+
+          }
+          catch (Exception e)
+          {
+            AdventureBackpacks.Log.Error($"Error: {e.Message}");
+            AdventureBackpacks.Log.Error($"Stack Trace: {e.StackTrace}");
+            AdventureBackpacks.Log.Error($"Source: {e.Source}");
+            throw e;
+          }
         }
     }
 
@@ -81,7 +96,7 @@ public static class EquipmentEffectCache
       [HarmonyPriority(Priority.First)]
       public static bool Prefix(string name, ref bool __result)
       {
-        if (activeEffects == null || !runningUpdateEquipmentStatusEffects)
+        if (activeEffects == null)
           return true;
           
         if (activeEffects.Any(x => x.name.Equals(name)))

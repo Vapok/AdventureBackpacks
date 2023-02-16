@@ -2,6 +2,7 @@
 using System.Timers;
 using AdventureBackpacks.Assets.Factories;
 using BepInEx.Configuration;
+using ItemManager;
 using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
@@ -18,7 +19,10 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     private static ConfigSyncBase _config;
     private static ILogIt _logger;
     private string _configSection;
+    private string _englishSection;
     private string _localizedCategory;
+    private Localization _english;
+    private Localization english => _english ??= LocalizationCache.ForLanguage("English");
 
     public System.Timers.Timer InceptionTimer;
     public System.Timers.Timer YardSaleTimer;
@@ -45,8 +49,6 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ConfigEntry<float> SpeedMod { get; private set;}
     internal ConfigEntry<bool> EnableFreezing { get; private set;}
     internal ConfigEntry<BackpackBiomes> BackpackBiome { get; private set;}
-
-   
     
     internal ConfigSyncBase Config => _config;
     internal ILogIt Log => _logger;
@@ -55,6 +57,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     protected BackpackItem(string prefabName, string itemName, string configSection = "") : base(prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
+        _englishSection = english.Localize(_configSection);
         _localizedCategory = Localization.instance.Localize(_configSection);
         Item.SectionName = _configSection;
         BackpackSize = new();
@@ -97,7 +100,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     
     internal virtual void RegisterBackpackSize(int quality = 1, int x = 6, int y = 3)
     {
-        BackpackSize.Add(quality, ConfigSyncBase.SyncedConfig(_configSection, $"Backpack Size - Level {quality}", new Vector2(x, y),
+        BackpackSize.Add(quality, ConfigSyncBase.SyncedConfig(_englishSection, $"Backpack Size - Level {quality}", new Vector2(x, y),
             new ConfigDescription("Backpack size (width, height).\nMax width is 8 unless you want to break things.",
                 null,
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 1 })));
@@ -107,7 +110,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
 
     internal virtual void RegisterWeightMultiplier(float defaultValue = 0.5f)
     {
-        WeightMultiplier = ConfigSyncBase.SyncedConfig(_configSection, "Weight Multiplier", defaultValue,
+        WeightMultiplier = ConfigSyncBase.SyncedConfig(_englishSection, "Weight Multiplier", defaultValue,
             new ConfigDescription("The weight of items stored in the backpack gets multiplied by this value.",
                 new AcceptableValueRange<float>(0f, 1f), // range between 0f and 1f will make it display as a percentage slider
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 2 }));
@@ -117,7 +120,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
 
     internal virtual void RegisterBackpackBiome(BackpackBiomes defaultValue = BackpackBiomes.None)
     {
-        BackpackBiome = ConfigSyncBase.SyncedConfig(_configSection, "Backpack Biome", defaultValue,
+        BackpackBiome = ConfigSyncBase.SyncedConfig(_englishSection, "Backpack Biome", defaultValue,
             new ConfigDescription("The Biome this bag will draw it's effects from.",
                 null, 
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 6 }));
@@ -125,7 +128,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
 
     internal virtual void RegisterCarryBonus(int defaultValue = 0)
     {
-        CarryBonus = ConfigSyncBase.SyncedConfig(_configSection, "Carry Bonus", defaultValue,
+        CarryBonus = ConfigSyncBase.SyncedConfig(_englishSection, "Carry Bonus", defaultValue,
             new ConfigDescription("Increases your carry capacity by this much (multiplied by item level) while wearing the backpack.",
                 new AcceptableValueRange<int>(0, 300),
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 3 }));
@@ -135,7 +138,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
 
     internal virtual void RegisterSpeedMod(float defaultValue = -0.15f)
     {
-        SpeedMod = ConfigSyncBase.SyncedConfig(_configSection, "Speed Modifier", defaultValue,
+        SpeedMod = ConfigSyncBase.SyncedConfig(_englishSection, "Speed Modifier", defaultValue,
             new ConfigDescription("Wearing the backpack slows you down by this much.",
                 new AcceptableValueRange<float>(-1f, -0f),
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 4 }));
@@ -145,7 +148,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
 
     internal virtual void RegisterEnableFreezing(bool defaultValue = true)
     {
-        EnableFreezing = ConfigSyncBase.SyncedConfig(_configSection, "Prevent freezing/cold?", defaultValue,
+        EnableFreezing = ConfigSyncBase.SyncedConfig(_englishSection, "Prevent freezing/cold?", defaultValue,
             new ConfigDescription("Wearing the backpack protects you against freezing/cold, just like capes.",
                 null,
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 5 }));
@@ -153,4 +156,3 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         EnableFreezing!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
     }
 }
-

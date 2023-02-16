@@ -72,6 +72,14 @@ public static class InventoryPatches
         
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _droppingOutside = false;
         }
     }
@@ -87,6 +95,14 @@ public static class InventoryPatches
         
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _droppingOutside = false;
         }
     }
@@ -171,17 +187,20 @@ public static class InventoryPatches
 
             if (item.IsBackpack())
             {
-                var noInception = Backpacks.CheckForInception(__instance, item);
-                if (noInception)
+                if (__instance.HaveEmptySlot())
                 {
-                    if (!_movingItemBetweenContainers)
+                    var noInception = Backpacks.CheckForInception(__instance, item);
+                    if (noInception)
                     {
-                        ItemsAddedQueue.Enqueue(new KeyValuePair<ItemDrop.ItemData, DateTime>(item,DateTime.Now));
+                        if (!_movingItemBetweenContainers)
+                        {
+                            ItemsAddedQueue.Enqueue(new KeyValuePair<ItemDrop.ItemData, DateTime>(item,DateTime.Now));
+                        }
                     }
-                }
-                __result = noInception;
+                    __result = noInception;
             
-                return noInception;
+                    return noInception;
+                }
             }
             
             return true;
@@ -239,6 +258,14 @@ public static class InventoryPatches
         
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _movingItemBetweenContainers = false;
         }
     }
@@ -265,6 +292,14 @@ public static class InventoryPatches
 
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _movingItemBetweenContainers = false;
         }
     }
@@ -292,6 +327,14 @@ public static class InventoryPatches
 
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _movingItemBetweenContainers = false;
         }
     }
