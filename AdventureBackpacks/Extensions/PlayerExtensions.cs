@@ -9,7 +9,13 @@ public static class PlayerExtensions
 {
     public static bool IsBackpackEquipped(this Player player)
     {
-        return InventoryGuiPatches.BackpackEquipped;
+        if (player == null || player.GetInventory() == null)
+            return false;
+            
+        if (player.m_shoulderItem == null)
+            return false;
+
+        return player.m_shoulderItem.IsBackpack();
     }
 
     public static BackpackComponent GetEquippedBackpack(this Player player)
@@ -17,21 +23,13 @@ public static class PlayerExtensions
         if (player == null || player.GetInventory() == null)
             return null;
             
-        // Get a list of all equipped items.
-        var equippedItems = player.GetInventory().GetEquipedtems();
+        if (player.m_shoulderItem == null)
+            return null;
 
-        if (equippedItems is null) return null;
-
-        // Go through all the equipped items, match them for any of the names in backpackTypes.
-        // If a match is found, return the backpack ItemData object.
-        foreach (ItemDrop.ItemData item in equippedItems)
+        if (player.m_shoulderItem.IsBackpack())
         {
-            if (item.TryGetBackpackItem(out var backpack))
-            {
-                return item.Data().GetOrCreate<BackpackComponent>();
-            }
+            return player.m_shoulderItem.Data().GetOrCreate<BackpackComponent>();
         }
-
         // Return null if no backpacks are found.
         return null;
     }

@@ -72,6 +72,14 @@ public static class InventoryPatches
         
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _droppingOutside = false;
         }
     }
@@ -87,6 +95,14 @@ public static class InventoryPatches
         
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _droppingOutside = false;
         }
     }
@@ -171,17 +187,20 @@ public static class InventoryPatches
 
             if (item.IsBackpack())
             {
-                var noInception = Backpacks.CheckForInception(__instance, item);
-                if (noInception)
+                if (__instance.HaveEmptySlot())
                 {
-                    if (!_movingItemBetweenContainers)
+                    var noInception = Backpacks.CheckForInception(__instance, item);
+                    if (noInception)
                     {
-                        ItemsAddedQueue.Enqueue(new KeyValuePair<ItemDrop.ItemData, DateTime>(item,DateTime.Now));
+                        if (!_movingItemBetweenContainers)
+                        {
+                            ItemsAddedQueue.Enqueue(new KeyValuePair<ItemDrop.ItemData, DateTime>(item,DateTime.Now));
+                        }
                     }
-                }
-                __result = noInception;
+                    __result = noInception;
             
-                return noInception;
+                    return noInception;
+                }
             }
             
             return true;
@@ -239,6 +258,14 @@ public static class InventoryPatches
         
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _movingItemBetweenContainers = false;
         }
     }
@@ -265,6 +292,14 @@ public static class InventoryPatches
 
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _movingItemBetweenContainers = false;
         }
     }
@@ -292,6 +327,14 @@ public static class InventoryPatches
 
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _movingItemBetweenContainers = false;
         }
     }
@@ -324,19 +367,30 @@ public static class InventoryPatches
                 if (__instance == null || Player.m_localPlayer == null)
                     return;
 
+                // Get a list of all items on the player.
+                List<ItemDrop.ItemData> items = __instance.GetAllItems();
+                
                 // If the inventory being checked for teleportability is the Player's inventory, see whether it contains any backpacks, and then check the backpack inventories for teleportability too
                 if (__instance == Player.m_localPlayer.GetInventory())
                 {
-                    // Get a list of all items on the player.
-                    List<ItemDrop.ItemData> items = __instance.GetAllItems();
-
+                    //am I wearing a backpack?
+                    if (Player.m_localPlayer.IsBackpackEquipped())
+                    {
+                        var backpack = Player.m_localPlayer.GetEquippedBackpack();
+                        if (backpack != null && !backpack.GetInventory().IsTeleportable())
+                        {
+                            __result = false;
+                            return;
+                        }
+                    }
+                    
                     // Go through all the items, match them for any of the names in backpackTypes.
                     // For each match found, check if the Inventory of that backpack is teleportable.
                     foreach (ItemDrop.ItemData item in items)
                     {
                         if (item == null)
                             continue;
-                        
+                    
                         if (item.IsBackpack())
                         {
                             if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable())

@@ -86,6 +86,14 @@ public static class QuickTransfer
 
         static void Finalizer(Exception __exception)
         {
+            if (__exception != null)
+            {
+                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
+                throw __exception;
+            }
+
             _processingRightClick = false;
             _toInventory = null;
             _fromInventory = null;

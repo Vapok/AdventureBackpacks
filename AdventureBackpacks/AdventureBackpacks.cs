@@ -1,12 +1,4 @@
-﻿/* Adventure Backpacks by Vapok
- *
- * This largely a new port of the original Jotunn Backpacks.  Only.. without the Jotunn, and other things.
- *
- * Planned Roadmap:
- * v1.5.0 - Adventure Begins - Revamping backpacks to be upgradable and offer new perks as upgrades happen. and offer backpacks at each stage of maturity. - DONE
- * v2.0.0 - To be determined! Possibly Bag Variants
- * 
- */
+﻿/* Adventure Backpacks by Vapok */
 
 using System;
 using System.Reflection;
@@ -35,7 +27,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.6.3";
+        private const string _version = "1.6.4";
         
         //Interface Properties
         public string PluginId => _pluginId;
