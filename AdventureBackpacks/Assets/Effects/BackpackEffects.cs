@@ -67,10 +67,7 @@ public static class EquipmentEffectCache
           var lastBrFalsePosition = 0;
           var foundPatchPosition = false;
           
-          var equipmentStatusEffectsField = AccessTools.DeclaredField(typeof(Humanoid), nameof(Humanoid.m_eqipmentStatusEffects));
-          
           CodeInstruction patchBeforeCodeInstruction = new CodeInstruction(OpCodes.Nop);
-          CodeInstruction brFalseCodeInstruction = new CodeInstruction(OpCodes.Nop);
           var brFalseLastLabel = new Label();
 
           for (int j = 0; j < instrs.Count; ++j)
