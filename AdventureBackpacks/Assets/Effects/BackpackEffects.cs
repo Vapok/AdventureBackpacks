@@ -60,31 +60,45 @@ public static class EquipmentEffectCache
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
     public static class HumanoidUpdateEquipmentStatusEffectsPatch
     {
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGen)
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
           var instrs = instructions.ToList();
           var positionToPatch = 0;
+          var lastBrFalsePosition = 0;
+          var foundPatchPosition = false;
           
           var equipmentStatusEffectsField = AccessTools.DeclaredField(typeof(Humanoid), nameof(Humanoid.m_eqipmentStatusEffects));
           
-          CodeInstruction thisCodeInstruction = new CodeInstruction(OpCodes.Nop);
+          CodeInstruction patchBeforeCodeInstruction = new CodeInstruction(OpCodes.Nop);
+          CodeInstruction brFalseCodeInstruction = new CodeInstruction(OpCodes.Nop);
+          var brFalseLastLabel = new Label();
 
           for (int j = 0; j < instrs.Count; ++j)
           {
+            if (instrs[j].opcode == OpCodes.Brfalse && instrs[j].operand is Label label)
+            {
+              lastBrFalsePosition = j;
+              brFalseLastLabel = label;
+            }
+            
             if (instrs[j].opcode == OpCodes.Br)
             {
-              if (instrs[j - 3].opcode == OpCodes.Ldfld && instrs[j - 3].operand.Equals(equipmentStatusEffectsField))
+              for (int k = lastBrFalsePosition; k < j; k++)
               {
-                if (instrs[j - 4].opcode == OpCodes.Ldarg_0)
-                { 
-                  thisCodeInstruction = instrs[j - 4];
-                  positionToPatch = j - 4;
-                  AdventureBackpacks.Log.Debug($"Position Found: {positionToPatch}  Current Position Opcode: {instrs[j].opcode} Patched Position Opcode: {instrs[positionToPatch].opcode}");
-                  AdventureBackpacks.Log.Warning($"Number of Labels on This Element: {thisCodeInstruction.labels.Count}");
-                  AdventureBackpacks.Log.Warning($"Number of Labels on This Element: {thisCodeInstruction.blocks.Count}");
+                if (instrs[k].labels.Contains(brFalseLastLabel))
+                {
+                  positionToPatch = k;
+                  patchBeforeCodeInstruction = instrs[k];
+                  AdventureBackpacks.Log.Debug($"Position Found: {positionToPatch}  Current Position Opcode: {patchBeforeCodeInstruction.opcode} Patched Position Opcode: {instrs[positionToPatch].opcode}");
+                  AdventureBackpacks.Log.Warning($"Number of Labels on This Element: {patchBeforeCodeInstruction.labels.Count}");
+                  AdventureBackpacks.Log.Warning($"Number of Exception Blocks on This Element: {patchBeforeCodeInstruction.blocks.Count}");
+                  foundPatchPosition = true;
                   break;
                 }
               }
+
+              if (foundPatchPosition)
+                break;
             }
           }
 
@@ -96,13 +110,11 @@ public static class EquipmentEffectCache
             return instruction;
           }
 
-          //var newLabel = ilGen.DefineLabel();
           var ldlocInstruction = new CodeInstruction(OpCodes.Ldloc_0); 
-
 
           for (int i = 0; i < instrs.Count; ++i)
           {
-            if (i == positionToPatch && instrs[i].opcode == OpCodes.Ldarg_0 && instrs[i] == thisCodeInstruction)
+            if (i == positionToPatch && instrs[i] == patchBeforeCodeInstruction)
             {
               //Patch here
               
@@ -120,12 +132,10 @@ public static class EquipmentEffectCache
               //Save output of calling method to local variable 0
               yield return LogMessage(new CodeInstruction(OpCodes.Stloc_0));
               counter++;
-
             }
             
             yield return LogMessage(instrs[i]);
             counter++;
-
           }
         }
     }
