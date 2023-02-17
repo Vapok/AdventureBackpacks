@@ -87,8 +87,8 @@ public static class EquipmentEffectCache
                   positionToPatch = k;
                   patchBeforeCodeInstruction = instrs[k];
                   AdventureBackpacks.Log.Debug($"Position Found: {positionToPatch}  Current Position Opcode: {patchBeforeCodeInstruction.opcode} Patched Position Opcode: {instrs[positionToPatch].opcode}");
-                  AdventureBackpacks.Log.Warning($"Number of Labels on This Element: {patchBeforeCodeInstruction.labels.Count}");
-                  AdventureBackpacks.Log.Warning($"Number of Exception Blocks on This Element: {patchBeforeCodeInstruction.blocks.Count}");
+                  AdventureBackpacks.Log.Debug($"Number of Labels on This Element: {patchBeforeCodeInstruction.labels.Count}");
+                  AdventureBackpacks.Log.Debug($"Number of Exception Blocks on This Element: {patchBeforeCodeInstruction.blocks.Count}");
                   foundPatchPosition = true;
                   break;
                 }
