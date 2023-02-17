@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using HarmonyLib;
 using JetBrains.Annotations;
 
@@ -66,26 +64,27 @@ public static class EquipmentEffectCache
         {
           var instrs = instructions.ToList();
           var positionToPatch = 0;
-          var lastPopPosition = 0;
-          var lastBrFalsePosition = 0;
+          
+          var equipmentStatusEffectsField = AccessTools.DeclaredField(typeof(Humanoid), nameof(Humanoid.m_eqipmentStatusEffects));
+          
+          CodeInstruction thisCodeInstruction = new CodeInstruction(OpCodes.Nop);
 
           for (int j = 0; j < instrs.Count; ++j)
           {
-            if (instrs[j].opcode == OpCodes.Pop)
-            {
-              lastPopPosition = j;
-            }
-
-            if (instrs[j].opcode == OpCodes.Brfalse)
-            {
-              lastBrFalsePosition = j;
-            }
-            
             if (instrs[j].opcode == OpCodes.Br)
             {
-              positionToPatch = lastPopPosition;
-              AdventureBackpacks.Log.Debug($"Position Found: {positionToPatch}  Current Position Opcode: {instrs[j].opcode} Patched Position Opcode: {instrs[positionToPatch].opcode}");
-              break;
+              if (instrs[j - 3].opcode == OpCodes.Ldfld && instrs[j - 3].operand.Equals(equipmentStatusEffectsField))
+              {
+                if (instrs[j - 4].opcode == OpCodes.Ldarg_0)
+                { 
+                  thisCodeInstruction = instrs[j - 4];
+                  positionToPatch = j - 4;
+                  AdventureBackpacks.Log.Debug($"Position Found: {positionToPatch}  Current Position Opcode: {instrs[j].opcode} Patched Position Opcode: {instrs[positionToPatch].opcode}");
+                  AdventureBackpacks.Log.Warning($"Number of Labels on This Element: {thisCodeInstruction.labels.Count}");
+                  AdventureBackpacks.Log.Warning($"Number of Labels on This Element: {thisCodeInstruction.blocks.Count}");
+                  break;
+                }
+              }
             }
           }
 
@@ -97,40 +96,36 @@ public static class EquipmentEffectCache
             return instruction;
           }
 
-          var newLabel = ilGen.DefineLabel();
+          //var newLabel = ilGen.DefineLabel();
+          var ldlocInstruction = new CodeInstruction(OpCodes.Ldloc_0); 
+
 
           for (int i = 0; i < instrs.Count; ++i)
           {
-            if (i == lastBrFalsePosition && instrs[i].opcode == OpCodes.Brfalse)
-            {
-              yield return LogMessage(new CodeInstruction(OpCodes.Brfalse, newLabel));
-              counter++;
-            }
-            else
-            {
-              yield return LogMessage(instrs[i]);
-              counter++;
-            }
-
-            if (i == positionToPatch && instrs[i].opcode == OpCodes.Pop)
+            if (i == positionToPatch && instrs[i].opcode == OpCodes.Ldarg_0 && instrs[i] == thisCodeInstruction)
             {
               //Patch here
               
+              //Move Labels from the current This element to new instruction.
+              instrs[i].MoveLabelsTo(ldlocInstruction);
+              
               //Patch the ldloc_0 which is the argument of my method using local variable 0.
-              //Apply new label from above so that above BRFalse knows where to go.
-              var ldlocInstruction = new CodeInstruction(OpCodes.Ldloc_0); 
-              ldlocInstruction.labels.Add(newLabel);
               yield return LogMessage(ldlocInstruction);
               counter++;
               
               //Patch Calling Method
-              yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(EquipmentEffectCache), nameof(EquipmentEffectCache.AddActiveBackpackEffects))));
+              yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(EquipmentEffectCache), nameof(AddActiveBackpackEffects))));
               counter++;
 
               //Save output of calling method to local variable 0
               yield return LogMessage(new CodeInstruction(OpCodes.Stloc_0));
               counter++;
+
             }
+            
+            yield return LogMessage(instrs[i]);
+            counter++;
+
           }
         }
     }
