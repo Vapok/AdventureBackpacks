@@ -45,7 +45,7 @@ public class Demister: EffectsBase
     public static class DemisterHumanoidUpdateEquipmentStatusEffectsPatch
     {
         [UsedImplicitly]
-        public static void Postfix(Humanoid __instance)
+        public static void Postfix(Humanoid __instance, bool __runOriginal)
         {
             if (__instance is Player player)
             {
