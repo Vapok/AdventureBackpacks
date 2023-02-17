@@ -1,5 +1,4 @@
-﻿using AdventureBackpacks.Assets;
-using AdventureBackpacks.Components;
+﻿using AdventureBackpacks.Components;
 using AdventureBackpacks.Patches;
 using Vapok.Common.Managers;
 
