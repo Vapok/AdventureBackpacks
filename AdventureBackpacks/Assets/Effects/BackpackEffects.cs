@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -20,39 +19,33 @@ public static class EquipmentEffectCache
 
   public static HashSet<StatusEffect> AddActiveBackpackEffects(HashSet<StatusEffect> other)
   {
+    if (other == null)
+    {
+      AdventureBackpacks.Log.Debug($"other HashSet argument is null. Expecting initialized object.");
+      other = new();
+    }
+
     if (Player.m_localPlayer == null)
     {
       AdventureBackpacks.Log.Debug($"Add Active Effects Started... Player null");
+      return other;
     }
     
     var player = Player.m_localPlayer;
           
-    if (other == null)
-    {
-      AdventureBackpacks.Log.Debug($"Add Active Effects Started... And I suck because other is null.");  
-    }
-    AdventureBackpacks.Log.Debug($"Add Active Effects Started... Count of Other: {other.Count}");
     activeEffects = new HashSet<StatusEffect>();
-          
     effectDemister = effectDemister == null ? ObjectDB.instance.GetStatusEffect("Demister") : effectDemister;
     effectSlowfall = effectSlowfall == null ? ObjectDB.instance.GetStatusEffect("SlowFall") : effectSlowfall;
-          
-    void EnsureEffectsAdded(StatusEffect se, bool shouldHave)
-    {
-      if (shouldHave && !activeEffects.Any( x => x.name.Equals(se.name)))
-        activeEffects.Add(se);
-    }
-          
-    EnsureEffectsAdded(effectDemister,Demister.ShouldHaveDemister(player));
-    EnsureEffectsAdded(effectSlowfall,FeatherFall.ShouldHaveFeatherFall(player));
-          
-    foreach (var backpackEffect in activeEffects)
-    {
-      if (!other.Any( x => x.name.Equals(backpackEffect.name)))
-        other.Add(backpackEffect);
-    }
+
+    if (Demister.ShouldHaveDemister(player))
+      activeEffects.Add(effectDemister);
     
-    AdventureBackpacks.Log.Debug($"Add Active Effects Ending... Count of Other: {other.Count}");
+    if (FeatherFall.ShouldHaveFeatherFall(player))
+      activeEffects.Add(effectSlowfall);
+          
+    other.UnionWith(activeEffects);
+    
+    AdventureBackpacks.Log.Debug($"Adding {other.Count} Active Backpack Effects.");
     return other;
   }
 
@@ -63,41 +56,6 @@ public static class EquipmentEffectCache
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
           var instrs = instructions.ToList();
-          var positionToPatch = 0;
-          var lastBrFalsePosition = 0;
-          var foundPatchPosition = false;
-          
-          CodeInstruction patchBeforeCodeInstruction = new CodeInstruction(OpCodes.Nop);
-          var brFalseLastLabel = new Label();
-
-          for (int j = 0; j < instrs.Count; ++j)
-          {
-            if (instrs[j].opcode == OpCodes.Brfalse && instrs[j].operand is Label label)
-            {
-              lastBrFalsePosition = j;
-              brFalseLastLabel = label;
-            }
-            
-            if (instrs[j].opcode == OpCodes.Br)
-            {
-              for (int k = lastBrFalsePosition; k < j; k++)
-              {
-                if (instrs[k].labels.Contains(brFalseLastLabel))
-                {
-                  positionToPatch = k;
-                  patchBeforeCodeInstruction = instrs[k];
-                  AdventureBackpacks.Log.Debug($"Position Found: {positionToPatch}  Current Position Opcode: {patchBeforeCodeInstruction.opcode} Patched Position Opcode: {instrs[positionToPatch].opcode}");
-                  AdventureBackpacks.Log.Debug($"Number of Labels on This Element: {patchBeforeCodeInstruction.labels.Count}");
-                  AdventureBackpacks.Log.Debug($"Number of Exception Blocks on This Element: {patchBeforeCodeInstruction.blocks.Count}");
-                  foundPatchPosition = true;
-                  break;
-                }
-              }
-
-              if (foundPatchPosition)
-                break;
-            }
-          }
 
           var counter = 0;
 
@@ -111,12 +69,17 @@ public static class EquipmentEffectCache
 
           for (int i = 0; i < instrs.Count; ++i)
           {
-            if (i == positionToPatch && instrs[i] == patchBeforeCodeInstruction)
+
+            yield return LogMessage(instrs[i]);
+            counter++;
+
+            //In Humanoid.UpdateEquipmentStatusEffects, Local Variable 0, or loc_0 is the target HashSet variable 
+            //listed as "other".  So, patching after Stloc_0 is called immediately after Newobj, which creates the object.
+            if (instrs[i].opcode == OpCodes.Stloc_0 && instrs[i-1].opcode == OpCodes.Newobj)
             {
-              //Patch here
-              
-              //Move Labels from the current This element to new instruction.
-              instrs[i].MoveLabelsTo(ldlocInstruction);
+              //Move Any Labels from the instruction position being patched to new instruction.
+              if (instrs[i].labels.Count > 0)
+                instrs[i].MoveLabelsTo(ldlocInstruction);
               
               //Patch the ldloc_0 which is the argument of my method using local variable 0.
               yield return LogMessage(ldlocInstruction);
@@ -130,9 +93,6 @@ public static class EquipmentEffectCache
               yield return LogMessage(new CodeInstruction(OpCodes.Stloc_0));
               counter++;
             }
-            
-            yield return LogMessage(instrs[i]);
-            counter++;
           }
         }
     }
