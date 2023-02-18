@@ -70,16 +70,8 @@ public static class InventoryPatches
             _droppingOutside = true;
         }
         
-        static void Finalizer(Exception __exception)
+        static void Postfix()
         {
-            if (__exception != null)
-            {
-                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
-                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
-                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
-                throw __exception;
-            }
-
             _droppingOutside = false;
         }
     }
@@ -93,16 +85,8 @@ public static class InventoryPatches
             _droppingOutside = true;
         }
         
-        static void Finalizer(Exception __exception)
+        static void Postfix()
         {
-            if (__exception != null)
-            {
-                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
-                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
-                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
-                throw __exception;
-            }
-
             _droppingOutside = false;
         }
     }
@@ -252,20 +236,11 @@ public static class InventoryPatches
             if (!__instance.IsBackPackInventory())
             {
                 _movingItemBetweenContainers = true;
-                return;
             }
         }
         
-        static void Finalizer(Exception __exception)
+        static void Postfix()
         {
-            if (__exception != null)
-            {
-                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
-                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
-                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
-                throw __exception;
-            }
-
             _movingItemBetweenContainers = false;
         }
     }
@@ -290,16 +265,8 @@ public static class InventoryPatches
             return Backpacks.CheckForInception(__instance, item);
         }
 
-        static void Finalizer(Exception __exception)
+        static void Postfix()
         {
-            if (__exception != null)
-            {
-                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
-                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
-                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
-                throw __exception;
-            }
-
             _movingItemBetweenContainers = false;
         }
     }
@@ -325,16 +292,8 @@ public static class InventoryPatches
             return Backpacks.CheckForInception(__instance, item);
         }
 
-        static void Finalizer(Exception __exception)
+        static void Postfix()
         {
-            if (__exception != null)
-            {
-                AdventureBackpacks.Log.Error($"Error: {__exception.Message}");
-                AdventureBackpacks.Log.Error($"Stack Trace: {__exception.StackTrace}");
-                AdventureBackpacks.Log.Error($"Source: {__exception.Source}");
-                throw __exception;
-            }
-
             _movingItemBetweenContainers = false;
         }
     }
