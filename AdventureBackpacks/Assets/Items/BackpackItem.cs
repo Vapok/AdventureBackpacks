@@ -40,7 +40,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     }
 
 
-    private int _inceptionCounter = 0;
+    private int _inceptionCounter;
     
     //Config Settings
     internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize { get; private set;}

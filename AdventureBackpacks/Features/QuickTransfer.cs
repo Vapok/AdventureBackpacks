@@ -18,7 +18,7 @@ public static class QuickTransfer
     private static Inventory _fromInventory;
     private static Inventory _toInventory;
 
-    private static bool _processingRightClick = false;
+    private static bool _processingRightClick;
 
     static QuickTransfer()
     {
