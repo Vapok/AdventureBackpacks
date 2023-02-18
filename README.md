@@ -117,6 +117,10 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Equipment and Quick Slots
 * Jewelcrafting
 * Shield Me Bruh!
+* Cheb's Necromancy
+  * Spectral Shroud of Holding Backpack
+    * Necromancy Armor Status Effect
+    * Necromancy Skill Modifier
 * _There's probably a ton of others. This mod is friendly to most mods. If you see a conflict though, let me know!_
 
 ## Incompatible Mods

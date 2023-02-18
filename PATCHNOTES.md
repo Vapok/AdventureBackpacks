@@ -1,5 +1,14 @@
 # Adventure Backpacks Patchnotes
 
+#1.6.5.0 - Cheb's Necromancy Compatibility and Overhauled Status Effects Management
+* Adds compatibility for Cheb's Necromancy
+  * Introduces a new Necromancy Backpack: Spectral Shroud of Holding
+    * Applies the Necromancy Armor Status Effect
+    * Applies Necromancy Skill Modifiers
+* Completely Reworked Status Effects Management
+  * Implements a new UpdateEquipmentStatusEffects Transpiler and removes several patch points.
+
+
 # 1.6.4.0 - Bug Fixes + Jewelcrafting Compatibility + Spanish Language Translation
 * Adds Spanish Language Translation File
   * Thanks to Esdac (on Discord) and lopezp9492 (GitHub) for contributions.
