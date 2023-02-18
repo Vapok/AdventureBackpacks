@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3034890855932467190}
   - component: {fileID: 2949366917102210349}
   - component: {fileID: 649531271814742533}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BackpackSwamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5174,7 +5174,7 @@ GameObject:
   - component: {fileID: 8447477308416057684}
   - component: {fileID: 7128482537938426749}
   - component: {fileID: 4309429912181946560}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: log
   m_TagString: Untagged
   m_Icon: {fileID: 0}
