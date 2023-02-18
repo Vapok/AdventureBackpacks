@@ -75,7 +75,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Assets\Backpacks.cs" />
-        <Compile Include="Assets\Effects\BackpackEffects.cs" />
         <Compile Include="Assets\Effects\ColdResistance.cs" />
         <Compile Include="Assets\Effects\Demister.cs" />
         <Compile Include="Assets\Effects\EffectsBase.cs" />
@@ -102,14 +101,17 @@
         <Compile Include="Extensions\InventoryExtensions.cs" />
         <Compile Include="Extensions\ItemDataExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
+        <Compile Include="Features\EquipmentEffectCache.cs" />
         <Compile Include="Features\QuickTransfer.cs" />
         <Compile Include="Patches\Door.cs" />
+        <Compile Include="Patches\EnvMan.cs" />
         <Compile Include="Patches\FejdStartup.cs" />
         <Compile Include="Patches\GuiBar.cs" />
         <Compile Include="Patches\Humanoid.cs" />
         <Compile Include="Patches\Inventory.cs" />
         <Compile Include="Patches\InventoryGui.cs" />
         <Compile Include="Patches\ItemDrop.cs" />
+        <Compile Include="Patches\SEMan.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AdventureBackpacks.cs" />
     </ItemGroup>

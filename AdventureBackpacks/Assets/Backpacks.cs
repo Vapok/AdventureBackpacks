@@ -215,15 +215,17 @@ namespace AdventureBackpacks.Assets
                 return null;
             
             //Apply Frost Resistance if configured.
-            if (FrostResistance.ShouldHaveFrostResistance(itemData))
-                modifierList.Add(BackpackEffects.FrostResistance);
+            var frostResistEffect = EffectsFactory.EffectList[BackpackEffect.FrostResistance];
+            if (frostResistEffect.IsEffectActive(itemData))
+                modifierList.Add(FrostResistance.EffectMod);
             
+            var trollEffect = EffectsFactory.EffectList[BackpackEffect.TrollArmor];
             //Apply Troll Armor Set if configured.
-            if (TrollArmor.ShouldHaveTrollArmorSet(itemData))
+            if (trollEffect.HasActiveStatusEffect(itemData, out var trollSneakEffect))
             {
                 itemData.m_shared.m_setName = "troll";
                 itemData.m_shared.m_setSize = 4;
-                itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");
+                itemData.m_shared.m_setStatusEffect = trollSneakEffect;
             }
             else
             {

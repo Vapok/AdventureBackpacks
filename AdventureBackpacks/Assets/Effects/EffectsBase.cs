@@ -17,6 +17,7 @@ public abstract class EffectsBase
     private string _configSection;
     private string _effectName;
     private string _description;
+    private StatusEffect _statusEffect;
 
     public EffectsBase(string effectName, string effectDesc)
     {
@@ -28,6 +29,28 @@ public abstract class EffectsBase
         RegisterEffectConfiguration();
     }
 
+    public virtual StatusEffect GetStatusEffect(string effectName)
+    {
+        return _statusEffect = _statusEffect == null ? ObjectDB.instance.GetStatusEffect(effectName) : _statusEffect;
+    }
+
+    public virtual bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
+    {
+        statusEffect = null;
+        return false;
+    }
+    public virtual bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
+    {
+        statusEffect = null;
+        return false;
+    }
+    public abstract bool IsEffectActive(Humanoid human);
+
+    public virtual bool IsEffectActive(ItemDrop.ItemData item)
+    {
+        return false;
+    }
+    
     public void RegisterEffectConfiguration()
     {
         BiomeQualityLevels = new();

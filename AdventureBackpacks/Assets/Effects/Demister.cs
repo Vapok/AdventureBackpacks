@@ -1,7 +1,5 @@
 ﻿using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
-using HarmonyLib;
-using JetBrains.Annotations;
 
 namespace AdventureBackpacks.Assets.Effects;
 
@@ -11,14 +9,19 @@ public class Demister: EffectsBase
     {
     }
 
-    public static bool ShouldHaveDemister(Humanoid human)
+    public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
-        var effect = EffectsFactory.EffectList[BackpackEffect.Demister];
+        statusEffect = GetStatusEffect("Demister");
+        return statusEffect != null && IsEffectActive(human);
+    }
+
+    public override bool IsEffectActive(Humanoid human)
+    {
         if (human is Player player)
         {
             var equippedBackpack = player.GetEquippedBackpack();
             
-            if (equippedBackpack == null || !effect.EnabledEffect.Value)
+            if (equippedBackpack == null || !EnabledEffect.Value)
                 return false;
             
             var itemData = equippedBackpack.Item;
@@ -27,9 +30,9 @@ public class Demister: EffectsBase
 
             var backpackBiome = backpack.BackpackBiome.Value;
 
-            if (effect.BiomeQualityLevels.ContainsKey(backpackBiome))
+            if (BiomeQualityLevels.ContainsKey(backpackBiome))
             {
-                var configQualityForBiome = effect.BiomeQualityLevels[backpackBiome].Value;
+                var configQualityForBiome = BiomeQualityLevels[backpackBiome].Value;
 
                 if (configQualityForBiome == 0 || backpackBiome == BackpackBiomes.None)
                     return false;
@@ -37,37 +40,6 @@ public class Demister: EffectsBase
                 return itemData.m_quality >= configQualityForBiome;  
             }
         }
-
         return false;
     }
-    
-    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
-    public static class DemisterHumanoidUpdateEquipmentStatusEffectsPatch
-    {
-        [UsedImplicitly]
-        public static void Postfix(Humanoid __instance, bool __runOriginal)
-        {
-            if (__instance is Player player)
-            {
-                var deMister = ObjectDB.instance.GetStatusEffect("Demister");
-                if (deMister == null)
-                {
-                    return;
-                }
-                
-                var shouldHaveDemister = ShouldHaveDemister(__instance);
-                var hasDemister = player.m_eqipmentStatusEffects.Contains(deMister);
-                
-                if (hasDemister && shouldHaveDemister)
-                    return;
-                
-                if (!hasDemister && shouldHaveDemister)
-                {
-                    player.m_eqipmentStatusEffects.Add(deMister);
-                    player.m_seman.AddStatusEffect(deMister);
-                }
-            }
-        }
-    }
-    
 }

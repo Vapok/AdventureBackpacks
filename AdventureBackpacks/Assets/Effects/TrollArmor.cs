@@ -1,27 +1,49 @@
 ﻿using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Extensions;
 
 namespace AdventureBackpacks.Assets.Effects;
 
 public class TrollArmor : EffectsBase
 {
+    private string _effectName = "SetEffect_TrollArmor";
     public TrollArmor(string effectName, string effectDesc) : base(effectName, effectDesc)
     {
     }
 
-    public static bool ShouldHaveTrollArmorSet(ItemDrop.ItemData itemData)
+    public override bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
-        var effect = EffectsFactory.EffectList[BackpackEffect.TrollArmor];
-        
-        if (!effect.EnabledEffect.Value)
+        statusEffect = GetStatusEffect(_effectName);
+        return statusEffect != null && IsEffectActive(item);
+    }
+
+    public override bool IsEffectActive(Humanoid human)
+    {
+        if (human is Player player)
+        {
+            var equippedBackpack = player.GetEquippedBackpack();
+            
+            if (equippedBackpack == null || !EnabledEffect.Value)
+                return false;
+            
+            var itemData = equippedBackpack.Item;
+            return IsEffectActive(itemData);
+        }
+
+        return false;
+    }
+
+    public override bool IsEffectActive(ItemDrop.ItemData itemData)
+    {
+        if (!EnabledEffect.Value)
             return false;
 
         if (itemData != null && itemData.TryGetBackpackItem(out var backpack))
         {
             var backpackBiome = backpack.BackpackBiome.Value;
 
-            if (effect.BiomeQualityLevels.ContainsKey(backpackBiome))
+            if (BiomeQualityLevels.ContainsKey(backpackBiome))
             {
-                var configQualityForBiome = effect.BiomeQualityLevels[backpackBiome].Value;
+                var configQualityForBiome = BiomeQualityLevels[backpackBiome].Value;
 
                 if (configQualityForBiome == 0 || backpackBiome == BackpackBiomes.None)
                     return false;
