@@ -7,6 +7,7 @@ using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using BepInEx;
+using BepInEx.Bootstrap;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -198,7 +199,6 @@ namespace AdventureBackpacks.Assets
         {
             if (itemData == null)
                 return null;
-            
             var backpackName = itemData.m_shared.m_name;
             var backpackQuality = itemData.m_quality;
             var statusEffects = new CustomSE(Enums.StatusEffects.Stats, $"SE_{backpackName}_{backpackQuality}");
@@ -232,6 +232,20 @@ namespace AdventureBackpacks.Assets
                 itemData.m_shared.m_setName = string.Empty;
                 itemData.m_shared.m_setSize = 0;
                 itemData.m_shared.m_setStatusEffect = null;
+            }
+
+            if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+            {
+                var necroEffect = EffectsFactory.EffectList[BackpackEffect.NecromancyArmor];
+                //Apply Necromancy Armor Set if configured.
+                if (necroEffect.HasActiveStatusEffect(itemData, out var necroSetEffect))
+                {
+                    itemData.m_shared.m_setStatusEffect = necroSetEffect;
+                }
+                else
+                {
+                    itemData.m_shared.m_setStatusEffect = null;
+                }
             }
             
             backpack.UpdateStatusEffects(backpackQuality, statusEffects, modifierList, itemData);

@@ -54,11 +54,15 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ILogIt Log => _logger;
 
 
-    protected BackpackItem(string prefabName, string itemName, string configSection = "") : base(prefabName,itemName)
+    protected BackpackItem(string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
         _englishSection = english.Localize(_configSection);
-        _localizedCategory = Localization.instance.Localize(_configSection);
+        if (externalLocalize)
+            _localizedCategory = Localization.m_instance.Localize(_configSection);
+        else
+            _localizedCategory = Localization.instance.Localize(_configSection);
+        
         Item.SectionName = _configSection;
         BackpackSize = new();
 

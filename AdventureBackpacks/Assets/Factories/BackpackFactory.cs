@@ -2,6 +2,7 @@
 using System.Linq;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Assets.Items.BackpackItems;
+using BepInEx.Bootstrap;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
 
@@ -44,6 +45,11 @@ internal class BackpackFactory : AssetFactory
         _backpackItems.Add(new BackpackMistlands("BackpackMistlands","$vapok_mod_item_backpack_mistlands"));
         _backpackItems.Add(new LegacyIronBackpack("CapeIronBackpack","$vapok_mod_item_rugged_backpack"));
         _backpackItems.Add(new LegacySilverBackpack("CapeSilverBackpack","$vapok_mod_item_arctic_backpack"));
+
+        if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+        {
+            _backpackItems.Add(new BackpackNecromancy("BackpackNecromancy","$item_friendlyskeletonwand_spectralshroud_backpack"));
+        }
     }
 
     internal static List<string> BackpackTypes()

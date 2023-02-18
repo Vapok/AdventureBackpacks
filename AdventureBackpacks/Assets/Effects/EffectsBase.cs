@@ -61,10 +61,15 @@ public abstract class EffectsBase
                 new ConfigurationManagerAttributes { Order = 1 }));
         
         //Waiting For Startup
-        ConfigRegistry.Waiter.StatusChanged += FillBiomeSettings;
+        ConfigRegistry.Waiter.StatusChanged += (_,_) => FillBiomeSettings();
+        ConfigRegistry.Waiter.StatusChanged += (_,_) => AdditionalConfiguration(_configSection);
     }
 
-    private void FillBiomeSettings(object sender, EventArgs e)
+    public virtual void AdditionalConfiguration(string configSection)
+    {
+        return;
+    }
+    private void FillBiomeSettings()
     {
         foreach (BackpackBiomes backpackBiome in Enum.GetValues(typeof(BackpackBiomes)))
         {

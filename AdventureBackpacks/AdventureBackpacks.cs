@@ -22,6 +22,7 @@ namespace AdventureBackpacks
 {
     [BepInPlugin(_pluginId, _displayName, _version)]
     [BepInIncompatibility("JotunnBackpacks")]
+    [BepInDependency("com.chebgonaz.ChebsNecromancy",BepInDependency.DependencyFlags.SoftDependency)]
     public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
     {
         //Module Constants
