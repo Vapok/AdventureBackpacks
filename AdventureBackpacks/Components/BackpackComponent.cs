@@ -1,7 +1,4 @@
-﻿/* BackpackComponent.cs
- * 
- *
- */
+﻿/* BackpackComponent.cs */
 
 using System;
 using AdventureBackpacks.Assets;
