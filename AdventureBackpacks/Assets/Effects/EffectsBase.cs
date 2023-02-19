@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Configuration;
+using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
 using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Shared;
@@ -44,10 +45,63 @@ public abstract class EffectsBase
         statusEffect = null;
         return false;
     }
-    public abstract bool IsEffectActive(Humanoid human);
 
-    public virtual bool IsEffectActive(ItemDrop.ItemData item)
+    public virtual bool IsEffectActive(Humanoid human)
     {
+        if (human is Player player)
+        {
+            var equippedBackpack = player.GetEquippedBackpack();
+            
+            if (equippedBackpack == null || !EnabledEffect.Value)
+                return false;
+            
+            var itemData = equippedBackpack.Item;
+            
+            itemData.TryGetBackpackItem(out var backpack);
+
+            var backpackBiome = backpack.BackpackBiome.Value;
+
+            var configQualityForBiome = 0;
+            foreach (var enumKeyBit in BiomeQualityLevels.Keys)
+            {
+                if ((backpackBiome & enumKeyBit) != 0)
+                {
+                    configQualityForBiome = BiomeQualityLevels[enumKeyBit].Value > configQualityForBiome ? BiomeQualityLevels[enumKeyBit].Value : configQualityForBiome;
+                }
+            }
+            
+            if (configQualityForBiome == 0)
+                return false;
+                
+            return itemData.m_quality >= configQualityForBiome;  
+
+        }
+        return false;
+    }
+
+    public virtual bool IsEffectActive(ItemDrop.ItemData itemData)
+    {
+        if (!EnabledEffect.Value)
+            return false;
+
+        if (itemData != null && itemData.TryGetBackpackItem(out var backpack))
+        {
+            var backpackBiome = backpack.BackpackBiome.Value;
+
+            var configQualityForBiome = 0;
+            foreach (var enumKeyBit in BiomeQualityLevels.Keys)
+            {
+                if ((backpackBiome & enumKeyBit) != 0)
+                {
+                    configQualityForBiome = BiomeQualityLevels[enumKeyBit].Value > configQualityForBiome ? BiomeQualityLevels[enumKeyBit].Value : configQualityForBiome;
+                }
+            }
+            
+            if (configQualityForBiome == 0)
+                return false;
+                
+            return itemData.m_quality >= configQualityForBiome;  
+        }
         return false;
     }
     
@@ -81,15 +135,21 @@ public abstract class EffectsBase
         if (biome == BackpackBiomes.None)
             return;
         
-        var qualityLevel = ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {biome.ToString()}", defaultQuality,
-            new ConfigDescription("Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
-                new AcceptableValueRange<int>(0, 5),
-                new ConfigurationManagerAttributes { Order = 2 }));
-        
-        if (!BiomeQualityLevels.ContainsKey(biome) && qualityLevel != null)
-        { 
-            BiomeQualityLevels.Add(biome, qualityLevel);
-            qualityLevel.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        foreach (BackpackBiomes enumKeyBit in Enum.GetValues(typeof(BackpackBiomes)))
+        {
+            if ((biome & enumKeyBit) != 0)
+            {
+                var qualityLevel = ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {enumKeyBit.ToString()}", defaultQuality,
+                    new ConfigDescription("Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
+                        new AcceptableValueRange<int>(0, 5),
+                        new ConfigurationManagerAttributes { Order = 2 }));
+
+                if (!BiomeQualityLevels.ContainsKey(enumKeyBit) && qualityLevel != null)
+                {
+                    BiomeQualityLevels.Add(enumKeyBit, qualityLevel);
+                    qualityLevel.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+                }
+            }
         }
     }
 }

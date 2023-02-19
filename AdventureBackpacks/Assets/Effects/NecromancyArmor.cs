@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
 using BepInEx.Bootstrap;
 using BepInEx.Configuration;
@@ -78,29 +77,6 @@ public class NecromancyArmor : EffectsBase
             return IsEffectActive(itemData);
         }
 
-        return false;
-    }
-
-    public override bool IsEffectActive(ItemDrop.ItemData itemData)
-    {
-        if (!EnabledEffect.Value)
-            return false;
-
-        if (itemData != null && itemData.TryGetBackpackItem(out var backpack))
-        {
-            var backpackBiome = backpack.BackpackBiome.Value;
-
-            if (BiomeQualityLevels.ContainsKey(backpackBiome))
-            {
-                var configQualityForBiome = BiomeQualityLevels[backpackBiome].Value;
-
-                if (configQualityForBiome == 0 || backpackBiome == BackpackBiomes.None)
-                    return false;
-                
-                return itemData.m_quality >= configQualityForBiome;  
-            }
-        }
-        
         return false;
     }
 }

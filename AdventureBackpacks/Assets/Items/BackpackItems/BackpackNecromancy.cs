@@ -27,7 +27,7 @@ internal class BackpackNecromancy : BackpackItem
 
     internal sealed override void RegisterConfigSettings()
     {
-        RegisterBackpackBiome(BackpackBiomes.BlackForest);
+        RegisterBackpackBiome(BackpackBiomes.Necromancy);
         RegisterBackpackSize(1,3,3);
         RegisterBackpackSize(2,4,3);
         RegisterBackpackSize(3,5,3);

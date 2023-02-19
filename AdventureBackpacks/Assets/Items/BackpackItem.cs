@@ -128,6 +128,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
             new ConfigDescription("The Biome this bag will draw it's effects from.",
                 null, 
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 6 }));
+        BackpackBiome.SettingChanged += Backpacks.UpdateItemDataConfigValues;
     }
 
     internal virtual void RegisterCarryBonus(int defaultValue = 0)
