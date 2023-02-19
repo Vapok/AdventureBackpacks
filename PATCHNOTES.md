@@ -3,10 +3,14 @@
 # 1.6.5.0 - Cheb's Necromancy Compatibility and Overhauled Status Effects Management
 * Adds Translation for Japanese and Portuguese Brazilian
   * Big thanks to Xutz and RedeyeBear for dropping by the Discord to contribute these!
+* Multiple Biome's can now be selected on backpacks, and applied effects will stack.
+  * If Backpack has more than 1 biome configured, and the biome's utilize the same effect, the backpack must meet all requirements for effect to trigger.
 * Adds compatibility for Cheb's Necromancy
   * Introduces a new Necromancy Backpack: Spectral Shroud of Holding
     * Applies the Necromancy Armor Status Effect
     * Applies Necromancy Skill Modifiers
+    * Adds New Necromancy Biome
+      * This is used to apply the Necromany Armor effect to just the Necromancy Backpack
 * Completely Reworked Status Effects Management
   * Implements a new UpdateEquipmentStatusEffects Transpiler and removes several patch points.
 

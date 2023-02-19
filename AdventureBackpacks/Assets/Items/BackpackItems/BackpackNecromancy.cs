@@ -27,7 +27,7 @@ internal class BackpackNecromancy : BackpackItem
 
     internal sealed override void RegisterConfigSettings()
     {
-        RegisterBackpackBiome(BackpackBiomes.Necromancy);
+        RegisterBackpackBiome(BackpackBiomes.Necromancy | BackpackBiomes.BlackForest);
         RegisterBackpackSize(1,3,3);
         RegisterBackpackSize(2,4,3);
         RegisterBackpackSize(3,5,3);
@@ -35,7 +35,8 @@ internal class BackpackNecromancy : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(20);
         RegisterSpeedMod();
-        EffectsFactory.EffectList[BackpackEffect.NecromancyArmor].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
+        if ((BackpackBiome.Value & BackpackBiomes.Necromancy) != 0)
+            EffectsFactory.EffectList[BackpackEffect.NecromancyArmor].RegisterEffectBiomeQuality(BackpackBiomes.Necromancy, 1);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
