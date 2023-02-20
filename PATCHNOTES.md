@@ -9,7 +9,7 @@
   * Introduces a new Necromancy Backpack: Spectral Shroud of Holding
     * Applies the Necromancy Armor Status Effect
     * Applies Necromancy Skill Modifiers
-    * Adds New Necromancy Biome
+    * Adds New Necromancy Option to Backpack Biome selection.
       * This is used to apply the Necromancy Armor effect to just the Necromancy Backpack
 * Completely Reworked Status Effects Management
   * Implements a new UpdateEquipmentStatusEffects Transpiler and removes several patch points.
