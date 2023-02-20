@@ -1,15 +1,6 @@
 # Adventure Backpacks Patchnotes
 
 # 1.6.5.0 - Cheb's Necromancy Compatibility and Overhauled Status Effects Management
-* Bugfixes: 
-  * Drops Enabled/Disable now completely work and will definitely disable drops.
-    * Apologies that this took so long for me to track down.
-  * When Backpack with items is placed on an Armor Stand, Thor accidentally duplicates items.
-    * Fixes GitHub #67
-* Adds Translation for Japanese and Portuguese Brazilian
-  * Big thanks to Xutz and RedeyeBear for dropping by the Discord to contribute these!
-* Multiple biomes can now be selected on backpacks, and applied effects will stack.
-  * If Backpack has more than 1 biome configured, and the biomes utilize the same effect, the backpack must meet all requirements for the effect to trigger.
 * Adds compatibility for Cheb's Necromancy
   * Introduces a new Necromancy Backpack: Spectral Shroud of Holding
     * Applies the Necromancy Armor Status Effect
@@ -18,6 +9,16 @@
       * This is used to apply the Necromancy Armor effect to just the Necromancy Backpack
 * Completely Reworked Status Effects Management
   * Implements a new UpdateEquipmentStatusEffects Transpiler and removes several patch points.
+* Multiple biomes can now be selected on backpacks, and applied effects will stack.
+  * If Backpack has more than 1 biome configured, and the biomes utilize the same effect, the backpack must meet all requirements for the effect to trigger.
+* Adds Translation for Japanese and Portuguese Brazilian
+  * Big thanks to Xutz and RedeyeBear for dropping by the Discord to contribute these!
+* Bugfixes: 
+  * Drops Enabled/Disable now completely work and will definitely disable drops.
+    * Apologies that this took so long for me to track down.
+  * When Backpack with items is placed on an Armor Stand, Thor accidentally duplicates items.
+    * Fixes GitHub #67
+
 
 
 # 1.6.4.0 - Bug Fixes + Jewelcrafting Compatibility + Spanish Language Translation
