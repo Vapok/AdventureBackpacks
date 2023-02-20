@@ -1,35 +1,35 @@
 {
   "vapok_mod_item_backpack_meadows": "バックパック",
-  "vapok_mod_item_backpack_meadows_description": "いくつかの物を入れることができる小さなバッグパック。",
+  "vapok_mod_item_backpack_meadows_description": "いくつかの物を入れることができる、小さなバックパック。",
 
   "vapok_mod_item_backpack_blackforest": "頑丈なバックパック",
-  "vapok_mod_item_backpack_blackforest_description": "バックルと上質なレザーストラップで補強された頑丈なバックパック。",
+  "vapok_mod_item_backpack_blackforest_description": "バックルと上質なレザーストラップで補強された、頑丈なバックパック。",
 
-  "vapok_mod_item_backpack_swamp": "防水バッグ",
-  "vapok_mod_item_backpack_swamp_description": "防水血液バッグで密閉加工された耐久性のあるバックパック。",
+  "vapok_mod_item_backpack_swamp": "防水バックパック",
+  "vapok_mod_item_backpack_swamp_description": "血液袋を利用して防水加工された、耐久性のあるバックパック。",
 
-  "vapok_mod_item_backpack_mountains": "北極シェルパバッ",
-  "vapok_mod_item_backpack_mountains_description": "山での長いハイキングに適した北極のバックパック。",
+  "vapok_mod_item_backpack_mountains": "北極圏用シェルパバックパック",
+  "vapok_mod_item_backpack_mountains_description": "山での長いトレッキングに適している、北極圏用のバックパック。",
 
-  "vapok_mod_item_backpack_plains": "ロックスレザー強化バッグ",
-  "vapok_mod_item_backpack_plains_description": "耐久性に優れたロックスレザーを使用した冒険者のバッグ。",
+  "vapok_mod_item_backpack_plains": "ロックスレザーバックパック",
+  "vapok_mod_item_backpack_plains_description": "非常に丈夫なロックスの皮で作られた、冒険者用のバックパック。",
 
   "vapok_mod_item_backpack_mistlands": "探検家のバックパック",
-  "vapok_mod_item_backpack_mistlands_description": "精巧に作られた神秘的なバックパック。 独自のボトムレスポケットを備えたデザイン。 それがどのように機能するかは誰にもわかりません",
+  "vapok_mod_item_backpack_mistlands_description": "精巧に作られた神秘的なバックパック、独自のボトムレスポケットを備えたデザイン、 それがどのように機能するかは誰も知らない。",
 
-  "vapok_mod_item_rugged_backpack": "万能なバックパック",
-  "vapok_mod_item_rugged_backpack_description": "あらゆる地形に適応する万能バックパック。",
-  
-  "vapok_mod_item_arctic_backpack": "北極バッグパック",
-  "vapok_mod_item_arctic_backpack_description": "冬山での長いハイキングに適した北極バックパック。",
-  
-  "vapok_mod_no_inception1": "神々を困らせないでください。",
-  "vapok_mod_no_inception2": "警告を受けました",
-  "vapok_mod_no_inception3": "あなたは神々を怒らせました",
-  "vapok_mod_no_inception4": "はあ…トールはすぐにあなたの世話をします。",
+  "vapok_mod_item_rugged_backpack": "古い頑丈なバックパック",
+  "vapok_mod_item_rugged_backpack_description": "バックルと上質なレザーストラップがついた、頑丈なバックパック。",
+
+  "vapok_mod_item_arctic_backpack": "古い北極圏用バックパック",
+  "vapok_mod_item_arctic_backpack_description": "山での長いトレッキングに適している、古い北極圏用のバックパック。",
+
+  "vapok_mod_no_inception1": "神々を怒らせてはなりません。",
+  "vapok_mod_no_inception2": "警告を受けました。",
+  "vapok_mod_no_inception3": "あなたは神々を怒らせました。",
+  "vapok_mod_no_inception4": "はあ…、トールはすぐにあなた対処します。",
   "vapok_mod_no_inception5": "トールがあなたの力を奪いました!!",
 
-  "vapok_mod_thor_saves_contents": "このバックパックにはいくつかの物が入っていました。 トールが保存してくれてました。",
+  "vapok_mod_thor_saves_contents": "このバックパックにはいくつかの物が入っていましたが、トールが保存してくれていました。",
 
   "vapok_mod_useful_backpack": "あなたのバックパックは便利そうです。",
   "vapok_mod_you_droped_bag": "バックパックを落としました!",
