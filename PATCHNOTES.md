@@ -1,6 +1,9 @@
 # Adventure Backpacks Patchnotes
 
 # 1.6.5.0 - Cheb's Necromancy Compatibility and Overhauled Status Effects Management
+* Bugfixes: 
+  * Drops Enabled/Disable now completely work and will definitely disable drops.
+    * Apologies that this took so long for me to track down.
 * Adds Translation for Japanese and Portuguese Brazilian
   * Big thanks to Xutz and RedeyeBear for dropping by the Discord to contribute these!
 * Multiple biomes can now be selected on backpacks, and applied effects will stack.
