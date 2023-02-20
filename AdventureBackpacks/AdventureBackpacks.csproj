@@ -105,6 +105,7 @@
         <Compile Include="Extensions\PlayerExtensions.cs" />
         <Compile Include="Features\EquipmentEffectCache.cs" />
         <Compile Include="Features\QuickTransfer.cs" />
+        <Compile Include="Patches\ArmorStand.cs" />
         <Compile Include="Patches\Door.cs" />
         <Compile Include="Patches\EnvMan.cs" />
         <Compile Include="Patches\FejdStartup.cs" />

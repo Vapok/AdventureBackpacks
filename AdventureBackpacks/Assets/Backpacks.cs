@@ -8,7 +8,6 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using BepInEx;
 using BepInEx.Bootstrap;
-using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;

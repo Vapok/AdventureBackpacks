@@ -136,7 +136,7 @@ public static class InventoryPatches
             return;
         }
         
-        if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping)
+        if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping || AdventureBackpacks.BypassMoveProtection)
             return;
             
         if (item.TryGetBackpackItem(out var backpackItem))

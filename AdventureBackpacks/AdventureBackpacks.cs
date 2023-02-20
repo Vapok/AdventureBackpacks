@@ -41,6 +41,7 @@ namespace AdventureBackpacks
         public static bool ValheimAwake;
         public static bool PerformYardSale = false;
         public static bool QuickDropping = false;
+        public static bool BypassMoveProtection = false;
         public static Waiting Waiter;
         public static ConfigSyncBase ActiveConfig => _config;
         
