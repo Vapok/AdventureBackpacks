@@ -35,6 +35,7 @@ internal class BackpackNecromancy : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(20);
         RegisterSpeedMod();
+        RegisterShaderSwap();
         if ((BackpackBiome.Value & BackpackBiomes.Necromancy) != 0)
             EffectsFactory.EffectList[BackpackEffect.NecromancyArmor].RegisterEffectBiomeQuality(BackpackBiomes.Necromancy, 1);
     }
