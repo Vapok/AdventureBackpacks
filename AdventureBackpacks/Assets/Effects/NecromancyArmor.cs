@@ -18,6 +18,7 @@ public class NecromancyArmor : EffectsBase
     private AssetBundle _assetBundle;
     private const string NecromancySkillIdentifier = "friendlyskeletonwand_necromancy_skill";
     private Skills.SkillType SkillUID;
+    private StatusEffect _externalStatusEffect;
     
     public ConfigEntry<int> NecromancySkillBonus { get; private set;}
 
@@ -44,24 +45,29 @@ public class NecromancyArmor : EffectsBase
         NecromancySkillBonus.SettingChanged += Backpacks.UpdateItemDataConfigValues;
     }
 
-    public override StatusEffect GetStatusEffect(string effectName)
+    private void LoadExternalStatusEffect()
     {
-        var seStat = _assetBundle.LoadAsset<SE_Stats>(effectName);
-        seStat.m_skillLevel = SkillUID;
-        seStat.m_skillLevelModifier = NecromancySkillBonus.Value;
-        return seStat;
+        if (_externalStatusEffect == null)
+        {
+            var seStat = _assetBundle.LoadAsset<SE_Stats>(_effectName);
+            seStat.m_skillLevel = SkillUID;
+            seStat.m_skillLevelModifier = NecromancySkillBonus.Value;
+            _externalStatusEffect = seStat;
+        }
     }
 
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
-        statusEffect = GetStatusEffect(_effectName);
-        return statusEffect != null && IsEffectActive(human);
+        LoadExternalStatusEffect();
+        SetStatusEffect(_externalStatusEffect);
+        return base.HasActiveStatusEffect(human, out statusEffect);
     }
 
     public override bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
-        statusEffect = GetStatusEffect(_effectName);
-        return statusEffect != null && IsEffectActive(item);
+        LoadExternalStatusEffect();
+        SetStatusEffect(_externalStatusEffect);
+        return base.HasActiveStatusEffect(item, out statusEffect);
     }
 
     public override bool IsEffectActive(Humanoid human)

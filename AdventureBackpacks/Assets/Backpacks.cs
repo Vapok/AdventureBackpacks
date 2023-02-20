@@ -8,10 +8,12 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using BepInEx;
 using BepInEx.Bootstrap;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
+using Random = System.Random;
 
 namespace AdventureBackpacks.Assets
 {
@@ -89,6 +91,8 @@ namespace AdventureBackpacks.Assets
             {
                 SearchInventory(equipped);    
             }
+            
+            Player.m_localPlayer.UpdateEquipmentStatusEffects();
         }
         
         public static Inventory NewInventoryInstance(string name, int itemMQuality = 1)
@@ -206,6 +210,7 @@ namespace AdventureBackpacks.Assets
             statusEffects.Effect.m_name = $"{backpackName} $vapok_mod_level {backpackQuality} $vapok_mod_effect";
             statusEffects.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
             statusEffects.Effect.m_startMessage = $"$vapok_mod_useful_backpack";
+            
 
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default
@@ -252,6 +257,7 @@ namespace AdventureBackpacks.Assets
             
             itemData.m_shared.m_maxDurability = 1000f;
             ((SE_Stats)statusEffects.Effect).m_mods = modifierList;
+            ((SE_Stats)statusEffects.Effect).m_icon = itemData.GetIcon();
 
             itemData.AddSEToItem(statusEffects);
             return statusEffects;

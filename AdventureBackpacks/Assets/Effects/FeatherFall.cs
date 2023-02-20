@@ -8,8 +8,8 @@ public class FeatherFall : EffectsBase
 
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
-        statusEffect = GetStatusEffect("SlowFall");
-        return statusEffect != null && IsEffectActive(human);
+        SetStatusEffect("SlowFall");
+        return base.HasActiveStatusEffect(human, out statusEffect);
     }
 }
 

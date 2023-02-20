@@ -8,7 +8,7 @@ public class Demister: EffectsBase
 
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
-        statusEffect = GetStatusEffect("Demister");
-        return statusEffect != null && IsEffectActive(human);
+        SetStatusEffect("Demister");
+        return base.HasActiveStatusEffect(human, out statusEffect);
     }
 }

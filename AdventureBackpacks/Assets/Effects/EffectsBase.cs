@@ -30,20 +30,30 @@ public abstract class EffectsBase
         RegisterEffectConfiguration();
     }
 
-    public virtual StatusEffect GetStatusEffect(string effectName)
+    public virtual StatusEffect GetStatusEffect()
     {
-        return _statusEffect = _statusEffect == null ? ObjectDB.instance.GetStatusEffect(effectName) : _statusEffect;
+        return _statusEffect;
+    }
+
+    public virtual void SetStatusEffect(StatusEffect statusEffect)
+    {
+        _statusEffect = statusEffect;
+    }
+
+    public virtual void SetStatusEffect(string effectName)
+    {
+        _statusEffect = _statusEffect == null ? ObjectDB.instance.GetStatusEffect(effectName) : _statusEffect;
     }
 
     public virtual bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
-        statusEffect = null;
-        return false;
+        statusEffect = _statusEffect;
+        return statusEffect != null && IsEffectActive(human);
     }
     public virtual bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
-        statusEffect = null;
-        return false;
+        statusEffect = _statusEffect;
+        return statusEffect != null && IsEffectActive(item);
     }
 
     public virtual bool IsEffectActive(Humanoid human)

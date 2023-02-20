@@ -11,8 +11,8 @@ public class TrollArmor : EffectsBase
 
     public override bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
-        statusEffect = GetStatusEffect(_effectName);
-        return statusEffect != null && IsEffectActive(item);
+        SetStatusEffect(_effectName);
+        return base.HasActiveStatusEffect(item, out statusEffect);
     }
 
     public override bool IsEffectActive(Humanoid human)
