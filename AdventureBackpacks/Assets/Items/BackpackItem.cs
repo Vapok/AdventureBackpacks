@@ -40,7 +40,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     }
 
 
-    private int _inceptionCounter = 0;
+    private int _inceptionCounter;
     
     //Config Settings
     internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize { get; private set;}
@@ -54,11 +54,15 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ILogIt Log => _logger;
 
 
-    protected BackpackItem(string prefabName, string itemName, string configSection = "") : base(prefabName,itemName)
+    protected BackpackItem(string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
         _englishSection = english.Localize(_configSection);
-        _localizedCategory = Localization.instance.Localize(_configSection);
+        if (externalLocalize)
+            _localizedCategory = Localization.m_instance.Localize(_configSection);
+        else
+            _localizedCategory = Localization.instance.Localize(_configSection);
+        
         Item.SectionName = _configSection;
         BackpackSize = new();
 
@@ -124,6 +128,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
             new ConfigDescription("The Biome this bag will draw it's effects from.",
                 null, 
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 6 }));
+        BackpackBiome.SettingChanged += Backpacks.UpdateItemDataConfigValues;
     }
 
     internal virtual void RegisterCarryBonus(int defaultValue = 0)

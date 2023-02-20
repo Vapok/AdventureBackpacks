@@ -54,7 +54,11 @@ internal static class InventoryGuiPatches
                         }
                     }
                 }
-                throw __exception;
+                AdventureBackpacks.Log.Warning($"The following error was captured by Adventure Backpacks, but was caused by another mod. Advanced Backpacks is going to allow the operation to continue, but is going to replay the error below:");
+                AdventureBackpacks.Log.Error($"External Mod Error Message: {__exception.Message}");
+                AdventureBackpacks.Log.Error($"External Mod Error Source: {__exception.Source}");
+                AdventureBackpacks.Log.Error($"External Mod Error Stack Trace: {__exception.StackTrace}");
+                AdventureBackpacks.Log.Warning($"Please check with other mod authors listed above.");
             }
             return null;
         }

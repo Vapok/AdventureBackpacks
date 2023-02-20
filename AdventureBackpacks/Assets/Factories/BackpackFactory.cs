@@ -1,21 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Assets.Items.BackpackItems;
+using BepInEx.Bootstrap;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Assets.Factories;
 
-public enum BackpackBiomes
+[Flags]
+public enum BackpackBiomes : uint
 {
-    Meadows,
-    BlackForest,
-    Swamp,
-    Mountains,
-    Plains,
-    Mistlands,
-    None
+    None = 0,
+    Meadows = 1 << 0,
+    BlackForest = 1 << 1,
+    Swamp = 1 << 2,
+    Mountains = 1 << 3,
+    Plains = 1 << 4,
+    Mistlands = 1 << 5,
+    Necromancy = 1 << 6
 }
 internal class BackpackFactory : AssetFactory
 {
@@ -44,6 +48,11 @@ internal class BackpackFactory : AssetFactory
         _backpackItems.Add(new BackpackMistlands("BackpackMistlands","$vapok_mod_item_backpack_mistlands"));
         _backpackItems.Add(new LegacyIronBackpack("CapeIronBackpack","$vapok_mod_item_rugged_backpack"));
         _backpackItems.Add(new LegacySilverBackpack("CapeSilverBackpack","$vapok_mod_item_arctic_backpack"));
+
+        if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+        {
+            _backpackItems.Add(new BackpackNecromancy("BackpackNecromancy","$item_friendlyskeletonwand_spectralshroud_backpack"));
+        }
     }
 
     internal static List<string> BackpackTypes()

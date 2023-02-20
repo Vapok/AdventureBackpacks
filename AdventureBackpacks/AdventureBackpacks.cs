@@ -22,12 +22,13 @@ namespace AdventureBackpacks
 {
     [BepInPlugin(_pluginId, _displayName, _version)]
     [BepInIncompatibility("JotunnBackpacks")]
+    [BepInDependency("com.chebgonaz.ChebsNecromancy",BepInDependency.DependencyFlags.SoftDependency)]
     public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
     {
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.6.4";
+        private const string _version = "1.6.5";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -37,9 +38,10 @@ namespace AdventureBackpacks
         
         //Class Properties
         public static ILogIt Log => _log;
-        public static bool ValheimAwake = false;
+        public static bool ValheimAwake;
         public static bool PerformYardSale = false;
         public static bool QuickDropping = false;
+        public static bool BypassMoveProtection = false;
         public static Waiting Waiter;
         public static ConfigSyncBase ActiveConfig => _config;
         

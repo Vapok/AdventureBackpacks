@@ -1,0 +1,42 @@
+{
+  "vapok_mod_item_backpack_meadows": "Mochila Pequena",
+  "vapok_mod_item_backpack_meadows_description": "Uma pequena mochila para guardar coisas.",
+
+  "vapok_mod_item_backpack_blackforest": "Mochila Rústica",
+  "vapok_mod_item_backpack_blackforest_description": "Uma mochila rústica, completa com fivelas e tiras de couro fino.",
+
+  "vapok_mod_item_backpack_swamp": "Mochila de Bolsa de Sangue",
+  "vapok_mod_item_backpack_swamp_description": "Uma mochila resistente, selada com bolsas de sangue à prova d'água.",
+
+  "vapok_mod_item_backpack_mountains": "Mochila Xerpa do Ártico",
+  "vapok_mod_item_backpack_mountains_description": "Uma mochila do ártico, ideal para longas caminhadas nas montanhas.",
+
+  "vapok_mod_item_backpack_plains": "Mochila de Pele de Lox",
+  "vapok_mod_item_backpack_plains_description": "Uma mochila de aventureiros, feita com peles de lox bastante resistentes.",
+
+  "vapok_mod_item_backpack_mistlands": "Mochila Wisp de Explorador",
+  "vapok_mod_item_backpack_mistlands_description": "Uma mochila mística finamente trabalhada. Completa com sua própria Caixa de Cargas. Nínguem sabe bem como ela funciona.",
+
+  "vapok_mod_item_rugged_backpack": "Mochila Rústica Velha",
+  "vapok_mod_item_rugged_backpack_description": "Uma mochila rústica, completa com fivelas e tiras de couro fino.",
+
+  "vapok_mod_item_arctic_backpack": "Mochila do Ártico Velha",
+  "vapok_mod_item_arctic_backpack_description": "Uma mochila do ártico, ideal para longas caminhadas nas montanhas.",
+
+  "vapok_mod_no_inception1": "Não enfureça aos deuses.",
+  "vapok_mod_no_inception2": "Você foi avisado.",
+  "vapok_mod_no_inception3": "Você enfureceu aos deuses!",
+  "vapok_mod_no_inception4": "Hmm... Thor lidará com você em breve.",
+  "vapok_mod_no_inception5": "Thor tirou de você seus poderes!!",
+
+  "vapok_mod_thor_saves_contents": "Aquela mochila tinha coisas dentro. Thor a salvou para você.",
+  
+  "vapok_mod_useful_backpack": "Sua mochila parece útil.",
+  "vapok_mod_you_droped_bag": "Você largou a mochila!",
+  "vapok_mod_level": "Nível",
+  "vapok_mod_effect": "Efeito",
+
+  "vapok_mod_se_cold_immunity": "Imunidade ao frio",
+  "vapok_mod_se_frost_resistance": "Resistência à geada",
+  "vapok_mod_se_wet_resistance": "Resistência à água"
+}

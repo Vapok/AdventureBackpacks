@@ -1,63 +1,38 @@
-﻿using AdventureBackpacks.Assets.Factories;
-using AdventureBackpacks.Extensions;
-using HarmonyLib;
-using JetBrains.Annotations;
+﻿using Vapok.Common.Managers.StatusEffects;
+using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Assets.Effects;
 
 public class ColdResistance : EffectsBase
 {
+    private StatusEffect _externalStatusEffect;
     public ColdResistance(string effectName, string effectDesc) : base(effectName, effectDesc)
     {
     }
-
-    public static bool ShouldHaveColdResistance(Humanoid human)
+    
+    private void LoadExternalStatusEffect()
     {
-        var effect = EffectsFactory.EffectList[BackpackEffect.ColdResistance];
-        if (human is Player player)
+        if (_externalStatusEffect == null)
         {
-            var equippedBackpack = player.GetEquippedBackpack();
-            
-            if (equippedBackpack == null || !effect.EnabledEffect.Value)
-                return false;
-            
-            var itemData = equippedBackpack.Item;
-            
-            itemData.TryGetBackpackItem(out var backpack);
-
-            var backpackBiome = backpack.BackpackBiome.Value;
-
-            if (effect.BiomeQualityLevels.ContainsKey(backpackBiome))
-            {
-                var configQualityForBiome = effect.BiomeQualityLevels[backpackBiome].Value;
-
-                if (configQualityForBiome == 0 || backpackBiome == BackpackBiomes.None)
-                    return false;
-                
-                return itemData.m_quality >= configQualityForBiome;  
-            }
+            var cold = ObjectDB.instance.GetStatusEffect("Cold");
+            var se = new CustomSE(Enums.StatusEffects.Stats, "SE_vapok_ab_cold_immunity");
+            se.Effect.m_name = "$vapok_mod_se_cold_immunity";
+            se.Effect.m_icon = cold.m_icon;
+            _externalStatusEffect = se.Effect;
         }
-
-        return false;
     }
     
-    [HarmonyPatch(typeof(EnvMan), nameof(EnvMan.IsCold))]
-    public static class UpdateStatusEffects
+    public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
-        [UsedImplicitly]
-        [HarmonyPriority(Priority.First)]
-        public static bool Prefix(EnvMan __instance, ref bool __result)
-        {
-            if (Player.m_localPlayer == null)
-                return true;
-            
-            if (ShouldHaveColdResistance(Player.m_localPlayer))
-            {
-                __result = false;
-                return false;
-            }
-            
-            return true;
-        }
+        LoadExternalStatusEffect();
+        SetStatusEffect(_externalStatusEffect);
+        return base.HasActiveStatusEffect(human, out statusEffect);
+    }
+
+    public override bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
+    {
+        LoadExternalStatusEffect();
+        SetStatusEffect(_externalStatusEffect);
+        return base.HasActiveStatusEffect(item, out statusEffect);
     }
 }

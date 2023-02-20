@@ -7,10 +7,12 @@ using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using BepInEx;
+using BepInEx.Bootstrap;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
+using Random = System.Random;
 
 namespace AdventureBackpacks.Assets
 {
@@ -88,6 +90,8 @@ namespace AdventureBackpacks.Assets
             {
                 SearchInventory(equipped);    
             }
+            
+            Player.m_localPlayer.UpdateEquipmentStatusEffects();
         }
         
         public static Inventory NewInventoryInstance(string name, int itemMQuality = 1)
@@ -198,7 +202,6 @@ namespace AdventureBackpacks.Assets
         {
             if (itemData == null)
                 return null;
-            
             var backpackName = itemData.m_shared.m_name;
             var backpackQuality = itemData.m_quality;
             var statusEffects = new CustomSE(Enums.StatusEffects.Stats, $"SE_{backpackName}_{backpackQuality}");
@@ -206,6 +209,7 @@ namespace AdventureBackpacks.Assets
             statusEffects.Effect.m_name = $"{backpackName} $vapok_mod_level {backpackQuality} $vapok_mod_effect";
             statusEffects.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
             statusEffects.Effect.m_startMessage = $"$vapok_mod_useful_backpack";
+            
 
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default
@@ -215,15 +219,17 @@ namespace AdventureBackpacks.Assets
                 return null;
             
             //Apply Frost Resistance if configured.
-            if (FrostResistance.ShouldHaveFrostResistance(itemData))
-                modifierList.Add(BackpackEffects.FrostResistance);
+            var frostResistEffect = EffectsFactory.EffectList[BackpackEffect.FrostResistance];
+            if (frostResistEffect.IsEffectActive(itemData))
+                modifierList.Add(FrostResistance.EffectMod);
             
+            var trollEffect = EffectsFactory.EffectList[BackpackEffect.TrollArmor];
             //Apply Troll Armor Set if configured.
-            if (TrollArmor.ShouldHaveTrollArmorSet(itemData))
+            if (trollEffect.HasActiveStatusEffect(itemData, out var trollSneakEffect))
             {
                 itemData.m_shared.m_setName = "troll";
                 itemData.m_shared.m_setSize = 4;
-                itemData.m_shared.m_setStatusEffect = ObjectDB.instance.GetStatusEffect("SetEffect_TrollArmor");
+                itemData.m_shared.m_setStatusEffect = trollSneakEffect;
             }
             else
             {
@@ -231,11 +237,26 @@ namespace AdventureBackpacks.Assets
                 itemData.m_shared.m_setSize = 0;
                 itemData.m_shared.m_setStatusEffect = null;
             }
+
+            if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+            {
+                var necroEffect = EffectsFactory.EffectList[BackpackEffect.NecromancyArmor];
+                //Apply Necromancy Armor Set if configured.
+                if (necroEffect.HasActiveStatusEffect(itemData, out var necroSetEffect))
+                {
+                    itemData.m_shared.m_setStatusEffect = necroSetEffect;
+                }
+                else
+                {
+                    itemData.m_shared.m_setStatusEffect = null;
+                }
+            }
             
             backpack.UpdateStatusEffects(backpackQuality, statusEffects, modifierList, itemData);
             
             itemData.m_shared.m_maxDurability = 1000f;
             ((SE_Stats)statusEffects.Effect).m_mods = modifierList;
+            ((SE_Stats)statusEffects.Effect).m_icon = itemData.GetIcon();
 
             itemData.AddSEToItem(statusEffects);
             return statusEffects;

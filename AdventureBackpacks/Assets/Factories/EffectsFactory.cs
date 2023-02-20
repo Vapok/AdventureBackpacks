@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AdventureBackpacks.Assets.Effects;
+using BepInEx.Bootstrap;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
 
@@ -13,7 +14,8 @@ public enum BackpackEffect
     Demister,
     WaterResistance,
     FrostResistance,
-    TrollArmor
+    TrollArmor,
+    NecromancyArmor
 }
 public class EffectsFactory : FactoryBase
 {
@@ -35,9 +37,15 @@ public class EffectsFactory : FactoryBase
         _effectList.Add(BackpackEffect.FrostResistance, new FrostResistance("Frost Resistance", "When activated allows you to stay warm in freezing conditions, negating the freezing debuff."));
         _effectList.Add(BackpackEffect.TrollArmor, new TrollArmor("Troll Armor Set", "When activated the backpack acts as the Shoulder Set piece of the Troll Armor Set allowing the set to complete for the Sneak Effect"));
 
+        if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+        {
+            _effectList.Add(BackpackEffect.NecromancyArmor, new NecromancyArmor("Necromancy Armor Effect", "When activated the backpack provides the Necromancy Armor effect from Cheb's Necromancy"));
+        }
+
         foreach (BackpackEffect effect in Enum.GetValues(typeof(BackpackEffect)))
         {   
-            EffectList[effect].RegisterEffectConfiguration();
+            if (EffectList.ContainsKey(effect))
+                EffectList[effect].RegisterEffectConfiguration();
         }
     }
 }

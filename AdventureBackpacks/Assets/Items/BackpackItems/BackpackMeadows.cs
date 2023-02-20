@@ -37,7 +37,8 @@ internal class BackpackMeadows : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(5);
         RegisterSpeedMod();
-        EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 3);
+        if ((BackpackBiome.Value & BackpackBiomes.Meadows) != 0) 
+            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Meadows, 3);
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)

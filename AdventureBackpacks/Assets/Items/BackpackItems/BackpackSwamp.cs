@@ -39,8 +39,11 @@ internal class BackpackSwamp : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(15);
         RegisterSpeedMod();
-        EffectsFactory.EffectList[BackpackEffect.WaterResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 2);
-        EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiome.Value, 1);
+        if ((BackpackBiome.Value & BackpackBiomes.Swamp) != 0)
+        {
+            EffectsFactory.EffectList[BackpackEffect.WaterResistance].RegisterEffectBiomeQuality(BackpackBiomes.Swamp, 2);
+            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Swamp, 1);
+        }
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
