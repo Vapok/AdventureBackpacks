@@ -34,5 +34,9 @@
   "vapok_mod_useful_backpack": "あなたのバックパックは便利そうです。",
   "vapok_mod_you_droped_bag": "バックパックを落としました!",
   "vapok_mod_level": "レベル",
-  "vapok_mod_effect": "効果"
+  "vapok_mod_effect": "効果",
+
+  "vapok_mod_se_cold_immunity": "寒冷免疫",
+  "vapok_mod_se_frost_resistance": "霜耐性",
+  "vapok_mod_se_wet_resistance": "耐水性"
 }

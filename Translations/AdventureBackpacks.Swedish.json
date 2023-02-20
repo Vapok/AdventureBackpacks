@@ -36,5 +36,9 @@
   "vapok_mod_useful_backpack": "Din ryggsäck känns användbar.",
   "vapok_mod_you_droped_bag": "Du släppte en ryggsäck!",
   "vapok_mod_level": "Nivå",
-  "vapok_mod_effect": "Effekt"
+  "vapok_mod_effect": "Effekt",
+
+  "vapok_mod_se_cold_immunity": "Kyla Immunitet",
+  "vapok_mod_se_frost_resistance": "Frostmotstånd",
+  "vapok_mod_se_wet_resistance": "Vattenmotstånd"
 }

@@ -34,5 +34,9 @@
   "vapok_mod_useful_backpack": "Dein Rucksack fühlt sich nützlich.",
   "vapok_mod_you_droped_bag": "Du hast einen Rucksack fallen lassen!",
   "vapok_mod_level": "Level",
-  "vapok_mod_effect": "Effekt"
+  "vapok_mod_effect": "Effekt",
+
+  "vapok_mod_se_cold_immunity": "Kälteimmunität",
+  "vapok_mod_se_frost_resistance": "Frostwiderstand",
+  "vapok_mod_se_wet_resistance": "Wasserresistenz"
 }

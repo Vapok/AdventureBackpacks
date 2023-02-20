@@ -34,5 +34,9 @@
    "vapok_mod_useful_backpack": "상당히 유용한 배낭이라고 생각합니다.",
    "vapok_mod_you_droped_bag": "배낭을 떨어뜨렸습니다!",
    "vapok_mod_level": "레벨",
-   "vapok_mod_effect": "효과"
+   "vapok_mod_effect": "효과",
+
+   "vapok_mod_se_cold_immunity": "한파 면역",
+   "vapok_mod_se_frost_resistance": "서리 저항",
+   "vapok_mod_se_wet_resistance": "물 저항"
 }

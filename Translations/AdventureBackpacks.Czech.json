@@ -34,5 +34,9 @@
   "vapok_mod_useful_backpack": "Tvůj batoh se zdá být užitečný",
   "vapok_mod_you_droped_bag": "Upustil jsi batoh na zem!",
   "vapok_mod_level": "Level",
-  "vapok_mod_effect": "Effekt"
+  "vapok_mod_effect": "Effekt",
+
+  "vapok_mod_se_cold_immunity": "Odpovídavost proti chladu",
+  "vapok_mod_se_frost_resistance": "Odolnost proti mrazu",
+  "vapok_mod_se_wet_resistance": "Odolnost proti vodě"
 }
