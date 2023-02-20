@@ -4,7 +4,7 @@
 * Bugfixes: 
   * Drops Enabled/Disable now completely work and will definitely disable drops.
     * Apologies that this took so long for me to track down.
-  * When Backpack with items is placed on an Armor Stand, Thor accidently duplicates items.
+  * When Backpack with items is placed on an Armor Stand, Thor accidentally duplicates items.
     * Fixes GitHub #67
 * Adds Translation for Japanese and Portuguese Brazilian
   * Big thanks to Xutz and RedeyeBear for dropping by the Discord to contribute these!
