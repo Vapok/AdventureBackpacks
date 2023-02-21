@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.6.0 - Hotfix - Sneaky Bug Is Sneaky
+* The Troll Armor status effect was being applied even without wearing the full set when a backpack was equipped with that effect.
+  * This ensures that the full troll armor set is worn.
+
 # 1.6.5.0 - Cheb's Necromancy Compatibility and Overhauled Status Effects Management
 * Adds compatibility for Cheb's Necromancy
   * Introduces a new Necromancy Backpack: Spectral Shroud of Holding

@@ -19,12 +19,14 @@ public abstract class EffectsBase
     private string _effectName;
     private string _description;
     private StatusEffect _statusEffect;
+    private bool _isSetItemStatusEffect;
 
-    public EffectsBase(string effectName, string effectDesc)
+    public EffectsBase(string effectName, string effectDesc, bool IsItemSetStatusEffect = false)
     {
         _effectName = effectName;
         _description = string.IsNullOrEmpty(effectDesc) ? "Enables the effect." : effectDesc;
         _configSection = $"Effect: {effectName}";
+        _isSetItemStatusEffect = IsItemSetStatusEffect;
         
 
         RegisterEffectConfiguration();
@@ -48,7 +50,7 @@ public abstract class EffectsBase
     public virtual bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
         statusEffect = _statusEffect;
-        return statusEffect != null && IsEffectActive(human);
+        return (statusEffect != null && IsEffectActive(human)) && !_isSetItemStatusEffect;
     }
     public virtual bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
