@@ -43,6 +43,10 @@ public class HumanoidPatches
                     //Patch the ldloc_0 which is the argument of my method using local variable 0.
                     yield return LogMessage(ldlocInstruction);
                     counter++;
+
+                    //Need to bring in the Humanoid Instance too to filter for players versus creatures.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
+                    counter++;
           
                     //Patch Calling Method
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(EquipmentEffectCache), nameof(EquipmentEffectCache.AddActiveBackpackEffects))));
