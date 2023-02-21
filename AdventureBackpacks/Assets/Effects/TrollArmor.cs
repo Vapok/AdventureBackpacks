@@ -5,7 +5,7 @@ namespace AdventureBackpacks.Assets.Effects;
 public class TrollArmor : EffectsBase
 {
     private string _effectName = "SetEffect_TrollArmor";
-    public TrollArmor(string effectName, string effectDesc) : base(effectName, effectDesc)
+    public TrollArmor(string effectName, string effectDesc) : base(effectName, effectDesc, true)
     {
     }
 
