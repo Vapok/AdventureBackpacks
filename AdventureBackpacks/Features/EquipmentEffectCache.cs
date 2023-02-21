@@ -7,7 +7,7 @@ public static class EquipmentEffectCache
 {
     public static HashSet<StatusEffect> ActiveEffects = new();
 
-    public static HashSet<StatusEffect> AddActiveBackpackEffects(HashSet<StatusEffect> other)
+    public static HashSet<StatusEffect> AddActiveBackpackEffects(HashSet<StatusEffect> other, Humanoid instance)
     {
         if (other == null)
         {
@@ -15,25 +15,21 @@ public static class EquipmentEffectCache
             other = new();
         }
 
-        if (Player.m_localPlayer == null)
+        if (instance is Player player && player == Player.m_localPlayer)
         {
-            AdventureBackpacks.Log.Debug($"Add Active Effects Started... Player null");
-            return other;
-        }
-    
-        var player = Player.m_localPlayer;
-          
-        ActiveEffects = new HashSet<StatusEffect>();
+            ActiveEffects = new HashSet<StatusEffect>();
 
-        foreach (var effectKeyValuePair in EffectsFactory.EffectList)
-        {
-            if (effectKeyValuePair.Value.HasActiveStatusEffect(player, out var statusEffect))
-                ActiveEffects.Add(statusEffect);  
+            foreach (var effectKeyValuePair in EffectsFactory.EffectList)
+            {
+                if (effectKeyValuePair.Value.HasActiveStatusEffect(player, out var statusEffect))
+                    ActiveEffects.Add(statusEffect);  
+            }
+          
+            other.UnionWith(ActiveEffects);
+    
+            AdventureBackpacks.Log.Debug($"Adding {other.Count} Active Backpack Effects.");
         }
           
-        other.UnionWith(ActiveEffects);
-    
-        AdventureBackpacks.Log.Debug($"Adding {other.Count} Active Backpack Effects.");
         return other;
     }
 }

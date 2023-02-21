@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.7.0 - Hotfix - Holy Status Effects Batman!
+* Bug was identified that all status effects applied to Player were being replicated to all creatures spawned in.
+  * While this is quite magical for the Wisplight effect, in giving every creature in the Mistlands Demister, (which in and of itself is pretty spectacular to see), this is indeed a bug that needs to be patched quickly.
+
 # 1.6.6.0 - Hotfix - Sneaky Bug Is Sneaky
 * The Troll Armor status effect was being applied even without wearing the full set when a backpack was equipped with that effect.
   * This ensures that the full troll armor set is worn.
