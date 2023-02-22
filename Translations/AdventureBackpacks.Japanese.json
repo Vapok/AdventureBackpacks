@@ -36,7 +36,7 @@
   "vapok_mod_level": "レベル",
   "vapok_mod_effect": "効果",
 
-  "vapok_mod_se_cold_immunity": "寒冷免疫",
-  "vapok_mod_se_frost_resistance": "霜耐性",
-  "vapok_mod_se_wet_resistance": "耐水性"
+  "vapok_mod_se_cold_immunity": "寒冷耐性",
+  "vapok_mod_se_frost_resistance": "凍結耐性",
+  "vapok_mod_se_wet_resistance": "防水耐性"
 }
