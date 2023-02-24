@@ -1,9 +1,10 @@
 # Adventure Backpacks Patchnotes
 
-# 1.6.7.1 - Hotfix - Tombstone Take All Duplication Fix Attempt
+# 1.6.8.0 - Adjusting Container.TakeAll and Adding Chinese Traditional Translation
 * When running some Extended Inventory Mod's, interacting with the Tombstone causes odd behavior.
   * Items dupe and "teleport" to other players.
-  * This is an attempt to fix that issue.
+* Adding Chinese Traditional Translation
+  * Thanks to 全家就是你家 for dropping by the Discord to submit it!
 
 # 1.6.7.0 - Hotfix - Holy Status Effects Batman!
 * Bug was identified that all status effects applied to Player were being replicated to all creatures spawned in.
