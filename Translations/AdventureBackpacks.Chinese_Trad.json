@@ -1,0 +1,42 @@
+{
+  "vapok_mod_item_backpack_meadows": "背包",
+  "vapok_mod_item_backpack_meadows_description": "可以容納一些東西的小背包。" ,
+
+  "vapok_mod_item_backpack_blackforest": "堅固耐用的背包",
+  "vapok_mod_item_backpack_blackforest_description": "堅固耐用的背包，使用鈕扣和精美的皮革固定製作而成。" ,
+
+  "vapok_mod_item_backpack_swamp": "防水的背包",
+  "vapok_mod_item_backpack_swamp_description": "防水耐用的背包，使用血袋進行防水處理過。" ,
+
+  "vapok_mod_item_backpack_mountains": "北極背包",
+  "vapok_mod_item_backpack_mountains_description": "適用於北極圈的背包，適合在寒冷的山區長途跋涉使用。" ,
+
+  "vapok_mod_item_backpack_plains": "狐狸皮革背包",
+  "vapok_mod_item_backpack_plains_description": "冒險家的背包，使用非常堅韌的狐狸皮革製作而成。" ,
+
+  "vapok_mod_item_backpack_mistlands": "探險家的背包",
+  "vapok_mod_item_backpack_mistlands_description": "精心製作的神祕背包，設計有自己的的無底袋，沒有人知道它是如何製作的。" ,
+
+  "vapok_mod_item_rugged_backpack": "古老的堅固背包",
+  "vapok_mod_item_rugged_backpack_description": "古老的堅固背包，使用鈕扣和精美皮革帶子固定製作而成。" ,
+
+  "vapok_mod_item_arctic_backpack": "古老的北極背包",
+  "vapok_mod_item_arctic_backpack_description": "古老的北極背包，適合在寒冷的山區長途跋涉使用。" ,
+
+  "vapok_mod_no_inception1": "不要得罪神靈。" ,
+  "vapok_mod_no_inception2": "你已經被警告了。" ,
+  "vapok_mod_no_inception3": "你已經冒犯了諸神。" ,
+  "vapok_mod_no_inception4": "哈......，雷神很快就會對付你。" ,
+  "vapok_mod_no_inception5": "雷神已經奪走了你的力量！" ,
+
+  "vapok_mod_thor_saves_contents": "這個背包裡裝了一些東西，但是雷神為我們留了下來。" ,
+
+  "vapok_mod_useful_backpack": "你的背包看起來很有用。" ,
+  "vapok_mod_you_droped_bag": "你的背包掉了！" ,
+  "vapok_mod_level": "等級",
+  "vapok_mod_effect": "效果",
+
+  "vapok_mod_se_cold_immunity": "耐寒",
+  "vapok_mod_se_frost_resistance": "抗凍",
+  "vapok_mod_se_wet_resistance": "防水"
+}
