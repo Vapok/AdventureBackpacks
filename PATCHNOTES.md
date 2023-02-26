@@ -2,7 +2,7 @@
 
 # 1.6.8.0 - Adjusting Container.TakeAll and Adding Chinese Traditional Translation
 * When running some Extended Inventory Mod's, interacting with the Tombstone causes odd behavior.
-  * Items dupe and "teleport" to other players.
+  * Fixed: Items dupe and "teleport" to other players.
 * Adding Chinese Traditional Translation
   * Thanks to 全家就是你家 for dropping by the Discord to submit it!
 
