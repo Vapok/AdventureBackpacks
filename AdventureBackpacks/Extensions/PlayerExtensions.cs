@@ -70,6 +70,23 @@ public static class PlayerExtensions
         if (backpack == null)
             return;
 
+        ItemDrop.ItemData tempItemRemoval = null;
+        var swapItemActivated = false;
+        var playerInventory = player.GetInventory();
+        
+        if (!playerInventory.ContainsBackpack(backpack.Item) && !playerInventory.HasEmptySlot())
+        {
+            tempItemRemoval = playerInventory.FindNonBackpackItem();
+            
+            if (tempItemRemoval != null && playerInventory.RemoveItem(tempItemRemoval))
+                    swapItemActivated = true;
+            else
+            {
+                player.Message(MessageHud.MessageType.Center, "$vapok_mod_quick_drop_unavailable");
+                return;
+            }
+        }
+
         AdventureBackpacks.QuickDropping = true;
         AdventureBackpacks.Log.Message("Quick dropping backpack.");        
         // Unequip and remove backpack from player's back
@@ -83,6 +100,9 @@ public static class PlayerExtensions
         var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.up - player.transform.up, player.transform.rotation);
         itemDrop.Save();
 
+        if (swapItemActivated)
+            playerInventory.AddItem(tempItemRemoval);
+        
         InventoryGuiPatches.BackpackIsOpen = false;
         AdventureBackpacks.QuickDropping = false;
     }
