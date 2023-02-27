@@ -35,6 +35,7 @@
    "vapok_mod_you_droped_bag": "배낭을 떨어뜨렸습니다!",
    "vapok_mod_level": "레벨",
    "vapok_mod_effect": "효과",
+   "vapok_mod_quick_drop_unavailable": "빠른 드롭을 사용할 수 없습니다.",
 
    "vapok_mod_se_cold_immunity": "한파 면역",
    "vapok_mod_se_frost_resistance": "서리 저항",
