@@ -35,6 +35,7 @@
   "vapok_mod_you_droped_bag": "バックパックを落としました!",
   "vapok_mod_level": "レベル",
   "vapok_mod_effect": "効果",
+  "vapok_mod_quick_drop_unavailable": "クイックドロップは利用できません。",
 
   "vapok_mod_se_cold_immunity": "寒冷耐性",
   "vapok_mod_se_frost_resistance": "凍結耐性",

@@ -35,6 +35,7 @@
   "vapok_mod_you_droped_bag": "你的背包掉了！" ,
   "vapok_mod_level": "等級",
   "vapok_mod_effect": "效果",
+  "vapok_mod_quick_drop_unavailable": "無法快速放置物品。",
 
   "vapok_mod_se_cold_immunity": "耐寒",
   "vapok_mod_se_frost_resistance": "抗凍",

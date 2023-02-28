@@ -35,6 +35,7 @@
   "vapok_mod_you_droped_bag": "You dropped a backpack!",
   "vapok_mod_level": "Level",
   "vapok_mod_effect": "Effect",
+  "vapok_mod_quick_drop_unavailable": "Quick Drop Unavailable.",
   
   "vapok_mod_se_cold_immunity": "Cold Immunity",
   "vapok_mod_se_frost_resistance": "Frost Resistance",

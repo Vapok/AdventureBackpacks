@@ -1,0 +1,43 @@
+{
+   "vapok_mod_item_backpack_meadows": "小肩包",
+   "vapok_mod_item_backpack_meadows_description": "比较初始的背包，只能装少量物品，适合在青青草原使用",
+ 
+   "vapok_mod_item_backpack_blackforest": "耐用背包",
+   "vapok_mod_item_backpack_blackforest_description": "有搭扣的皮革背包，适合在黑暗林山使用",
+ 
+   "vapok_mod_item_backpack_swamp": "密封背包",
+   "vapok_mod_item_backpack_swamp_description": "用防水血袋封住的背包，适合在泥泞沼泽使用",
+ 
+   "vapok_mod_item_backpack_mountains": "山地背包",
+   "vapok_mod_item_backpack_mountains_description": "带有一块帘布的防寒背包，适合在凛冽雪山使用",
+ 
+   "vapok_mod_item_backpack_plains": "牛牛背包",
+   "vapok_mod_item_backpack_plains_description": "用牦牛皮缝制的坚固背包，适合在北境平原使用",
+ 
+   "vapok_mod_item_backpack_mistlands": "探险背包",
+   "vapok_mod_item_backpack_mistlands_description": "一款制作精良的神秘背包，它能够带你从高处缓降，适合在迷雾之地使用",
+ 
+   "vapok_mod_item_rugged_backpack": "小赤佬背包(弃用)",
+   "vapok_mod_item_rugged_backpack_description": "一个小赤佬背包，适合你装额外的东西，减轻你的负重",
+ 
+   "vapok_mod_item_arctic_backpack": "老毕登背包(弃用)",
+   "vapok_mod_item_arctic_backpack_description": "一个老毕登背包，和小赤佬背包一样的效果，但更加适合长途跋涉",
+  
+   "vapok_mod_no_inception1": "别惹众神生气",
+   "vapok_mod_no_inception2": "你被警告了，注意点",
+   "vapok_mod_no_inception3": "你惹众神生气了！",
+   "vapok_mod_no_inception4": "呵呵... 众神很快就会收拾你的",
+   "vapok_mod_no_inception5": "众神夺走了你的力量！！",
+
+   "vapok_mod_thor_saves_contents": "你的背包里有东西，托尔为你保留了它",
+
+   "vapok_mod_useful_backpack": "你的背包看起很有用..",
+   "vapok_mod_you_droped_bag": "你的背包掉了！",
+   "vapok_mod_level": "等级",
+   "vapok_mod_effect": "效果",
+   "vapok_mod_quick_drop_unavailable": "快速放置不可用。",
+
+  "vapok_mod_se_cold_immunity": "耐冷",
+  "vapok_mod_se_frost_resistance": "抗霜",
+  "vapok_mod_se_wet_resistance": "防水"
+}

@@ -89,6 +89,8 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 
 ## Currently Available Translations
 * Czech / čeština
+* Chinese / 简体中文
+* Chinese Traditional / 繁體中文
 * English
 * French / Français
 * German / Deutsch

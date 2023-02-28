@@ -35,6 +35,7 @@
   "vapok_mod_you_droped_bag": "Ты уронил рюкзак!",
   "vapok_mod_level": "Уровень",
   "vapok_mod_effect": "Эффект",
+  "vapok_mod_quick_drop_unavailable": "Быстрое сбрасывание недоступно.",
 
   "vapok_mod_se_cold_immunity": "Устойчивость к холоду",
   "vapok_mod_se_frost_resistance": "Сопротивление морозу",
