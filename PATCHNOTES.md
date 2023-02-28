@@ -1,8 +1,10 @@
 # Adventure Backpacks Patchnotes
 
-# 1.6.9.0 - Bugfixes and  
+# 1.6.9.0 - Bugfixes and Chinese Translation
 * Onward Mode/Quick Drop Bug
   * Fixed an issue with quick drop mod when bag inventory is full, while using Extended Inventory mods
+* Added Chinese Simplified Translations
+  * Thanks to DuDaowl for dropping me a line on Discord!
 
 # 1.6.8.0 - Adjusting Container.TakeAll and Adding Chinese Traditional Translation
 * When running some Extended Inventory Mod's, interacting with the Tombstone causes odd behavior.
