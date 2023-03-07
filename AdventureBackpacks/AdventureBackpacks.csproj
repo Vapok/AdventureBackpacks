@@ -39,13 +39,13 @@
           <HintPath>..\..\References\BepInEx\5.4.1901\BepInEx\core\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
-          <HintPath>..\..\References\Valheim\0.213.4\assembly_guiutils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.214.2\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-          <HintPath>..\..\References\Valheim\0.213.4\assembly_utils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.214.2\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
-          <HintPath>..\..\References\Valheim\0.213.4\assembly_valheim_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.214.2\assembly_valheim_publicized.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx">
           <HintPath>..\..\References\BepInEx\5.4.1901\BepInEx\core\BepInEx.dll</HintPath>
