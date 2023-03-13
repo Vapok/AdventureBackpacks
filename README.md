@@ -101,6 +101,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Russian / Русский
 * Spanish / Español
 * Swedish / svenska
+* Ukrainian / українська
 * *Don't see your language, I'm looking for submissions for additional languages. Please find me on Discord (see link below) or submit a Pull Request!*
 
 ## Current Patch Notes
