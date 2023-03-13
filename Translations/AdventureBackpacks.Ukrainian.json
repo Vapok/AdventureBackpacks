@@ -1,0 +1,45 @@
+{
+  "vapok_mod_item_backpack_meadows": "Сумка",
+  "vapok_mod_item_backpack_meadows_description": "Маленька сумка, в яку можна помістити кілька речей.",
+
+  "vapok_mod_item_backpack_blackforest": "Міцний рюкзак",
+  "vapok_mod_item_backpack_blackforest_description": "Міцний рюкзак, посилений пряжками і тонкими шкіряними ремінцями",
+
+  "vapok_mod_item_backpack_swamp": "Водонепроникна сумка",
+  "vapok_mod_item_backpack_swamp_description": "Водонепроникна сумка закрита водонепроникними мішками для крові..",
+
+  "vapok_mod_item_backpack_mountains": "Пошарпаний арктичний рюкзак",
+  "vapok_mod_item_backpack_mountains_description": "Арктичний рюкзак для тривалих походів у гори.",
+
+  "vapok_mod_item_backpack_plains": "Посилена шкіряна сумка із локса",
+  "vapok_mod_item_backpack_plains_description": "Сумка для авантюристів, виготовлена ​​з надзвичайно міцної шкіри локса.",
+
+  "vapok_mod_item_backpack_mistlands": "Рюкзак дослідника",
+  "vapok_mod_item_backpack_mistlands_description": "Містичний рюкзак тонкої роботи. Розроблено з власною бездонною кишенею. Ніхто насправді не знає, як це працює.",
+
+  "vapok_mod_item_rugged_backpack": "Стародавній міцний рюкзак",
+  "vapok_mod_item_rugged_backpack_description": "Стародавній міцний рюкзак, посилений пряжками і тонкими шкіряними ремінцями.",
+
+  "vapok_mod_item_arctic_backpack": "Стародавній арктичний рюкзак",
+  "vapok_mod_item_arctic_backpack_description": "Арктичний рюкзак, який підходить для тривалих гірських походів.",
+
+  "vapok_mod_no_inception": "Ви розгнівили богів!",
+
+  "vapok_mod_no_inception1": "Не засмучуй богів.",
+  "vapok_mod_no_inception2": "Вас попередили.",
+  "vapok_mod_no_inception3": "Ви розгнівили богів!",
+  "vapok_mod_no_inception4": "Зітхнув... Тор скоро подбає про вас.",
+  "vapok_mod_no_inception5": "Тор позбавив тебе сил!!",
+
+  "vapok_mod_thor_saves_contents": "Цей рюкзак містив речі. Тор зберіг його для вас.",
+
+  "vapok_mod_useful_backpack": "Ваш рюкзак виглядає корисним...",
+  "vapok_mod_you_droped_bag": "Ти впустив сумку!",
+  "vapok_mod_level": "Рівень",
+  "vapok_mod_effect": "Ефект",
+  "vapok_mod_quick_drop_unavailable": "Швидке скидання недоступне.",
+
+  "vapok_mod_se_cold_immunity": "Стійкість до холоду",
+  "vapok_mod_se_frost_resistance": "Опір морозу",
+  "vapok_mod_se_wet_resistance": "Стійкість до води"
+}

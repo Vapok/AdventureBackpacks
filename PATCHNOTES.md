@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.10.0 - Valheim 0.214.2 Update
+* Updates to Valheim 0.214.2
+* Adds in Ukranian Translation (Thanks to @Stadde1n for stopping by the Discord!)
+
 # 1.6.9.0 - Bugfixes and Chinese Translation
 * Onward Mode/Quick Drop Bug
   * Fixed an issue with quick drop mod when bag inventory is full, while using Extended Inventory mods
