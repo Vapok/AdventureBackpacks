@@ -1,5 +1,9 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.11.0 - Clean Up and Upgrade of BepInEx
+* Updates to BepInEx 5.4.21
+* Various Clean Up
+
 # 1.6.10.0 - Valheim 0.214.2 Update
 * Updates to Valheim 0.214.2
 * Adds in Ukranian Translation (Thanks to @Stadde1n for stopping by the Discord!)
