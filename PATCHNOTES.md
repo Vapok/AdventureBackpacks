@@ -3,8 +3,8 @@
 # 1.6.12.0 - Redefining Keymappings and Open with Inventory Option
 * Adjusted Config Keymappings to allow for Gamepad, Mouse, or Keyboard to be set.
   * Untested Controller Support - I'm hoping this works, but it might not. Please provide feedback.
-* Added in additional configuration option to Open Backpack Inventory when Player Inventory is Opened.
-  * This defaults to Disabled. Set to Enabled (true) to open backpack at same time as inventory.
+* Added an additional configuration option to Open Backpack Inventory when Player Inventory is Opened.
+  * This defaults to Disabled. Set to Enabled (true) to open the backpack at the same time as inventory.
 
 # 1.6.11.0 - Clean Up and Upgrade of BepInEx
 * Updates to BepInEx 5.4.21
