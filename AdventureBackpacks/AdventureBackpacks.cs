@@ -12,6 +12,7 @@ using BepInEx;
 using HarmonyLib;
 using ItemManager;
 using JetBrains.Annotations;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.Configuration;
@@ -28,7 +29,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.6.11";
+        private const string _version = "1.6.12";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -98,13 +99,15 @@ namespace AdventureBackpacks
                     Backpacks.PerformYardSale(Player.m_localPlayer, backpack.Item);
             }
             
-            if (!KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) && Player.m_localPlayer.CanOpenBackpack())
+            if (!KeyPressTool.IgnoreKeyPresses(true) && (ConfigRegistry.HotKeyOpen.Value.IsDown() || ZInput.GetButtonDown(ConfigRegistry.HotKeyOpen.Value.Serialize()) ) && Player.m_localPlayer.CanOpenBackpack())
             {
+                ZInput.ResetButtonStatus(ConfigRegistry.HotKeyOpen.Value.Serialize());
                 Player.m_localPlayer.OpenBackpack();
             }
 
-            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyDrop.Value) && Player.m_localPlayer.CanOpenBackpack())
+            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && (ConfigRegistry.HotKeyDrop.Value.IsDown() || ZInput.GetButtonDown(ConfigRegistry.HotKeyDrop.Value.Serialize())) && Player.m_localPlayer.CanOpenBackpack())
             {
+                ZInput.ResetButtonStatus(ConfigRegistry.HotKeyOpen.Value.Serialize());
                 Player.m_localPlayer.QuickDropBackpack();
             }
 

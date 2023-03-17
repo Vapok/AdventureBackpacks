@@ -50,6 +50,9 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
   * Configure Speed Modification
     * Configure Speed Modification (slowness).
       * Upon each quality upgrade of backpack, speed modification is reduced (never eliminated).
+  * Configure Opening of Backpack with Inventory
+    * When enabled, opens backpack inventory with player inventory without additional interaction
+    * Can also set Mouse, Keyboard, and Gamepad bindings.
 * Backpack Inventory Protection Guard
   * Every backpack inventory is specially handled by Thor himself and is monitored for any interactions that might otherwise harm the existence of items in your backpacks.
   * Backpacks in Backpacks is not allowed and the only feature that is not configurable. This is how the Allfather dreamt of it.

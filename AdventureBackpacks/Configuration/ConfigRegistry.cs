@@ -10,8 +10,9 @@ namespace AdventureBackpacks.Configuration
     public class ConfigRegistry : ConfigSyncBase
     {
         //Configuration Entry Privates
-        internal static ConfigEntry<KeyCode> HotKeyOpen { get; private set; }
-        internal static ConfigEntry<KeyCode> HotKeyDrop { get; private set;}
+        internal static ConfigEntry<KeyboardShortcut> HotKeyOpen { get; private set; }
+        internal static ConfigEntry<KeyboardShortcut> HotKeyDrop { get; private set;}
+        internal static ConfigEntry<bool> OpenWithInventory { get; private set;}
         internal static ConfigEntry<bool> CloseInventory { get; private set;}
         internal static ConfigEntry<bool> OutwardMode { get; private set;}
         
@@ -31,18 +32,23 @@ namespace AdventureBackpacks.Configuration
                 return;
             
             //User Configs
-            HotKeyOpen = _config.Bind("Local Config", "Open Backpack", KeyCode.I,
+            HotKeyOpen = _config.Bind("Local Config", "Open Backpack", new KeyboardShortcut(KeyCode.I),
                 new ConfigDescription("Hotkey to open backpack.", null, new ConfigurationManagerAttributes{ Order = 3 }));
             
             HotKeyDrop = _config.Bind(
-                "Local Config", "Quickdrop Backpack", KeyCode.Y,
+                "Local Config", "Quickdrop Backpack", new KeyboardShortcut(KeyCode.Y),
                 new ConfigDescription("Hotkey to quickly drop backpack while on the run.",
                     null,
                     new ConfigurationManagerAttributes { Order = 2 }));
             
+            OpenWithInventory = _config.Bind(
+                "Local Config", "Open with Inventory", false,
+                new ConfigDescription("If enabled, both backpack and inventory will open when Inventory is opened.",
+                    null, new ConfigurationManagerAttributes { Order = 2 }));
+            
             CloseInventory = _config.Bind(
                 "Local Config", "Close Inventory", true,
-                new ConfigDescription("If set to true, both backpack and inventory will close with Open Backpack keybind is pressed while Inventory is open.",
+                new ConfigDescription("If enabled, both backpack and inventory will close with Open Backpack keybind is pressed while Inventory is open.",
                     null, new ConfigurationManagerAttributes { Order = 1 }));
             
             OutwardMode = _config.Bind(
