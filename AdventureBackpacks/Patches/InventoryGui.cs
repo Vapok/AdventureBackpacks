@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
@@ -64,14 +67,115 @@ internal static class InventoryGuiPatches
         }
     }
     
+    public static void ShowBackpack(Player player)
+    {
+        if (ConfigRegistry.OpenWithInventory.Value && player.CanOpenBackpack())
+        {
+           player.OpenBackpack(false);
+        }
+    }
+    
+    public static void HideBackpack(InventoryGui instance)
+    {
+        if (ConfigRegistry.OpenWithInventory.Value)
+        {
+            if (BackpackIsOpen)
+            {
+                instance.CloseContainer();
+                BackpackIsOpen = false;
+                
+                if (ConfigRegistry.CloseInventory.Value)
+                    instance.Hide();
+            }
+        }
+    }
+
+    
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
+    static class InventoryGuiUpdateTranspiler
+    {
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            var instrs = instructions.ToList();
+
+            var counter = 0;
+
+            CodeInstruction LogMessage(CodeInstruction instruction)
+            {
+                AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
+                return instruction;
+            }
+
+            var resetButtonStatus = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.ResetButtonStatus));
+            var hideMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Hide));
+            var showMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Show));
+
+            for (int i = 0; i < instrs.Count; ++i)
+            {
+                if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(resetButtonStatus) &&
+                    instrs[i + 1].opcode == OpCodes.Ldarg_0 && instrs[i + 2].opcode == OpCodes.Call &&
+                    instrs[i + 2].operand.Equals(hideMethod))
+                {
+                    //Call to Hide Backpack
+                    var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_0);
+                    //Move Any Labels from the instruction position being patched to new instruction.
+                    if (instrs[i].labels.Count > 0)
+                        instrs[i].MoveLabelsTo(ldArgInstruction);
+                    
+                    //Output current Operation
+                    yield return LogMessage(instrs[i]);
+                    counter++;
+
+                    //Patch ldarg_0 this is instance of InventoryGui.
+                    yield return LogMessage(ldArgInstruction);
+                    counter++;
+
+                    //Patch Call Method for Hiding.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(HideBackpack))));
+                    counter++;
+                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(showMethod) &&
+                           instrs[i - 1].opcode == OpCodes.Ldc_I4_1 && instrs[i - 2].opcode == OpCodes.Ldnull &&
+                           instrs[i - 3].opcode == OpCodes.Ldarg_0)
+                {
+                    //Call to Show Backpack
+                    //Get localPlayer at ldloc.1
+                    var localPlayerInstruction = new CodeInstruction(OpCodes.Ldloc_1);
+                    //Move Any Labels from the instruction position being patched to new instruction.
+                    if (instrs[i].labels.Count > 0)
+                        instrs[i].MoveLabelsTo(localPlayerInstruction);
+                    
+                    //Output current Operation
+                    yield return LogMessage(instrs[i]);
+                    counter++;
+
+                    //Patch ldloc_1 this is localPlayer.
+                    yield return LogMessage(localPlayerInstruction);
+                    counter++;
+
+                    //Patch Call Method for Hiding.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(ShowBackpack))));
+                    counter++;
+                }
+                else
+                {
+                    yield return LogMessage(instrs[i]);
+                    counter++;
+                }
+            }
+        }
+    }
+
+    
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
     static class InventoryGuiUpdatePatch
     {
         static void Postfix(Animator ___m_animator, ref Container ___m_currentContainer)
         {
-            if (!KeyPressTool.CheckKeyDown(ConfigRegistry.HotKeyOpen.Value) || !Player.m_localPlayer || !___m_animator.GetBool("visible"))
+            if ( !ConfigRegistry.HotKeyOpen.Value.IsDown() || !ZInput.GetButtonDown(ConfigRegistry.HotKeyOpen.Value.Serialize()) || !Player.m_localPlayer || !___m_animator.GetBool("visible"))
                 return;
 
+            ZInput.ResetButtonStatus(ConfigRegistry.HotKeyOpen.Value.Serialize());
+                
             if (BackpackIsOpening)
             {
                 BackpackIsOpening = false;
