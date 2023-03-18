@@ -41,7 +41,7 @@ public static class QuickTransfer
         {
             if (!FeatureInitialized)
                 return;
-            
+
             if (Player.m_localPlayer == null || __instance == null || item == null)
                 return;
 
@@ -50,12 +50,52 @@ public static class QuickTransfer
 
             if (Chainloader.PluginInfos.ContainsKey("blumaye.quicktransfer"))
             {
-                AdventureBackpacks.Log.Warning("blumaye.quicktransfer mod is enabled. Adventure Backpack's Quick Transfer disabled.");
+                AdventureBackpacks.Log.Warning(
+                    "blumaye.quicktransfer mod is enabled. Adventure Backpack's Quick Transfer disabled.");
                 return;
             }
 
+            //If item is equipped, let's skip the move, because this is most likely an unequip action.
             if (item.m_equiped)
                 return;
+
+            //If I have a backpack open, and I currently have nothing in the equipped slot, I want to prioritize equipping it over storing it.
+            if (item.IsEquipable() && grid.m_inventory == Player.m_localPlayer.GetInventory())
+            {
+                switch (item.m_shared.m_itemType)
+                {
+                    case ItemDrop.ItemData.ItemType.Helmet:
+                        if (Player.m_localPlayer.m_helmetItem == null)
+                            return;
+                        break;
+                    case ItemDrop.ItemData.ItemType.Chest:
+                        if (Player.m_localPlayer.m_chestItem == null)
+                            return;
+                        break;
+                    case ItemDrop.ItemData.ItemType.Legs:
+                        if (Player.m_localPlayer.m_legItem == null)
+                            return;
+                        break;
+                    case ItemDrop.ItemData.ItemType.Bow:
+                    case ItemDrop.ItemData.ItemType.TwoHandedWeapon:
+                    case ItemDrop.ItemData.ItemType.OneHandedWeapon:
+                        if (Player.m_localPlayer.m_rightItem == null)
+                            return;
+                        break;
+                    case ItemDrop.ItemData.ItemType.Shoulder:
+                        if (Player.m_localPlayer.m_shoulderItem == null)
+                            return;
+                        break;
+                    case ItemDrop.ItemData.ItemType.Utility:
+                        if (Player.m_localPlayer.m_utilityItem == null)
+                            return;
+                        break;
+                    case ItemDrop.ItemData.ItemType.Shield:
+                        if (Player.m_localPlayer.m_leftItem == null)
+                            return;
+                        break;
+                }
+            }
 
             var containerInventory = __instance.m_currentContainer.GetInventory();
             

@@ -1,5 +1,13 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.14.0 - Fixing Equippable Items
+* Discovered a bug (or unintended interaction) that prevented the ability to equip armor if backpack is configured to open with inventory (and close with inventory) when using "Right Click Quick Transfer" functionality
+  * This has been fixed. Right Click Quick Transfer will now detect if there is armor in the spot it would be equiped at.
+    * If no item is equipped in it's intended slot, it will equip the item instead of transfering it.
+    * if item slot is already filled, it will quick transfer the equippable item.
+    * This does mean, if you intent to swap out armor, you'll have to unequip the current item equipped manually.
+      * This is not an issue if Right Click Quick Transfer is disabled.
+
 # 1.6.13.0 - Refactor of Backpack Interaction Controls
 * Enhanced and improved the mechanics behind how backpacks open.
 * Fixed the backpack not closing when open.
