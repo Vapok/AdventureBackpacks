@@ -6,6 +6,7 @@
 * All Configuration settings for backpack controls have been validated.
   * **Please double check your settings if interactions have changed for you**
 * Community has verified controller support from previous version.
+* Fixed an issue with bags falling through the floor when dropped with Outward Mode
 
 # 1.6.12.0 - Redefining Keymappings and Open with Inventory Option
 * Adjusted Config Keymappings to allow for Gamepad, Mouse, or Keyboard to be set.

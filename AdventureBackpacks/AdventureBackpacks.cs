@@ -98,6 +98,12 @@ namespace AdventureBackpacks
                     Backpacks.PerformYardSale(Player.m_localPlayer, backpack.Item);
             }
 
+            if ((ZInput.GetButton("Forward") || ZInput.GetButton("Backward") || ZInput.GetButton("Left") ||ZInput.GetButton("Right")) 
+                && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey) &&  ConfigRegistry.OutwardMode.Value)
+            {
+                Player.m_localPlayer.QuickDropBackpack();
+            }
+
             InventoryPatches.ProcessItemsAddedQueue();
         }
 

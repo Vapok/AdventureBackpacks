@@ -72,6 +72,9 @@
         <Reference Include="UnityEngine.InputLegacyModule">
           <HintPath>..\..\References\BepInEx\5.4.2101\unstripped_corlib\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+          <HintPath>..\..\References\BepInEx\5.4.2101\unstripped_corlib\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
         <Reference Include="Vapok.Common">
           <HintPath>..\..\References\Vapok.Common\Vapok.Common.dll</HintPath>
         </Reference>

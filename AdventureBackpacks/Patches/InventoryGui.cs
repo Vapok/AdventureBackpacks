@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using HarmonyLib;
+using JetBrains.Annotations;
 using UnityEngine;
 using Vapok.Common.Managers;
 
@@ -149,7 +151,7 @@ internal static class InventoryGuiPatches
         
         return zInputDown || hotKeyDown || _showBackpack;
     }
-    
+   
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
     static class InventoryGuiUpdateTranspiler
     {

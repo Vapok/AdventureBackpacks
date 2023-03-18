@@ -1,5 +1,6 @@
 ﻿using AdventureBackpacks.Components;
 using AdventureBackpacks.Patches;
+using UnityEngine;
 using Vapok.Common.Managers;
 
 namespace AdventureBackpacks.Extensions;
@@ -96,7 +97,9 @@ public static class PlayerExtensions
         player.m_inventory.RemoveItem(backpack.Item);
 
         // This drops a copy of the backpack itemDrop.itemData
-        var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.up - player.transform.up, player.transform.rotation);
+        var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
+        itemDrop.GetComponent<Rigidbody>().velocity = (Vector3.up - player.transform.forward) * 5f;
+        player.m_dropEffects.Create(player.transform.position, Quaternion.identity);
         itemDrop.Save();
 
         if (swapItemActivated)
