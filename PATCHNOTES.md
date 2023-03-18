@@ -1,5 +1,13 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.13.0 - Refactor of Backpack Interaction Controls
+* Enhanced and improved the mechanics behind how backpacks open.
+* Fixed the backpack not closing when open.
+* All Configuration settings for backpack controls have been validated.
+  * **Please double check your settings if interactions have changed for you**
+* Community has verified controller support from previous version.
+* Fixed an issue with bags falling through the floor when dropped with Outward Mode
+
 # 1.6.12.0 - Redefining Keymappings and Open with Inventory Option
 * Adjusted Config Keymappings to allow for Gamepad, Mouse, or Keyboard to be set.
   * Untested Controller Support - I'm hoping this works, but it might not. Please provide feedback.

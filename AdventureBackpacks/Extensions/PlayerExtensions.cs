@@ -1,5 +1,6 @@
 ﻿using AdventureBackpacks.Components;
 using AdventureBackpacks.Patches;
+using UnityEngine;
 using Vapok.Common.Managers;
 
 namespace AdventureBackpacks.Extensions;
@@ -38,7 +39,7 @@ public static class PlayerExtensions
         return IsBackpackEquipped(player);
     }
 
-    public static void OpenBackpack(this Player player, bool track = true)
+    public static void OpenBackpack(this Player player, InventoryGui instance)
     {
         if (player == null)
             return;
@@ -56,8 +57,7 @@ public static class PlayerExtensions
         backpackContainer.m_bkg = backpack.Item.m_shared.m_icons[0];
 
         InventoryGuiPatches.BackpackIsOpen = true;
-        InventoryGuiPatches.BackpackIsOpening = track;
-        InventoryGui.instance.Show(backpackContainer);
+        instance.Show(backpackContainer);
     }
 
     public static void QuickDropBackpack(this Player player)
@@ -97,7 +97,9 @@ public static class PlayerExtensions
         player.m_inventory.RemoveItem(backpack.Item);
 
         // This drops a copy of the backpack itemDrop.itemData
-        var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.up - player.transform.up, player.transform.rotation);
+        var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
+        itemDrop.GetComponent<Rigidbody>().velocity = (Vector3.up - player.transform.forward) * 5f;
+        player.m_dropEffects.Create(player.transform.position, Quaternion.identity);
         itemDrop.Save();
 
         if (swapItemActivated)
