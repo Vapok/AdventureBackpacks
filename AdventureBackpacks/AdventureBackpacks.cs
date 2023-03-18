@@ -12,7 +12,6 @@ using BepInEx;
 using HarmonyLib;
 using ItemManager;
 using JetBrains.Annotations;
-using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.Configuration;
@@ -97,18 +96,6 @@ namespace AdventureBackpacks
                 var backpack = Player.m_localPlayer.GetEquippedBackpack();
                 if (backpack != null)
                     Backpacks.PerformYardSale(Player.m_localPlayer, backpack.Item);
-            }
-            
-            if (!KeyPressTool.IgnoreKeyPresses(true) && (ConfigRegistry.HotKeyOpen.Value.IsDown() || ZInput.GetButtonDown(ConfigRegistry.HotKeyOpen.Value.Serialize()) ) && Player.m_localPlayer.CanOpenBackpack())
-            {
-                ZInput.ResetButtonStatus(ConfigRegistry.HotKeyOpen.Value.Serialize());
-                Player.m_localPlayer.OpenBackpack();
-            }
-
-            if (ConfigRegistry.OutwardMode.Value && !KeyPressTool.IgnoreKeyPresses(true) && (ConfigRegistry.HotKeyDrop.Value.IsDown() || ZInput.GetButtonDown(ConfigRegistry.HotKeyDrop.Value.Serialize())) && Player.m_localPlayer.CanOpenBackpack())
-            {
-                ZInput.ResetButtonStatus(ConfigRegistry.HotKeyOpen.Value.Serialize());
-                Player.m_localPlayer.QuickDropBackpack();
             }
 
             InventoryPatches.ProcessItemsAddedQueue();

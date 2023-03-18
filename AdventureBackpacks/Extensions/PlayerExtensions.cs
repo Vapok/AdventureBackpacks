@@ -38,7 +38,7 @@ public static class PlayerExtensions
         return IsBackpackEquipped(player);
     }
 
-    public static void OpenBackpack(this Player player, bool track = true)
+    public static void OpenBackpack(this Player player, InventoryGui instance)
     {
         if (player == null)
             return;
@@ -56,8 +56,7 @@ public static class PlayerExtensions
         backpackContainer.m_bkg = backpack.Item.m_shared.m_icons[0];
 
         InventoryGuiPatches.BackpackIsOpen = true;
-        InventoryGuiPatches.BackpackIsOpening = track;
-        InventoryGui.instance.Show(backpackContainer);
+        instance.Show(backpackContainer);
     }
 
     public static void QuickDropBackpack(this Player player)
