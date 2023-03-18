@@ -9,15 +9,14 @@ using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using UnityEngine;
 using Vapok.Common.Managers;
-using Vapok.Common.Tools;
 
 namespace AdventureBackpacks.Patches;
 
 internal static class InventoryGuiPatches
 {
     public static bool BackpackIsOpen;
-    public static bool BackpackIsOpening;
     public static bool BackpackEquipped = false;
+    private static bool _showBackpack = false;
 
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.DoCrafting))]
     static class InventoryGuiDoCraftingPrefix
@@ -67,29 +66,89 @@ internal static class InventoryGuiPatches
         }
     }
     
-    public static void ShowBackpack(Player player)
+    public static void ShowBackpack(Player player, InventoryGui instance)
     {
-        if (ConfigRegistry.OpenWithInventory.Value && player.CanOpenBackpack())
-        {
-           player.OpenBackpack(false);
+        if (_showBackpack)
+        { 
+            _showBackpack = false; 
+            player.OpenBackpack(instance);
         }
     }
     
     public static void HideBackpack(InventoryGui instance)
     {
-        if (ConfigRegistry.OpenWithInventory.Value)
+        if (BackpackIsOpen)
         {
-            if (BackpackIsOpen)
-            {
-                instance.CloseContainer();
-                BackpackIsOpen = false;
-                
-                if (ConfigRegistry.CloseInventory.Value)
-                    instance.Hide();
-            }
+            instance.CloseContainer();
+            BackpackIsOpen = false;
+            
+            if (ConfigRegistry.CloseInventory.Value)
+                instance.Hide();
         }
     }
 
+    public static bool DetectInputToHide(KeyCode defaultKeyCode, Player player, InventoryGui instance)
+    {
+        var defaultInputDown = Input.GetKeyDown(defaultKeyCode);
+        var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
+        var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown;
+        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
+
+        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack())
+        {
+            if (instance.m_currentContainer != null)
+            {
+                instance.m_currentContainer.SetInUse(false);
+                instance.m_currentContainer = null;
+            }
+            player.OpenBackpack(instance);
+            return false;
+        }
+        
+        if (hotKeyDown && BackpackIsOpen && !hotKeyDownOnClose)
+        {
+            instance.CloseContainer();
+            BackpackIsOpen = false;
+            return false;
+        }
+       
+        if (hotKeyDrop)
+        {
+            player.QuickDropBackpack();
+        }
+
+        return defaultInputDown || hotKeyDownOnClose || hotKeyDrop;
+    }
+    
+    public static bool DetectInputToShow(string defaultKeyCode, Player player, InventoryGui instance)
+    {
+        var zInputDown = ZInput.GetButtonDown(defaultKeyCode);
+        var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
+        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
+
+        if (hotKeyDrop)
+        {
+            player.QuickDropBackpack();
+        }
+
+        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack())
+        {
+            _showBackpack = true;
+        }
+        
+        if (zInputDown && ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
+        {
+            _showBackpack = true;
+        }
+
+        if (_showBackpack && !BackpackIsOpen)
+        {
+            if (instance.m_currentContainer != null)
+                instance.CloseContainer();
+        }
+        
+        return zInputDown || hotKeyDown || _showBackpack;
+    }
     
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
     static class InventoryGuiUpdateTranspiler
@@ -109,6 +168,8 @@ internal static class InventoryGuiPatches
             var resetButtonStatus = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.ResetButtonStatus));
             var hideMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Hide));
             var showMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Show));
+            var inputKeyDown = AccessTools.DeclaredMethod(typeof(Input), nameof(Input.GetKeyDown), new []{typeof(KeyCode)});
+            var zInputButtonDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetButtonDown), new []{typeof(string)});
 
             for (int i = 0; i < instrs.Count; ++i)
             {
@@ -151,9 +212,57 @@ internal static class InventoryGuiPatches
                     //Patch ldloc_1 this is localPlayer.
                     yield return LogMessage(localPlayerInstruction);
                     counter++;
+                    
+                    //InventoryGui Argument.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
+                    counter++;
 
                     //Patch Call Method for Hiding.
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(ShowBackpack))));
+                    counter++;
+                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(inputKeyDown) && instrs[i - 1].operand.Equals((sbyte)KeyCode.Escape) && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("Use"))
+                {
+                    //Add Inventory Open Key from Config
+                    //Get Player
+                    var ldLocInstruction = new CodeInstruction(OpCodes.Ldloc_1);
+                    //Move Any Labels from the instruction position being patched to new instruction.
+                    if (instrs[i].labels.Count > 0)
+                        instrs[i].MoveLabelsTo(ldLocInstruction);
+
+                    //Patch Call Method for Detecting Key Press
+                    yield return LogMessage(ldLocInstruction);
+                    counter++;
+
+                    //InventoryGui Argument.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
+                    counter++;
+
+                    //Patch Call Method for Detect Hide.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToHide))));
+                    counter++;
+
+                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(zInputButtonDown) 
+                           && instrs[i - 1].operand.Equals("Inventory") && instrs[i + 1].opcode == OpCodes.Brtrue 
+                           && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("JoyButtonY"))
+                {
+
+                    //Add Inventory Open Key from Config
+                    //Get Player
+                    var ldLocInstruction = new CodeInstruction(OpCodes.Ldloc_1);
+                    //Move Any Labels from the instruction position being patched to new instruction.
+                    if (instrs[i].labels.Count > 0)
+                        instrs[i].MoveLabelsTo(ldLocInstruction);
+
+                    //Patch Call Method for Detecting Key Press
+                    yield return LogMessage(ldLocInstruction);
+                    counter++;
+
+                    //InventoryGui Argument.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
+                    counter++;
+                    
+                    //Patch Call Method for Detect Show.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToShow))));
                     counter++;
                 }
                 else
@@ -161,41 +270,6 @@ internal static class InventoryGuiPatches
                     yield return LogMessage(instrs[i]);
                     counter++;
                 }
-            }
-        }
-    }
-
-    
-    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
-    static class InventoryGuiUpdatePatch
-    {
-        static void Postfix(Animator ___m_animator, ref Container ___m_currentContainer)
-        {
-            if ( !ConfigRegistry.HotKeyOpen.Value.IsDown() || !ZInput.GetButtonDown(ConfigRegistry.HotKeyOpen.Value.Serialize()) || !Player.m_localPlayer || !___m_animator.GetBool("visible"))
-                return;
-
-            ZInput.ResetButtonStatus(ConfigRegistry.HotKeyOpen.Value.Serialize());
-                
-            if (BackpackIsOpening)
-            {
-                BackpackIsOpening = false;
-                return;
-            }
-            
-            if (BackpackIsOpen)
-            {
-                InventoryGui.instance.CloseContainer();
-                BackpackIsOpen = false;
-                
-                if (ConfigRegistry.CloseInventory.Value)
-                    InventoryGui.instance.Hide();
-                
-                return;
-            }
-            
-            if (Player.m_localPlayer.CanOpenBackpack())
-            {
-                Player.m_localPlayer.OpenBackpack(false);
             }
         }
     }
