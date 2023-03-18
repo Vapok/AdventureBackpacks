@@ -60,11 +60,8 @@ namespace AdventureBackpacks
             
             //Waiting For Startup
             Waiter = new Waiting();
-
-            var initOptions = new Initializer.InitOptions(false, true, true, true, false, false, true, true);
-            
             //Initialize Managers
-            Initializer.LoadManagers(initOptions);
+            Initializer.LoadManagers(false, true, true, true, false, false, true, true);
 
             //Register Configuration Settings
             _config = new ConfigRegistry(_instance);
