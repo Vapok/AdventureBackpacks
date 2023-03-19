@@ -1,12 +1,17 @@
 # Adventure Backpacks Patchnotes
 
-# 1.6.14.0 - Fixing Equippable Items
+# 1.6.14.0 - Fixing Equippable Items, Adding Hover Over Interaction option, Fixing Signs.
+* New Feature: Open Inventory with Hover Interaction
+  * When enabled, this will override the Open with Inventory and Close Inventory Options.
+  * When enabled, hovering over an equipped backpack item in player inventory and pressing the Backpack Open Hot Key will open equipped backpack.
 * Discovered a bug (or unintended interaction) that prevented the ability to equip armor if backpack is configured to open with inventory (and close with inventory) when using "Right Click Quick Transfer" functionality
   * This has been fixed. Right Click Quick Transfer will now detect if there is armor in the spot it would be equiped at.
     * If no item is equipped in it's intended slot, it will equip the item instead of transfering it.
     * if item slot is already filled, it will quick transfer the equippable item.
     * This does mean, if you intent to swap out armor, you'll have to unequip the current item equipped manually.
       * This is not an issue if Right Click Quick Transfer is disabled.
+* When typing in Signs, inventory was opening with hot key.
+  * Fixed to prevent inventory from opening while typing in signs.
 
 # 1.6.13.0 - Refactor of Backpack Interaction Controls
 * Enhanced and improved the mechanics behind how backpacks open.

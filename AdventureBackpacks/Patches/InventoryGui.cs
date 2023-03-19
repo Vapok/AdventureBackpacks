@@ -67,6 +67,20 @@ internal static class InventoryGuiPatches
             return null;
         }
     }
+
+    public static bool CheckForTextInput()
+    {
+        var textInputVisible = false;
+        var textInputPanel = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui(Clone)/TextInput/panel");
+        
+        if (textInputPanel != null)
+        {
+            if (textInputPanel.activeSelf)
+                textInputVisible = true;
+        }
+        
+        return textInputVisible;
+    }
     
     public static void ShowBackpack(Player player, InventoryGui instance)
     {
@@ -96,7 +110,24 @@ internal static class InventoryGuiPatches
         var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown;
         var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
 
-        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack())
+        var openBackpack = hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value;
+
+        if (hotKeyDown && ConfigRegistry.OpenWithHoverInteract.Value)
+        {
+            var hoveredElement = instance.m_playerGrid.GetHoveredElement();
+
+            if (hoveredElement != null)
+            {
+                var hoveredItem = player.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
+                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && !BackpackIsOpen &&
+                    player.CanOpenBackpack())
+                {
+                    openBackpack = true;
+                }
+            }
+        }
+
+        if (openBackpack)
         {
             if (instance.m_currentContainer != null)
             {
@@ -107,7 +138,7 @@ internal static class InventoryGuiPatches
             return false;
         }
         
-        if (hotKeyDown && BackpackIsOpen && !hotKeyDownOnClose)
+        if (hotKeyDown && BackpackIsOpen && (!hotKeyDownOnClose || ConfigRegistry.OpenWithHoverInteract.Value))
         {
             instance.CloseContainer();
             BackpackIsOpen = false;
@@ -119,7 +150,7 @@ internal static class InventoryGuiPatches
             player.QuickDropBackpack();
         }
 
-        return defaultInputDown || hotKeyDownOnClose || hotKeyDrop;
+        return defaultInputDown || (hotKeyDownOnClose && !ConfigRegistry.OpenWithHoverInteract.Value) || hotKeyDrop;
     }
     
     public static bool DetectInputToShow(string defaultKeyCode, Player player, InventoryGui instance)
@@ -133,23 +164,23 @@ internal static class InventoryGuiPatches
             player.QuickDropBackpack();
         }
 
-        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack())
+        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value)
         {
             _showBackpack = true;
         }
         
-        if (zInputDown && ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
+        if (zInputDown && ConfigRegistry.OpenWithInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value && !BackpackIsOpen && player.CanOpenBackpack())
         {
             _showBackpack = true;
         }
 
-        if (_showBackpack && !BackpackIsOpen)
+        if (_showBackpack && !BackpackIsOpen && instance.m_currentContainer != null)
         {
-            if (instance.m_currentContainer != null)
-                instance.CloseContainer();
+            instance.m_currentContainer.SetInUse(false);
+            instance.m_currentContainer = null;
         }
         
-        return zInputDown || hotKeyDown || _showBackpack;
+        return (zInputDown || (hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value) || _showBackpack) && !CheckForTextInput();
     }
    
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
@@ -168,6 +199,7 @@ internal static class InventoryGuiPatches
             }
 
             var resetButtonStatus = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.ResetButtonStatus));
+            var menuVisibleMethod = AccessTools.DeclaredMethod(typeof(Menu), nameof(Menu.IsVisible));
             var hideMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Hide));
             var showMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Show));
             var inputKeyDown = AccessTools.DeclaredMethod(typeof(Input), nameof(Input.GetKeyDown), new []{typeof(KeyCode)});
