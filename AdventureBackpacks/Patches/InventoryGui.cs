@@ -75,7 +75,7 @@ internal static class InventoryGuiPatches
         
         if (textInputPanel != null)
         {
-            if (textInputPanel.activeSelf)
+            if (textInputPanel.activeInHierarchy)
                 textInputVisible = true;
         }
         
@@ -112,7 +112,7 @@ internal static class InventoryGuiPatches
 
         var openBackpack = hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value;
 
-        if (hotKeyDown && ConfigRegistry.OpenWithHoverInteract.Value)
+        if (hotKeyDown && ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
         {
             var hoveredElement = instance.m_playerGrid.GetHoveredElement();
 
@@ -127,7 +127,7 @@ internal static class InventoryGuiPatches
             }
         }
 
-        if (openBackpack)
+        if (openBackpack & !CheckForTextInput())
         {
             if (instance.m_currentContainer != null)
             {
@@ -138,19 +138,19 @@ internal static class InventoryGuiPatches
             return false;
         }
         
-        if (hotKeyDown && BackpackIsOpen && (!hotKeyDownOnClose || ConfigRegistry.OpenWithHoverInteract.Value))
+        if (hotKeyDown && BackpackIsOpen && (!hotKeyDownOnClose || ConfigRegistry.OpenWithHoverInteract.Value) && !CheckForTextInput())
         {
             instance.CloseContainer();
             BackpackIsOpen = false;
             return false;
         }
        
-        if (hotKeyDrop)
+        if (hotKeyDrop && !CheckForTextInput())
         {
             player.QuickDropBackpack();
         }
 
-        return defaultInputDown || (hotKeyDownOnClose && !ConfigRegistry.OpenWithHoverInteract.Value) || hotKeyDrop;
+        return (defaultInputDown || (hotKeyDownOnClose && !ConfigRegistry.OpenWithHoverInteract.Value) || hotKeyDrop) && !CheckForTextInput();
     }
     
     public static bool DetectInputToShow(string defaultKeyCode, Player player, InventoryGui instance)
@@ -159,17 +159,17 @@ internal static class InventoryGuiPatches
         var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
         var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
 
-        if (hotKeyDrop)
+        if (hotKeyDrop && !CheckForTextInput())
         {
             player.QuickDropBackpack();
         }
 
-        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value)
+        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
         {
             _showBackpack = true;
         }
         
-        if (zInputDown && ConfigRegistry.OpenWithInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value && !BackpackIsOpen && player.CanOpenBackpack())
+        if (zInputDown && ConfigRegistry.OpenWithInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value && !BackpackIsOpen && player.CanOpenBackpack() && !CheckForTextInput())
         {
             _showBackpack = true;
         }
