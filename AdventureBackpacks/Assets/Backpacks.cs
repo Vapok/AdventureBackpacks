@@ -54,6 +54,9 @@ namespace AdventureBackpacks.Assets
             if (Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null)
                 return;
 
+            //Close Inventory before making changes.  Leaving open can have undesirable effects.
+            InventoryGui.instance.Hide();
+            
             void SearchInventory(List<ItemDrop.ItemData> inventory)
             {
                 if (inventory == null)
