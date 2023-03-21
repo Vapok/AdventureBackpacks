@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using HarmonyLib;
-using UnityEngine;
 using Vapok.Common.Managers;
 
 namespace AdventureBackpacks.Patches;
