@@ -12,6 +12,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * The default hotkey is `I` to open the equipped backpack.
 * Each backpack is completely different in form, function, and size.  Upgrading backpacks will unlock additional features depending on the progresion that backpack is intended to be used with.
 * Check the Configuration for ALL the different ways that you can modify these packs.
+* Keybindings and Actions are Controller Supported
 
 ## How To Install Adventure Backpacks
 * Install Adventure Backpacks into it's own FOLDER inside of the `BepInEx/plugins` folder.
