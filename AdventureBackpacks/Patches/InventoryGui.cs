@@ -116,24 +116,42 @@ internal static class InventoryGuiPatches
 
     public static bool DetectInputToHide(Player player, InventoryGui instance)
     {
-        var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
+        var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
         var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown;
-        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
+        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
 
         var openBackpack = hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value;
 
         if (hotKeyDown && ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
         {
-            var hoveredElement = instance.m_playerGrid.GetHoveredElement();
+            var grids = new List<InventoryGrid>();
+            grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
 
-            if (hoveredElement != null)
+            ItemDrop.ItemData hoveredItem = null;
+            
+            foreach (var grid in grids)
             {
-                var hoveredItem = player.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
-                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && !BackpackIsOpen &&
-                    player.CanOpenBackpack())
+                if (grid.GetHoveredElement() == null)
+                    continue;
+                
+                var hoveredElement = grid.GetHoveredElement();
+                hoveredItem = grid.GetItem(hoveredElement.m_pos);
+            }
+
+            if (ZInput.IsGamepadActive() && hoveredItem == null)
+            {
+                foreach (var grid in grids)
                 {
-                    openBackpack = true;
+                    if (grid.GetGamepadSelectedItem() == null)
+                        continue;
+                    hoveredItem = grid.GetGamepadSelectedItem();
                 }
+            }
+            
+            if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && !BackpackIsOpen &&
+                player.CanOpenBackpack())
+            {
+                openBackpack = true;
             }
         }
 
@@ -165,8 +183,8 @@ internal static class InventoryGuiPatches
     
     public static bool DetectInputToShow(Player player, InventoryGui instance)
     {
-        var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
-        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
+        var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
+        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
 
         if (hotKeyDrop && !CheckForTextInput())
         {
