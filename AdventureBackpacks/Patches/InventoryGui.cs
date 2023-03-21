@@ -7,6 +7,7 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using HarmonyLib;
+using JetBrains.Annotations;
 using UnityEngine;
 using Vapok.Common.Managers;
 
@@ -16,11 +17,12 @@ internal static class InventoryGuiPatches
 {
     public static bool BackpackIsOpen;
     public static bool BackpackEquipped = false;
-    private static bool _showBackpack = false;
+    private static bool _showBackpack ;
 
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.DoCrafting))]
     static class InventoryGuiDoCraftingPrefix
     {
+        [UsedImplicitly]
         static void Postfix(InventoryGui __instance)
         {
             if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
@@ -35,6 +37,7 @@ internal static class InventoryGuiPatches
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnSelectedItem))]
     static class InventoryGuiOnSelectedItem
     {
+        [UsedImplicitly]
         static Exception Finalizer(Exception __exception, InventoryGrid grid, ItemDrop.ItemData item, Vector2i pos, InventoryGrid.Modifier mod, InventoryGui __instance)
         {
 
@@ -200,6 +203,7 @@ internal static class InventoryGuiPatches
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
     static class InventoryGuiUpdateTranspiler
     {
+        [UsedImplicitly]
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var instrs = instructions.ToList();
