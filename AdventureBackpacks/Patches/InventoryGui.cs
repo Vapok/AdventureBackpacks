@@ -85,7 +85,7 @@ internal static class InventoryGuiPatches
     
     public static void ShowBackpack(Player player, InventoryGui instance)
     {
-        if (ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value)
+        if (ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
         {
             _showBackpack = true;
         }
@@ -110,7 +110,7 @@ internal static class InventoryGuiPatches
             instance.CloseContainer();
             BackpackIsOpen = false;
             
-            if (ConfigRegistry.CloseInventory.Value)
+            if (ConfigRegistry.CloseInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value)
                 instance.Hide();
         }
     }
@@ -118,16 +118,16 @@ internal static class InventoryGuiPatches
     public static bool DetectInputToHide(Player player, InventoryGui instance)
     {
         var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
-        var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown;
+        var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value;
         var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
 
         var openBackpack = hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value;
+        
+        var grids = new List<InventoryGrid>();
+        grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
 
-        if (hotKeyDown && ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
+        if (hotKeyDown && !BackpackIsOpen && ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
         {
-            var grids = new List<InventoryGrid>();
-            grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
-
             ItemDrop.ItemData hoveredItem = null;
             
             foreach (var grid in grids)
@@ -169,9 +169,47 @@ internal static class InventoryGuiPatches
         
         if (hotKeyDown && BackpackIsOpen && (!hotKeyDownOnClose || ConfigRegistry.OpenWithHoverInteract.Value) && !CheckForTextInput())
         {
-            instance.CloseContainer();
-            BackpackIsOpen = false;
-            return false;
+            bool closeBackpack = false;
+            
+            if (ConfigRegistry.OpenWithHoverInteract.Value)
+            {
+                ItemDrop.ItemData hoveredItem = null;
+            
+                foreach (var grid in grids)
+                {
+                    if (grid.GetHoveredElement() == null)
+                        continue;
+                
+                    var hoveredElement = grid.GetHoveredElement();
+                    hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
+                }
+
+                if (ZInput.IsGamepadActive() && hoveredItem == null)
+                {
+                    foreach (var grid in grids)
+                    {
+                        if (grid.GetGamepadSelectedItem() == null)
+                            continue;
+                        hoveredItem = grid.GetGamepadSelectedItem();
+                    }
+                }
+                
+                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && BackpackIsOpen)
+                {
+                    closeBackpack = true;
+                }
+            }
+            else
+            {
+                closeBackpack = true;
+            }
+
+            if (closeBackpack)
+            {
+                instance.CloseContainer();
+                BackpackIsOpen = false;
+                return false;
+            }
         }
        
         if (hotKeyDrop && !CheckForTextInput())
@@ -179,7 +217,7 @@ internal static class InventoryGuiPatches
             player.QuickDropBackpack();
         }
 
-        return ((hotKeyDownOnClose && !ConfigRegistry.OpenWithHoverInteract.Value) || hotKeyDrop) && !CheckForTextInput();
+        return ((hotKeyDownOnClose) || hotKeyDrop) && !CheckForTextInput();
     }
     
     public static bool DetectInputToShow(Player player, InventoryGui instance)
@@ -192,12 +230,12 @@ internal static class InventoryGuiPatches
             player.QuickDropBackpack();
         }
 
-        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
+        if (hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value && !BackpackIsOpen && player.CanOpenBackpack() && !CheckForTextInput())
         {
             _showBackpack = true;
         }
         
-        return ((hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value) || _showBackpack) && !CheckForTextInput();
+        return _showBackpack && !CheckForTextInput();
     }
    
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
