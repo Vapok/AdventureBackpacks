@@ -84,8 +84,19 @@ internal static class InventoryGuiPatches
     
     public static void ShowBackpack(Player player, InventoryGui instance)
     {
+        if (ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value)
+        {
+            _showBackpack = true;
+        }
+    
         if (_showBackpack)
         { 
+            if (!BackpackIsOpen && instance.m_currentContainer != null)
+            {
+                instance.m_currentContainer.SetInUse(false);
+                instance.m_currentContainer = null;
+            }
+
             _showBackpack = false; 
             player.OpenBackpack(instance);
         }
@@ -103,9 +114,8 @@ internal static class InventoryGuiPatches
         }
     }
 
-    public static bool DetectInputToHide(KeyCode defaultKeyCode, Player player, InventoryGui instance)
+    public static bool DetectInputToHide(Player player, InventoryGui instance)
     {
-        var defaultInputDown = Input.GetKeyDown(defaultKeyCode);
         var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
         var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown;
         var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
@@ -150,12 +160,11 @@ internal static class InventoryGuiPatches
             player.QuickDropBackpack();
         }
 
-        return (defaultInputDown || (hotKeyDownOnClose && !ConfigRegistry.OpenWithHoverInteract.Value) || hotKeyDrop) && !CheckForTextInput();
+        return ((hotKeyDownOnClose && !ConfigRegistry.OpenWithHoverInteract.Value) || hotKeyDrop) && !CheckForTextInput();
     }
     
-    public static bool DetectInputToShow(string defaultKeyCode, Player player, InventoryGui instance)
+    public static bool DetectInputToShow(Player player, InventoryGui instance)
     {
-        var zInputDown = ZInput.GetButtonDown(defaultKeyCode);
         var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
         var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
 
@@ -169,24 +178,13 @@ internal static class InventoryGuiPatches
             _showBackpack = true;
         }
         
-        if (zInputDown && ConfigRegistry.OpenWithInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value && !BackpackIsOpen && player.CanOpenBackpack() && !CheckForTextInput())
-        {
-            _showBackpack = true;
-        }
-
-        if (_showBackpack && !BackpackIsOpen && instance.m_currentContainer != null)
-        {
-            instance.m_currentContainer.SetInUse(false);
-            instance.m_currentContainer = null;
-        }
-        
-        return (zInputDown || (hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value) || _showBackpack) && !CheckForTextInput();
+        return ((hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value) || _showBackpack) && !CheckForTextInput();
     }
    
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
     static class InventoryGuiUpdateTranspiler
     {
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var instrs = instructions.ToList();
 
@@ -196,6 +194,17 @@ internal static class InventoryGuiPatches
             {
                 AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
                 return instruction;
+            }
+            
+            CodeInstruction FindInstructionWithLabel(List<CodeInstruction> codeInstructions, int index, Label label)
+            {
+                if (index >= codeInstructions.Count)
+                    return null;
+                
+                if (codeInstructions[index].labels.Contains(label))
+                    return codeInstructions[index];
+                
+                return FindInstructionWithLabel(codeInstructions, index + 1, label);
             }
 
             var resetButtonStatus = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.ResetButtonStatus));
@@ -256,47 +265,97 @@ internal static class InventoryGuiPatches
                     counter++;
                 } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(inputKeyDown) && instrs[i - 1].operand.Equals((sbyte)KeyCode.Escape) && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("Use"))
                 {
-                    //Add Inventory Open Key from Config
-                    //Get Player
-                    var ldLocInstruction = new CodeInstruction(OpCodes.Ldloc_1);
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldLocInstruction);
 
-                    //Patch Call Method for Detecting Key Press
-                    yield return LogMessage(ldLocInstruction);
+                    //1. Output current spot.
+                    yield return LogMessage(instrs[i]);
                     counter++;
 
-                    //InventoryGui Argument.
+                    //2. Output i + 1 (this is the brtrue).
+                    yield return LogMessage(instrs[i + 1]);
+                    counter++;
+
+                    //3. Grab label from brtrue.
+                    Label originalLabel = (Label)instrs[i + 1].operand;
+                    
+                    //4. Look ahead and find instruction with label.
+                    var instWithLabel = FindInstructionWithLabel(instrs, i + 2, originalLabel);
+                    
+                    if (instWithLabel == null)
+                    {
+                        AdventureBackpacks.Log.Error($"Can't Find Instruction with Label {originalLabel}");
+                        continue;
+                    }
+
+                    i++;
+                    
+                    //5. Generate new label.
+                    var detectHideLabel = ilGenerator.DefineLabel();
+                    
+                    //6. Save Label to instruction ahead.
+                    instWithLabel.labels.Add(detectHideLabel);
+                    
+                    //7. Write Player Var
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
+                    counter++;
+                    
+                    //8. Write LdArg Var
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
-
-                    //Patch Call Method for Detect Hide.
+                    
+                    //9. Write Call instruction
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToHide))));
+                    counter++;
+
+                    //10. Write Brture instruction with new label
+                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectHideLabel));
                     counter++;
 
                 } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(zInputButtonDown) 
                            && instrs[i - 1].operand.Equals("Inventory") && instrs[i + 1].opcode == OpCodes.Brtrue 
                            && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("JoyButtonY"))
                 {
-
-                    //Add Inventory Open Key from Config
-                    //Get Player
-                    var ldLocInstruction = new CodeInstruction(OpCodes.Ldloc_1);
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldLocInstruction);
-
-                    //Patch Call Method for Detecting Key Press
-                    yield return LogMessage(ldLocInstruction);
+                    //1. Output current spot.
+                    yield return LogMessage(instrs[i]);
                     counter++;
 
-                    //InventoryGui Argument.
+                    //2. Output i + 1 (this is the brtrue).
+                    yield return LogMessage(instrs[i + 1]);
+                    counter++;
+
+                    //3. Grab label from brtrue.
+                    Label originalLabel = (Label)instrs[i + 1].operand;
+                    
+                    //4. Look ahead and find instruction with label.
+                    var instWithLabel = FindInstructionWithLabel(instrs, i + 2, originalLabel);
+
+                    if (instWithLabel == null)
+                    {
+                        AdventureBackpacks.Log.Error($"Can't Find Instruction with Label {originalLabel}");
+                        continue;
+                    }
+                    
+                    i++;
+                    
+                    //5. Generate new label.
+                    var detectShowLabel = ilGenerator.DefineLabel();
+                    
+                    //6. Save Label to instruction ahead.
+                    instWithLabel.labels.Add(detectShowLabel);
+                    
+                    //7. Write Player Var
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
+                    counter++;
+                    
+                    //8. Write LdArg Var
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
                     
-                    //Patch Call Method for Detect Show.
+                    //9. Write Call instruction
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToShow))));
+                    counter++;
+
+                    //10. Write Brture instruction with new label
+                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectShowLabel));
                     counter++;
                 }
                 else
