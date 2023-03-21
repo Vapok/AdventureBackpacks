@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using AdventureBackpacks.Assets;
-using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
@@ -18,11 +17,12 @@ internal static class InventoryGuiPatches
 {
     public static bool BackpackIsOpen;
     public static bool BackpackEquipped = false;
-    private static bool _showBackpack = false;
+    private static bool _showBackpack ;
 
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.DoCrafting))]
     static class InventoryGuiDoCraftingPrefix
     {
+        [UsedImplicitly]
         static void Postfix(InventoryGui __instance)
         {
             if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
@@ -37,6 +37,7 @@ internal static class InventoryGuiPatches
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnSelectedItem))]
     static class InventoryGuiOnSelectedItem
     {
+        [UsedImplicitly]
         static Exception Finalizer(Exception __exception, InventoryGrid grid, ItemDrop.ItemData item, Vector2i pos, InventoryGrid.Modifier mod, InventoryGui __instance)
         {
 
@@ -75,7 +76,7 @@ internal static class InventoryGuiPatches
         
         if (textInputPanel != null)
         {
-            if (textInputPanel.activeSelf)
+            if (textInputPanel.activeInHierarchy)
                 textInputVisible = true;
         }
         
@@ -84,8 +85,19 @@ internal static class InventoryGuiPatches
     
     public static void ShowBackpack(Player player, InventoryGui instance)
     {
+        if (ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
+        {
+            _showBackpack = true;
+        }
+    
         if (_showBackpack)
         { 
+            if (!BackpackIsOpen && instance.m_currentContainer != null)
+            {
+                instance.m_currentContainer.SetInUse(false);
+                instance.m_currentContainer = null;
+            }
+
             _showBackpack = false; 
             player.OpenBackpack(instance);
         }
@@ -98,36 +110,53 @@ internal static class InventoryGuiPatches
             instance.CloseContainer();
             BackpackIsOpen = false;
             
-            if (ConfigRegistry.CloseInventory.Value)
+            if (ConfigRegistry.CloseInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value)
                 instance.Hide();
         }
     }
 
-    public static bool DetectInputToHide(KeyCode defaultKeyCode, Player player, InventoryGui instance)
+    public static bool DetectInputToHide(Player player, InventoryGui instance)
     {
-        var defaultInputDown = Input.GetKeyDown(defaultKeyCode);
-        var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
-        var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown;
-        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
+        var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
+        var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value;
+        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
 
         var openBackpack = hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value;
+        
+        var grids = new List<InventoryGrid>();
+        grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
 
-        if (hotKeyDown && ConfigRegistry.OpenWithHoverInteract.Value)
+        if (hotKeyDown && !BackpackIsOpen && ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
         {
-            var hoveredElement = instance.m_playerGrid.GetHoveredElement();
-
-            if (hoveredElement != null)
+            ItemDrop.ItemData hoveredItem = null;
+            
+            foreach (var grid in grids)
             {
-                var hoveredItem = player.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
-                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && !BackpackIsOpen &&
-                    player.CanOpenBackpack())
+                if (grid.GetHoveredElement() == null)
+                    continue;
+                
+                var hoveredElement = grid.GetHoveredElement();
+                hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
+            }
+
+            if (ZInput.IsGamepadActive() && hoveredItem == null)
+            {
+                foreach (var grid in grids)
                 {
-                    openBackpack = true;
+                    if (grid.GetGamepadSelectedItem() == null)
+                        continue;
+                    hoveredItem = grid.GetGamepadSelectedItem();
                 }
+            }
+            
+            if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && !BackpackIsOpen &&
+                player.CanOpenBackpack())
+            {
+                openBackpack = true;
             }
         }
 
-        if (openBackpack)
+        if (openBackpack & !CheckForTextInput())
         {
             if (instance.m_currentContainer != null)
             {
@@ -138,55 +167,82 @@ internal static class InventoryGuiPatches
             return false;
         }
         
-        if (hotKeyDown && BackpackIsOpen && (!hotKeyDownOnClose || ConfigRegistry.OpenWithHoverInteract.Value))
+        if (hotKeyDown && BackpackIsOpen && (!hotKeyDownOnClose || ConfigRegistry.OpenWithHoverInteract.Value) && !CheckForTextInput())
         {
-            instance.CloseContainer();
-            BackpackIsOpen = false;
-            return false;
+            bool closeBackpack = false;
+            
+            if (ConfigRegistry.OpenWithHoverInteract.Value)
+            {
+                ItemDrop.ItemData hoveredItem = null;
+            
+                foreach (var grid in grids)
+                {
+                    if (grid.GetHoveredElement() == null)
+                        continue;
+                
+                    var hoveredElement = grid.GetHoveredElement();
+                    hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
+                }
+
+                if (ZInput.IsGamepadActive() && hoveredItem == null)
+                {
+                    foreach (var grid in grids)
+                    {
+                        if (grid.GetGamepadSelectedItem() == null)
+                            continue;
+                        hoveredItem = grid.GetGamepadSelectedItem();
+                    }
+                }
+                
+                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && BackpackIsOpen)
+                {
+                    closeBackpack = true;
+                }
+            }
+            else
+            {
+                closeBackpack = true;
+            }
+
+            if (closeBackpack)
+            {
+                instance.CloseContainer();
+                BackpackIsOpen = false;
+                return false;
+            }
         }
        
-        if (hotKeyDrop)
+        if (hotKeyDrop && !CheckForTextInput())
         {
             player.QuickDropBackpack();
         }
 
-        return defaultInputDown || (hotKeyDownOnClose && !ConfigRegistry.OpenWithHoverInteract.Value) || hotKeyDrop;
+        return ((hotKeyDownOnClose) || hotKeyDrop) && !CheckForTextInput();
     }
     
-    public static bool DetectInputToShow(string defaultKeyCode, Player player, InventoryGui instance)
+    public static bool DetectInputToShow(Player player, InventoryGui instance)
     {
-        var zInputDown = ZInput.GetButtonDown(defaultKeyCode);
-        var hotKeyDown = ConfigRegistry.HotKeyOpen.Value.IsDown();
-        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop.Value.IsDown();
+        var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
+        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
 
-        if (hotKeyDrop)
+        if (hotKeyDrop && !CheckForTextInput())
         {
             player.QuickDropBackpack();
         }
 
-        if (hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value)
+        if (hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value && !BackpackIsOpen && player.CanOpenBackpack() && !CheckForTextInput())
         {
             _showBackpack = true;
         }
         
-        if (zInputDown && ConfigRegistry.OpenWithInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value && !BackpackIsOpen && player.CanOpenBackpack())
-        {
-            _showBackpack = true;
-        }
-
-        if (_showBackpack && !BackpackIsOpen && instance.m_currentContainer != null)
-        {
-            instance.m_currentContainer.SetInUse(false);
-            instance.m_currentContainer = null;
-        }
-        
-        return (zInputDown || (hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value) || _showBackpack) && !CheckForTextInput();
+        return _showBackpack && !CheckForTextInput();
     }
    
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Update))]
     static class InventoryGuiUpdateTranspiler
     {
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        [UsedImplicitly]
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var instrs = instructions.ToList();
 
@@ -196,6 +252,17 @@ internal static class InventoryGuiPatches
             {
                 AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
                 return instruction;
+            }
+            
+            CodeInstruction FindInstructionWithLabel(List<CodeInstruction> codeInstructions, int index, Label label)
+            {
+                if (index >= codeInstructions.Count)
+                    return null;
+                
+                if (codeInstructions[index].labels.Contains(label))
+                    return codeInstructions[index];
+                
+                return FindInstructionWithLabel(codeInstructions, index + 1, label);
             }
 
             var resetButtonStatus = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.ResetButtonStatus));
@@ -256,47 +323,97 @@ internal static class InventoryGuiPatches
                     counter++;
                 } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(inputKeyDown) && instrs[i - 1].operand.Equals((sbyte)KeyCode.Escape) && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("Use"))
                 {
-                    //Add Inventory Open Key from Config
-                    //Get Player
-                    var ldLocInstruction = new CodeInstruction(OpCodes.Ldloc_1);
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldLocInstruction);
 
-                    //Patch Call Method for Detecting Key Press
-                    yield return LogMessage(ldLocInstruction);
+                    //1. Output current spot.
+                    yield return LogMessage(instrs[i]);
                     counter++;
 
-                    //InventoryGui Argument.
+                    //2. Output i + 1 (this is the brtrue).
+                    yield return LogMessage(instrs[i + 1]);
+                    counter++;
+
+                    //3. Grab label from brtrue.
+                    Label originalLabel = (Label)instrs[i + 1].operand;
+                    
+                    //4. Look ahead and find instruction with label.
+                    var instWithLabel = FindInstructionWithLabel(instrs, i + 2, originalLabel);
+                    
+                    if (instWithLabel == null)
+                    {
+                        AdventureBackpacks.Log.Error($"Can't Find Instruction with Label {originalLabel}");
+                        continue;
+                    }
+
+                    i++;
+                    
+                    //5. Generate new label.
+                    var detectHideLabel = ilGenerator.DefineLabel();
+                    
+                    //6. Save Label to instruction ahead.
+                    instWithLabel.labels.Add(detectHideLabel);
+                    
+                    //7. Write Player Var
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
+                    counter++;
+                    
+                    //8. Write LdArg Var
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
-
-                    //Patch Call Method for Detect Hide.
+                    
+                    //9. Write Call instruction
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToHide))));
+                    counter++;
+
+                    //10. Write Brture instruction with new label
+                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectHideLabel));
                     counter++;
 
                 } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(zInputButtonDown) 
                            && instrs[i - 1].operand.Equals("Inventory") && instrs[i + 1].opcode == OpCodes.Brtrue 
                            && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("JoyButtonY"))
                 {
-
-                    //Add Inventory Open Key from Config
-                    //Get Player
-                    var ldLocInstruction = new CodeInstruction(OpCodes.Ldloc_1);
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldLocInstruction);
-
-                    //Patch Call Method for Detecting Key Press
-                    yield return LogMessage(ldLocInstruction);
+                    //1. Output current spot.
+                    yield return LogMessage(instrs[i]);
                     counter++;
 
-                    //InventoryGui Argument.
+                    //2. Output i + 1 (this is the brtrue).
+                    yield return LogMessage(instrs[i + 1]);
+                    counter++;
+
+                    //3. Grab label from brtrue.
+                    Label originalLabel = (Label)instrs[i + 1].operand;
+                    
+                    //4. Look ahead and find instruction with label.
+                    var instWithLabel = FindInstructionWithLabel(instrs, i + 2, originalLabel);
+
+                    if (instWithLabel == null)
+                    {
+                        AdventureBackpacks.Log.Error($"Can't Find Instruction with Label {originalLabel}");
+                        continue;
+                    }
+                    
+                    i++;
+                    
+                    //5. Generate new label.
+                    var detectShowLabel = ilGenerator.DefineLabel();
+                    
+                    //6. Save Label to instruction ahead.
+                    instWithLabel.labels.Add(detectShowLabel);
+                    
+                    //7. Write Player Var
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
+                    counter++;
+                    
+                    //8. Write LdArg Var
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
                     
-                    //Patch Call Method for Detect Show.
+                    //9. Write Call instruction
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToShow))));
+                    counter++;
+
+                    //10. Write Brture instruction with new label
+                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectShowLabel));
                     counter++;
                 }
                 else

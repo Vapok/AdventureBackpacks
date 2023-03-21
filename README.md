@@ -12,6 +12,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * The default hotkey is `I` to open the equipped backpack.
 * Each backpack is completely different in form, function, and size.  Upgrading backpacks will unlock additional features depending on the progresion that backpack is intended to be used with.
 * Check the Configuration for ALL the different ways that you can modify these packs.
+* Keybindings and Actions are Controller Supported
 
 ## How To Install Adventure Backpacks
 * Install Adventure Backpacks into it's own FOLDER inside of the `BepInEx/plugins` folder.
@@ -55,8 +56,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
     * Can also set Mouse, Keyboard, and Gamepad bindings.
   * Configure Opening of Backpack with Hover + Interaction
     * When enabled, will open backpack when hovered over in Player Inventory and the Open Hot Key is pressed.
-    * This feature overrides Open with Inventory and Close with Inventory.
-    * This feature will only work when backpack is in player inventory, and NOT in Extended Inventory windows.
+    * This feature overrides Close with Inventory.
 * Backpack Inventory Protection Guard
   * Every backpack inventory is specially handled by Thor himself and is monitored for any interactions that might otherwise harm the existence of items in your backpacks.
   * Backpacks in Backpacks is not allowed and the only feature that is not configurable. This is how the Allfather dreamt of it.
