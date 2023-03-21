@@ -56,8 +56,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
     * Can also set Mouse, Keyboard, and Gamepad bindings.
   * Configure Opening of Backpack with Hover + Interaction
     * When enabled, will open backpack when hovered over in Player Inventory and the Open Hot Key is pressed.
-    * This feature overrides Open with Inventory and Close with Inventory.
-    * This feature will only work when backpack is in player inventory, and NOT in Extended Inventory windows.
+    * This feature overrides Close with Inventory.
 * Backpack Inventory Protection Guard
   * Every backpack inventory is specially handled by Thor himself and is monitored for any interactions that might otherwise harm the existence of items in your backpacks.
   * Backpacks in Backpacks is not allowed and the only feature that is not configurable. This is how the Allfather dreamt of it.

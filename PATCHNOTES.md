@@ -5,7 +5,8 @@
   * Set bindings in configuration for opening up the backpack and other settings.
 * Rebuilt the mechanism for calculating backpack weight. Now uses transpiler.
 * Addition Sign and Tame Rename Interaction Fixes
-* Open Inventory With Hover now fully works on extended inventory and quick slot grids.
+* Open Backpack With Hover now fully works on extended inventory and quick slot grids.
+* Open with Inventory now work with Open/Close Backpack with Hover.
 
 # 1.6.14.0 - Fixing Equippable Items, Adding Hover Over Interaction option, Fixing Signs.
 * New Feature: Open Inventory with Hover Interaction
