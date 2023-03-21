@@ -135,7 +135,7 @@ internal static class InventoryGuiPatches
                     continue;
                 
                 var hoveredElement = grid.GetHoveredElement();
-                hoveredItem = grid.GetItem(hoveredElement.m_pos);
+                hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
             }
 
             if (ZInput.IsGamepadActive() && hoveredItem == null)

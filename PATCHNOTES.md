@@ -1,5 +1,12 @@
 # Adventure Backpacks Patchnotes
 
+# 1.6.15.0 - Controller Support!!!, also some bug fixes.
+* Fully Implemented Controller/Gamepad Support.
+  * Set bindings in configuration for opening up the backpack and other settings.
+* Rebuilt the mechanism for calculating backpack weight. Now uses transpiler.
+* Addition Sign and Tame Rename Interaction Fixes
+* Open Inventory With Hover now fully works on extended inventory and quick slot grids.
+
 # 1.6.14.0 - Fixing Equippable Items, Adding Hover Over Interaction option, Fixing Signs.
 * New Feature: Open Inventory with Hover Interaction
   * When enabled, this will override the Open with Inventory and Close Inventory Options.
