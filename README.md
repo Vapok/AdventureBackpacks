@@ -150,4 +150,4 @@ Source: [Github](https://github.com/Vapok/AdventureBackpacks)
 
 Discord: [Vapok's Mod's Community](https://discord.gg/5YAJkRFBXt)
 
-Patch notes: [Github Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/PATCHNOTES.md)
+Patch notes: [Github Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/CHANGELOG.md)

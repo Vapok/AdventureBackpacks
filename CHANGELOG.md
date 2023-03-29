@@ -1,4 +1,8 @@
-# Adventure Backpacks Patchnotes
+# 1.6.16 - Valheim 0.214.300 Update
+* Crafting bags will no longer allow you to consume equipped cape's.
+  * To craft a bag with a cape, and the only one in inventory is equipped, it must be unequipped in order for it to be used.
+* Updates codebase to 0.214.300 Valheim References
+* Adding CHANGELOG.md to Thunderstore package
 
 # 1.6.15.0 - Controller Support!!!, also some bug fixes.
 * Fully Implemented Controller/Gamepad Support.
