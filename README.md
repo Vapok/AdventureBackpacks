@@ -112,7 +112,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * *Don't see your language, I'm looking for submissions for additional languages. Please find me on Discord (see link below) or submit a Pull Request!*
 
 ## Current Patch Notes
-[Adventure Backpack Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/PATCHNOTES.md) 
+[Adventure Backpack Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/CHANGELOG.md) 
 
 ## Compatible Mods (Verified)
 * Epic Loot 0.9.3+

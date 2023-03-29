@@ -1,6 +1,8 @@
-# 1.6.16 - Valheim 0.214.300 Update
+# 1.6.16 - Various Updates
 * Crafting bags will no longer allow you to consume equipped cape's.
   * To craft a bag with a cape, and the only one in inventory is equipped, it must be unequipped in order for it to be used.
+* Scaled down size and repositioned the Explorer's Wisppack.
+* Updated Adventure Backpacks Unity version to 2020.3.45
 * Updates codebase to 0.214.300 Valheim References
 * Adding CHANGELOG.md to Thunderstore package
 
