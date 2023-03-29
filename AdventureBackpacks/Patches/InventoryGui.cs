@@ -424,4 +424,58 @@ internal static class InventoryGuiPatches
             }
         }
     }
+    
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.SetupRequirement))]
+    static class InventoryGuiSetupRequirementPatch
+    {
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            var instrs = instructions.ToList();
+
+            var counter = 0;
+
+            CodeInstruction LogMessage(CodeInstruction instruction)
+            {
+                AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
+                return instruction;
+            }
+
+            var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_2);
+            var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), "CountItems", new[] { typeof(string), typeof(int) }); 
+
+            for (int i = 0; i < instrs.Count; ++i)
+            {
+
+                yield return LogMessage(instrs[i]);
+                counter++;
+
+                if (i > 5 && instrs[i-1].opcode == OpCodes.Callvirt && instrs[i-1].operand.Equals(countItemsMethod) && instrs[i].opcode == OpCodes.Stloc_S)
+                {
+                    //Move Any Labels from the instruction position being patched to new instruction.
+                    if (instrs[i].labels.Count > 0)
+                        instrs[i].MoveLabelsTo(ldArgInstruction);
+          
+                    //Player ldArg2
+                    yield return LogMessage(ldArgInstruction);
+                    counter++;
+                    
+                    //Piece.Requirement resource
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_1));
+                    counter++;
+                    
+                    //int num
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_S, instrs[i].operand));
+                    counter++;
+          
+                    //Patch Calling Method
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(PlayerPatches.AdjustCountIfEquipped))));
+                    counter++;
+
+                    //Save output of calling method to local variable 0
+                    yield return LogMessage(new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand));
+                    counter++;
+                }
+            }
+        }
+    }
 }
