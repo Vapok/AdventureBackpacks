@@ -1,3 +1,7 @@
+# 1.6.17 - MaxAxe Compatibility Hotfix
+* Changes to crafting were assuming unstackable items.
+  * Fixed to allow stackable items (that can be equipped) to be removed correctly.
+
 # 1.6.16 - Various Updates
 * Crafting bags will no longer allow you to consume equipped cape's.
   * To craft a bag with a cape, and the only one in inventory is equipped, it must be unequipped in order for it to be used.

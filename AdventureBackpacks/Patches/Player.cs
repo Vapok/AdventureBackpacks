@@ -45,7 +45,7 @@ public class PlayerPatches
 
                 if (removedCounter < amount)
                 {
-                    player.m_inventory.RemoveItem(item);
+                    player.m_inventory.RemoveItem(item,1);
                     removedCounter++;
                 }
             }
