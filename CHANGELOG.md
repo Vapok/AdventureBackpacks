@@ -1,3 +1,7 @@
+# 1.6.18 - Cheb's Necromancy Hotfix
+* Fixes Cheb's Necromancy Asset Issue
+* Put in strong error handling for when this will happen again in the future.
+
 # 1.6.17 - MaxAxe Compatibility Hotfix
 * Changes to crafting were assuming unstackable items.
   * Fixed to allow stackable items (that can be equipped) to be removed correctly.

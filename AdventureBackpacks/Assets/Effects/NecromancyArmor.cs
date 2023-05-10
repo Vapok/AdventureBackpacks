@@ -28,7 +28,17 @@ public class NecromancyArmor : EffectsBase
         {
             var pluginInfo = Chainloader.PluginInfos["com.chebgonaz.ChebsNecromancy"];
             _assetBundlePath = Path.Combine(BepInEx.Paths.PluginPath,Path.GetDirectoryName(pluginInfo.Location) ?? "", AssetFolderName, AssetName);
+            
+            if (!File.Exists(_assetBundlePath))
+                _assetBundlePath = Path.Combine(BepInEx.Paths.PluginPath,Path.GetDirectoryName(pluginInfo.Location) ?? "", AssetName);
+            
             _assetBundle = !File.Exists(_assetBundlePath) ? null : AssetBundle.LoadFromFile(_assetBundlePath);
+
+            if (_assetBundle == null)
+            {
+                AdventureBackpacks.Log.Error($"Can't find Asset Bundle for Status Effect: {_effectName} - Disabling Status Effect");
+                EnabledEffect.Value = false;
+            }
             
             var num = Math.Abs(NecromancySkillIdentifier.GetStableHashCode());
             SkillUID = (Skills.SkillType)num;
@@ -47,17 +57,31 @@ public class NecromancyArmor : EffectsBase
 
     private void LoadExternalStatusEffect()
     {
-        if (_externalStatusEffect == null)
+        try
         {
-            var seStat = _assetBundle.LoadAsset<SE_Stats>(_effectName);
-            seStat.m_skillLevel = SkillUID;
-            seStat.m_skillLevelModifier = NecromancySkillBonus.Value;
-            _externalStatusEffect = seStat;
+            if (_externalStatusEffect == null)
+            {
+                var seStat = _assetBundle.LoadAsset<SE_Stats>(_effectName);
+                if (seStat != null)
+                {
+                    seStat.m_skillLevel = SkillUID;
+                    seStat.m_skillLevelModifier = NecromancySkillBonus.Value;
+                }
+                _externalStatusEffect = seStat;
+            }
+        }
+        catch (Exception e)
+        {
+            AdventureBackpacks.Log.Error($"Can't Load External Status Effect: {_effectName} - Message: {e.Message}");
         }
     }
 
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
+        statusEffect = null;
+        if (!EnabledEffect.Value)
+            return false;
+        
         LoadExternalStatusEffect();
         SetStatusEffect(_externalStatusEffect);
         return base.HasActiveStatusEffect(human, out statusEffect);
@@ -65,6 +89,10 @@ public class NecromancyArmor : EffectsBase
 
     public override bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
+        statusEffect = null;
+        if (!EnabledEffect.Value)
+            return false;
+        
         LoadExternalStatusEffect();
         SetStatusEffect(_externalStatusEffect);
         return base.HasActiveStatusEffect(item, out statusEffect);
