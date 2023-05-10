@@ -1,0 +1,43 @@
+{
+  "vapok_mod_item_backpack_meadows": "Torba",
+  "vapok_mod_item_backpack_meadows_description": "Mała torba na kilka rzeczy.",
+
+  "vapok_mod_item_backpack_blackforest": "Skórzany plecak",
+  "vapok_mod_item_backpack_blackforest_description": "Skórzany plecak z klamrami i cienkimi skórzanymi paskami.",
+
+  "vapok_mod_item_backpack_swamp": "Wodoodporny plecak",
+  "vapok_mod_item_backpack_swamp_description": "Plecak wodoodporny uszczelniony workami na krew.",
+
+  "vapok_mod_item_backpack_mountains": "Zimowy plecak",
+  "vapok_mod_item_backpack_mountains_description": "Zimowy plecak odpowiedni na wędrówki po górach.",
+
+  "vapok_mod_item_backpack_plains": "Plecak loxa",
+  "vapok_mod_item_backpack_plains_description": "Mocny plecak ze skóry loxa.",
+
+  "vapok_mod_item_backpack_mistlands": "Plecak Odkrywcy",
+  "vapok_mod_item_backpack_mistlands_description": "Misternie wykonany mistyczny plecak w komplecie z własnym pudełkiem na drobiazgi. Nikt nie jest pewien, jak to działa.",
+
+  "vapok_mod_item_rugged_backpack": "Wytrzymały plecak",
+  "vapok_mod_item_rugged_backpack_description": "Wytrzymały plecak z klamrami i cienkimi skórzanymi paskami.",
+
+  "vapok_mod_item_arctic_backpack": "Arktyczny plecak",
+  "vapok_mod_item_arctic_backpack_description": "Plecak na długie wyprawy po lodowych pustkowiach.",
+
+  "vapok_mod_no_inception1": "Nie kuś bogów.",
+  "vapok_mod_no_inception2": "Zostałeś ostrzeżony.",
+  "vapok_mod_no_inception3": "Rozgniewałeś bogów!",
+  "vapok_mod_no_inception4": "Ech... Thor wkrótce się tobą zaopiekuje.",
+  "vapok_mod_no_inception5": "Thor pozbawił cię mocy!!!",
+
+  "vapok_mod_thor_saves_contents": "W plecaku były tajemnicze rzeczy. Thor zatrzymał je dla siebie.",
+
+  "vapok_mod_useful_backpack": "Twój plecak wydaje się przydatny",
+  "vapok_mod_you_droped_bag": "Upuściłeś plecak!",
+  "vapok_mod_level": "Poziom",
+  "vapok_mod_effect": "Efekt",
+  "vapok_mod_quick_drop_unavailable": "Szybka drzemka jest niedostępna.",
+
+  "vapok_mod_se_cold_immunity": "Odporność na zimno",
+  "vapok_mod_se_frost_resistance": "Mrozoodporność",
+  "vapok_mod_se_wet_resistance": "Wodoodporność"
+}
