@@ -56,7 +56,7 @@ public static class QuickTransfer
             }
 
             //If item is equipped, let's skip the move, because this is most likely an unequip action.
-            if (item.m_equiped)
+            if (item.m_equipped)
                 return;
 
             //If I have a backpack open, and I currently have nothing in the equipped slot, I want to prioritize equipping it over storing it.
