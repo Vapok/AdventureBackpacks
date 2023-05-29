@@ -1,0 +1,45 @@
+{
+  "vapok_mod_item_backpack_meadows": "Tornister",
+  "vapok_mod_item_backpack_meadows_description": "Mały plecak zdolny pomieścić kilka przedmiotów.",
+
+  "vapok_mod_item_backpack_blackforest": "Skórzany Plecak",
+  "vapok_mod_item_backpack_blackforest_description": "Skórzany plecak z klamrami i delikatnymi skórzanymi paskami.",
+
+  "vapok_mod_item_backpack_swamp": "Krwawy Plecak",
+  "vapok_mod_item_backpack_swamp_description": "Plecak wodoodporny uszczelniony workami na krew.",
+
+  "vapok_mod_item_backpack_mountains": "Plecak Górski",
+  "vapok_mod_item_backpack_mountains_description": "Plecak idealnie nadający się na długie wędrówki po górach.",
+
+  "vapok_mod_item_backpack_plains": "Plecak ze Skóry Loxa",
+  "vapok_mod_item_backpack_plains_description": "Plecak poszukiwaczy przygód wykonany z niezwykle wytrzymałej skóry loxa",
+
+  "vapok_mod_item_backpack_mistlands": "Plecak Odkrywcy",
+  "vapok_mod_item_backpack_mistlands_description": "Perfekcyjnie wykonany mistyczny plecak w komplecie z własnym pudełkiem na drobiazgi. Nikt nie jest pewien, jak to działa.",
+
+  "vapok_mod_item_rugged_backpack": "Wytrzymały Plecak",
+  "vapok_mod_item_rugged_backpack_description": "Wytrzymały plecak z klamrami i delikatnymi skórzanymi paskami.",
+
+  "vapok_mod_item_arctic_backpack": "Arktyczny Plecak",
+  "vapok_mod_item_arctic_backpack_description": "Arktyczny plecak na długie wyprawy po lodowych pustkowiach.",
+
+  "vapok_mod_no_inception1": "Nie rozgniewaj bogów.",
+  "vapok_mod_no_inception2": "Zostałeś ostrzeżony.",
+  "vapok_mod_no_inception3": "Rozgniewałeś bogów!",
+  "vapok_mod_no_inception4": "Ech... Thor wkrótce się tobą rozprawi.",
+  "vapok_mod_no_inception5": "Thor pozbawił cię mocy!!!",
+
+  "vapok_mod_thor_saves_contents": "W plecaku były rzeczy. Thor zatrzymał je dla ciebie.",
+
+  "vapok_mod_useful_backpack": "Twój plecak sprawia wrażenie użytecznego.",
+  "vapok_mod_you_droped_bag": "Upuściłeś plecak!",
+  "vapok_mod_level": "Poziom",
+  "vapok_mod_effect": "Efekt",
+  "vapok_mod_quick_drop_unavailable": "Szybkie rzucenie plecaka jest niemożliwe.",
+
+  "vapok_mod_se_cold_immunity": "Odporność na zimno",
+  "vapok_mod_se_frost_resistance": "Odporność na mróz",
+  "vapok_mod_se_wet_resistance": "Odporność na wodę",
+
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Widmowy Całun Utrzymania"
+}
