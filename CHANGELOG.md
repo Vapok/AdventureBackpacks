@@ -1,5 +1,5 @@
-# 1.6.19 - Valheim 0.216.7 Update
-* Implements updates needed for Valheim Update 0.216.7
+# 1.6.19 - Valheim 0.216.9 Update
+* Implements updates needed for Valheim Update 0.216.9
 * Adds in Polish Translations (big thanks to Gryfu and rysson for the collaboration and pull requests)
 
 # 1.6.18 - Cheb's Necromancy Hotfix
