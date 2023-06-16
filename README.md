@@ -104,6 +104,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Japanese / 日本
 * Korean / 한국인
 * Norwegian / norsk
+* Polish / Polski
 * Portuguese Brazilian / Português Brasileiro
 * Russian / Русский
 * Spanish / Español

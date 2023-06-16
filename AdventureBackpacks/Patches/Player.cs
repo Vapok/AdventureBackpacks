@@ -15,7 +15,7 @@ public class PlayerPatches
             return num;
             
         var itemName = resource.m_resItem.m_itemData.m_shared.m_name;
-        var equippedItems = player.GetInventory().GetEquipedtems();
+        var equippedItems = player.GetInventory().GetEquippedItems();
 
         if (equippedItems.Any(x => x.m_shared.m_name.Equals(itemName)))
         {
@@ -40,7 +40,7 @@ public class PlayerPatches
         {
             foreach (var item in resourceItems)
             {
-                if (item.m_equiped)
+                if (item.m_equipped)
                     continue;
 
                 if (removedCounter < amount)

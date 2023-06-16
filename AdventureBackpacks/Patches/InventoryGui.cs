@@ -149,7 +149,7 @@ internal static class InventoryGuiPatches
                 }
             }
             
-            if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && !BackpackIsOpen &&
+            if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equipped && !BackpackIsOpen &&
                 player.CanOpenBackpack())
             {
                 openBackpack = true;
@@ -194,7 +194,7 @@ internal static class InventoryGuiPatches
                     }
                 }
                 
-                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equiped && BackpackIsOpen)
+                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equipped && BackpackIsOpen)
                 {
                     closeBackpack = true;
                 }

@@ -87,7 +87,7 @@ namespace AdventureBackpacks.Assets
             }
 
             // Get a list of all equipped items.
-            var equipped = Player.m_localPlayer.GetInventory().GetEquipedtems();
+            var equipped = Player.m_localPlayer.GetInventory().GetEquippedItems();
 
             if (equipped != null)
             {
