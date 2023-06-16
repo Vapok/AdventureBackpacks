@@ -14,7 +14,7 @@ public class ColdResistance : EffectsBase
     {
         if (_externalStatusEffect == null)
         {
-            var cold = ObjectDB.instance.GetStatusEffect("Cold");
+            var cold = ObjectDB.instance.GetStatusEffect("Cold".GetHashCode());
             var se = new CustomSE(Enums.StatusEffects.Stats, "SE_vapok_ab_cold_immunity");
             se.Effect.m_name = "$vapok_mod_se_cold_immunity";
             se.Effect.m_icon = cold.m_icon;

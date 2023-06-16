@@ -14,7 +14,7 @@ public class Waterproof: EffectsBase
     {
         if (_externalStatusEffect == null)
         {
-            var wet = ObjectDB.instance.GetStatusEffect("Wet");
+            var wet = ObjectDB.instance.GetStatusEffect("Wet".GetHashCode());
             var se = new CustomSE(Enums.StatusEffects.Stats, "SE_vapok_ab_wet_resistance");
             se.Effect.m_name = "$vapok_mod_se_wet_resistance";
             se.Effect.m_icon = wet.m_icon;
