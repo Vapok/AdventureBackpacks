@@ -1,21 +1,21 @@
 {
   "vapok_mod_item_backpack_meadows": "Ранец",
-  "vapok_mod_item_backpack_meadows_description": "Небольшой ранец, способный вместить вещи.",
+  "vapok_mod_item_backpack_meadows_description": "Небольшой ранец, способный вместить немного вещей.",
 
-  "vapok_mod_item_backpack_blackforest": "Потертый прочный рюкзак",
-  "vapok_mod_item_backpack_blackforest_description": "Потертый прочный рюкзак с пряжками и тонкими кожаными ремнями.",
+  "vapok_mod_item_backpack_blackforest": "Прочный рюкзак",
+  "vapok_mod_item_backpack_blackforest_description": "Прочный рюкзак с пряжками и тонкими кожаными ремешками.",
 
-  "vapok_mod_item_backpack_swamp": "Багровый рюкзак",
-  "vapok_mod_item_backpack_swamp_description": "Багровый рюкзак, запечатанный водонепроницаемыми пакетами для крови.",
+  "vapok_mod_item_backpack_swamp": "Болотный мешок",
+  "vapok_mod_item_backpack_swamp_description": "Крепкий рюкзак из водонепроницаемой шкуры пиявки.",
 
-  "vapok_mod_item_backpack_mountains": "Потертый арктический рюкзак",
-  "vapok_mod_item_backpack_mountains_description": "Потертый арктический рюкзак, пригодный для длительных походов по горам.",
+  "vapok_mod_item_backpack_mountains": "Арктический рюкзак",
+  "vapok_mod_item_backpack_mountains_description": "Утепленный арктический рюкзак, отлично подходит для длительных походов в горы.",
 
-  "vapok_mod_item_backpack_plains": "Вековой рюкзак быкоящера",
-  "vapok_mod_item_backpack_plains_description": "Вековой рюкзак для приключений из чрезвычайно прочной шкуры быкоящера.",
+  "vapok_mod_item_backpack_plains": "Вечный рюкзак быкоящера",
+  "vapok_mod_item_backpack_plains_description": "Вечный рюкзак для приключений из чрезвычайно прочной шкуры быкоящера.",
 
-  "vapok_mod_item_backpack_mistlands": "Небывалый рюкзак исследователей",
-  "vapok_mod_item_backpack_mistlands_description": "Прекрасно созданный, мистический рюкзак. В комплекте с собственной коробкой для хранения. Никто не совсем уверен, как это работает.",
+  "vapok_mod_item_backpack_mistlands": "Небывалый рюкзак исследователя",
+  "vapok_mod_item_backpack_mistlands_description": "Искусно изготовленный загадочный рюкзак. С сундуком. Никто не знает, как именно он работает.",
 
   "vapok_mod_item_rugged_backpack": "Древний прочный рюкзак",
   "vapok_mod_item_rugged_backpack_description": "Древний прочный рюкзак с пряжками и тонкими кожаными ремнями.",
@@ -26,8 +26,8 @@
   "vapok_mod_no_inception1": "Не злите богов.",
   "vapok_mod_no_inception2": "Вы были предупреждены.",
   "vapok_mod_no_inception3": "Вы злите богов!",
-  "vapok_mod_no_inception4": "Вздыхает... Тор скоро займется вами.",
-  "vapok_mod_no_inception5": "Тор лишил вас своих сил!!",
+  "vapok_mod_no_inception4": "Прекратите... Или вами займется Тор.",
+  "vapok_mod_no_inception5": "Тор лишил вас своих сил!!!",
 
   "vapok_mod_thor_saves_contents": "В этом рюкзаке были вещи. Тор сохранил его для тебя.",
 
@@ -39,5 +39,5 @@
 
   "vapok_mod_se_cold_immunity": "Устойчивость к холоду",
   "vapok_mod_se_frost_resistance": "Сопротивление морозу",
-  "vapok_mod_se_wet_resistance": "Устойчивость к воде"
+  "vapok_mod_se_wet_resistance": "Устойчивость к намоканию"
 }
