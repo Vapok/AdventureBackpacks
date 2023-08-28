@@ -1,3 +1,7 @@
+# 1.6.21 - Hildir's Bug Fixing
+* Fixes Item Requirement Count Method
+* Updated Russian Translations
+
 # 1.6.20 - Valheim 0.217.14 Update
 * Implements updates needed for Valheim Update Hildir's Request
 
