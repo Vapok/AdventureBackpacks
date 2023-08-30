@@ -441,7 +441,7 @@ internal static class InventoryGuiPatches
             }
 
             var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_2);
-            var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), "CountItems", new[] { typeof(string), typeof(int) }); 
+            var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) }); 
 
             for (int i = 0; i < instrs.Count; ++i)
             {
