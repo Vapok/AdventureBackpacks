@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
+using Vapok.Common.Managers;
 
 namespace AdventureBackpacks.Patches;
 
@@ -104,7 +106,9 @@ public class HumanoidPatches
                     inventoryGui.CloseContainer();
                     InventoryGuiPatches.BackpackIsOpen = false;
                 }
-
+                
+                var backpackContainer = player.gameObject.GetComponent<Container>();
+                backpackContainer.m_inventory = new Inventory("Empty", null, 1, 1);
                 InventoryGuiPatches.BackpackEquipped = false;
             }
         }
@@ -119,12 +123,22 @@ public class HumanoidPatches
             
             if ( Player.m_localPlayer == null && !__result)
                 return;
-
+            var player = Player.m_localPlayer;
             var item = __0;
 
             if (item.IsBackpack())
             {
                 InventoryGuiPatches.BackpackEquipped = true;
+                
+                var backpackContainer = player.gameObject.GetComponent<Container>();
+
+                var backpack = item.Data().GetOrCreate<BackpackComponent>();
+                
+                var inventory = backpack.GetInventory();
+                backpackContainer.m_inventory = inventory;
+                backpackContainer.m_width = inventory.m_width;
+                backpackContainer.m_height = inventory.m_height;
+                backpackContainer.m_bkg = backpack.Item.m_shared.m_icons[0];
             }
         }
     }

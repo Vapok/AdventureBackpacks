@@ -8,6 +8,15 @@ namespace AdventureBackpacks.Patches;
 
 public class PlayerPatches
 {
+    [HarmonyPatch(typeof(Player), nameof(Player.Awake))]
+    static class PlayerAwakePatch
+    {
+        static void Postfix(Player __instance)
+        {
+            __instance.gameObject.AddComponent<Container>();
+        }
+    }
+
     public static int AdjustCountIfEquipped(Player player, Piece.Requirement resource, int itemCount)
     {
         var num = itemCount;
