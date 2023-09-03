@@ -22,6 +22,21 @@ public static class ContainerPatches
         }
     }
 
+    [HarmonyPatch(typeof(Container), nameof(Container.Interact))]
+    static class ContainerInteractPatch
+    {
+        static bool Prefix(Container __instance, ref bool __result)
+        {
+            if (__instance.name.Equals("Player(Clone)"))
+            {
+                __result = false;
+                return false;
+            }
+
+            return true;
+        }
+    }
+    
     [HarmonyPatch(typeof(Container), nameof(Container.Awake))]
     static class ContainerAwakePatch
     {
