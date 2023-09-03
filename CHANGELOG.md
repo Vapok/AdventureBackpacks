@@ -1,3 +1,6 @@
+# 1.6.22 - Hildir's Bug Fixing
+* Fixes Item Requirement Count Method - Missed 1 method.
+
 # 1.6.21 - Hildir's Bug Fixing
 * Fixes Item Requirement Count Method
 * Updated Russian Translations
