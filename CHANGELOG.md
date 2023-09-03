@@ -3,6 +3,7 @@
   * This is needed to prevent other mods from having to make specific updates for this mod.
   * AzuCraftyBoxes is now fully supported with Adventure Backpacks when using the Equipped Backpack
   * Craft From Containers needs 1 update in order to work (They need to not check for Piece component)
+* Fixes a Compatibility issue with Valheim+ Where Transpilers were fighting for attention.
 
 # 1.6.24 - Updates and Compatibilities
 * Fixing a Player Load error on Startup when wearing a backpack.

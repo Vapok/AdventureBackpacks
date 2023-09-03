@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using HarmonyLib;
@@ -68,7 +69,7 @@ public class PlayerPatches
     static class PlayerHaveRequirementItemsPatch
     {
         
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var patchedSuccess = false;
             
@@ -83,19 +84,19 @@ public class PlayerPatches
             }
 
             var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_0);
-            var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) }); 
+            var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) });
 
+            
             for (int i = 0; i < instrs.Count; ++i)
             {
-
-                yield return LogMessage(instrs[i]);
-                counter++;
-
-                if (i > 5 && instrs[i-1].opcode == OpCodes.Callvirt && instrs[i-1].operand.Equals(countItemsMethod) && instrs[i].opcode == OpCodes.Stloc_S)
+                if (i > 5 && instrs[i].opcode == OpCodes.Stloc_S && instrs[i+1].opcode == OpCodes.Ldarg_1 && instrs[i+2].opcode == OpCodes.Ldfld)
                 {
                     //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)
                         instrs[i].MoveLabelsTo(ldArgInstruction);
+
+                    yield return LogMessage(instrs[i]);
+                    counter++;
           
                     //Player this
                     yield return LogMessage(ldArgInstruction);
@@ -118,6 +119,11 @@ public class PlayerPatches
                     counter++;
                     
                     patchedSuccess = true;
+                }
+                else
+                {
+                    yield return LogMessage(instrs[i]);
+                    counter++;
                 }
             }
             
