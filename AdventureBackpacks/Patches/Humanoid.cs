@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Threading;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
@@ -14,6 +15,8 @@ public class HumanoidPatches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            var patchedSuccess = false;
+            
             var instrs = instructions.ToList();
 
             var counter = 0;
@@ -55,7 +58,15 @@ public class HumanoidPatches
                     //Save output of calling method to local variable 0
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_0));
                     counter++;
+                    
+                    patchedSuccess = true;
                 }
+            }
+
+            if (!patchedSuccess)
+            {
+                AdventureBackpacks.Log.Error($"{nameof(Humanoid.UpdateEquipmentStatusEffects)} Transpiler Failed To Patch");
+                Thread.Sleep(5000);
             }
         }
     }
