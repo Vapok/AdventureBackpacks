@@ -1,3 +1,10 @@
+# 1.6.23 - Updates and Compatibilities
+* Fixed the Inventory Input Control that was broken.
+* Added in logging and warning messages when Transpilers don't patch.
+* Added in Container compatibility for mods (like AzuCraftyBoxes) that would access containers.
+  * This places a Container component on the Player(Clone) that will always contain the inventory of the EQUIPPED backpack
+  * This would allow Craft from Containers (assuming no code changes needed on other mods) to access that inventory.
+
 # 1.6.22 - Hildir's Bug Fixing
 * Fixes Item Requirement Count Method - Missed 1 method.
 
