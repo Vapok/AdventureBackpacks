@@ -35,6 +35,7 @@ internal class BackpackPlains : BackpackItem
         RegisterBackpackSize(2,4,4);
         RegisterBackpackSize(3,5,4);
         RegisterBackpackSize(4,6,4);
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(25);
         RegisterSpeedMod();

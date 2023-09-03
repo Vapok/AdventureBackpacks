@@ -36,6 +36,7 @@ internal class BackpackBlackForest : BackpackItem
         RegisterBackpackSize(2,4,2);
         RegisterBackpackSize(3,5,2);
         RegisterBackpackSize(4,6,2);
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(10);
         RegisterSpeedMod();

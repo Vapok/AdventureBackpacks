@@ -15,6 +15,7 @@ internal class LegacyIronBackpack: BackpackItem
     {
         RegisterBackpackBiome();
         RegisterBackpackSize();
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(25);
         RegisterSpeedMod();

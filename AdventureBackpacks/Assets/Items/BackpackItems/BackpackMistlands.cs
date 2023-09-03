@@ -39,6 +39,7 @@ internal class BackpackMistlands : BackpackItem
         RegisterBackpackSize(2,5,4);
         RegisterBackpackSize(3,6,4);
         RegisterBackpackSize(4,7,4);
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(30);
         RegisterSpeedMod();

@@ -36,6 +36,7 @@ internal class BackpackSwamp : BackpackItem
         RegisterBackpackSize(2,3,3);
         RegisterBackpackSize(3,4,3);
         RegisterBackpackSize(4,5,3);
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(15);
         RegisterSpeedMod();

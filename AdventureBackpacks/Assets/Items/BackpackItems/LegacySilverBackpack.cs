@@ -15,6 +15,7 @@ internal class LegacySilverBackpack : BackpackItem
     {
         RegisterBackpackBiome();
         RegisterBackpackSize();
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(45);
         RegisterSpeedMod();
