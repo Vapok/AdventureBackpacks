@@ -6,6 +6,8 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using Vapok.Common.Managers;
 
 namespace AdventureBackpacks.Patches;
@@ -84,7 +86,10 @@ public class HumanoidPatches
             
             if ( Player.m_localPlayer == null)
                 return;
-            
+
+            if (SceneManager.GetActiveScene().name.Equals("start"))
+                return;
+
             var player = Player.m_localPlayer;
 
             var item = __0;
@@ -123,6 +128,10 @@ public class HumanoidPatches
             
             if ( Player.m_localPlayer == null && !__result)
                 return;
+            
+            if (SceneManager.GetActiveScene().name.Equals("start"))
+                return;
+            
             var player = Player.m_localPlayer;
             var item = __0;
 
