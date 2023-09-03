@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Threading;
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
+using Vapok.Common.Managers;
 
 namespace AdventureBackpacks.Patches;
 
@@ -14,6 +17,8 @@ public class HumanoidPatches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            var patchedSuccess = false;
+            
             var instrs = instructions.ToList();
 
             var counter = 0;
@@ -55,7 +60,15 @@ public class HumanoidPatches
                     //Save output of calling method to local variable 0
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_0));
                     counter++;
+                    
+                    patchedSuccess = true;
                 }
+            }
+
+            if (!patchedSuccess)
+            {
+                AdventureBackpacks.Log.Error($"{nameof(Humanoid.UpdateEquipmentStatusEffects)} Transpiler Failed To Patch");
+                Thread.Sleep(5000);
             }
         }
     }
@@ -93,7 +106,9 @@ public class HumanoidPatches
                     inventoryGui.CloseContainer();
                     InventoryGuiPatches.BackpackIsOpen = false;
                 }
-
+                
+                var backpackContainer = player.gameObject.GetComponent<Container>();
+                backpackContainer.m_inventory = new Inventory("Empty", null, 1, 1);
                 InventoryGuiPatches.BackpackEquipped = false;
             }
         }
@@ -108,12 +123,22 @@ public class HumanoidPatches
             
             if ( Player.m_localPlayer == null && !__result)
                 return;
-
+            var player = Player.m_localPlayer;
             var item = __0;
 
             if (item.IsBackpack())
             {
                 InventoryGuiPatches.BackpackEquipped = true;
+                
+                var backpackContainer = player.gameObject.GetComponent<Container>();
+
+                var backpack = item.Data().GetOrCreate<BackpackComponent>();
+                
+                var inventory = backpack.GetInventory();
+                backpackContainer.m_inventory = inventory;
+                backpackContainer.m_width = inventory.m_width;
+                backpackContainer.m_height = inventory.m_height;
+                backpackContainer.m_bkg = backpack.Item.m_shared.m_icons[0];
             }
         }
     }

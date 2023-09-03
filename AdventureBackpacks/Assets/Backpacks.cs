@@ -205,21 +205,25 @@ namespace AdventureBackpacks.Assets
         {
             if (itemData == null)
                 return null;
+
+            if (!itemData.TryGetBackpackItem(out var backpack))
+                return null;
+            
             var backpackName = itemData.m_shared.m_name;
             var backpackQuality = itemData.m_quality;
             var statusEffects = new CustomSE(Enums.StatusEffects.Stats, $"SE_{backpackName}_{backpackQuality}");
-            
-            statusEffects.Effect.m_name = $"{backpackName} $vapok_mod_level {backpackQuality} $vapok_mod_effect";
-            statusEffects.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
-            statusEffects.Effect.m_startMessage = $"$vapok_mod_useful_backpack";
-            
+            var defaultStatusName = $"{backpackName} $vapok_mod_level {backpackQuality} $vapok_mod_effect";
+
+            if (backpack.ShowBackpackStatusEffect.Value)
+            {
+                statusEffects.Effect.m_name = string.IsNullOrEmpty(backpack.CustomStatusEffectName.Value) ? defaultStatusName : backpack.CustomStatusEffectName.Value;
+                statusEffects.Effect.m_startMessageType = MessageHud.MessageType.TopLeft;
+                statusEffects.Effect.m_startMessage = $"$vapok_mod_useful_backpack";
+            }
 
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default
             itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel * backpackQuality;
-            
-            if (!itemData.TryGetBackpackItem(out var backpack))
-                return null;
             
             //Apply Frost Resistance if configured.
             var frostResistEffect = EffectsFactory.EffectList[BackpackEffect.FrostResistance];
@@ -259,7 +263,10 @@ namespace AdventureBackpacks.Assets
             
             itemData.m_shared.m_maxDurability = 1000f;
             ((SE_Stats)statusEffects.Effect).m_mods = modifierList;
-            ((SE_Stats)statusEffects.Effect).m_icon = itemData.GetIcon();
+            if (backpack.ShowBackpackStatusEffect.Value)
+            {
+                ((SE_Stats)statusEffects.Effect).m_icon = itemData.GetIcon();   
+            }
 
             itemData.AddSEToItem(statusEffects);
             return statusEffects;

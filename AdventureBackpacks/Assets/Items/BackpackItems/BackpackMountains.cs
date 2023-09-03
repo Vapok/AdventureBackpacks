@@ -33,6 +33,7 @@ internal class BackpackMountains : BackpackItem
         RegisterBackpackSize(2,4,3);
         RegisterBackpackSize(3,5,3);
         RegisterBackpackSize(4,6,3);
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(20);
         RegisterSpeedMod();

@@ -1,12 +1,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Threading;
 using HarmonyLib;
 
 namespace AdventureBackpacks.Patches;
 
 public class PlayerPatches
 {
+    [HarmonyPatch(typeof(Player), nameof(Player.Awake))]
+    static class PlayerAwakePatch
+    {
+        static void Postfix(Player __instance)
+        {
+            __instance.gameObject.AddComponent<Container>();
+        }
+    }
+
     public static int AdjustCountIfEquipped(Player player, Piece.Requirement resource, int itemCount)
     {
         var num = itemCount;
@@ -60,6 +70,8 @@ public class PlayerPatches
         
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            var patchedSuccess = false;
+            
             var instrs = instructions.ToList();
 
             var counter = 0;
@@ -104,7 +116,15 @@ public class PlayerPatches
                     //Save output of calling method to local variable 0
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand));
                     counter++;
+                    
+                    patchedSuccess = true;
                 }
+            }
+            
+            if (!patchedSuccess)
+            {
+                AdventureBackpacks.Log.Error($"{nameof(Player.HaveRequirementItems)} Transpiler Failed To Patch");
+                Thread.Sleep(5000);
             }
         }
     }
@@ -115,6 +135,7 @@ public class PlayerPatches
         
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            var patchedSuccess = false;
             var instrs = instructions.ToList();
 
             var counter = 0;
@@ -159,7 +180,15 @@ public class PlayerPatches
                     //Save output of calling method to local variable 0
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_3));
                     counter++;
+                    
+                    patchedSuccess = true;
                 }
+            }
+            
+            if (!patchedSuccess)
+            {
+                AdventureBackpacks.Log.Error($"{nameof(Player.ConsumeResources)} Transpiler Failed To Patch");
+                Thread.Sleep(5000);
             }
         }
     }

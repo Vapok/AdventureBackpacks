@@ -34,6 +34,7 @@ internal class BackpackMeadows : BackpackItem
         RegisterBackpackSize(2,4,1);
         RegisterBackpackSize(3,5,1);
         RegisterBackpackSize(4,6,1);
+        RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(5);
         RegisterSpeedMod();

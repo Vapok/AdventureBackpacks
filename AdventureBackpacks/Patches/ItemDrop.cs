@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Threading;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using HarmonyLib;
@@ -34,6 +35,8 @@ public class ItemDropPatches
         
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            var patchedSuccess = false;
+            
             var instrs = instructions.ToList();
 
             var counter = 0;
@@ -79,12 +82,20 @@ public class ItemDropPatches
                     //Output current Operation
                     yield return LogMessage(instrs[i]);
                     counter++;
+                    
+                    patchedSuccess = true;
                 } 
                 else
                 {
                     yield return LogMessage(instrs[i]);
                     counter++;
                 }
+            }
+
+            if (!patchedSuccess)
+            {
+                AdventureBackpacks.Log.Error($"{nameof(ItemDrop.ItemData.GetWeight)} Transpiler Failed To Patch");
+                Thread.Sleep(5000);
             }
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Threading;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
@@ -244,9 +245,15 @@ internal static class InventoryGuiPatches
         [UsedImplicitly]
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
+            
             var instrs = instructions.ToList();
 
             var counter = 0;
+
+            var patchedHideBackpackMethod = false;
+            var patchedShowBackpackMethod = false;
+            var patchedDetectInputHideMethod = false;
+            var patchedDetectInputShowMethod = false;
 
             CodeInstruction LogMessage(CodeInstruction instruction)
             {
@@ -269,7 +276,7 @@ internal static class InventoryGuiPatches
             var menuVisibleMethod = AccessTools.DeclaredMethod(typeof(Menu), nameof(Menu.IsVisible));
             var hideMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Hide));
             var showMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Show));
-            var inputKeyDown = AccessTools.DeclaredMethod(typeof(Input), nameof(Input.GetKeyDown), new []{typeof(KeyCode)});
+            var zInputKeyDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetKeyDown), new []{typeof(KeyCode)});
             var zInputButtonDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetButtonDown), new []{typeof(string)});
 
             for (int i = 0; i < instrs.Count; ++i)
@@ -295,6 +302,9 @@ internal static class InventoryGuiPatches
                     //Patch Call Method for Hiding.
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(HideBackpack))));
                     counter++;
+
+                    patchedHideBackpackMethod = true;
+                    
                 } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(showMethod) &&
                            instrs[i - 1].opcode == OpCodes.Ldc_I4_1 && instrs[i - 2].opcode == OpCodes.Ldnull &&
                            instrs[i - 3].opcode == OpCodes.Ldarg_0)
@@ -321,7 +331,9 @@ internal static class InventoryGuiPatches
                     //Patch Call Method for Hiding.
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(ShowBackpack))));
                     counter++;
-                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(inputKeyDown) && instrs[i - 1].operand.Equals((sbyte)KeyCode.Escape) && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("Use"))
+
+                    patchedShowBackpackMethod = true;
+                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(zInputKeyDown) && instrs[i - 1].operand.Equals((sbyte)KeyCode.Escape) && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("Use"))
                 {
 
                     //1. Output current spot.
@@ -367,6 +379,8 @@ internal static class InventoryGuiPatches
                     //10. Write Brture instruction with new label
                     yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectHideLabel));
                     counter++;
+
+                    patchedDetectInputHideMethod = true;
 
                 } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(zInputButtonDown) 
                            && instrs[i - 1].operand.Equals("Inventory") && instrs[i + 1].opcode == OpCodes.Brtrue 
@@ -415,12 +429,25 @@ internal static class InventoryGuiPatches
                     //10. Write Brture instruction with new label
                     yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectShowLabel));
                     counter++;
+
+                    patchedDetectInputShowMethod = true;
                 }
                 else
                 {
                     yield return LogMessage(instrs[i]);
                     counter++;
                 }
+            }
+
+            if (!patchedHideBackpackMethod || !patchedShowBackpackMethod || !patchedDetectInputHideMethod ||
+                !patchedDetectInputShowMethod)
+            {
+                AdventureBackpacks.Log.Error($"InventoryGui.Update Transpiler Failed To Patch");
+                AdventureBackpacks.Log.Warning($" patchedHideBackpackMethod {patchedHideBackpackMethod}");
+                AdventureBackpacks.Log.Warning($" patchedShowBackpackMethod {patchedShowBackpackMethod}");
+                AdventureBackpacks.Log.Warning($" patchedDetectInputHideMethod {patchedDetectInputHideMethod}");
+                AdventureBackpacks.Log.Warning($" patchedDetectInputShowMethod {patchedDetectInputShowMethod}");
+                Thread.Sleep(5000);
             }
         }
     }
@@ -430,6 +457,7 @@ internal static class InventoryGuiPatches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            var patchedSuccess = false;
             var instrs = instructions.ToList();
 
             var counter = 0;
@@ -474,7 +502,14 @@ internal static class InventoryGuiPatches
                     //Save output of calling method to local variable 0
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand));
                     counter++;
+
+                    patchedSuccess = true;
                 }
+            }
+            if (!patchedSuccess)
+            {
+                AdventureBackpacks.Log.Error($"InventoryGui.SetupRequirement Transpiler Failed To Patch");
+                Thread.Sleep(5000);
             }
         }
     }
