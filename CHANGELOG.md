@@ -1,3 +1,6 @@
+# 1.6.24 - Updates and Compatibilities
+* Fixing a Player Load error on Startup when wearing a backpack.
+
 # 1.6.23 - Updates and Compatibilities
 * Fixed the Inventory Input Control that was broken.
 * Added in logging and warning messages when Transpilers don't patch.
