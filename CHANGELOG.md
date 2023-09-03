@@ -1,3 +1,7 @@
+# 1.6.26 - Hotfix to address Critical Crashing Bug
+* Turns out adding a container on Players, make them interactable which crashes the player object.
+  * Disabled the interaction function on containers when the container is Player(Clone)
+
 # 1.6.25 - Container Checking for Mod Compatibility
 * Made changes will allow the Container to be recognized as "player built"
   * This is needed to prevent other mods from having to make specific updates for this mod.
