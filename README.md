@@ -125,6 +125,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Project Auga
 * Quick Stack Store
 * Auto Split Stack
+* AzuCraftyBoxes
 * Multi-User-Chests
 * Fast Item Transfer
 * Equipment and Quick Slots
