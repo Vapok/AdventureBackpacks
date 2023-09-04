@@ -3,7 +3,9 @@
     <Target Name="ILRepacker" AfterTargets="Build">
         <ItemGroup>
             <InputAssemblies Include="$(TargetPath)" />
-            <InputAssemblies Include="$(OutputPath)\Vapok.Common.dll" />
+            <InputAssemblies Include="$(OutputPath)\Vapok.Valheim.Common.dll" />
+            <InputAssemblies Include="$(OutputPath)\YamlDotNet.dll" />
+            <InputAssemblies Include="$(OutputPath)\ServerSync.dll" />
             <LibraryPath Include="$(OutputPath)" />
         </ItemGroup>
         <ILRepack Parallel="true" DebugInfo="true" Internalize="true" InputAssemblies="@(InputAssemblies)" OutputFile="$(TargetPath)" TargetKind="SameAsPrimaryAssembly" LibraryPath="@(LibraryPath)" />
