@@ -18,6 +18,20 @@ public static class PlayerExtensions
         return player.m_shoulderItem.IsBackpack();
     }
 
+    public static bool IsThisBackpackEquipped(this Player player, ItemDrop.ItemData itemData )
+    {
+        if (player == null || player.GetInventory() == null)
+            return false;
+            
+        if (player.m_shoulderItem == null)
+            return false;
+
+        if (!player.m_shoulderItem.IsBackpack())
+            return false;
+        
+        return player.m_shoulderItem.Equals(itemData);
+    }
+
     public static BackpackComponent GetEquippedBackpack(this Player player)
     {
         if (player == null || player.GetInventory() == null)

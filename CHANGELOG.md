@@ -1,6 +1,10 @@
 # 1.6.27 - 0.217.24 Update
 * Updates for Valheim 0.217.24
 
+# 1.6.27 - Bug Fix
+* Fixed: In a rare case, when a bag is upgraded, and then you die before unequipping your bag, it can potentially lose the contents of the backpack.
+  * This is fixed in this version.
+
 # 1.6.26 - Hotfix to address Critical Crashing Bug
 * Turns out adding a container on Players, make them interactable which crashes the player object.
   * Disabled the interaction function on containers when the container is Player(Clone)
@@ -11,6 +15,9 @@
   * AzuCraftyBoxes is now fully supported with Adventure Backpacks when using the Equipped Backpack
   * Craft From Containers needs 1 update in order to work (They need to not check for Piece component)
 * Fixes a Compatibility issue with Valheim+ Where Transpilers were fighting for attention.
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.6.24 - Updates and Compatibilities
 * Fixing a Player Load error on Startup when wearing a backpack.
@@ -272,3 +279,5 @@
    * Adventure Backpacks will seamlessly convert Jotunn Backpacks into new Adventure Backpacks.
    * As such, Jotunn Backpacks is incompatible with Adventure Backpacks
      * Utilizing the same Prefab Name, to get technical.
+
+</details>
