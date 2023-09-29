@@ -26,11 +26,23 @@ internal static class InventoryGuiPatches
         [UsedImplicitly]
         static void Postfix(InventoryGui __instance)
         {
+            if ( Player.m_localPlayer == null)
+                return;
+            var player = Player.m_localPlayer;
+            
             if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
             {
                 var backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
+                if (backpack == null)
+                    return;
+                
+                var backpackContainer = player.gameObject.GetComponent<Container>();
                 backpack?.Load();
-                Player.m_localPlayer.UpdateEquipmentStatusEffects();
+                
+                if (player.IsThisBackpackEquipped(backpack.Item))
+                    backpack?.UpdateContainerSizing(backpackContainer);
+                
+                player.UpdateEquipmentStatusEffects();
             }
         }
     }
@@ -447,6 +459,7 @@ internal static class InventoryGuiPatches
                 AdventureBackpacks.Log.Warning($" patchedShowBackpackMethod {patchedShowBackpackMethod}");
                 AdventureBackpacks.Log.Warning($" patchedDetectInputHideMethod {patchedDetectInputHideMethod}");
                 AdventureBackpacks.Log.Warning($" patchedDetectInputShowMethod {patchedDetectInputShowMethod}");
+                AdventureBackpacks.Log.Error($"Please inform Mod Author.");
                 Thread.Sleep(5000);
             }
         }

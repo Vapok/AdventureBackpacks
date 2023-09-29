@@ -140,14 +140,8 @@ public class HumanoidPatches
                 InventoryGuiPatches.BackpackEquipped = true;
                 
                 var backpackContainer = player.gameObject.GetComponent<Container>();
-
                 var backpack = item.Data().GetOrCreate<BackpackComponent>();
-                
-                var inventory = backpack.GetInventory();
-                backpackContainer.m_inventory = inventory;
-                backpackContainer.m_width = inventory.m_width;
-                backpackContainer.m_height = inventory.m_height;
-                backpackContainer.m_bkg = backpack.Item.m_shared.m_icons[0];
+                backpack.UpdateContainerSizing(backpackContainer);
             }
         }
     }

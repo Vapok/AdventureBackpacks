@@ -28,6 +28,15 @@ namespace AdventureBackpacks.Components
             return _backpackInventory;
         }
 
+        public void UpdateContainerSizing(Container backpackContainer)
+        {
+            var inventory = GetInventory();
+            backpackContainer.m_inventory = inventory;
+            backpackContainer.m_width = inventory.m_width;
+            backpackContainer.m_height = inventory.m_height;
+            backpackContainer.m_bkg = Item.m_shared.m_icons[0];
+        }
+
         public string Serialize()
         {
             _log.Debug($"[Serialize()] Starting..");
