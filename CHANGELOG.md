@@ -1,4 +1,4 @@
-# 1.6.27 - 0.217.24 Update
+# 1.6.28 - 0.217.24 Update
 * Updates for Valheim 0.217.24
 
 # 1.6.27 - Bug Fix
