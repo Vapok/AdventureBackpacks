@@ -1,5 +1,5 @@
-# 1.6.27 - 0.217.19 Update
-* Updates for Valheim 0.217.19
+# 1.6.27 - 0.217.24 Update
+* Updates for Valheim 0.217.24
 
 # 1.6.26 - Hotfix to address Critical Crashing Bug
 * Turns out adding a container on Players, make them interactable which crashes the player object.
