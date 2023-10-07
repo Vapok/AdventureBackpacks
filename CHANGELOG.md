@@ -1,3 +1,6 @@
+# 1.6.29 - Multiplayer Issue
+* Fixing ServerSync
+
 # 1.6.28 - 0.217.24 Update
 * Updates for Valheim 0.217.24
 

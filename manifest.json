@@ -1,6 +1,6 @@
 {
   "name": "AdventureBackpacks",
-  "version_number": "1.6.28",
+  "version_number": "1.6.29",
   "website_url": "https://github.com/Vapok/AdventureBackpacks",
   "description": "A Valheim Mod to add a catalogue of Adventuring Backpacks to the Game. These packs will grow and become more useful as the game progresses.",
   "dependencies": [

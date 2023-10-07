@@ -82,8 +82,8 @@
         <Reference Include="UnityEngine.UI">
           <HintPath>..\..\References\BepInEx\5.4.2200\unstripped_corlib\UnityEngine.UI.dll</HintPath>
         </Reference>
-        <Reference Include="Vapok.Valheim.Common, Version=0.217.14.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\Vapok.Valheim.Common.1.3.21714\lib\net462\Vapok.Valheim.Common.dll</HintPath>
+        <Reference Include="Vapok.Valheim.Common, Version=0.217.24.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\Vapok.Valheim.Common.1.4.21724\lib\net462\Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\YamlDotNet.12.3.1\lib\net45\YamlDotNet.dll</HintPath>
