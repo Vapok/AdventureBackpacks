@@ -1,3 +1,11 @@
+# 1.6.30 - Valheim Update 0.217.27
+* Updated for most recent Valheim.
+* Upgraded to .net 4.7.2
+ 
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
 # 1.6.29 - Multiplayer Issue
 * Fixing ServerSync
 
@@ -18,9 +26,6 @@
   * AzuCraftyBoxes is now fully supported with Adventure Backpacks when using the Equipped Backpack
   * Craft From Containers needs 1 update in order to work (They need to not check for Piece component)
 * Fixes a Compatibility issue with Valheim+ Where Transpilers were fighting for attention.
-
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.6.24 - Updates and Compatibilities
 * Fixing a Player Load error on Startup when wearing a backpack.
