@@ -1,9 +1,8 @@
 # 1.7.0 - Release of the Adventure Backpacks API 
 * Initial Release of the ABAPI.
-  * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/vapok/r1.6.30/Docs/AdventureBackpacksAPI.md)
-  * API Download
+  * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
+  * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
 * Valheim Update 0.217.27
-* Updated for most recent Valheim.
 * Upgraded to .net 4.7.2
  
 
