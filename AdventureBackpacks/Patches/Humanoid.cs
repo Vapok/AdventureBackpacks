@@ -6,7 +6,6 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Vapok.Common.Managers;
 

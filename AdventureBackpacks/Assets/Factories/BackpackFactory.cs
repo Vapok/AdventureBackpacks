@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Assets.Items.BackpackItems;
@@ -9,18 +8,7 @@ using Vapok.Common.Managers.Configuration;
 
 namespace AdventureBackpacks.Assets.Factories;
 
-[Flags]
-public enum BackpackBiomes : uint
-{
-    None = 0,
-    Meadows = 1 << 0,
-    BlackForest = 1 << 1,
-    Swamp = 1 << 2,
-    Mountains = 1 << 3,
-    Plains = 1 << 4,
-    Mistlands = 1 << 5,
-    Necromancy = 1 << 6
-}
+
 internal class BackpackFactory : AssetFactory
 {
     private static List<BackpackItem> _backpackItems = new();

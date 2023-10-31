@@ -36,6 +36,9 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
     * **Explorers Wisppack** - _A finely crafted, mystical backpack. Complete with it's own Box of Holding. No one is quite sure how it works._
 
 ## Features of Backpacks
+* Adventure Backpacks API Available
+  * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
+  * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
 * Each Backpack Biome can be fully configured for progression.
   * Configure Sizing
     * Each Quality Level of Backpack can have a different inventory grid size. Simply adjust the width and height in configuration for each quality level.

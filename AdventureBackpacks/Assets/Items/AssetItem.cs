@@ -12,8 +12,8 @@ internal interface IAssetItem
 }
 internal abstract class AssetItem : IAssetItem
 {
-    private const string AssetName = "vapokbackpacks";
-    private const string AssetFolderName = "Assets.Bundles";
+    private string AssetName = "vapokbackpacks";
+    private string AssetFolderName = "Assets.Bundles";
     private string _prefabName;
     private string _itemName;
     private Item _item;

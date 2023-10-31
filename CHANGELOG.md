@@ -1,3 +1,20 @@
+# 1.7.0 - Release of the Adventure Backpacks API 
+* Initial Release of the ABAPI.
+  * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
+  * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
+* Valheim Update 0.217.27
+* Upgraded to .net 4.7.2
+ 
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
+# 1.6.29 - Multiplayer Issue
+* Fixing ServerSync
+
+# 1.6.28 - 0.217.24 Update
+* Updates for Valheim 0.217.24
+
 # 1.6.27 - Bug Fix
 * Fixed: In a rare case, when a bag is upgraded, and then you die before unequipping your bag, it can potentially lose the contents of the backpack.
   * This is fixed in this version.
@@ -12,9 +29,6 @@
   * AzuCraftyBoxes is now fully supported with Adventure Backpacks when using the Equipped Backpack
   * Craft From Containers needs 1 update in order to work (They need to not check for Piece component)
 * Fixes a Compatibility issue with Valheim+ Where Transpilers were fighting for attention.
-
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.6.24 - Updates and Compatibilities
 * Fixing a Player Load error on Startup when wearing a backpack.
