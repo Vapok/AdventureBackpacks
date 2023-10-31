@@ -34,9 +34,29 @@
         <WarningLevel>4</WarningLevel>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'API|AnyCPU' ">
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <AssemblyName>AdventureBackpacksAPI</AssemblyName>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <OutputPath>bin\API\</OutputPath>
+        <DefineConstants>API;TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DocumentationMarkdown>$(MSBuildProjectDirectory)\..\Docs\AdventureBackpacksAPI.md</DocumentationMarkdown>
+        <DocumentationFile>bin\API\AdventureBackpacksAPI.xml</DocumentationFile>
+        <VsxmdAutoDeleteXml>True</VsxmdAutoDeleteXml>
+    </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
           <HintPath>..\..\References\BepInEx\5.4.2201\BepInEx\core\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="APIManager">
+          <HintPath>..\..\References\APIManager\APIManager.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
           <HintPath>..\..\References\Valheim\0.217.27\assembly_guiutils_publicized.dll</HintPath>
@@ -89,7 +109,7 @@
           <HintPath>..\packages\YamlDotNet.12.3.1\lib\net45\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
-    <ItemGroup>
+    <ItemGroup Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' ">
         <Compile Include="Assets\Backpacks.cs" />
         <Compile Include="Assets\Effects\ColdResistance.cs" />
         <Compile Include="Assets\Effects\Demister.cs" />
@@ -133,20 +153,28 @@
         <Compile Include="Patches\ItemDrop.cs" />
         <Compile Include="Patches\Player.cs" />
         <Compile Include="Patches\SEMan.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AdventureBackpacks.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="API\ABAPI.cs" />
+        <Compile Include="API\Privates.cs" />
+        <Compile Include="API\Structs.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Content Include="ILRepack.targets" />
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />
       <None Include="packages.config" />
     </ItemGroup>
-    <ItemGroup>
+    <ItemGroup Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' ">
       <EmbeddedResource Include="Translations\English.json" />
       <EmbeddedResource Include="Assets\Bundles\vapokbackpacks" />
-      <Content Include="ILRepack.targets" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Target Name="CopyToDev" AfterTargets="ILRepack">
+    <Target Name="CopyApi" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'API|AnyCPU' ">
+        <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;M:\Code\VapokModBase\References\ABAPI\&quot; /q /y /i" />
+    </Target>
+    <Target Name="CopyToDev" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' ">
         <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;G:\Steam\steamapps\common\Valheim-Dev\BepInEx\plugins\$(ProjectName)\&quot; /q /y /i" />
     </Target>
     <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -164,7 +192,9 @@
         <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
       </PropertyGroup>
       <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
+      <Error Condition="!Exists('..\packages\Vsxmd.1.4.5\build\Vsxmd.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Vsxmd.1.4.5\build\Vsxmd.targets'))" />
     </Target>
+    <Import Project="..\packages\Vsxmd.1.4.5\build\Vsxmd.targets" Condition="'$(Configuration)|$(Platform)' == 'API|AnyCPU'" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

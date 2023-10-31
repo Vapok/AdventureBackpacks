@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.API;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;

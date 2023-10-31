@@ -8,6 +8,7 @@ using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using AdventureBackpacks.Patches;
+using APIManager;
 using BepInEx;
 using HarmonyLib;
 using ItemManager;
@@ -58,6 +59,8 @@ namespace AdventureBackpacks
             //I'm awake!
             _instance = this;
             
+            Patcher.Patch();
+            
             //Waiting For Startup
             Waiter = new Waiting();
             //Initialize Managers
@@ -70,11 +73,6 @@ namespace AdventureBackpacks
             LogManager.Init(PluginId,out _log);
 
             PrefabManager.Initalized = true;
-
-            Localizer.Waiter.StatusChanged += InitializeBackpacks;
-            
-            //Initialized Features
-            QuickTransfer.FeatureInitialized = true;
             
             //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);
@@ -84,7 +82,15 @@ namespace AdventureBackpacks
 
             //Profit
         }
-        
+
+        private void Start()
+        {
+            Localizer.Waiter.StatusChanged += InitializeBackpacks;
+            
+            //Initialized Features
+            QuickTransfer.FeatureInitialized = true;
+        }
+
         private void Update()
         {
             if (!Player.m_localPlayer || !ZNetScene.instance)

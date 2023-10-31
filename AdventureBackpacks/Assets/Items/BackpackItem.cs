@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Timers;
-using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.API;
 using BepInEx.Configuration;
 using ItemManager;
 using UnityEngine;
