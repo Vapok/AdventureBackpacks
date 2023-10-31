@@ -59,7 +59,7 @@ namespace AdventureBackpacks
             //I'm awake!
             _instance = this;
             
-            Patcher.Patch();
+            Patcher.Patch(new []{"AdventureBackpacks.API"});
             
             //Waiting For Startup
             Waiter = new Waiting();
