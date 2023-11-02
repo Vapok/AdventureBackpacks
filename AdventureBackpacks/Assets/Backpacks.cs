@@ -257,8 +257,6 @@ namespace AdventureBackpacks.Assets
                 ((SE_Stats)statusEffects.Effect).m_icon = itemData.GetIcon();   
             }
 
-            AdventureBackpacks.Log.Warning($"Status Effect Name: {statusEffects.Name}");
-            AdventureBackpacks.Log.Warning($"Status Effect Key: {statusEffects.Effect.m_name}");
             itemData.AddSEToItem(statusEffects);
             
             return statusEffects;
