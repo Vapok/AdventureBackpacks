@@ -56,18 +56,47 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ILogIt Log => _logger;
 
 
+    protected BackpackItem(ABAPI.BackpackDefinition definition, GameObject goItem)
+        : base(goItem,definition.ItemName)
+    {
+        _configSection = string.IsNullOrEmpty(definition.ConfigSection) ? $"Backpack: {definition.ItemName}" : definition.ConfigSection;
+        SetupLocalization();
+        SetupBackpackDef();
+    }
+
+    protected BackpackItem(ABAPI.BackpackDefinition definition)
+        : base(definition.AssetBundle,definition.PrefabName,definition.ItemName)
+    {
+        _configSection = string.IsNullOrEmpty(definition.ConfigSection) ? $"Backpack: {definition.ItemName}" : definition.ConfigSection;
+        SetupLocalization();
+        SetupBackpackDef();
+    }
+    
     protected BackpackItem(string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
         _englishSection = english.Localize(_configSection);
+
         if (externalLocalize)
             _localizedCategory = Localization.m_instance.Localize(_configSection);
         else
             _localizedCategory = Localization.instance.Localize(_configSection);
         
+        SetupBackpackDef();
+    }
+
+    internal void SetupLocalization()
+    {
+        _englishSection = english.Localize(_configSection);
+        _localizedCategory = Localization.m_instance.Localize(_configSection);
+        if (_localizedCategory.Equals(_configSection))
+            _localizedCategory = Localization.instance.Localize(_configSection);
+    }
+    
+    private void SetupBackpackDef()
+    {
         Item.SectionName = _configSection;
         BackpackSize = new();
-
         InceptionTimer = new System.Timers.Timer(10000);
         InceptionTimer.AutoReset = false;
         InceptionTimer.Enabled = false;

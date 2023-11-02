@@ -27,10 +27,13 @@ public abstract class EffectsBase
         _description = string.IsNullOrEmpty(effectDesc) ? "Enables the effect." : effectDesc;
         _configSection = $"Effect: {effectName}";
         _isSetItemStatusEffect = IsItemSetStatusEffect;
-        
+
+        AdventureBackpacks.Waiter.StatusChanged += (_,_)=>LoadStatusEffect();
 
         RegisterEffectConfiguration();
     }
+
+    public abstract void LoadStatusEffect();
 
     public virtual StatusEffect GetStatusEffect()
     {
@@ -127,7 +130,6 @@ public abstract class EffectsBase
                 new ConfigurationManagerAttributes { Order = 1 }));
         
         //Waiting For Startup
-        ConfigRegistry.Waiter.StatusChanged += (_,_) => FillBiomeSettings();
         ConfigRegistry.Waiter.StatusChanged += (_,_) => AdditionalConfiguration(_configSection);
     }
 
@@ -139,10 +141,10 @@ public abstract class EffectsBase
     {
         foreach (BackpackBiomes backpackBiome in Enum.GetValues(typeof(BackpackBiomes)))
         {
-            RegisterEffectBiomeQuality(backpackBiome);
+            RegisterEffectBiomeQuality(backpackBiome,0,false);
         }
     }
-    public void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 0)
+    public void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 0, bool fillUp = true)
     {
         if (biome == BackpackBiomes.None)
             return;
@@ -162,6 +164,11 @@ public abstract class EffectsBase
                     qualityLevel.SettingChanged += Backpacks.UpdateItemDataConfigValues;
                 }
             }
+        }
+
+        if (fillUp)
+        {
+            FillBiomeSettings();
         }
     }
 }

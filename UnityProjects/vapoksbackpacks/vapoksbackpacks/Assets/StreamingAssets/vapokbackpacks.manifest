@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3115447487
+CRC: 444948837
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6b0398d2d5f2c973733c6a19afc1b6c2
+    Hash: cc3e9f91f4b69e5af58915c98af71a55
   TypeTreeHash:
     serializedVersion: 2
     Hash: e8332a6d8fa8fcfcc86e8edfb27851a5
@@ -70,7 +70,6 @@ Assets:
 - Assets/Sprite/SilverBackpack_Icon.asset
 - Assets/Texture2D/NecromancyBackpack_Icon.png
 - Assets/Texture2D/SilverBackpack_Icon.png
-- Assets/vapok/Prefabs/BackpackNecromancy.prefab
 - Assets/Shader/DoubleSided_Standard_Standard DS.shader
 - Assets/vapok/Prefabs/CapeSilverBackpack.prefab
 - Assets/Sprite/IronBackpack_Icon.asset

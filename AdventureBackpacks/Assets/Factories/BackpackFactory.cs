@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Assets.Items.BackpackItems;
-using BepInEx.Bootstrap;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
 
@@ -11,10 +11,12 @@ namespace AdventureBackpacks.Assets.Factories;
 
 internal class BackpackFactory : AssetFactory
 {
-    private static List<BackpackItem> _backpackItems = new();
+    private static HashSet<BackpackItem> _backpackItems = new();
     private static bool _initialized;
+    private static List<ABAPI.BackpackDefinition> _externalBackpacks = new();
     
-    internal static List<BackpackItem> BackpackItems => _backpackItems;
+    internal static IEnumerable<BackpackItem> BackpackItems => _backpackItems;
+    
 
     internal BackpackFactory(ILogIt logger, ConfigSyncBase configSync) : base(logger, configSync)
     {
@@ -25,6 +27,12 @@ internal class BackpackFactory : AssetFactory
             _initialized = true;
         }
     }
+    
+    public static void RegisterExternalBackpack(ABAPI.BackpackDefinition backpackDefinition)
+    {
+        _externalBackpacks.Add(backpackDefinition);
+    }
+
 
     internal override void CreateAssets()
     {
@@ -37,9 +45,16 @@ internal class BackpackFactory : AssetFactory
         _backpackItems.Add(new LegacyIronBackpack("CapeIronBackpack","$vapok_mod_item_rugged_backpack"));
         _backpackItems.Add(new LegacySilverBackpack("CapeSilverBackpack","$vapok_mod_item_arctic_backpack"));
 
-        if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+        foreach (var backpackDefinition in _externalBackpacks)
         {
-            _backpackItems.Add(new BackpackNecromancy("BackpackNecromancy","$item_friendlyskeletonwand_spectralshroud_backpack"));
+            if (_backpackItems.Any(x => x.ItemName.Equals(backpackDefinition.ItemName))) return;
+            
+            var newBackpack = backpackDefinition.BackPackGo != null ? 
+                new ExternalBackpack(backpackDefinition, backpackDefinition.BackPackGo) : 
+                new ExternalBackpack(backpackDefinition);
+            
+            _backpackItems.Add(newBackpack);
+
         }
     }
 

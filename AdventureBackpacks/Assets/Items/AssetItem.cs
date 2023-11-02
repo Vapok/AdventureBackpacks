@@ -1,4 +1,6 @@
-﻿using ItemManager;
+﻿using System;
+using ItemManager;
+using UnityEngine;
 using Vapok.Common.Managers.PieceManager;
 using CraftingTable = ItemManager.CraftingTable;
 
@@ -24,15 +26,47 @@ internal abstract class AssetItem : IAssetItem
 
     public Item Item => _item;
 
+    internal AssetItem(GameObject goItem, string itemName)
+    {
+        _prefabName = goItem.name;
+        _itemName = itemName;
+
+        _item = new Item(goItem)
+        {
+            Configurable = Configurability.Disabled
+        };
+        
+        SetupItem();
+    }
+
+    internal AssetItem(AssetBundle bundle, string prefabName, string itemName)
+    {
+        _prefabName = prefabName;
+        _itemName = itemName;
+        
+        _item = new Item(bundle,prefabName)
+        {
+            Configurable = Configurability.Disabled
+        };
+        
+        SetupItem();
+    }
+
     internal AssetItem(string prefabName, string itemName)
     {
         _prefabName = prefabName;
         _itemName = itemName;
+
         _item = new Item(AssetName, PrefabName, AssetFolderName)
         {
             Configurable = Configurability.Disabled
         };
         
+        SetupItem();
+    }
+
+    private void SetupItem()
+    {
         SetPersistence();
         ResetPrefabArmor();
     }
@@ -40,6 +74,18 @@ internal abstract class AssetItem : IAssetItem
     internal void AssignCraftingTable(CraftingTable craftingTable, int stationLevel)
     {
         _item.Crafting.Add(craftingTable,stationLevel);
+    }
+
+    internal void AssignCraftingTable(string craftingTable, int stationLevel)
+    {
+        if (Enum.TryParse<CraftingTable>(craftingTable, true, out var tableEnum))
+        {
+            _item.Crafting.Add(tableEnum,stationLevel);    
+        }
+        else
+        {
+            _item.Crafting.Add(craftingTable,stationLevel);
+        }
     }
 
     internal void AddRecipeIngredient(string prefabName, int quantity)

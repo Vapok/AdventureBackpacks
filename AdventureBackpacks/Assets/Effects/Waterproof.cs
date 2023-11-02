@@ -19,9 +19,15 @@ public class Waterproof: EffectsBase
             se.Effect.m_name = "$vapok_mod_se_wet_resistance";
             se.Effect.m_icon = wet.m_icon;
             _externalStatusEffect = se.Effect;
+            SetStatusEffect(_externalStatusEffect);
         }
     }
-    
+
+    public override void LoadStatusEffect()
+    {
+        LoadExternalStatusEffect();
+    }
+
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
         LoadExternalStatusEffect();

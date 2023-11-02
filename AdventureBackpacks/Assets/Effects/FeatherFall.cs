@@ -6,6 +6,11 @@ public class FeatherFall : EffectsBase
     {
     }
 
+    public override void LoadStatusEffect()
+    {
+        SetStatusEffect("SlowFall");
+    }
+
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
         SetStatusEffect("SlowFall");

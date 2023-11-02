@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 #if ! API
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 #endif
@@ -128,6 +129,19 @@ return null;
     }
 
     /// <summary>
+    /// Retrieves all Status Effects Registered with Adventure Backpacks
+    /// </summary>
+    /// <returns>HashSet of Status Effects.</returns>
+    public static HashSet<StatusEffect> GetRegisterdStatusEffects()
+    {
+#if ! API
+        return EffectsFactory.GetRegisteredEffects();
+#else
+return null;
+#endif
+    }
+
+    /// <summary>
     /// Method to activate the backpack on the local player's GUI and open it. Use in conjunction with CanOpenBackpack()
     /// </summary>
     /// <param name="player">Player, usually Player.m_localPlayer</param>
@@ -137,6 +151,28 @@ return null;
 #if ! API
         if (player != null)
             player.OpenBackpack(gui);
+#endif
+    }
+
+    /// <summary>
+    /// Use this method in the Awake() of your mod to register a Status Effect that can be utilized on Adventure Backpacks
+    /// </summary>
+    /// <param name="effectDefinition">Create a new EffectDefinition that contains the overall parameters that are needed to register the new effect.</param>
+    public static void RegisterEffect(EffectDefinition effectDefinition)
+    {
+#if ! API
+        EffectsFactory.RegisterExternalEffect(effectDefinition);
+#endif
+    }
+
+    /// <summary>
+    /// Use this method in the Awake() of your mod to register a new Backpack that can be utilized on Adventure Backpacks.
+    /// </summary>
+    /// <param name="definition">Create a new BackpackDefinition that contains the overall parameters that are needed to register the new backpack.</param>
+    public static void RegisterBackpack(BackpackDefinition definition)
+    {
+#if ! API
+        BackpackFactory.RegisterExternalBackpack(definition);
 #endif
     }
 }

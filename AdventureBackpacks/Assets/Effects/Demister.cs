@@ -6,6 +6,12 @@ public class Demister: EffectsBase
     {
     }
 
+
+    public override void LoadStatusEffect()
+    {
+        SetStatusEffect("Demister");
+    }
+
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
         SetStatusEffect("Demister");

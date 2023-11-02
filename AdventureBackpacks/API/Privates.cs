@@ -17,14 +17,14 @@ public partial class ABAPI
     private static Backpack? ConvertBackpackItem(BackpackComponent component)
     {
         var definition = GetBackPackDefinitionFromComponent(component);
-        if (!definition.HasValue)
+        if (definition == null)
             return null;
         
         var backpackItem = new Backpack
         {
-            Name = definition.Value.ItemName,
+            Name = definition.ItemName,
             ItemData = component.Item,
-            Definition = definition.Value,
+            Definition = definition,
             Inventory = component.GetInventory()
         };
         return backpackItem;
@@ -44,7 +44,7 @@ public partial class ABAPI
         return backpack.BackpackSize.ToDictionary(entry => entry.Key, entry => entry.Value.Value);
     }
 
-    private static BackpackDefinition? GetBackPackDefinitionFromComponent(BackpackComponent component)
+    private static BackpackDefinition GetBackPackDefinitionFromComponent(BackpackComponent component)
     {
         var isBackpack = component.Item.TryGetBackpackItem(out var backpack);
         if (isBackpack)

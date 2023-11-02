@@ -20,9 +20,15 @@ public class FrostResistance : EffectsBase
             se.Effect.m_name = "$vapok_mod_se_frost_resistance";
             se.Effect.m_icon = freezing.m_icon;
             _externalStatusEffect = se.Effect;
+            SetStatusEffect(_externalStatusEffect);
         }
     }
-    
+
+    public override void LoadStatusEffect()
+    {
+        LoadExternalStatusEffect();
+    }
+
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
         LoadExternalStatusEffect();

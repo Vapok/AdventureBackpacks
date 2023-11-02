@@ -19,9 +19,15 @@ public class ColdResistance : EffectsBase
             se.Effect.m_name = "$vapok_mod_se_cold_immunity";
             se.Effect.m_icon = cold.m_icon;
             _externalStatusEffect = se.Effect;
+            SetStatusEffect(_externalStatusEffect);
         }
     }
-    
+
+    public override void LoadStatusEffect()
+    {
+        LoadExternalStatusEffect();
+    }
+
     public override bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
     {
         LoadExternalStatusEffect();

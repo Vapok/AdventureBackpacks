@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Effects;
-using BepInEx.Bootstrap;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
 
@@ -15,17 +16,46 @@ public enum BackpackEffect
     WaterResistance,
     FrostResistance,
     TrollArmor,
-    NecromancyArmor
+    NecromancyArmor,
+    ExternalEffect
 }
 public class EffectsFactory : FactoryBase
 {
+
+    public static HashSet<EffectsBase> AllEffects => _allEffects;
     public static Dictionary<BackpackEffect,EffectsBase> EffectList => _effectList;
 
     private static Dictionary<BackpackEffect,EffectsBase> _effectList = new();
     
+    private static HashSet<EffectsBase> _externalEffects = new();
+    private static HashSet<EffectsBase> _allEffects = new();
+    
     public EffectsFactory(ILogIt logger, ConfigSyncBase configs) : base(logger, configs)
     {
     
+    }
+
+    public static HashSet<StatusEffect> GetRegisteredEffects()
+    {
+        var effects = new HashSet<StatusEffect>();
+
+        foreach (var effectsBase in _effectList)
+        {
+            effects.Add(effectsBase.Value.GetStatusEffect());
+        }
+        
+        foreach (var effectsBase in _externalEffects)
+        {
+            effects.Add(effectsBase.GetStatusEffect());
+        }
+        return effects;
+    }
+    public static void RegisterExternalEffect(ABAPI.EffectDefinition effectDefinition)
+    {
+        if (_externalEffects.Any(x => x.EffectName.Equals(effectDefinition.EffectName))) return;
+        
+        var externalEffect = new ExternalEffect(effectDefinition);
+        _externalEffects.Add(externalEffect);
     }
 
     public void RegisterEffects()
@@ -37,15 +67,29 @@ public class EffectsFactory : FactoryBase
         _effectList.Add(BackpackEffect.FrostResistance, new FrostResistance("Frost Resistance", "When activated allows you to stay warm in freezing conditions, negating the freezing debuff."));
         _effectList.Add(BackpackEffect.TrollArmor, new TrollArmor("Troll Armor Set", "When activated the backpack acts as the Shoulder Set piece of the Troll Armor Set allowing the set to complete for the Sneak Effect"));
 
-        if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
-        {
-            _effectList.Add(BackpackEffect.NecromancyArmor, new NecromancyArmor("Necromancy Armor Effect", "When activated the backpack provides the Necromancy Armor effect from Cheb's Necromancy"));
-        }
-
         foreach (BackpackEffect effect in Enum.GetValues(typeof(BackpackEffect)))
-        {   
-            if (EffectList.ContainsKey(effect))
-                EffectList[effect].RegisterEffectConfiguration();
+        {
+            switch (effect)
+            {
+                case BackpackEffect.ExternalEffect:
+                    foreach (var effectsBase in _externalEffects)
+                    {
+                        _allEffects.Add(effectsBase);
+                        effectsBase.RegisterEffectConfiguration();
+                    }
+                    break;
+                case BackpackEffect.FeatherFall:
+                case BackpackEffect.ColdResistance:
+                case BackpackEffect.Demister:
+                case BackpackEffect.WaterResistance:
+                case BackpackEffect.FrostResistance:
+                case BackpackEffect.TrollArmor:
+                case BackpackEffect.NecromancyArmor:
+                    if (!EffectList.ContainsKey(effect)) continue;
+                    _allEffects.Add(EffectList[effect]);
+                    EffectList[effect].RegisterEffectConfiguration();
+                    break;
+            }
         }
     }
 }

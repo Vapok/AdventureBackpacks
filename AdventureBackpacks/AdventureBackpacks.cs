@@ -4,12 +4,14 @@ using System;
 using System.Reflection;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Compats;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using AdventureBackpacks.Patches;
 using APIManager;
 using BepInEx;
+using BepInEx.Bootstrap;
 using HarmonyLib;
 using ItemManager;
 using JetBrains.Annotations;
@@ -78,10 +80,16 @@ namespace AdventureBackpacks
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
+            if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+            {
+                ChebsNecromancy.SetupNecromancyBackpackUsingApi();
+            }
+
             //???
 
             //Profit
         }
+
 
         private void Start()
         {
