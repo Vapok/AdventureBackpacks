@@ -1,3 +1,14 @@
+# 1.7.3 - Fixed Configuration Issue
+* Fixed the ItemManager issue and now running on new version.
+* Drops tested and working as expected.
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
+# 1.7.2 - Fixing Drop Issues
+* Reverting to a previous version of ItemManager until I can understand why drops are not working fully.
+  * If you having continued issues with drops after updating to this update, you might have reset your Adventure Backpacks configuration file.
+
 # 1.7.1 - Release of the Adventure Backpacks API - Effect and Backpack Creation
 * API (v1.1) now supports bringing in custom effects and backpacks
   * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
@@ -11,9 +22,6 @@
   * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
 * Valheim Update 0.217.27
 * Upgraded to .net 4.7.2
-
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.6.29 - Multiplayer Issue
 * Fixing ServerSync
