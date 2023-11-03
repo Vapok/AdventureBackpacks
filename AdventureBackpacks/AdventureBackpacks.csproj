@@ -59,13 +59,13 @@
           <HintPath>..\..\References\APIManager\APIManager.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
-          <HintPath>..\..\References\Valheim\0.217.27\assembly_guiutils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.217.28\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-          <HintPath>..\..\References\Valheim\0.217.27\assembly_utils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.217.28\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
-          <HintPath>..\..\References\Valheim\0.217.27\assembly_valheim_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.217.28\assembly_valheim_publicized.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx">
           <HintPath>..\..\References\BepInEx\5.4.2201\BepInEx\core\BepInEx.dll</HintPath>
@@ -102,8 +102,8 @@
         <Reference Include="UnityEngine.UI">
           <HintPath>..\..\References\BepInEx\5.4.2201\unstripped_corlib\UnityEngine.UI.dll</HintPath>
         </Reference>
-        <Reference Include="Vapok.Valheim.Common, Version=0.217.27.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\Vapok.Valheim.Common.1.5.21727\lib\net472\Vapok.Valheim.Common.dll</HintPath>
+        <Reference Include="Vapok.Valheim.Common, Version=0.217.28.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\Vapok.Valheim.Common.1.6.21728\lib\net472\Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\YamlDotNet.12.3.1\lib\net45\YamlDotNet.dll</HintPath>
@@ -116,7 +116,6 @@
         <Compile Include="Assets\Effects\EffectsBase.cs" />
         <Compile Include="Assets\Effects\FeatherFall.cs" />
         <Compile Include="Assets\Effects\FrostResistance.cs" />
-        <Compile Include="Assets\Effects\NecromancyArmor.cs" />
         <Compile Include="Assets\Effects\TrollArmor.cs" />
         <Compile Include="Assets\Effects\Waterproof.cs" />
         <Compile Include="Assets\Factories\AssetFactory.cs" />
@@ -129,7 +128,6 @@
         <Compile Include="Assets\Items\BackpackItems\BackpackMeadows.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMistlands.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMountains.cs" />
-        <Compile Include="Assets\Items\BackpackItems\BackpackNecromancy.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackPlains.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackSwamp.cs" />
         <Compile Include="Assets\Items\BackpackItems\LegacyIronBackpack.cs" />
@@ -154,6 +152,11 @@
         <Compile Include="Patches\Player.cs" />
         <Compile Include="Patches\SEMan.cs" />
         <Compile Include="AdventureBackpacks.cs" />
+        <Compile Include="Assets\Effects\ExternalEffect.cs" />
+        <Compile Include="Assets\Items\BackpackItems\ExternalBackpack.cs" />
+        <Compile Include="Compats\ChebsNecromancy.cs" />
+        <Compile Include="Features\Utilities.cs" />
+        <EmbeddedResource Include="Assets\Bundles\chebsbackpack" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\ABAPI.cs" />

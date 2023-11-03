@@ -9,6 +9,11 @@ public class TrollArmor : EffectsBase
     {
     }
 
+    public override void LoadStatusEffect()
+    {
+        SetStatusEffect(_effectName);
+    }
+
     public override bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
         SetStatusEffect(_effectName);

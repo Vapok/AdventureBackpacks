@@ -1,7 +1,11 @@
 ManifestFileVersion: 0
-CRC: 1499047801
+CRC: 2266818252
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: vapokbackpacks
       Dependencies: {}
+    Info_1:
+      Name: chebsbackpack
+      Dependencies:
+        Dependency_0: vapokbackpacks

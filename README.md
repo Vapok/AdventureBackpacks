@@ -39,6 +39,15 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Adventure Backpacks API Available
   * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
   * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
+    * API Features Include:
+      * Registering Your Own Status Effects
+      * Registering your own Backpacks (including models)
+      * Getting Information about the Player worn backpack.
+        * Is Item a Backpack
+        * Is Backpack Equipped
+        * Get Backpack Information (including Inventory on any backpack item, not just equipped)
+        * Get Active Backpack Effects
+      * View which effects are registered to Adventure Backpacks
 * Each Backpack Biome can be fully configured for progression.
   * Configure Sizing
     * Each Quality Level of Backpack can have a different inventory grid size. Simply adjust the width and height in configuration for each quality level.

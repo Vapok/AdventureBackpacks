@@ -1,10 +1,16 @@
-# 1.7.0 - Release of the Adventure Backpacks API 
+# 1.7.1 - Release of the Adventure Backpacks API - Effect and Backpack Creation
+* API (v1.1) now supports bringing in custom effects and backpacks
+  * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
+  * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
+* Cheb's Necromany Backpack Integration converted to API
+* Updated to 0.218.28 Valheim
+
+# 1.7.0 - Release of the Adventure Backpacks API
 * Initial Release of the ABAPI.
   * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
   * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
 * Valheim Update 0.217.27
 * Upgraded to .net 4.7.2
- 
 
 <details>
 <summary><b>Changelog History</b> (<i>click to expand</i>)</summary>

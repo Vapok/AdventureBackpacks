@@ -4,12 +4,14 @@ using System;
 using System.Reflection;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Compats;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using AdventureBackpacks.Patches;
 using APIManager;
 using BepInEx;
+using BepInEx.Bootstrap;
 using HarmonyLib;
 using ItemManager;
 using JetBrains.Annotations;
@@ -29,7 +31,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.7.0";
+        private const string _version = "1.7.1";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -78,10 +80,16 @@ namespace AdventureBackpacks
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
+            if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
+            {
+                ChebsNecromancy.SetupNecromancyBackpackUsingApi();
+            }
+
             //???
 
             //Profit
         }
+
 
         private void Start()
         {
