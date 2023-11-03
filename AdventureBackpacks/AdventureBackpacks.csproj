@@ -59,13 +59,13 @@
           <HintPath>..\..\References\APIManager\APIManager.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
-          <HintPath>..\..\References\Valheim\0.217.27\assembly_guiutils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.217.28\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-          <HintPath>..\..\References\Valheim\0.217.27\assembly_utils_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.217.28\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
-          <HintPath>..\..\References\Valheim\0.217.27\assembly_valheim_publicized.dll</HintPath>
+          <HintPath>..\..\References\Valheim\0.217.28\assembly_valheim_publicized.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx">
           <HintPath>..\..\References\BepInEx\5.4.2201\BepInEx\core\BepInEx.dll</HintPath>
@@ -102,8 +102,8 @@
         <Reference Include="UnityEngine.UI">
           <HintPath>..\..\References\BepInEx\5.4.2201\unstripped_corlib\UnityEngine.UI.dll</HintPath>
         </Reference>
-        <Reference Include="Vapok.Valheim.Common, Version=0.217.27.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\Vapok.Valheim.Common.1.5.21727\lib\net472\Vapok.Valheim.Common.dll</HintPath>
+        <Reference Include="Vapok.Valheim.Common, Version=0.217.28.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\Vapok.Valheim.Common.1.6.21728\lib\net472\Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\YamlDotNet.12.3.1\lib\net45\YamlDotNet.dll</HintPath>
