@@ -157,6 +157,7 @@
         <Compile Include="Compats\ChebsNecromancy.cs" />
         <Compile Include="Features\Utilities.cs" />
         <EmbeddedResource Include="Assets\Bundles\chebsbackpack" />
+        <Compile Include="Patches\ItemStand.cs" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\ABAPI.cs" />

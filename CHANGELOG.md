@@ -1,12 +1,15 @@
+# 1.7.5 - Compatibility with Jere's Item Stand All Items
+* Added in Protection Override so that backpacks can be placed on an Item Stand, similar to Armor Stands.
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
 # 1.7.4 - One more Drop Bug
 * Fixed: Drops were being enabled on world start.
 
 # 1.7.3 - Fixed Configuration Issue
 * Fixed the ItemManager issue and now running on new version.
 * Drops tested and working as expected.
-
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.7.2 - Fixing Drop Issues
 * Reverting to a previous version of ItemManager until I can understand why drops are not working fully.
