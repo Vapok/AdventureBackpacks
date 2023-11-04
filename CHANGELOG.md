@@ -1,3 +1,6 @@
+# 1.7.4 - One more Drop Bug
+* Fixed: Drops were being enabled on world start.
+
 # 1.7.3 - Fixed Configuration Issue
 * Fixed the ItemManager issue and now running on new version.
 * Drops tested and working as expected.
