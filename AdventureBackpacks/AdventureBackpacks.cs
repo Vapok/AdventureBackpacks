@@ -26,6 +26,7 @@ namespace AdventureBackpacks
     [BepInPlugin(_pluginId, _displayName, _version)]
     [BepInIncompatibility("JotunnBackpacks")]
     [BepInDependency("com.chebgonaz.ChebsNecromancy",BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.maxsch.valheim.contentswithin", BepInDependency.DependencyFlags.SoftDependency)]
     public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
     {
         //Module Constants
@@ -80,11 +81,17 @@ namespace AdventureBackpacks
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
+            //Compatibilities
             if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
             {
                 ChebsNecromancy.SetupNecromancyBackpackUsingApi();
             }
 
+            if (Chainloader.PluginInfos.ContainsKey("com.maxsch.valheim.contentswithin"))
+            {
+                ContentsWithin.Awake(_harmony,"com.maxsch.valheim.contentswithin");
+            }
+            
             //???
 
             //Profit

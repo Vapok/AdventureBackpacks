@@ -163,6 +163,7 @@
         <Compile Include="API\ABAPI.cs" />
         <Compile Include="API\Privates.cs" />
         <Compile Include="API\Structs.cs" />
+        <Compile Include="Compats\ContentsWithin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Content Include="ILRepack.targets" />
     </ItemGroup>

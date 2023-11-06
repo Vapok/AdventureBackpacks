@@ -1,5 +1,6 @@
-# 1.7.5 - Compatibility with Jere's Item Stand All Items
+# 1.7.5 - More Compatibility Support
 * Added in Protection Override so that backpacks can be placed on an Item Stand, similar to Armor Stands.
+* Added initial ContentsWithin support to prevent backpacks from being previewed. 
 
 <details>
 <summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
