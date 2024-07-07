@@ -84,16 +84,7 @@ internal static class InventoryGuiPatches
 
     public static bool CheckForTextInput()
     {
-        var textInputVisible = false;
-        var textInputPanel = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui(Clone)/TextInput/panel");
-        
-        if (textInputPanel != null)
-        {
-            if (textInputPanel.activeInHierarchy)
-                textInputVisible = true;
-        }
-        
-        return textInputVisible;
+        return TextInput.IsVisible();
     }
     
     public static void ShowBackpack(Player player, InventoryGui instance)
