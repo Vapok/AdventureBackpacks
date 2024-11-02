@@ -1,9 +1,15 @@
-# 1.7.5 - More Compatibility Support
-* Added in Protection Override so that backpacks can be placed on an Item Stand, similar to Armor Stands.
-* Added initial ContentsWithin support to prevent backpacks from being previewed. 
+# 1.7.6 - Updating for 0.217.38 Valheim
+* Fixed error on load.
+* Note From Author:
+
+_I am incredibly sorry for the length of time it has taken for me to fix this issue.  Since Thanksgiving of 2023, I've been going through some deep family and personal issues, where mental health, depression, and family took over my life. Christmas was especially hard this year. Thank you for your understanding. I am coming out of it and starting to gain control back over my interactions with myself and the world._
 
 <details>
 <summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
+# 1.7.5 - More Compatibility Support
+* Added in Protection Override so that backpacks can be placed on an Item Stand, similar to Armor Stands.
+* Added initial ContentsWithin support to prevent backpacks from being previewed. 
 
 # 1.7.4 - One more Drop Bug
 * Fixed: Drops were being enabled on world start.
