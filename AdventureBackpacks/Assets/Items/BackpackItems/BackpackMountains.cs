@@ -39,7 +39,12 @@ internal class BackpackMountains : BackpackItem
         RegisterCarryBonus(20);
         RegisterSpeedMod();
         if ((BackpackBiome.Value & BackpackBiomes.Mountains) != 0)
-            EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 1);            
+        {
+            EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 4);
+            EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 1);
+            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 1);
+        }
+                        
     }
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)

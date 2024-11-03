@@ -135,16 +135,17 @@ public abstract class EffectsBase
 
     public virtual void AdditionalConfiguration(string configSection)
     {
+        FillBiomeSettings();
         return;
     }
     private void FillBiomeSettings()
     {
         foreach (BackpackBiomes backpackBiome in Enum.GetValues(typeof(BackpackBiomes)))
         {
-            RegisterEffectBiomeQuality(backpackBiome,0,false);
+            RegisterEffectBiomeQuality(backpackBiome,0);
         }
     }
-    public void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 0, bool fillUp = true)
+    public void RegisterEffectBiomeQuality(BackpackBiomes biome, int defaultQuality = 0)
     {
         if (biome == BackpackBiomes.None)
             return;
@@ -164,11 +165,6 @@ public abstract class EffectsBase
                     qualityLevel.SettingChanged += Backpacks.UpdateItemDataConfigValues;
                 }
             }
-        }
-
-        if (fillUp)
-        {
-            FillBiomeSettings();
         }
     }
 }
