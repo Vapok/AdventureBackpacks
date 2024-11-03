@@ -1,10 +1,13 @@
-# 1.7.7 - Updating for Ashland and Bog Witch Updates
-* Updates to Valheim 0.219.14
-* Updated ItemManager and Piece Manager
+# 1.7.8 - Forgot to increment the in-game version to 1.7.7
+* In-game version now shows 1.7.8
 
 
 <details>
 <summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
+# 1.7.7 - Updating for Ashland and Bog Witch Updates
+* Updates to Valheim 0.219.14
+* Updated ItemManager and Piece Manager
 
 # 1.7.6 - Updating for 0.217.38 Valheim
 * Fixed error on load.
