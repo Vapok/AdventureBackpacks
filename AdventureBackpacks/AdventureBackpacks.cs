@@ -26,12 +26,13 @@ namespace AdventureBackpacks
     [BepInPlugin(_pluginId, _displayName, _version)]
     [BepInIncompatibility("JotunnBackpacks")]
     [BepInDependency("com.chebgonaz.ChebsNecromancy",BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.maxsch.valheim.contentswithin", BepInDependency.DependencyFlags.SoftDependency)]
     public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
     {
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.7.4";
+        private const string _version = "1.7.8";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -80,11 +81,17 @@ namespace AdventureBackpacks
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
+            //Compatibilities
             if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
             {
                 ChebsNecromancy.SetupNecromancyBackpackUsingApi();
             }
 
+            if (Chainloader.PluginInfos.ContainsKey("com.maxsch.valheim.contentswithin"))
+            {
+                ContentsWithin.Awake(_harmony,"com.maxsch.valheim.contentswithin");
+            }
+            
             //???
 
             //Profit
@@ -147,7 +154,6 @@ namespace AdventureBackpacks
         private void OnDestroy()
         {
             _instance = null;
-            _harmony?.UnpatchSelf();
         }
 
         public class Waiting

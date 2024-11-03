@@ -1,12 +1,27 @@
+# 1.7.8 - Forgot to increment the in-game version to 1.7.7
+* In-game version now shows 1.7.8
+
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
+# 1.7.7 - Updating for Ashland and Bog Witch Updates
+* Updates to Valheim 0.219.14
+* Updated ItemManager and Piece Manager
+
+# 1.7.6 - Updating for 0.217.38 Valheim
+* Fixed error on load.
+
+# 1.7.5 - More Compatibility Support
+* Added in Protection Override so that backpacks can be placed on an Item Stand, similar to Armor Stands.
+* Added initial ContentsWithin support to prevent backpacks from being previewed. 
+
 # 1.7.4 - One more Drop Bug
 * Fixed: Drops were being enabled on world start.
 
 # 1.7.3 - Fixed Configuration Issue
 * Fixed the ItemManager issue and now running on new version.
 * Drops tested and working as expected.
-
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.7.2 - Fixing Drop Issues
 * Reverting to a previous version of ItemManager until I can understand why drops are not working fully.
