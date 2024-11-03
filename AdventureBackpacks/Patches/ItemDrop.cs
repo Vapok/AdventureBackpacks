@@ -51,7 +51,7 @@ public class ItemDropPatches
 
             for (int i = 0; i < instrs.Count; ++i)
             {
-                if (i > 6 && instrs[i].opcode == OpCodes.Ldloc_0 && instrs[i-1].opcode == OpCodes.Stloc_0 && instrs[i-2].opcode == OpCodes.Add &&
+                if (i > 6 && instrs[i].opcode == OpCodes.Ldloc_1 && instrs[i-1].opcode == OpCodes.Stloc_1 && instrs[i-2].opcode == OpCodes.Add &&
                     instrs[i - 3].opcode == OpCodes.Mul && instrs[i - 4].opcode == OpCodes.Ldfld &&
                     instrs[i - 4].operand.Equals(scaleWeightByQualityField))
                 {
@@ -68,7 +68,7 @@ public class ItemDropPatches
                     counter++;
                     
                     //Get Weight which is ldloc0
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_0));
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
                     counter++;
 
                     //Patch Call Method for Overriding the Weight.
@@ -76,7 +76,7 @@ public class ItemDropPatches
                     counter++;
                     
                     //Set Weight which is stloc0
-                    yield return LogMessage(new CodeInstruction(OpCodes.Stloc_0));
+                    yield return LogMessage(new CodeInstruction(OpCodes.Stloc_1));
                     counter++;
                     
                     //Output current Operation

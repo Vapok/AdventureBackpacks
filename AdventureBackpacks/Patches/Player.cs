@@ -88,7 +88,7 @@ public class PlayerPatches
             
             for (int i = 0; i < instrs.Count; ++i)
             {
-                if (i > 5 && instrs[i].opcode == OpCodes.Stloc_S && instrs[i+1].opcode == OpCodes.Ldarg_1 && instrs[i+2].opcode == OpCodes.Ldfld)
+                if (i > 5 && instrs[i].opcode == OpCodes.Stloc_S && instrs[i + 1].opcode == OpCodes.Ldloc_S && instrs[i + 2].opcode == OpCodes.Ldloc_S && instrs[i - 1].opcode == OpCodes.Callvirt)
                 {
                     //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)
@@ -118,6 +118,7 @@ public class PlayerPatches
                     counter++;
                     
                     patchedSuccess = true;
+                    
                 }
                 else
                 {
@@ -160,7 +161,8 @@ public class PlayerPatches
                 yield return LogMessage(instrs[i]);
                 counter++;
 
-                if (i > 5 && instrs[i-1].opcode == OpCodes.Callvirt && instrs[i-1].operand.Equals(getAmountMethod) && instrs[i].opcode == OpCodes.Stloc_3)
+                if (i > 5 && instrs[i].opcode == OpCodes.Stloc_3 && instrs[i-1].opcode == OpCodes.Mul && instrs[i-2].opcode == OpCodes.Ldarg_S
+                    && instrs[i-3].opcode == OpCodes.Callvirt && instrs[i-3].operand.Equals(getAmountMethod))
                 {
                     //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)
