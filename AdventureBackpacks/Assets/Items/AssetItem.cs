@@ -1,4 +1,5 @@
 ﻿using System;
+using AdventureBackpacks.Configuration;
 using ItemManager;
 using UnityEngine;
 using Vapok.Common.Managers.PieceManager;
@@ -105,6 +106,9 @@ internal abstract class AssetItem : IAssetItem
 
     internal void RegisterShaderSwap(MaterialReplacer.ShaderType shaderType = MaterialReplacer.ShaderType.PieceShader)
     {
+        if (!ConfigRegistry.ReplaceShader.Value)
+            return;
+        
         MaterialReplacer.RegisterGameObjectForShaderSwap(_item.Prefab,shaderType);
     }
 
