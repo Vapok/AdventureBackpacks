@@ -17,6 +17,8 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<bool> CloseInventory { get; private set;}
         internal static ConfigEntry<bool> OutwardMode { get; private set;}
         
+        internal static ConfigEntry<bool> ReplaceShader { get; private set;}
+        
         public static Waiting Waiter;
 
         public ConfigRegistry(IPluginInfo mod): base(mod)
@@ -61,6 +63,12 @@ namespace AdventureBackpacks.Configuration
                 "Local Config", "Outward Mode", false,
                 new ConfigDescription("You can use a hotkey to quickly drop your equipped backpack in order to run faster away from danger.",
                     null, new ConfigurationManagerAttributes { Order = 1 }));
+
+            ReplaceShader = _config.Bind(
+                "Local Config", "Replace Shader", true,
+                new ConfigDescription("Toggle To use the Material Shader Replacer (Requires Game Restart)",
+                    null, new ConfigurationManagerAttributes { Order = 1 }));
+
         }
     }
     

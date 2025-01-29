@@ -1,11 +1,16 @@
+# 1.7.10 - Updates for 0.219.16
+* Resolved a Shader Compatibility issue with Blacks7ar's FeatherCollector
+* Added a configuration setting to enable/disable the Shader Replacer (requires game restart)
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
 # 1.7.9 - Additional Updates and Bug Fixes
 * Updated Changes based on feedback from Pull Requests
 * Fixed Bug that removed default effects from Backpacks
 * Changed and updated default settings for Frost and Cold Resistances on Backpacks
   * You may need to reset your Cold Resist configs for Cold Resist to show back up on Lox Hide Backpack
 
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.7.8 - Forgot to increment the in-game version to 1.7.7
 * In-game version now shows 1.7.8
