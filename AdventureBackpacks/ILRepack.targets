@@ -4,8 +4,6 @@
         <ItemGroup>
             <InputAssemblies Include="$(TargetPath)" />
             <InputAssemblies Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' " Include="$(OutputPath)\Vapok.Valheim.Common.dll" />
-            <InputAssemblies Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' " Include="$(OutputPath)\YamlDotNet.dll" />
-            <InputAssemblies Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' " Include="$(OutputPath)\ServerSync.dll" />
             <InputAssemblies Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' " Include="$(OutputPath)\APIManager.dll" />
             <LibraryPath Include="$(OutputPath)" />
         </ItemGroup>

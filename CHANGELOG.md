@@ -1,9 +1,20 @@
+# 1.9.3 - Fixing Dedicated Server Config Syncing
+* A regression issue was introduced when switching to Jotunn preventing servers from dictating configs to clients.
+  * This has been resolved.
+* Appropriately added the BepInDependency Flags for graceful mod exit if missing dependencies.
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+# 1.9.2 - Removed ServerSync - Updated to Jotunn
+* 1.9.2 - Forgot to actually change Project References (good news it still worked!)
+* 1.9.1 - Removed ServerSync and Updated to Jotunn for Config Management
+* 1.9.0 - Updated for Valheim 0.221.4
+
+
 # 1.7.10 - Updates for 0.219.16
 * Resolved a Shader Compatibility issue with Blacks7ar's FeatherCollector
 * Added a configuration setting to enable/disable the Shader Replacer (requires game restart)
 
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.7.9 - Additional Updates and Bug Fixes
 * Updated Changes based on feedback from Pull Requests

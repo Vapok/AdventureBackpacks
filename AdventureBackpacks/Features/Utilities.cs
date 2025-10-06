@@ -1,12 +1,15 @@
-using ItemManager;
+using System.Linq;
+using System.Reflection;
+using Jotunn.Managers;
+using Jotunn.Utils;
 using UnityEngine;
 
 namespace AdventureBackpacks.Features;
 
 public static class Utilities
 {
-    public static AssetBundle LoadAssetBundle(string filename, string folderName)
+    public static AssetBundle LoadAssetBundle(string assetBundleFileName, string folderName)
     {
-        return PrefabManager.RegisterAssetBundle(filename, folderName);
+        return AssetUtils.LoadAssetBundle($".{folderName}." + assetBundleFileName);
     }
 }
