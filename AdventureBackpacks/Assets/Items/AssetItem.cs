@@ -127,7 +127,6 @@ internal abstract class AssetItem : IAssetItem
             itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel;
             itemDrop.Save();
         }
-
     }
 }
 
