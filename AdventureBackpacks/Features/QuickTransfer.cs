@@ -3,6 +3,7 @@ using AdventureBackpacks.Extensions;
 using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using HarmonyLib;
+using PlayFab.Internal;
 using UnityEngine;
 using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Shared;
@@ -12,7 +13,7 @@ namespace AdventureBackpacks.Features;
 public static class QuickTransfer
 {
     public static bool FeatureInitialized = false;
-    public static ConfigEntry<bool> EnableQuickTransfer { get; private set;}
+    public static ConfigEntry<bool> EnableQuickTransfer;
 
     private static InventoryGui _inventoryGuiInstance;
     private static Inventory _fromInventory;
@@ -27,10 +28,10 @@ public static class QuickTransfer
 
     private static void RegisterConfiguraitonFile()
     {
-        EnableQuickTransfer = ConfigSyncBase.UnsyncedConfig("Local Config", "Enable Quick Right Click Item Transfer", false,
+        ConfigSyncBase.UnsyncedConfig("Local Config", "Enable Quick Right Click Item Transfer", false,
             new ConfigDescription("When enabled, can move items to/from player inventory to container, by right clicking.",
                 null,
-                new ConfigurationManagerAttributes { Order = 5 }));
+                new ConfigurationManagerAttributes { Order = 5 }),ref EnableQuickTransfer);
     }
 
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnRightClickItem))]

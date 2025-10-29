@@ -102,7 +102,7 @@ public static class PlayerExtensions
 
         // This drops a copy of the backpack itemDrop.itemData
         var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
-        itemDrop.GetComponent<Rigidbody>().velocity = (Vector3.up - player.transform.forward) * 5f;
+        itemDrop.GetComponent<Rigidbody>().linearVelocity = (Vector3.up - player.transform.forward) * 5f;
         player.m_dropEffects.Create(player.transform.position, Quaternion.identity);
         itemDrop.Save();
 

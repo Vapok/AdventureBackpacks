@@ -12,8 +12,8 @@ namespace AdventureBackpacks.Assets.Effects;
 public abstract class EffectsBase
 {
     public string EffectName => _effectName;
-    public ConfigEntry<bool> EnabledEffect { get; private set;}
-    public Dictionary<BackpackBiomes,ConfigEntry<int>> BiomeQualityLevels { get; private set;}
+    public ConfigEntry<bool> EnabledEffect;
+    public Dictionary<BackpackBiomes, ConfigEntry<int>> BiomeQualityLevels;
 
     private string _configSection;
     private string _effectName;
@@ -124,10 +124,10 @@ public abstract class EffectsBase
     {
         BiomeQualityLevels = new();
         
-        EnabledEffect = ConfigSyncBase.SyncedConfig(_configSection, "Effect Enabled", true,
+        ConfigSyncBase.SyncedConfig(_configSection, "Effect Enabled", true,
             new ConfigDescription(_description,
                 null,
-                new ConfigurationManagerAttributes { Order = 1 }));
+                new ConfigurationManagerAttributes { Order = 1 }),ref EnabledEffect);
         
         //Waiting For Startup
         ConfigRegistry.Waiter.StatusChanged += (_,_) => AdditionalConfiguration(_configSection);
@@ -154,10 +154,16 @@ public abstract class EffectsBase
         {
             if ((biome & enumKeyBit) != 0)
             {
-                var qualityLevel = ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {enumKeyBit.ToString()}", defaultQuality,
-                    new ConfigDescription("Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
+                ConfigEntry<int> configEntry = null;
+
+                ConfigSyncBase.SyncedConfig(_configSection, $"Effective Quality Level: {enumKeyBit.ToString()}",
+                    defaultQuality,
+                    new ConfigDescription(
+                        "Quality Level needed to apply effect to backpack. Zero disables effect for Biome.",
                         new AcceptableValueRange<int>(0, 5),
-                        new ConfigurationManagerAttributes { Order = 2 }));
+                        new ConfigurationManagerAttributes { Order = 2 }), ref configEntry);
+                
+                var qualityLevel = configEntry;
 
                 if (!BiomeQualityLevels.ContainsKey(enumKeyBit) && qualityLevel != null)
                 {

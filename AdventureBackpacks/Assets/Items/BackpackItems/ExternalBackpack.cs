@@ -11,7 +11,7 @@ namespace AdventureBackpacks.Assets.Items.BackpackItems;
 internal class ExternalBackpack : BackpackItem
 {
     private readonly ABAPI.BackpackDefinition _backpackDefinition;
-    private static EffectsBase _setEffectsBase = null;
+    private static EffectsBase _setEffectsBase;
     
     public ExternalBackpack(ABAPI.BackpackDefinition backpackDefinition, GameObject goItem) : base(backpackDefinition, goItem)
     {

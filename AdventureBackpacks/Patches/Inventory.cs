@@ -13,6 +13,8 @@ public static class InventoryPatches
 {
     private static bool _movingItemBetweenContainers;
     private static bool _droppingOutside;
+    public static bool IsDoingCrafting = false;
+    private static BackpackComponent _savedBackpackData = null;
 
     private static readonly Queue<KeyValuePair<ItemDrop.ItemData,DateTime>> ItemsAddedQueue = new();
 
@@ -135,6 +137,17 @@ public static class InventoryPatches
         {
             return;
         }
+
+        if (IsDoingCrafting)
+        {
+            //Save Backpack contents
+            if (item.IsBackpack())
+            {
+                _savedBackpackData = item.Data().Get<BackpackComponent>();
+            }
+
+            return;
+        }
         
         if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping || AdventureBackpacks.BypassMoveProtection)
             return;
@@ -159,7 +172,31 @@ public static class InventoryPatches
             }
         }
     }
-    
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem),
+        new[]
+        {
+            typeof(string), typeof(int), typeof(int), typeof(int), typeof(long), typeof(string), typeof(Vector2i),
+            typeof(bool)
+        })]
+    [HarmonyPriority(Priority.First)]
+    static class AddItemCraftingPatch
+    {
+        static void Postfix(Inventory __instance, ref ItemDrop.ItemData __result)
+        {
+            if (IsDoingCrafting && __instance != null)
+            {
+                if (__result.IsBackpack() && _savedBackpackData?.GetInventory() != null)
+                {
+                    var backpack = __result.Data().Get<BackpackComponent>();
+                    var inventoryData = new ZPackage();
+                    _savedBackpackData.GetInventory().Save(inventoryData);
+                    backpack?.GetInventory().Load(inventoryData);
+                    _savedBackpackData = null;
+                }
+            }
+        }
+    }
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(ItemDrop.ItemData) })]
     [HarmonyPriority(Priority.First)]
     static class AddItemPatch

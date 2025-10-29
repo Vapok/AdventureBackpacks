@@ -25,6 +25,8 @@ namespace AdventureBackpacks
 {
     [BepInPlugin(_pluginId, _displayName, _version)]
     [BepInIncompatibility("JotunnBackpacks")]
+    [BepInDependency(Jotunn.Main.ModGuid)]
+    [BepInDependency("com.ValheimModding.YamlDotNetDetector")]
     [BepInDependency("com.chebgonaz.ChebsNecromancy",BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.maxsch.valheim.contentswithin", BepInDependency.DependencyFlags.SoftDependency)]
     public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
@@ -32,7 +34,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.7.10";
+        private const string _version = "1.9.4";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -66,14 +68,18 @@ namespace AdventureBackpacks
             
             //Waiting For Startup
             Waiter = new Waiting();
-            //Initialize Managers
-            Initializer.LoadManagers(false, true, true, true, false, false, true, true);
-
-            //Register Configuration Settings
-            _config = new ConfigRegistry(_instance);
+            
+            //Jotunn Localization
+            var localization = Jotunn.Managers.LocalizationManager.Instance.GetLocalization();
 
             //Register Logger
             LogManager.Init(PluginId,out _log);
+            
+            //Initialize Managers
+            Initializer.LoadManagers(localization,false, true, true, true, false, false, true);
+
+            //Register Configuration Settings
+            _config = new ConfigRegistry(_instance);
 
             PrefabManager.Initalized = true;
             
