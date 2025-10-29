@@ -24,8 +24,13 @@ internal static class InventoryGuiPatches
     static class InventoryGuiDoCraftingPrefix
     {
         [UsedImplicitly]
+        static void Prefix(InventoryGui __instance)
+        {
+            InventoryPatches.IsDoingCrafting = true;
+        }
         static void Postfix(InventoryGui __instance)
         {
+            InventoryPatches.IsDoingCrafting = false;
             if ( Player.m_localPlayer == null)
                 return;
             var player = Player.m_localPlayer;

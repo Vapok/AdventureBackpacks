@@ -1,10 +1,18 @@
+# 1.9.4 - Upgraded Bag Upgrades, Localization, and Dependency Updates
+* Tired of Thor saving your bags? 
+  * Now upgrade bags with inventory without having your inventory explode.
+* Completely revamped Localization System
+  * Localizations are now working again.
+  * Yes, they were broken. I'm sorry about that.
+* Various Dependencies Updated to Current Versions
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 # 1.9.3 - Fixing Dedicated Server Config Syncing
 * A regression issue was introduced when switching to Jotunn preventing servers from dictating configs to clients.
   * This has been resolved.
 * Appropriately added the BepInDependency Flags for graceful mod exit if missing dependencies.
 
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 # 1.9.2 - Removed ServerSync - Updated to Jotunn
 * 1.9.2 - Forgot to actually change Project References (good news it still worked!)
 * 1.9.1 - Removed ServerSync and Updated to Jotunn for Config Management

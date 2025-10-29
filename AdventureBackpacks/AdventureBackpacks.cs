@@ -34,7 +34,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.9.3";
+        private const string _version = "1.9.4";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -68,14 +68,18 @@ namespace AdventureBackpacks
             
             //Waiting For Startup
             Waiter = new Waiting();
-            //Initialize Managers
-            Initializer.LoadManagers(false, true, true, true, false, false, true, true);
-
-            //Register Configuration Settings
-            _config = new ConfigRegistry(_instance);
+            
+            //Jotunn Localization
+            var localization = Jotunn.Managers.LocalizationManager.Instance.GetLocalization();
 
             //Register Logger
             LogManager.Init(PluginId,out _log);
+            
+            //Initialize Managers
+            Initializer.LoadManagers(localization,false, true, true, true, false, false, true);
+
+            //Register Configuration Settings
+            _config = new ConfigRegistry(_instance);
 
             PrefabManager.Initalized = true;
             

@@ -3,6 +3,7 @@ using AdventureBackpacks.Extensions;
 using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using HarmonyLib;
+using PlayFab.Internal;
 using UnityEngine;
 using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Shared;

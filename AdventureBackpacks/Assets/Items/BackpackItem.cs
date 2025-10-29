@@ -20,10 +20,6 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     private string _configSection;
     private string _englishSection;
     private string _localizedCategory;
-    private Localization _english;
-    
-    
-    private Localization english => _english ??= LocalizationCache.ForLanguage("English");
 
     public System.Timers.Timer InceptionTimer;
     public System.Timers.Timer YardSaleTimer;
@@ -76,7 +72,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     protected BackpackItem(string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
-        _englishSection = english.Localize(_configSection);
+        _englishSection = Localizer.GetTranslation("English",_configSection);
 
         if (externalLocalize)
             _localizedCategory = Localization.m_instance.Localize(_configSection);
@@ -88,7 +84,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
 
     internal void SetupLocalization()
     {
-        _englishSection = english.Localize(_configSection);
+        _englishSection = Localizer.GetTranslation("English",_configSection);;
         _localizedCategory = Localization.m_instance.Localize(_configSection);
         if (_localizedCategory.Equals(_configSection))
             _localizedCategory = Localization.instance.Localize(_configSection);
