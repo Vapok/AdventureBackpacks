@@ -1,0 +1,45 @@
+{
+  "vapok_mod_item_backpack_meadows": "Seyahat Çantası",
+  "vapok_mod_item_backpack_meadows_description": "Eşya taşıyabilen küçük bir sırt çantası.",
+
+  "vapok_mod_item_backpack_blackforest": "Sağlam Sırt Çantası",
+  "vapok_mod_item_backpack_blackforest_description": "Tokalar ve kaliteli deri kayışlarla donatılmış sağlam bir sırt çantası.",
+
+  "vapok_mod_item_backpack_swamp": "Kan Torbası Su Geçirmez Çanta",
+  "vapok_mod_item_backpack_swamp_description": "Su geçirmez kan torbalarıyla sızdırmaz hale getirilmiş dayanıklı bir sırt çantası.",
+
+  "vapok_mod_item_backpack_mountains": "Arktik Dağcı Çantası",
+  "vapok_mod_item_backpack_mountains_description": "Dağlarda uzun yolculuklar için uygun bir arktik sırt çantası.",
+
+  "vapok_mod_item_backpack_plains": "Lox Derisi Maceracı Çantası",
+  "vapok_mod_item_backpack_plains_description": "Son derece dayanıklı lox derisinden yapılmış bir macera sırt çantası.",
+
+  "vapok_mod_item_backpack_mistlands": "Kaşifin Sis Çantası",
+  "vapok_mod_item_backpack_mistlands_description": "İnce bir işçilikle yapılmış, gizemli bir sırt çantası. Kendi saklama kutusuyla gelir, nasıl çalıştığı tam bir muamma.",
+
+  "vapok_mod_item_rugged_backpack": "Eski Sağlam Sırt Çantası",
+  "vapok_mod_item_rugged_backpack_description": "Tokalar ve kaliteli deri kayışlarla donatılmış eski bir sağlam sırt çantası.",
+
+  "vapok_mod_item_arctic_backpack": "Eski Arktik Sırt Çantası",
+  "vapok_mod_item_arctic_backpack_description": "Dağlarda uzun yolculuklar için uygun eski bir arktik sırt çantası.",
+
+  "vapok_mod_no_inception1": "Onu kızdırma.",
+  "vapok_mod_no_inception2": "Uyarıldın.",
+  "vapok_mod_no_inception3": "Onu kızdırdın!",
+  "vapok_mod_no_inception4": "Ah... Thor yakında seninle ilgilenecek.",
+  "vapok_mod_no_inception5": "Thor güçlerini elinden aldı!!",
+
+  "vapok_mod_thor_saves_contents": "O çantada eşyalar vardı. Thor onları senin için kurtardı.",
+  
+  "vapok_mod_useful_backpack": "Sırt çantan oldukça kullanışlı hissettiriyor.",
+  "vapok_mod_you_droped_bag": "Bir sırt çantası düşürdün!",
+  "vapok_mod_level": "Seviye",
+  "vapok_mod_effect": "Efekt",
+  "vapok_mod_quick_drop_unavailable": "Hızlı Bırakma Kullanılamıyor.",
+  
+  "vapok_mod_se_cold_immunity": "Soğuk Bağışıklığı",
+  "vapok_mod_se_frost_resistance": "Buz Dayanıklılığı",
+  "vapok_mod_se_wet_resistance": "Su Dayanıklılığı",
+  
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Hayalet Saklama Örtüsü"
+}
