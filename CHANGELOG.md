@@ -1,4 +1,5 @@
-# 1.9.4 - Upgraded Bag Upgrades, Localization, and Dependency Updates
+# 1.9.4 - Turkish, Upgraded Bag Upgrades, Localization, and Dependency Updates
+* Added Turkish Translation thanks to Fahrim!
 * Tired of Thor saving your bags? 
   * Now upgrade bags with inventory without having your inventory explode.
 * Completely revamped Localization System
