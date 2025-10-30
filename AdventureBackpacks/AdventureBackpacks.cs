@@ -34,7 +34,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.9.5";
+        private const string _version = "1.9.6";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -131,11 +131,11 @@ namespace AdventureBackpacks
             }
 
             var effect = EffectsFactory.EffectList[BackpackEffect.Demister];
-            if (Player.m_localPlayer.m_currentBiome.Equals(Heightmap.Biome.Mistlands))
+            if ((Player.m_localPlayer.m_currentBiome.Equals(Heightmap.Biome.Mistlands) && ConfigRegistry.WisplightBiomeLogic.Value) || !ConfigRegistry.WisplightBiomeLogic.Value)
             {
                 if (Player.m_localPlayer.IsBackpackEquipped())
                 {
-                    if (Assets.Effects.Demister.PreviouseBiome != Heightmap.Biome.Mistlands)
+                    if (Assets.Effects.Demister.PreviouseBiome != Heightmap.Biome.Mistlands && ConfigRegistry.WisplightBiomeLogic.Value)
                     {
                         Assets.Effects.Demister.DemisterActive = true;
                         Player.m_localPlayer.UpdateEquipmentStatusEffects();
@@ -152,7 +152,7 @@ namespace AdventureBackpacks
             }
             else
             {
-                if (Assets.Effects.Demister.DemisterActive)
+                if (Assets.Effects.Demister.DemisterActive && ConfigRegistry.WisplightBiomeLogic.Value)
                 {
                     if (effect.IsEffectActive(Player.m_localPlayer))
                     {
