@@ -9,14 +9,15 @@ namespace AdventureBackpacks.Configuration
     public class ConfigRegistry : ConfigSyncBase
     {
         //Configuration Entry Privates
-        internal static ConfigEntry<KeyboardShortcut> HotKeyOpen = null;
-        internal static ConfigEntry<KeyboardShortcut> HotKeyDrop = null;
-        internal static ConfigEntry<KeyboardShortcut> WisplightKeyToggle = null;
-        internal static ConfigEntry<bool> OpenWithInventory = null;
-        internal static ConfigEntry<bool> OpenWithHoverInteract = null;
-        internal static ConfigEntry<bool> CloseInventory = null;
-        internal static ConfigEntry<bool> OutwardMode = null;
-        internal static ConfigEntry<bool> ReplaceShader = null;
+        internal static ConfigEntry<KeyboardShortcut> HotKeyOpen;
+        internal static ConfigEntry<KeyboardShortcut> HotKeyDrop;
+        internal static ConfigEntry<KeyboardShortcut> WisplightKeyToggle;
+        internal static ConfigEntry<bool> WisplightBiomeLogic;
+        internal static ConfigEntry<bool> OpenWithInventory;
+        internal static ConfigEntry<bool> OpenWithHoverInteract;
+        internal static ConfigEntry<bool> CloseInventory;
+        internal static ConfigEntry<bool> OutwardMode;
+        internal static ConfigEntry<bool> ReplaceShader;
         
         public static Waiting Waiter;
 
@@ -46,6 +47,10 @@ namespace AdventureBackpacks.Configuration
                 new ConfigDescription("Hotkey to turn Wisplight on and off",
                     null,
                     new ConfigurationManagerAttributes { Order = 1 }),ref WisplightKeyToggle);
+            
+            UnsyncedConfig("Local Config", "Wisplight Biome Logic", true,
+                new ConfigDescription("If enabled, the Wisplight will automatically turn on when entering Mistlands, and turn off when exiting.",
+                    null, new ConfigurationManagerAttributes { Order = 3 }), ref WisplightBiomeLogic);
             
             UnsyncedConfig("Local Config", "Open with Inventory", false,
                 new ConfigDescription("If enabled, both backpack and inventory will open when Inventory is opened.",

@@ -1,3 +1,9 @@
+# 1.9.6 - TIL Wisplights are Desired 
+* Added a new config setting called Wisplight Biome Logic
+  * This can be disabled to allow the wisplight to be used in any biome
+  * You're welcome schrodingerspsycho <3
+* Adjusted Readme to highlight new settings.
+
 # 1.9.5 - More Updates and Enhancements
 * Explorers Wisppack Wisplight is Now Togglable
   * Set keybind in config, default is "L" for Light
@@ -8,6 +14,9 @@
   * Note: This has reduced some of the "user friendly" fields in Configuration Manager (for now)
 * The Trinket slot could be a lot of fun.
 
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
 # 1.9.4 - Turkish, Upgraded Bag Upgrades, Localization, and Dependency Updates
 * Added Turkish Translation thanks to Fahrim!
 * Tired of Thor saving your bags?
@@ -17,8 +26,6 @@
   * Yes, they were broken. I'm sorry about that.
 * Various Dependencies Updated to Current Versions
 
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 # 1.9.3 - Fixing Dedicated Server Config Syncing
 * A regression issue was introduced when switching to Jotunn preventing servers from dictating configs to clients.
   * This has been resolved.
