@@ -417,9 +417,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: e7983875326f0d47c89fa48f94e3e3f1
+          Hash: 725b0921adc283e97c4977f6a34260b9
         - serializedVersion: 2
-          Hash: a84b9c4e1146fff1de30643a6adf3622
+          Hash: c77b3813684b8d11dcd2a55e6dec72a2
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask: []
@@ -1257,9 +1257,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 7e8482ee371aee7af10e89adb96ada65
+          Hash: 60d069cef57066eb701b58694706fde3
         - serializedVersion: 2
-          Hash: 2025d093333cf96e7d666b81b583f30a
+          Hash: df4d5197bbafb9d99fe8147e5a860156
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask: []

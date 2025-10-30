@@ -34,7 +34,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.9.4";
+        private const string _version = "1.9.5";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -130,7 +130,40 @@ namespace AdventureBackpacks
                 Player.m_localPlayer.QuickDropBackpack();
             }
 
+            var effect = EffectsFactory.EffectList[BackpackEffect.Demister];
+            if (Player.m_localPlayer.m_currentBiome.Equals(Heightmap.Biome.Mistlands))
+            {
+                if (Player.m_localPlayer.IsBackpackEquipped())
+                {
+                    if (Assets.Effects.Demister.PreviouseBiome != Heightmap.Biome.Mistlands)
+                    {
+                        Assets.Effects.Demister.DemisterActive = true;
+                        Player.m_localPlayer.UpdateEquipmentStatusEffects();
+                    }
+                    if (ZInput.GetKeyDown(ConfigRegistry.WisplightKeyToggle.Value.MainKey))
+                    {
+                        if (effect.IsEffectActive(Player.m_localPlayer))
+                        {
+                            Assets.Effects.Demister.DemisterActive = !Assets.Effects.Demister.DemisterActive;
+                            Player.m_localPlayer.UpdateEquipmentStatusEffects();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (Assets.Effects.Demister.DemisterActive)
+                {
+                    if (effect.IsEffectActive(Player.m_localPlayer))
+                    {
+                        Assets.Effects.Demister.DemisterActive = false;
+                        Player.m_localPlayer.UpdateEquipmentStatusEffects();
+                    }
+                }
+            }
+            
             InventoryPatches.ProcessItemsAddedQueue();
+            Assets.Effects.Demister.PreviouseBiome = Player.m_localPlayer.GetCurrentBiome();
         }
 
         public void InitializeBackpacks(object send, EventArgs args)

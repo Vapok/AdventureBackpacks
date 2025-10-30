@@ -1,6 +1,16 @@
+# 1.9.5 - More Updates and Enhancements
+* Explorers Wisppack Wisplight is Now Togglable
+  * Set keybind in config, default is "L" for Light
+  * Additionally, Wisplight will automatically be put away when not in Mistland's Biome's.
+* Updated AssetBundles to Unity 6.0.0.0
+* Revamped Managers to no longer look for ServerSync
+  * This has moved all configuration now to Jotunn for managers now.
+  * Note: This has reduced some of the "user friendly" fields in Configuration Manager (for now)
+* The Trinket slot could be a lot of fun.
+
 # 1.9.4 - Turkish, Upgraded Bag Upgrades, Localization, and Dependency Updates
 * Added Turkish Translation thanks to Fahrim!
-* Tired of Thor saving your bags? 
+* Tired of Thor saving your bags?
   * Now upgrade bags with inventory without having your inventory explode.
 * Completely revamped Localization System
   * Localizations are now working again.

@@ -161,9 +161,9 @@ Shader:
     - m_Passes:
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: a81ce2ae2865897924dbaed722fe4483
+          Hash: 0709297b6b189ebec21c54b6dd2f01c9
         - serializedVersion: 2
-          Hash: a6b91461abd99dabf3f03a134bb24784
+          Hash: 5fa7f682a4b8377be3c873d68cc4158c
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -496,7 +496,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 30943
+          gpuProgramID: 61651
           m_Tags:
             tags:
             - LIGHTMODE: FORWARDBASE
@@ -1246,9 +1246,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 341f4c372ce814bda095a9aabd5cc3e7
+          Hash: 1a66aa4fd6263d197be459bd3b54457d
         - serializedVersion: 2
-          Hash: 04e073fa7828000de2ec878c1216eae0
+          Hash: ff38a0ecedb9a6ddc91f2da848ffa7db
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -1552,7 +1552,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 94649
+          gpuProgramID: 110038
           m_Tags:
             tags:
             - LIGHTMODE: FORWARDADD

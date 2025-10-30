@@ -15,9 +15,9 @@ Shader:
     - m_Passes:
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 439bc5cbe7b79edc49924cff15f75a68
+          Hash: 467ed0800a0a1bccfe865262a5204824
         - serializedVersion: 2
-          Hash: fd945d7364c3638140049b114a787c71
+          Hash: 99412fbf8cae23a8732bb3708cce5548
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -346,7 +346,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 33229
+          gpuProgramID: 22178
           m_Tags:
             tags:
             - FORCENOSHADOWCASTING: true
@@ -2608,9 +2608,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: d7596adae14e53eb0fa1436fb3734aba
+          Hash: 2587286d8d745166909cc3964303fd8b
         - serializedVersion: 2
-          Hash: 351b155d3af04b43700d19e69634d706
+          Hash: 722cd984c08fbf92ee08362c6e127265
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -2920,7 +2920,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 74312
+          gpuProgramID: 71639
           m_Tags:
             tags:
             - FORCENOSHADOWCASTING: true
@@ -3781,9 +3781,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 0a702ce7b7df416167c366004258d68f
+          Hash: 0be20834e7d6202a6a036953df7c68dd
         - serializedVersion: 2
-          Hash: c94ba9eba700a0508ecb5d1ecd3c387f
+          Hash: a5e5c936bc27bb012fdb36ee7f97d821
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -4079,7 +4079,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 166327
+          gpuProgramID: 158759
           m_Tags:
             tags:
             - FORCENOSHADOWCASTING: true
