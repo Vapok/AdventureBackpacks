@@ -365,9 +365,9 @@ Shader:
     - m_Passes:
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 56136d14afb92ebc084f14126404a221
+          Hash: d21b5fd5f7b37bf2f775055ba2330641
         - serializedVersion: 2
-          Hash: d02f667ca6c95f923e7f91981a6decb7
+          Hash: 7493f36a305263f3ac48b62bbb10d1e8
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -713,7 +713,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 51779
+          gpuProgramID: 53498
           m_Tags:
             tags:
             - LIGHTMODE: FORWARDBASE
@@ -2175,9 +2175,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: d0332a28742aeae55d5bf27bce05701e
+          Hash: 14bb20f29506751dd02f29bff535c115
         - serializedVersion: 2
-          Hash: 6e32562ca6aaaa6c04d64a4e7f0c203b
+          Hash: e453cf84981727536743df1c0752a64e
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -2494,7 +2494,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 77690
+          gpuProgramID: 70299
           m_Tags:
             tags:
             - LIGHTMODE: FORWARDADD
@@ -3686,9 +3686,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: f38fa40600d83b6f2cf0f827385a0121
+          Hash: 307f4f1bece008c3c5dde69ec577d4d7
         - serializedVersion: 2
-          Hash: 10f872b513719a11713b4f49a18ebd38
+          Hash: 49da9dcb2cd8edc49d163a7babf05ee4
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -4001,7 +4001,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 160377
+          gpuProgramID: 158531
           m_Tags:
             tags:
             - LIGHTMODE: DEFERRED

@@ -270,9 +270,9 @@ Shader:
     - m_Passes:
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 52ca2744bc8ea01dd791f8b3ea748a4a
+          Hash: 0b7551ab5a39885500b359256d87efb2
         - serializedVersion: 2
-          Hash: 0090982a325e37ac2654ddc970a8bf8c
+          Hash: 4962464c71bca0341fe3cba7740ad87b
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -613,7 +613,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 54187
+          gpuProgramID: 15803
           m_Tags:
             tags:
             - DisableBatching: true
@@ -5564,9 +5564,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 90351b1fd6672a380fb7ed65901ea3c3
+          Hash: 83fef97f5d50c97e3baadfd675a0ec03
         - serializedVersion: 2
-          Hash: e5b1d17ec23a9fd3f1dac8b4040016f1
+          Hash: 2cff21888f30c281c90c9ace6e6888e6
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -5890,7 +5890,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 116451
+          gpuProgramID: 71348
           m_Tags:
             tags:
             - DisableBatching: true
@@ -10296,9 +10296,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 8f298222b3c761fd76b2042d80df1863
+          Hash: 6750d1c4dbe1ad2562ba9fbabe5ed6ee
         - serializedVersion: 2
-          Hash: 5521def0dab2d2fa8ccb7ddb5908f855
+          Hash: 3e6e23f5e0ee7dd512d576b44b26d7aa
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -10607,7 +10607,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 185822
+          gpuProgramID: 145516
           m_Tags:
             tags:
             - DisableBatching: true
@@ -12019,9 +12019,9 @@ Shader:
           m_CombinedStatus: 0
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: 7529df2ff26c8212bf5da89d8426085f
+          Hash: 14a68aab64190e9400186584d5f99d4b
         - serializedVersion: 2
-          Hash: 1cd18db30340e4c4b7041fc55a41bcbb
+          Hash: ba0d668adde4df1e2fd01aee8643958b
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:
@@ -12314,7 +12314,7 @@ Shader:
               name: '<noninit>'
             name: unity_FogColor
           fogMode: -1
-          gpuProgramID: 201632
+          gpuProgramID: 212119
           m_Tags:
             tags:
             - DisableBatching: true

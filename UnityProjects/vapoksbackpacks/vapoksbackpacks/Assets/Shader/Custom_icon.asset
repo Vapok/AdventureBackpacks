@@ -207,9 +207,9 @@ Shader:
     - m_Passes:
       - m_EditorDataHash:
         - serializedVersion: 2
-          Hash: c8f2f02425e427286275b94fd9d15723
+          Hash: 98a76231961dbd53ec1c1bd2ecf1799f
         - serializedVersion: 2
-          Hash: 870fee8d46cedb85e60eed7c07d7ab85
+          Hash: 9a1778ed7cda9a0f7788c27d8279ef3d
         m_Platforms: 0412
         m_LocalKeywordMask: []
         m_GlobalKeywordMask:

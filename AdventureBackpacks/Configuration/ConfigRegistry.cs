@@ -3,21 +3,20 @@ using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
-using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Configuration
 {
     public class ConfigRegistry : ConfigSyncBase
     {
         //Configuration Entry Privates
-        internal static ConfigEntry<KeyboardShortcut> HotKeyOpen { get; private set; }
-        internal static ConfigEntry<KeyboardShortcut> HotKeyDrop { get; private set;}
-        internal static ConfigEntry<bool> OpenWithInventory { get; private set;}
-        internal static ConfigEntry<bool> OpenWithHoverInteract { get; private set;}
-        internal static ConfigEntry<bool> CloseInventory { get; private set;}
-        internal static ConfigEntry<bool> OutwardMode { get; private set;}
-        
-        internal static ConfigEntry<bool> ReplaceShader { get; private set;}
+        internal static ConfigEntry<KeyboardShortcut> HotKeyOpen = null;
+        internal static ConfigEntry<KeyboardShortcut> HotKeyDrop = null;
+        internal static ConfigEntry<KeyboardShortcut> WisplightKeyToggle = null;
+        internal static ConfigEntry<bool> OpenWithInventory = null;
+        internal static ConfigEntry<bool> OpenWithHoverInteract = null;
+        internal static ConfigEntry<bool> CloseInventory = null;
+        internal static ConfigEntry<bool> OutwardMode = null;
+        internal static ConfigEntry<bool> ReplaceShader = null;
         
         public static Waiting Waiter;
 
@@ -35,39 +34,39 @@ namespace AdventureBackpacks.Configuration
                 return;
             
             //User Configs
-            HotKeyOpen = _config.Bind("Local Config", "Open Backpack", new KeyboardShortcut(KeyCode.I),
-                new ConfigDescription("Hotkey to open backpack.", null, new ConfigurationManagerAttributes{ Order = 3 }));
+            UnsyncedConfig("Local Config", "Open Backpack", new KeyboardShortcut(KeyCode.I),
+                new ConfigDescription("Hotkey to open backpack.", null, new ConfigurationManagerAttributes{ Order = 3 }), ref HotKeyOpen);
             
-            HotKeyDrop = _config.Bind(
-                "Local Config", "Quickdrop Backpack", new KeyboardShortcut(KeyCode.Y),
+            UnsyncedConfig("Local Config", "Quickdrop Backpack", new KeyboardShortcut(KeyCode.Y),
                 new ConfigDescription("Hotkey to quickly drop backpack while on the run.",
                     null,
-                    new ConfigurationManagerAttributes { Order = 1 }));
+                    new ConfigurationManagerAttributes { Order = 1 }),ref HotKeyDrop);
             
-            OpenWithInventory = _config.Bind(
-                "Local Config", "Open with Inventory", false,
+            UnsyncedConfig("Local Config", "Wisplight Effect Toggle", new KeyboardShortcut(KeyCode.L),
+                new ConfigDescription("Hotkey to turn Wisplight on and off",
+                    null,
+                    new ConfigurationManagerAttributes { Order = 1 }),ref WisplightKeyToggle);
+            
+            UnsyncedConfig("Local Config", "Open with Inventory", false,
                 new ConfigDescription("If enabled, both backpack and inventory will open when Inventory is opened.",
-                    null, new ConfigurationManagerAttributes { Order = 3 }));
+                    null, new ConfigurationManagerAttributes { Order = 3 }),ref OpenWithInventory);
             
-            OpenWithHoverInteract = _config.Bind(
-                "Local Config", "Open with Interactive Hover", false,
+            UnsyncedConfig("Local Config", "Open with Interactive Hover", false,
                 new ConfigDescription("If enabled, backpack will only open while hovering over equipped backpack and pressing hotkey.  This option overrides Open with Inventory.",
-                    null, new ConfigurationManagerAttributes { Order = 3 }));
+                    null, new ConfigurationManagerAttributes { Order = 3 }), ref OpenWithHoverInteract);
             
-            CloseInventory = _config.Bind(
-                "Local Config", "Close Inventory", true,
+            UnsyncedConfig("Local Config", "Close Inventory", true,
                 new ConfigDescription("If enabled, both backpack and inventory will close with Open Backpack keybind is pressed while Inventory is open.",
-                    null, new ConfigurationManagerAttributes { Order = 2 }));
+                    null, new ConfigurationManagerAttributes { Order = 2 }), ref CloseInventory);
             
-            OutwardMode = _config.Bind(
-                "Local Config", "Outward Mode", false,
+            UnsyncedConfig("Local Config", "Outward Mode", false,
                 new ConfigDescription("You can use a hotkey to quickly drop your equipped backpack in order to run faster away from danger.",
-                    null, new ConfigurationManagerAttributes { Order = 1 }));
+                    null, new ConfigurationManagerAttributes { Order = 1 }), ref OutwardMode);
 
-            ReplaceShader = _config.Bind(
-                "Local Config", "Replace Shader", true,
+            UnsyncedConfig("Local Config", "Replace Shader", true,
                 new ConfigDescription("Toggle To use the Material Shader Replacer (Requires Game Restart)",
-                    null, new ConfigurationManagerAttributes { Order = 1 }));
+                    null, new ConfigurationManagerAttributes { Order = 1 }), ref ReplaceShader);
+            
 
         }
     }
