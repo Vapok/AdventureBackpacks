@@ -176,6 +176,12 @@
         <Compile Include="API\Structs.cs" />
         <Compile Include="Compats\ContentsWithin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_black_forest" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_meadows" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_mistlands" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_mountains" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_plains" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_swamp" />
         <Content Include="ILRepack.Config.props" />
         <Content Include="ILRepack.targets" />
     </ItemGroup>

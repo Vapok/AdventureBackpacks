@@ -1,6 +1,6 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.58f2
-CRC: 1920023209
+CRC: 3703089065
 HashAppended: 0
 AssetBundleManifest:
   AssetBundleInfos:
@@ -11,3 +11,23 @@ AssetBundleManifest:
       Name: chebsbackpack
       Dependencies:
         Dependency_0: vapokbackpacks
+    Info_2:
+      Name: backpack_black_forest
+      Dependencies:
+        Dependency_0: vapokbackpacks
+    Info_3:
+      Name: backpack_mistlands
+      Dependencies: {}
+    Info_4:
+      Name: backpack_meadows
+      Dependencies: {}
+    Info_5:
+      Name: backpack_mountains
+      Dependencies:
+        Dependency_0: vapokbackpacks
+    Info_6:
+      Name: backpack_plains
+      Dependencies: {}
+    Info_7:
+      Name: backpack_swamp
+      Dependencies: {}

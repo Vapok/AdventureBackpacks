@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
 UnityVersion: 6000.0.58f2
-CRC: 217347689
+CRC: 4000079070
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b34b3b321491d8ea5ccf28518bf7e60b
+    Hash: 08af76719f15fd22030f7a7aa39fb356
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e3eddb91b01c98a2f59320b817d980f3
+    Hash: b8eea3fb8f07123fe79b23d13e57ca0e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 047c0bfe216c30c3cd11430ee1515806
+    Hash: 438808cf666b44a1a6794e02d5364b9d
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -51,8 +51,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 199
   Script: {instanceID: 0}
-- Class: 205
-  Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
@@ -67,17 +65,11 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: assembly_valheim
   ClassName: ItemDrop/ItemData/SharedData
 Assets:
-- Assets/vapok/Prefabs/BackpackMistlands.prefab
 - Assets/Texture2D/IronBackpack_Icon.png
-- Assets/vapok/Prefabs/BackpackMeadows.prefab
-- Assets/vapok/Prefabs/BackpackPlains.prefab
 - Assets/Sprite/SilverBackpack_Icon.asset
 - Assets/Texture2D/NecromancyBackpack_Icon.png
 - Assets/Texture2D/SilverBackpack_Icon.png
 - Assets/vapok/Prefabs/CapeSilverBackpack.prefab
 - Assets/Sprite/IronBackpack_Icon.asset
-- Assets/vapok/Prefabs/BackpackSwamp.prefab
-- Assets/vapok/Prefabs/BackpackMountains.prefab
-- Assets/vapok/Prefabs/BackpackBlackForest.prefab
 - Assets/vapok/Prefabs/CapeIronBackpack.prefab
 Dependencies: []
