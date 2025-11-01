@@ -69,7 +69,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         SetupBackpackDef();
     }
     
-    protected BackpackItem(string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(prefabName,itemName)
+    protected BackpackItem(string assetName, string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(assetName, prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
         _englishSection = Localizer.GetTranslation("English",_configSection);

@@ -8,7 +8,7 @@ namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
 internal class BackpackPlains : BackpackItem
 {
-    public BackpackPlains(string prefabName, string itemName) : base(prefabName, itemName)
+    public BackpackPlains(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
     {
         RegisterConfigSettings();
         Item.Configurable = Configurability.Recipe | Configurability.Drop;

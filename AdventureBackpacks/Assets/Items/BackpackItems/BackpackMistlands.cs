@@ -9,7 +9,7 @@ namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
 internal class BackpackMistlands : BackpackItem
 {
-    public BackpackMistlands(string prefabName, string itemName) : base(prefabName, itemName)
+    public BackpackMistlands(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
     {
         RegisterConfigSettings();
         
