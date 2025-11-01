@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Effects;
 using Vapok.Common.Abstractions;
@@ -29,10 +30,11 @@ public class EffectsFactory : FactoryBase
     
     private static HashSet<EffectsBase> _externalEffects = new();
     private static HashSet<EffectsBase> _allEffects = new();
+    public static EffectsFactory Instance;
     
     public EffectsFactory(ILogIt logger, ConfigSyncBase configs) : base(logger, configs)
     {
-    
+        Instance = this;
     }
 
     public static HashSet<StatusEffect> GetRegisteredEffects()
@@ -91,5 +93,10 @@ public class EffectsFactory : FactoryBase
                     break;
             }
         }
+    }
+
+    public void ToggleEffects()
+    {
+        _effectList.Values.ToList().ForEach(x => x.ToggleEffect());
     }
 }

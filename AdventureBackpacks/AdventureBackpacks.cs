@@ -13,13 +13,16 @@ using APIManager;
 using BepInEx;
 using BepInEx.Bootstrap;
 using HarmonyLib;
-using ItemManager;
 using JetBrains.Annotations;
+using Jotunn.Managers;
+using Jotunn.Utils;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Managers.LocalizationManager;
 using Vapok.Common.Tools;
+using BoneReorder = Vapok.Common.Tools.BoneReorder;
+using PrefabManager = ItemManager.PrefabManager;
 
 namespace AdventureBackpacks
 {
@@ -29,12 +32,13 @@ namespace AdventureBackpacks
     [BepInDependency("com.ValheimModding.YamlDotNetDetector")]
     [BepInDependency("com.chebgonaz.ChebsNecromancy",BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.maxsch.valheim.contentswithin", BepInDependency.DependencyFlags.SoftDependency)]
+    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
     public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
     {
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.9.6";
+        private const string _version = "1.9.7";
         
         //Interface Properties
         public string PluginId => _pluginId;
@@ -56,6 +60,7 @@ namespace AdventureBackpacks
         private static ConfigSyncBase _config;
         private static ILogIt _log;
         private Harmony _harmony;
+       
         
         [UsedImplicitly]
         // This the main function of the mod. BepInEx will call this.
@@ -70,7 +75,7 @@ namespace AdventureBackpacks
             Waiter = new Waiting();
             
             //Jotunn Localization
-            var localization = Jotunn.Managers.LocalizationManager.Instance.GetLocalization();
+            var localization = LocalizationManager.Instance.GetLocalization();
 
             //Register Logger
             LogManager.Init(PluginId,out _log);
@@ -82,7 +87,7 @@ namespace AdventureBackpacks
             _config = new ConfigRegistry(_instance);
 
             PrefabManager.Initalized = true;
-            
+           
             //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -129,41 +134,10 @@ namespace AdventureBackpacks
             {
                 Player.m_localPlayer.QuickDropBackpack();
             }
-
-            var effect = EffectsFactory.EffectList[BackpackEffect.Demister];
-            if ((Player.m_localPlayer.m_currentBiome.Equals(Heightmap.Biome.Mistlands) && ConfigRegistry.WisplightBiomeLogic.Value) || !ConfigRegistry.WisplightBiomeLogic.Value)
-            {
-                if (Player.m_localPlayer.IsBackpackEquipped())
-                {
-                    if (Assets.Effects.Demister.PreviouseBiome != Heightmap.Biome.Mistlands && ConfigRegistry.WisplightBiomeLogic.Value)
-                    {
-                        Assets.Effects.Demister.DemisterActive = true;
-                        Player.m_localPlayer.UpdateEquipmentStatusEffects();
-                    }
-                    if (ZInput.GetKeyDown(ConfigRegistry.WisplightKeyToggle.Value.MainKey))
-                    {
-                        if (effect.IsEffectActive(Player.m_localPlayer))
-                        {
-                            Assets.Effects.Demister.DemisterActive = !Assets.Effects.Demister.DemisterActive;
-                            Player.m_localPlayer.UpdateEquipmentStatusEffects();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (Assets.Effects.Demister.DemisterActive && ConfigRegistry.WisplightBiomeLogic.Value)
-                {
-                    if (effect.IsEffectActive(Player.m_localPlayer))
-                    {
-                        Assets.Effects.Demister.DemisterActive = false;
-                        Player.m_localPlayer.UpdateEquipmentStatusEffects();
-                    }
-                }
-            }
+            
+            EffectsFactory.Instance.ToggleEffects();
             
             InventoryPatches.ProcessItemsAddedQueue();
-            Assets.Effects.Demister.PreviouseBiome = Player.m_localPlayer.GetCurrentBiome();
         }
 
         public void InitializeBackpacks(object send, EventArgs args)

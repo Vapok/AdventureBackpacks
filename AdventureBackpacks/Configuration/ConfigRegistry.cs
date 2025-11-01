@@ -11,8 +11,6 @@ namespace AdventureBackpacks.Configuration
         //Configuration Entry Privates
         internal static ConfigEntry<KeyboardShortcut> HotKeyOpen;
         internal static ConfigEntry<KeyboardShortcut> HotKeyDrop;
-        internal static ConfigEntry<KeyboardShortcut> WisplightKeyToggle;
-        internal static ConfigEntry<bool> WisplightBiomeLogic;
         internal static ConfigEntry<bool> OpenWithInventory;
         internal static ConfigEntry<bool> OpenWithHoverInteract;
         internal static ConfigEntry<bool> CloseInventory;
@@ -42,16 +40,7 @@ namespace AdventureBackpacks.Configuration
                 new ConfigDescription("Hotkey to quickly drop backpack while on the run.",
                     null,
                     new ConfigurationManagerAttributes { Order = 1 }),ref HotKeyDrop);
-            
-            UnsyncedConfig("Local Config", "Wisplight Effect Toggle", new KeyboardShortcut(KeyCode.L),
-                new ConfigDescription("Hotkey to turn Wisplight on and off",
-                    null,
-                    new ConfigurationManagerAttributes { Order = 1 }),ref WisplightKeyToggle);
-            
-            UnsyncedConfig("Local Config", "Wisplight Biome Logic", true,
-                new ConfigDescription("If enabled, the Wisplight will automatically turn on when entering Mistlands, and turn off when exiting.",
-                    null, new ConfigurationManagerAttributes { Order = 3 }), ref WisplightBiomeLogic);
-            
+           
             UnsyncedConfig("Local Config", "Open with Inventory", false,
                 new ConfigDescription("If enabled, both backpack and inventory will open when Inventory is opened.",
                     null, new ConfigurationManagerAttributes { Order = 3 }),ref OpenWithInventory);
@@ -71,8 +60,6 @@ namespace AdventureBackpacks.Configuration
             UnsyncedConfig("Local Config", "Replace Shader", true,
                 new ConfigDescription("Toggle To use the Material Shader Replacer (Requires Game Restart)",
                     null, new ConfigurationManagerAttributes { Order = 1 }), ref ReplaceShader);
-            
-
         }
     }
     
