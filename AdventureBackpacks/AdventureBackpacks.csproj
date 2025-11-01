@@ -40,7 +40,7 @@
         <NoWarn>MSB3245;MSB3243</NoWarn>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'API|AnyCPU' ">
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <AssemblyName>AdventureBackpacksAPI</AssemblyName>
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
