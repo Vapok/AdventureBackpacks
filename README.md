@@ -18,16 +18,17 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Install Adventure Backpacks into it's own FOLDER inside of the `BepInEx/plugins` folder.
   * Create a folder called `Translations` and ensure all Translation files are stored in there.
     * Translations files should be named `AdventureBackpacks.<language key>.json`
-* Adventure Backpacks is a client-side and server-side mod.
+* Adventure Backpacks is a client-side **AND** server-side mod and should be installed on both.
   * If using on Dedicated Servers:
-    * Configuration Lock and Sync is available and disabled by default.
-      * Enabling Locked and Synced Configs will require server restart.
-      * All other settings will be synced to connected clients, and server configs will be enforced.
-
+    * Configuration Lock and Sync is automatically enabled for configured Admins
+      * All Syncable settings will be synced to connected clients, and server configs will be enforced.
+      * Admins can change server configs using a Configuration Management mod.
+  * Network Compatibility Enforcement is enabled.
+    * This is to prevent data loss on a dedicated server if one client is running the mod, but another client isn't. In particular, you could lose your backpacks and everything in them if someone opens a chest and doesn't have the mod.
 ---
 
 ## Gear Introduced In This Mod
-* The 6 new backpacks are:
+* The 6 Original Adventure Backpacks are:
     * **Satchel** - _A small backpack capable of holding things._
     * **Rugged Backpack**  - _A rugged backpack, complete with buckles and fine leather straps._
     * **Bloodbag Wetpack** - _A durable backpack sealed using waterproof blood bags._
@@ -89,7 +90,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
     * Swamp Key for Crypts
 * Optional Right Click Quick Transfer (Fast Item Transfer)
   * Allows single right-click transfer of an item/stack of items between Player Inventory and any Open Container
-  * This is the same functionality that's available as the stand-alone mod **Fast Item Transfer**
+  * This is the same functionality that's available as the stand-alone mod **Fast Item Transfer** which is disabled when installed with Adventure Backpacks
 * Outward Run Away Mode
   * Pressing the Quick Drop keybind (default is `Y`), will immediately release the equipped backpack and drop it behind the player on the ground.
   * This feature is optional, and is disabled out of the box.
@@ -105,7 +106,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
   * Waterproof
   * Slow Fall
   * Demister (Wisplight effect that clears mist in Mistlands)
-    * Config Settings For Demister
+    * Config Settings For Demister found in "Wisplight Client Settings"
       * Toggle Wisplight with Keybind 
         * Default: "L" key
       * Wisplight Biome Logic to automatically turn off Wisplight when not in Mistlands.

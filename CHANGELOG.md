@@ -1,4 +1,14 @@
-# 1.9.6 - TIL Wisplights are Desired 
+# 1.9.7 - Item Loss Issue - Update to Dedicated Server Strictness and Wisplight Config Changes
+* It has been identified that major item data loss can occur if two clients are on a dedicated server, but only one client has Adventure Backpacks installed. The client without the mod can create dataloss, including the contents of a backpack.
+  * To safeguard against this, I have enabled JVL Network Compatibility to enforce that all clients must use Adventure Backpacks.
+  * This will require Adventure Backpacks, along with JVL and Yaml mods to be installed on dedicated servers.
+  * Additionally all clients and servers must be using the same version as of this update.
+* Reorganized Configuration Settings for Wisplight, now found under "Wisplight Client Settings" under the Effect
+  * This is prep work for providing similar functionality later on for other effects.
+  * This might result in resetting of your client config for these settings.
+* Updates to ReadMe
+
+# 1.9.6 - TIL Wisplights are Desired
 * Added a new config setting called Wisplight Biome Logic
   * This can be disabled to allow the wisplight to be used in any biome
   * You're welcome schrodingerspsycho <3

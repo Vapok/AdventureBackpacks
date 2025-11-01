@@ -5,7 +5,6 @@ using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
 using Vapok.Common.Managers.Configuration;
-using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Assets.Effects;
 
@@ -20,6 +19,7 @@ public abstract class EffectsBase
     private string _description;
     private StatusEffect _statusEffect;
     private bool _isSetItemStatusEffect;
+    private bool _effectSwitch = true;
 
     public EffectsBase(string effectName, string effectDesc, bool IsItemSetStatusEffect = false)
     {
@@ -60,7 +60,7 @@ public abstract class EffectsBase
         statusEffect = _statusEffect;
         return statusEffect != null && IsEffectActive(item);
     }
-
+    
     public virtual bool IsEffectActive(Humanoid human)
     {
         if (human is Player player)
@@ -94,6 +94,27 @@ public abstract class EffectsBase
         return false;
     }
 
+    public virtual void ToggleEffect()
+    {
+        
+    }
+    
+    public virtual void ToggleEffectSwitch()
+    {
+        _effectSwitch = !_effectSwitch;
+    }
+    
+    public virtual void SetEffectSwitch(bool switchValue)
+    {
+        _effectSwitch = switchValue;
+    }
+    
+    public virtual bool CurrectSwitchSetting()
+    {
+        return _effectSwitch;
+    }
+
+    
     public virtual bool IsEffectActive(ItemDrop.ItemData itemData)
     {
         if (!EnabledEffect.Value)
@@ -120,7 +141,7 @@ public abstract class EffectsBase
         return false;
     }
     
-    public void RegisterEffectConfiguration()
+    public virtual void RegisterEffectConfiguration()
     {
         BiomeQualityLevels = new();
         
