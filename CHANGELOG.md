@@ -1,4 +1,9 @@
 # 1.9.8 - 
+* Changes
+  * Updated Config Hint Text for Multipler. Lot of confusion on this.
+    * Setting to 100% basically disables the weight reduction.
+      * I see what you are doing out there.
+      * Setting to 0% will give you the desired effect.
 * API Changes 1.1.0 -> 1.2.0
   * Updated API Dll to .NET 4.8
 * Internal Changes

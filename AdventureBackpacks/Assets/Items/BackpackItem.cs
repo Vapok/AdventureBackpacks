@@ -145,7 +145,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal virtual void RegisterWeightMultiplier(float defaultValue = 0.5f)
     {
         ConfigSyncBase.SyncedConfig(_englishSection, "Weight Multiplier", defaultValue,
-            new ConfigDescription("The weight of items stored in the backpack gets multiplied by this value.",
+            new ConfigDescription("The weight of items stored in the backpack gets multiplied by this value. Setting to 100% or 1.0 disables weight reduction.",
                 new AcceptableValueRange<float>(0f, 1f), // range between 0f and 1f will make it display as a percentage slider
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 4 }),ref WeightMultiplier);
         
