@@ -124,6 +124,7 @@ public class HumanoidPatches
     {
         static void Postfix(ItemDrop.ItemData __0, bool __result)
         {
+            AdventureBackpacks.Log.Debug($"##########   EquipItem Start");
             if (__0 is null) return;
             
             if ( Player.m_localPlayer == null && !__result)
@@ -141,11 +142,21 @@ public class HumanoidPatches
                 
                 var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
                 
-                if (!Backpacks.IsEmptyingBackpack && backpackItem.InventoryNeedsValidating(backpack.BackpackSize[backpackItem.Item.m_quality].Value))
+                if (!Backpacks.IsEmptyingBackpack)
                 {
-                    Backpacks.ValidateBackpackInventorySizing(player, backpackItem.Item);
+                    if (backpackItem.InventoryNeedsValidating(backpack.BackpackSize[backpackItem.Item.m_quality].Value))
+                    {
+                        AdventureBackpacks.Log.Debug($"##########   EquipItem: InventoryNeedsValidating: {backpack.BackpackSize[backpackItem.Item.m_quality].Value}");
+                        Backpacks.ValidateBackpackInventorySizing(player, backpackItem.Item);
+                    }
+                    else
+                    {
+                        var backpackContainer = player.gameObject.GetComponent<Container>();
+                        backpackItem.UpdateContainerSizing(backpackContainer);
+                    }
                 }
             }
+            AdventureBackpacks.Log.Debug($"##########   EquipItem End");
         }
     }
 }

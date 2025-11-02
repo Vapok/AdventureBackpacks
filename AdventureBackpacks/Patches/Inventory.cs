@@ -203,14 +203,7 @@ public static class InventoryPatches
         {
             if (IsDoingCrafting && __instance != null)
             {
-                if (__result.IsBackpack() && _savedBackpackData?.GetInventory() != null)
-                {
-                    var backpack = __result.Data().Get<BackpackComponent>();
-                    var inventoryData = new ZPackage();
-                    _savedBackpackData.GetInventory().Save(inventoryData);
-                    backpack?.GetInventory().Load(inventoryData);
-                    _savedBackpackData = null;
-                }
+                _savedBackpackData = null;
             }
         }
     }

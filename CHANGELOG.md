@@ -1,3 +1,9 @@
+# 1.9.9 - Regression Issue on Backpack Equiping and Upgrades
+* Last Update caused a regression issue on backup equiping and upgrading
+  * This should fix it.
+* Apologies on the many updates. Trying to push out quickly to prevent these stupid issues.
+  * Also hopefully this slows down the updates.
+
 # 1.9.8 - Fixing an Item Duping Issue
 * Fixed: Item Duping during Backpack Resizing
 * Changes
@@ -7,6 +13,9 @@
       * Setting to 0% will give you the desired effect.
 * API Changes 1.1.0 -> 1.2.0
   * Updated API Dll to .NET 4.8
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.9.7 - Item Loss Issue - Update to Dedicated Server Strictness and Wisplight Config Changes
 * It has been identified that major item data loss can occur if two clients are on a dedicated server, but only one client has Adventure Backpacks installed. The client without the mod can create dataloss, including the contents of a backpack.
@@ -33,9 +42,6 @@
   * This has moved all configuration now to Jotunn for managers now.
   * Note: This has reduced some of the "user friendly" fields in Configuration Manager (for now)
 * The Trinket slot could be a lot of fun.
-
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.9.4 - Turkish, Upgraded Bag Upgrades, Localization, and Dependency Updates
 * Added Turkish Translation thanks to Fahrim!
