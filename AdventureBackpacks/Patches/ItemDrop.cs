@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
@@ -25,9 +26,14 @@ public class ItemDropPatches
                 // Note that GetTotalWeight() just returns a the value of m_totalWeight, and doesn't do any calculation on its own.
                 // If the Inventory has been changed at any point, it calls UpdateTotalWeight(), which should ensure that its m_totalWeight is accurate.
                 var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
+
+                var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
                 
-                if (!Backpacks.IsEmptyingBackpack && backpackItem.InventoryNeedsValidating(backpack.BackpackSize[backpackItem.Item.m_quality].Value))
+                if (!backpackItem.IsEmptyingBackpack && backpackItem.InventoryNeedsValidating(size))
                 {
+                    AdventureBackpacks.Log.Debug($"[GetWeight() - Item Name: {item.m_shared.m_name}");
+                    AdventureBackpacks.Log.Debug($"[GetWeight() - Backpack Item: {backpackItem.Item.m_shared.m_name}");
+                    AdventureBackpacks.Log.Debug($"[GetWeight() - Backpack: {backpack.ItemName}");
                     Backpacks.ValidateBackpackInventorySizing(Player.m_localPlayer, backpackItem.Item);
                 }
                 

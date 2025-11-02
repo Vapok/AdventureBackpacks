@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AdventureBackpacks.Assets.Effects;
 using AdventureBackpacks.Assets.Factories;
@@ -7,6 +8,7 @@ using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using BepInEx;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -21,7 +23,7 @@ namespace AdventureBackpacks.Assets
         private static ILogIt _log = AdventureBackpacks.Log;
         private static List<string> _backpackTypes = new();
         
-        public static bool IsEmptyingBackpack;
+        
         public static List<string> BackpackTypes => _backpackTypes;
 
         public static void LoadBackpackTypes(List<string> backpackTypes)
@@ -74,7 +76,8 @@ namespace AdventureBackpacks.Assets
                     if (item.IsBackpack() && item.TryGetBackpackItem(out var backpack))
                     {
                         var currentBackpack = item.Data().GetOrCreate<BackpackComponent>();
-                        if (currentBackpack.InventoryNeedsValidating(backpack.BackpackSize[currentBackpack.Item.m_quality].Value))
+                        var size = backpack.GetInventorySize(currentBackpack.Item.m_quality);
+                        if (currentBackpack.InventoryNeedsValidating(size))
                         {
                             ValidateBackpackInventorySizing(player, item);
                         }
@@ -116,26 +119,62 @@ namespace AdventureBackpacks.Assets
             return newInventory;
         }
 
+        public static Vector2 ValidateMinMaxChestSize(float x, float y)
+        {
+            if (x < 1)
+                x = 1;
+            if (y < 1)
+                y = 1;
+
+            return new Vector2(x, y);
+        }
+
         public static void ValidateBackpackInventorySizing(Player player, ItemDrop.ItemData currentBackpack)
         {
+            AdventureBackpacks.Log.Debug($"############################################");
+            AdventureBackpacks.Log.Debug($"####  ValidateBackpackInventorySizing  #####");
+            AdventureBackpacks.Log.Debug($"{currentBackpack.m_shared.m_name}");
+            AdventureBackpacks.Log.Debug($"############################################");
+            var stackTrace = new StackTrace();
+
+            for (int i = 1; i <= 20; i++)
+            {
+                if (stackTrace.FrameCount < i)
+                    break;
+                
+                var callingMethod = stackTrace.GetFrame(i)?.GetMethod();
+                AdventureBackpacks.Log.Debug($"[{i}]Called by: {callingMethod?.DeclaringType?.FullName}.{callingMethod?.Name}");
+            }
+            
             if (!currentBackpack.TryGetBackpackItem(out var backpackDefinition)) return;
 
-            var vectorSize = backpackDefinition.BackpackSize[currentBackpack.m_quality];
-            var backpackSize = (int)Math.Floor(vectorSize.Value.x) * (int)Math.Floor(vectorSize.Value.y);
-            AdventureBackpacks.Log.Debug($"### Backpack Slot Size: {backpackSize}");
+            if (!backpackDefinition.BackpackSize.TryGetValue(currentBackpack.m_quality, out var vectorConfig))
+            {
+                AdventureBackpacks.Log.Warning(
+                    $"Backpack '{currentBackpack.m_shared.m_name}' has unexpected quality '{currentBackpack.m_quality}'. " +
+                    "Falling back to quality 1.");
+    
+                // pick a sensible default
+                vectorConfig = backpackDefinition.BackpackSize[1];
+            }
+            
+            var vectorSize = ValidateMinMaxChestSize(vectorConfig.Value.x, vectorConfig.Value.y);
+            
+            var backpackSize = (int)Math.Floor(vectorSize.x) * (int)Math.Floor(vectorSize.y);
+            AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### Backpack Slot Size: {backpackSize}");
                         
             var backpackItem = currentBackpack.Data().GetOrCreate<BackpackComponent>();
             var currentInventory = backpackItem.GetInventory();
-            AdventureBackpacks.Log.Debug($"### Current Inventory Slot Size: {currentInventory.m_inventory.Count}");
+            AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### Current Inventory Slot Size: {currentInventory.m_inventory.Count}");
 
             if (backpackSize < currentInventory.m_inventory.Count)
             {
                 var diff = currentInventory.m_inventory.Count - backpackSize;
-                AdventureBackpacks.Log.Debug($"### I need to YEET {diff} items");
+                AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### I need to YEET {diff} items");
                 PerformYardSale(player, backpackItem.Item, true, diff);
 
                 var newInventorySize = currentInventory.m_inventory.Count;
-                AdventureBackpacks.Log.Debug($"### New Inventory Size {newInventorySize}");
+                AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### New Inventory Size {newInventorySize}");
                 backpackItem.IsLoadingInventory = true;
                 var newInventory = NewInventoryInstance(backpackDefinition.ItemName, currentBackpack.m_quality);
                 
@@ -147,8 +186,16 @@ namespace AdventureBackpacks.Assets
             }
             
             backpackItem.Load();
-            var backpackContainer = player.gameObject.GetComponent<Container>();
-            backpackItem.UpdateContainerSizing(backpackContainer);
+            if (player.IsThisBackpackEquipped(currentBackpack))
+            {
+                var backpackContainer = player.gameObject.GetComponent<Container>();
+                backpackItem.UpdateContainerSizing(backpackContainer);
+            }
+            AdventureBackpacks.Log.Debug($"############################################");
+            AdventureBackpacks.Log.Debug($"DONE  ValidateBackpackInventorySizing  DONE");
+            AdventureBackpacks.Log.Debug($"{currentBackpack.m_shared.m_name}");
+            AdventureBackpacks.Log.Debug($"############################################");
+
         }
         
         public static bool CheckForInception(Inventory instance, ItemDrop.ItemData item)
@@ -201,13 +248,13 @@ namespace AdventureBackpacks.Assets
 
                     void EmtpyInventory(Inventory inventory)
                     {
-                        if (IsEmptyingBackpack)
+                        if (backpack.IsEmptyingBackpack)
                             return;
                         
-                        AdventureBackpacks.Log.Debug($"Number of Items: {numberItems}");
-                        AdventureBackpacks.Log.Debug($"Inventory Count: {inventory.m_inventory.Count}");
+                        AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}]Number of Items: {numberItems}");
+                        AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}]Inventory Count: {inventory.m_inventory.Count}");
                         
-                        IsEmptyingBackpack = true;
+                        backpack.IsEmptyingBackpack = true;
                         try
                         {
                             if (numberItems == 0)
@@ -237,22 +284,22 @@ namespace AdventureBackpacks.Assets
                                     var item = inventory.m_inventory[0]; // safe because of Count check
 
                                     var amount = inventory.CountItems(item.m_shared.m_name, -1);
-                                    AdventureBackpacks.Log.Debug($"Number of {item.m_shared.m_name}: {amount}");
-                                    AdventureBackpacks.Log.Debug($"Stack Size of {item.m_shared.m_name}: {item.m_stack}");
+                                    AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Number of {item.m_shared.m_name}: {amount}");
+                                    AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Stack Size of {item.m_shared.m_name}: {item.m_stack}");
 
                                     var dropAmount = amount > item.m_stack ? item.m_stack : amount;
-                                    AdventureBackpacks.Log.Debug($"Drop Amount: {dropAmount}");
+                                    AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Drop Amount: {dropAmount}");
 
                                     mLocalPlayer.DropItem(inventory, item, dropAmount);
 
                                     dropped++;
                                 }
                             }
-                            AdventureBackpacks.Log.Debug($"Inventory Count (end): {inventory.m_inventory.Count}");
+                            AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Inventory Count (end): {inventory.m_inventory.Count}");
                         }
                         finally
                         {
-                            IsEmptyingBackpack = false;
+                            backpack.IsEmptyingBackpack = false;
                         }
                     }
                     

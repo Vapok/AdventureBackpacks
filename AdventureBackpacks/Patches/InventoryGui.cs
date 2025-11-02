@@ -26,10 +26,18 @@ internal static class InventoryGuiPatches
         [UsedImplicitly]
         static void Prefix(InventoryGui __instance)
         {
+            AdventureBackpacks.Log.Debug($"########################################");
+            AdventureBackpacks.Log.Debug($"####       DoCrafting.Prefix       #####");
+            AdventureBackpacks.Log.Debug($"########################################");
             InventoryPatches.IsDoingCrafting = true;
+            
         }
         static void Postfix(InventoryGui __instance)
         {
+            AdventureBackpacks.Log.Debug($"########################################");
+            AdventureBackpacks.Log.Debug($"####       DoCrafting.Postfix      #####");
+            AdventureBackpacks.Log.Debug($"########################################");
+
             InventoryPatches.IsDoingCrafting = false;
             if ( Player.m_localPlayer == null)
                 return;
@@ -37,15 +45,21 @@ internal static class InventoryGuiPatches
             
             if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
             {
+                AdventureBackpacks.Log.Debug($"Item: {__instance.m_craftUpgradeItem.m_shared.m_name} ");
+
                 var backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
+                AdventureBackpacks.Log.Debug($"Backpack: {__instance.m_craftUpgradeItem.m_shared.m_name} ");
                 if (backpack == null)
                     return;
-                
-                var backpackContainer = player.gameObject.GetComponent<Container>();
+
                 backpack?.Load();
-                
+
                 if (player.IsThisBackpackEquipped(backpack.Item))
+                {
+                    var backpackContainer = player.gameObject.GetComponent<Container>();
                     backpack?.UpdateContainerSizing(backpackContainer);
+                }
+                    
                 
                 player.UpdateEquipmentStatusEffects();
             }
