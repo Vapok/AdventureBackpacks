@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
@@ -49,10 +50,26 @@ public static class InventoryPatches
             // If the inventory changed belongs to a backpack...
             if (__instance.IsBackPackInventory())
             {
-                var backpack = Player.m_localPlayer.GetEquippedBackpack();
+                var stackTrace = new StackTrace();
+
+                AdventureBackpacks.Log.Debug($"#### Patch Inventory Changed: {__instance.m_name}");
+                AdventureBackpacks.Log.Debug($"#### Patch Inventory Count: {__instance.m_inventory.Count}");
                 
-                if (backpack != null) 
-                    backpack.Save();
+                var backpack = Player.m_localPlayer.GetEquippedBackpack();
+                if (backpack != null )
+                {
+                    AdventureBackpacks.Log.Debug($"#### Before Save BackpackComponent Inventory Count: {backpack.GetInventory().m_inventory.Count}");
+                    if (backpack.IsLoadingInventory)
+                    {
+                        AdventureBackpacks.Log.Debug($"Bypassing Save - Inventory Is Loading ----->");
+                    }
+                    else
+                    {
+                        
+                        backpack.Save(__instance);
+                    }
+                    AdventureBackpacks.Log.Debug($"#### After Save BackpackComponent Inventory Count: {backpack.GetInventory().m_inventory.Count}");
+                }
             }
         }
     }

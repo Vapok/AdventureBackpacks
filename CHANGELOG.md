@@ -1,4 +1,5 @@
-# 1.9.8 - 
+# 1.9.8 - Fixing an Item Duping Issue
+* Fixed: Item Duping during Backpack Resizing
 * Changes
   * Updated Config Hint Text for Multipler. Lot of confusion on this.
     * Setting to 100% basically disables the weight reduction.
@@ -6,8 +7,6 @@
       * Setting to 0% will give you the desired effect.
 * API Changes 1.1.0 -> 1.2.0
   * Updated API Dll to .NET 4.8
-* Internal Changes
-  * Each backpack is now it's own asset bundle
 
 # 1.9.7 - Item Loss Issue - Update to Dedicated Server Strictness and Wisplight Config Changes
 * It has been identified that major item data loss can occur if two clients are on a dedicated server, but only one client has Adventure Backpacks installed. The client without the mod can create dataloss, including the contents of a backpack.

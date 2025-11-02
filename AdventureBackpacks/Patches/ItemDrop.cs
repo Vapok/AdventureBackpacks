@@ -24,7 +24,14 @@ public class ItemDropPatches
                 // If the item in GetWeight() is a backpack, call GetTotalWeight() on its Inventory.
                 // Note that GetTotalWeight() just returns a the value of m_totalWeight, and doesn't do any calculation on its own.
                 // If the Inventory has been changed at any point, it calls UpdateTotalWeight(), which should ensure that its m_totalWeight is accurate.
-                var inventoryWeight = item.Data().GetOrCreate<BackpackComponent>().GetInventory()?.GetTotalWeight() ?? 0;
+                var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
+                
+                if (!Backpacks.IsEmptyingBackpack && backpackItem.InventoryNeedsValidating(backpack.BackpackSize[backpackItem.Item.m_quality].Value))
+                {
+                    Backpacks.ValidateBackpackInventorySizing(Player.m_localPlayer, backpackItem.Item);
+                }
+                
+                var inventoryWeight = backpackItem.GetInventory()?.GetTotalWeight() ?? 0;
 
                 // To the backpack's item weight, add the backpack's inventory weight multiplied by the weightMultiplier in the configs.
                 returnedWeight += inventoryWeight * backpack.WeightMultiplier.Value;

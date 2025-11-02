@@ -20,6 +20,8 @@ namespace AdventureBackpacks.Assets
 
         private static ILogIt _log = AdventureBackpacks.Log;
         private static List<string> _backpackTypes = new();
+        
+        public static bool IsEmptyingBackpack;
         public static List<string> BackpackTypes => _backpackTypes;
 
         public static void LoadBackpackTypes(List<string> backpackTypes)
@@ -53,6 +55,7 @@ namespace AdventureBackpacks.Assets
             if (Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null)
                 return;
 
+            var player = Player.m_localPlayer;
             //Close Inventory before making changes.  Leaving open can have undesirable effects.
             InventoryGui.instance.Hide();
             
@@ -68,11 +71,14 @@ namespace AdventureBackpacks.Assets
                     if (item == null)
                         continue;
                 
-                    if (item.IsBackpack())
+                    if (item.IsBackpack() && item.TryGetBackpackItem(out var backpack))
                     {
-                        //UpdateStatusEffects(item);
-                        var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
-                        backpackItem.Load();
+                        var currentBackpack = item.Data().GetOrCreate<BackpackComponent>();
+                        if (currentBackpack.InventoryNeedsValidating(backpack.BackpackSize[currentBackpack.Item.m_quality].Value))
+                        {
+                            ValidateBackpackInventorySizing(player, item);
+                        }
+                        
                     }
                 }
             }
@@ -110,6 +116,41 @@ namespace AdventureBackpacks.Assets
             return newInventory;
         }
 
+        public static void ValidateBackpackInventorySizing(Player player, ItemDrop.ItemData currentBackpack)
+        {
+            if (!currentBackpack.TryGetBackpackItem(out var backpackDefinition)) return;
+
+            var vectorSize = backpackDefinition.BackpackSize[currentBackpack.m_quality];
+            var backpackSize = (int)Math.Floor(vectorSize.Value.x) * (int)Math.Floor(vectorSize.Value.y);
+            AdventureBackpacks.Log.Debug($"### Backpack Slot Size: {backpackSize}");
+                        
+            var backpackItem = currentBackpack.Data().GetOrCreate<BackpackComponent>();
+            var currentInventory = backpackItem.GetInventory();
+            AdventureBackpacks.Log.Debug($"### Current Inventory Slot Size: {currentInventory.m_inventory.Count}");
+
+            if (backpackSize < currentInventory.m_inventory.Count)
+            {
+                var diff = currentInventory.m_inventory.Count - backpackSize;
+                AdventureBackpacks.Log.Debug($"### I need to YEET {diff} items");
+                PerformYardSale(player, backpackItem.Item, true, diff);
+
+                var newInventorySize = currentInventory.m_inventory.Count;
+                AdventureBackpacks.Log.Debug($"### New Inventory Size {newInventorySize}");
+                backpackItem.IsLoadingInventory = true;
+                var newInventory = NewInventoryInstance(backpackDefinition.ItemName, currentBackpack.m_quality);
+                
+                newInventory.MoveAll(currentInventory);
+                
+                backpackItem.IsLoadingInventory = false;
+                
+                backpackItem.Save(newInventory);
+            }
+            
+            backpackItem.Load();
+            var backpackContainer = player.gameObject.GetComponent<Container>();
+            backpackItem.UpdateContainerSizing(backpackContainer);
+        }
+        
         public static bool CheckForInception(Inventory instance, ItemDrop.ItemData item)
         {
             if (instance.IsBackPackInventory() && Player.m_localPlayer != null)
@@ -150,7 +191,7 @@ namespace AdventureBackpacks.Assets
             return true;
         }
 
-        public static void PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false)
+        public static void PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false, int numberItems = 0)
         {
             if (itemData.IsBackpack())
             {
@@ -160,17 +201,61 @@ namespace AdventureBackpacks.Assets
 
                     void EmtpyInventory(Inventory inventory)
                     {
-                        var inventoryCount = inventory.m_inventory.Count;
-
-                        while (inventory.m_inventory.Count > 0)
+                        if (IsEmptyingBackpack)
+                            return;
+                        
+                        AdventureBackpacks.Log.Debug($"Number of Items: {numberItems}");
+                        AdventureBackpacks.Log.Debug($"Inventory Count: {inventory.m_inventory.Count}");
+                        
+                        IsEmptyingBackpack = true;
+                        try
                         {
-                            var item = inventory.m_inventory[0];
-                            
-                            var amount = inventory.CountItems(item.m_shared.m_name, -1);
-                            
-                            mLocalPlayer.DropItem(inventory,item,amount);
+                            if (numberItems == 0)
+                            {
+                                while (inventory.m_inventory.Count > 0)
+                                {
+                                    if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
+                                        break;
+                                    
+                                    var item = inventory.m_inventory[0];
+                        
+                                    var amount = inventory.CountItems(item.m_shared.m_name, -1);
+
+                                    var dropAmount = amount > item.m_stack ? item.m_stack : amount;
+                        
+                                    mLocalPlayer.DropItem(inventory,item,dropAmount);
+                                }
+                            }
+                            else
+                            {
+                                var dropped = 0;
+                                while (dropped < numberItems && inventory.m_inventory.Count > 0)
+                                {
+                                    if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
+                                        break;
+                                    
+                                    var item = inventory.m_inventory[0]; // safe because of Count check
+
+                                    var amount = inventory.CountItems(item.m_shared.m_name, -1);
+                                    AdventureBackpacks.Log.Debug($"Number of {item.m_shared.m_name}: {amount}");
+                                    AdventureBackpacks.Log.Debug($"Stack Size of {item.m_shared.m_name}: {item.m_stack}");
+
+                                    var dropAmount = amount > item.m_stack ? item.m_stack : amount;
+                                    AdventureBackpacks.Log.Debug($"Drop Amount: {dropAmount}");
+
+                                    mLocalPlayer.DropItem(inventory, item, dropAmount);
+
+                                    dropped++;
+                                }
+                            }
+                            AdventureBackpacks.Log.Debug($"Inventory Count (end): {inventory.m_inventory.Count}");
+                        }
+                        finally
+                        {
+                            IsEmptyingBackpack = false;
                         }
                     }
+                    
                     var inventory = backpack.GetInventory();
                     EmtpyInventory(inventory);
 

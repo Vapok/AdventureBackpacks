@@ -2,6 +2,7 @@
 
 using System;
 using AdventureBackpacks.Assets;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -15,6 +16,8 @@ namespace AdventureBackpacks.Components
         private Inventory _backpackInventory;
         private CustomSE _statusEffects;
 
+        public bool IsLoadingInventory = false;
+
         private ILogIt _log = AdventureBackpacks.Log;
 
         public void SetInventory(Inventory inventoryInstance)
@@ -23,6 +26,11 @@ namespace AdventureBackpacks.Components
             Save(_backpackInventory); 
         }
 
+        public bool InventoryNeedsValidating(Vector2 backpackDimension)
+        {
+            return _backpackInventory.m_width != (int)Math.Floor(backpackDimension.x) || _backpackInventory.m_height != (int)Math.Floor(backpackDimension.y);
+        }
+        
         public Inventory GetInventory()
         {
             return _backpackInventory;
@@ -30,11 +38,14 @@ namespace AdventureBackpacks.Components
 
         public void UpdateContainerSizing(Container backpackContainer)
         {
+
             var inventory = GetInventory();
+            
             backpackContainer.m_inventory = inventory;
             backpackContainer.m_width = inventory.m_width;
             backpackContainer.m_height = inventory.m_height;
             backpackContainer.m_bkg = Item.m_shared.m_icons[0];
+
         }
 
         public string Serialize()
@@ -67,13 +78,18 @@ namespace AdventureBackpacks.Components
                 var type = Item.m_shared.m_name;
                 _backpackInventory = Backpacks.NewInventoryInstance(type, Item.m_quality);
 
+                _log.Debug($"[Deserialize()] Value Before = {Value}");
+                _log.Debug($"[Deserialize()] data = {data}");
                 //Save data to Value
                 Value = data;
                 
-                _log.Debug($"[Deserialize()] Value = {Value}");
+                _log.Debug($"[Deserialize()] Value After = {Value}");
                 // Deserialising saved inventory data and storing it into the newly initialised Inventory instance.
                 ZPackage pkg = new ZPackage(data);
+                _log.Debug($"[Deserialize()] Inventory Count Before Load: {_backpackInventory.m_inventory.Count}");
                 _backpackInventory.Load(pkg);
+                
+                _log.Debug($"[Deserialize()] Inventory Count After Load: {_backpackInventory.m_inventory.Count}");
                 
                 //Update Status Effects
                 _statusEffects = Backpacks.UpdateStatusEffects(Item);
@@ -127,6 +143,7 @@ namespace AdventureBackpacks.Components
         public override void Load()
         {
             _log.Debug($"[Load] Starting");
+            IsLoadingInventory = true;
 
             if (!string.IsNullOrEmpty(Value))
             {
@@ -144,16 +161,20 @@ namespace AdventureBackpacks.Components
                 
                 Serialize();
             }
+            IsLoadingInventory = false;
         }
 
         public override void Save()
         {
             _log.Debug($"[Save()] Starting Value = {Value}");
+            _log.Debug($"[Save()] Starting backpack count {_backpackInventory.m_inventory.Count}");
             Value = Serialize();
+            _log.Debug($"[Save()] Ending backpack count {_backpackInventory.m_inventory.Count}");
         }
 
         public void Save(Inventory backpack)
         {
+            
             _log.Debug($"[Save(Inventory)] Starting backpack count {backpack.m_inventory.Count}");
             _backpackInventory = backpack;
             Save();
