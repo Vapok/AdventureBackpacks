@@ -142,9 +142,10 @@ public class HumanoidPatches
                 
                 var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
                 
-                if (!Backpacks.IsEmptyingBackpack)
+                if (!backpackItem.IsEmptyingBackpack)
                 {
-                    if (backpackItem.InventoryNeedsValidating(backpack.BackpackSize[backpackItem.Item.m_quality].Value))
+                    var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
+                    if (backpackItem.InventoryNeedsValidating(size))
                     {
                         AdventureBackpacks.Log.Debug($"##########   EquipItem: InventoryNeedsValidating: {backpack.BackpackSize[backpackItem.Item.m_quality].Value}");
                         Backpacks.ValidateBackpackInventorySizing(player, backpackItem.Item);

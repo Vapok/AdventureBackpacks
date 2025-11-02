@@ -1,3 +1,7 @@
+# 1.9.10 - Additional Fixes
+* Fixed: Issue when backpack size x or y get set to 0, causes game crash.
+* Fixed: Item loss issue when upgrading non-equipped backpacks while having a backpack equipped.
+
 # 1.9.9 - Regression Issue on Backpack Equiping and Upgrades
 * Last Update caused a regression issue on backup equiping and upgrading
   * This should fix it.
