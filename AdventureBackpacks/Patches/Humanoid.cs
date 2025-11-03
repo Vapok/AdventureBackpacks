@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
+using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
@@ -123,6 +124,7 @@ public class HumanoidPatches
     {
         static void Postfix(ItemDrop.ItemData __0, bool __result)
         {
+            AdventureBackpacks.Log.Debug($"##########   EquipItem Start");
             if (__0 is null) return;
             
             if ( Player.m_localPlayer == null && !__result)
@@ -134,14 +136,28 @@ public class HumanoidPatches
             var player = Player.m_localPlayer;
             var item = __0;
 
-            if (item.IsBackpack())
+            if (item.IsBackpack() && item.TryGetBackpackItem(out var backpack))
             {
                 InventoryGuiPatches.BackpackEquipped = true;
                 
-                var backpackContainer = player.gameObject.GetComponent<Container>();
-                var backpack = item.Data().GetOrCreate<BackpackComponent>();
-                backpack.UpdateContainerSizing(backpackContainer);
+                var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
+                
+                if (!backpackItem.IsEmptyingBackpack)
+                {
+                    var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
+                    if (backpackItem.InventoryNeedsValidating(size))
+                    {
+                        AdventureBackpacks.Log.Debug($"##########   EquipItem: InventoryNeedsValidating: {backpack.BackpackSize[backpackItem.Item.m_quality].Value}");
+                        Backpacks.ValidateBackpackInventorySizing(player, backpackItem.Item);
+                    }
+                    else
+                    {
+                        var backpackContainer = player.gameObject.GetComponent<Container>();
+                        backpackItem.UpdateContainerSizing(backpackContainer);
+                    }
+                }
             }
+            AdventureBackpacks.Log.Debug($"##########   EquipItem End");
         }
     }
 }

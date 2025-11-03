@@ -6,7 +6,7 @@ namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
 internal class LegacyIronBackpack: BackpackItem
 {
-    public LegacyIronBackpack(string prefabName, string itemName) : base(prefabName, itemName)
+    public LegacyIronBackpack(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
     {
         RegisterConfigSettings();
     }

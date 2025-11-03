@@ -69,7 +69,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         SetupBackpackDef();
     }
     
-    protected BackpackItem(string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(prefabName,itemName)
+    protected BackpackItem(string assetName, string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(assetName, prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
         _englishSection = Localizer.GetTranslation("English",_configSection);
@@ -125,7 +125,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         //If quantity entering here is higher than 4, let's Clamp it at 4.
         quality = Mathf.Clamp(quality, 1, 4);
         
-        return new Vector2i(Mathf.Clamp((int)BackpackSize[quality].Value.x,1,8),(int)BackpackSize[quality].Value.y);    
+        return new Vector2i(Mathf.Clamp((int)BackpackSize[quality].Value.x,1,256),Mathf.Clamp((int)BackpackSize[quality].Value.y, 1, 256));    
     }
     
     internal abstract void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData);
@@ -145,7 +145,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal virtual void RegisterWeightMultiplier(float defaultValue = 0.5f)
     {
         ConfigSyncBase.SyncedConfig(_englishSection, "Weight Multiplier", defaultValue,
-            new ConfigDescription("The weight of items stored in the backpack gets multiplied by this value.",
+            new ConfigDescription("The weight of items stored in the backpack gets multiplied by this value. Setting to 100% or 1.0 disables weight reduction.",
                 new AcceptableValueRange<float>(0f, 1f), // range between 0f and 1f will make it display as a percentage slider
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 4 }),ref WeightMultiplier);
         

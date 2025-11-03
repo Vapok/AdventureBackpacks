@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
@@ -24,7 +25,19 @@ public class ItemDropPatches
                 // If the item in GetWeight() is a backpack, call GetTotalWeight() on its Inventory.
                 // Note that GetTotalWeight() just returns a the value of m_totalWeight, and doesn't do any calculation on its own.
                 // If the Inventory has been changed at any point, it calls UpdateTotalWeight(), which should ensure that its m_totalWeight is accurate.
-                var inventoryWeight = item.Data().GetOrCreate<BackpackComponent>().GetInventory()?.GetTotalWeight() ?? 0;
+                var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
+
+                var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
+                
+                if (!backpackItem.IsEmptyingBackpack && backpackItem.InventoryNeedsValidating(size))
+                {
+                    AdventureBackpacks.Log.Debug($"[GetWeight() - Item Name: {item.m_shared.m_name}");
+                    AdventureBackpacks.Log.Debug($"[GetWeight() - Backpack Item: {backpackItem.Item.m_shared.m_name}");
+                    AdventureBackpacks.Log.Debug($"[GetWeight() - Backpack: {backpack.ItemName}");
+                    Backpacks.ValidateBackpackInventorySizing(Player.m_localPlayer, backpackItem.Item);
+                }
+                
+                var inventoryWeight = backpackItem.GetInventory()?.GetTotalWeight() ?? 0;
 
                 // To the backpack's item weight, add the backpack's inventory weight multiplied by the weightMultiplier in the configs.
                 returnedWeight += inventoryWeight * backpack.WeightMultiplier.Value;

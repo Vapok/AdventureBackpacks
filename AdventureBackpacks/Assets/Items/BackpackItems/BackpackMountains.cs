@@ -8,7 +8,7 @@ namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
 internal class BackpackMountains : BackpackItem
 {
-    public BackpackMountains(string prefabName, string itemName) : base(prefabName, itemName)
+    public BackpackMountains(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
     {
         RegisterConfigSettings();
         

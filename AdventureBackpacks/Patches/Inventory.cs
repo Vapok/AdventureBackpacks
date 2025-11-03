@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
@@ -46,13 +47,39 @@ public static class InventoryPatches
             if (__instance == null || Player.m_localPlayer == null)
                 return;
 
+            var player = Player.m_localPlayer;
             // If the inventory changed belongs to a backpack...
             if (__instance.IsBackPackInventory())
             {
-                var backpack = Player.m_localPlayer.GetEquippedBackpack();
+                var stackTrace = new StackTrace();
+
+                AdventureBackpacks.Log.Debug($"#### Patch Inventory Changed: {__instance.m_name}");
+                AdventureBackpacks.Log.Debug($"#### Patch Inventory Count: {__instance.m_inventory.Count}");
                 
-                if (backpack != null) 
-                    backpack.Save();
+                
+                if (player.IsBackpackEquipped())
+                {
+                    var backpack = player.GetEquippedBackpack();
+                    AdventureBackpacks.Log.Debug($"########################################");
+                    AdventureBackpacks.Log.Debug($"####       Inventory.Changed       #####");
+                    AdventureBackpacks.Log.Debug($"Inventory Instance: {__instance.m_name}");
+                    AdventureBackpacks.Log.Debug($"Backpack Name: {backpack.Item.m_shared.m_name}");
+                    AdventureBackpacks.Log.Debug($"########################################");
+
+                    if (backpack.GetInventory() == __instance)
+                    {
+                        AdventureBackpacks.Log.Debug($"#### Before Save BackpackComponent Inventory Count: {backpack.GetInventory().m_inventory.Count}");
+                        if (backpack.IsLoadingInventory)
+                        {
+                            AdventureBackpacks.Log.Debug($"Bypassing Save - Inventory Is Loading ----->");
+                        }
+                        else
+                        {
+                            backpack.Save(__instance);
+                        }
+                        AdventureBackpacks.Log.Debug($"#### After Save BackpackComponent Inventory Count: {backpack.GetInventory().m_inventory.Count}");
+                    }
+                }
             }
         }
     }
@@ -186,14 +213,7 @@ public static class InventoryPatches
         {
             if (IsDoingCrafting && __instance != null)
             {
-                if (__result.IsBackpack() && _savedBackpackData?.GetInventory() != null)
-                {
-                    var backpack = __result.Data().Get<BackpackComponent>();
-                    var inventoryData = new ZPackage();
-                    _savedBackpackData.GetInventory().Save(inventoryData);
-                    backpack?.GetInventory().Load(inventoryData);
-                    _savedBackpackData = null;
-                }
+                _savedBackpackData = null;
             }
         }
     }
@@ -347,10 +367,19 @@ public static class InventoryPatches
             
             if (__instance.IsBackPackInventory())
             {
+
                 // When the equipped backpack inventory total weight is updated, the player inventory total weight should also be updated.
-                if (player)
+                if (player.IsBackpackEquipped())
                 {
-                    player.GetInventory().UpdateTotalWeight();
+                    var backpack = player.GetEquippedBackpack();
+                    AdventureBackpacks.Log.Debug($"########################################");
+                    AdventureBackpacks.Log.Debug($"####       UpdateTotalWeight       #####");
+                    AdventureBackpacks.Log.Debug($"Inventory Instance: {__instance.m_name}");
+                    AdventureBackpacks.Log.Debug($"Backpack Name: {backpack.Item.m_shared.m_name}");
+                    AdventureBackpacks.Log.Debug($"########################################");
+                    
+                    if (backpack.GetInventory() == __instance)
+                        player.GetInventory().UpdateTotalWeight();
                 }
             }
         }

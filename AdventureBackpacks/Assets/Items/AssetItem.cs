@@ -15,22 +15,21 @@ internal interface IAssetItem
 }
 internal abstract class AssetItem : IAssetItem
 {
-    private string AssetName = "vapokbackpacks";
-    private string AssetFolderName = "Assets.Bundles";
-    private string _prefabName;
-    private string _itemName;
-    private Item _item;
+    
+    private readonly string _assetFolderName = "Assets.Bundles";
+    private readonly Item _item;
 
-    public string PrefabName => _prefabName;
+    public string AssetName { get; }
+    public string PrefabName { get; }
 
-    public string ItemName => _itemName;
+    public string ItemName { get; }
 
     public Item Item => _item;
 
     internal AssetItem(GameObject goItem, string itemName)
     {
-        _prefabName = goItem.name;
-        _itemName = itemName;
+        PrefabName = goItem.name;
+        ItemName = itemName;
 
         _item = new Item(goItem)
         {
@@ -42,8 +41,8 @@ internal abstract class AssetItem : IAssetItem
 
     internal AssetItem(AssetBundle bundle, string prefabName, string itemName)
     {
-        _prefabName = prefabName;
-        _itemName = itemName;
+        PrefabName = prefabName;
+        ItemName = itemName;
         
         _item = new Item(bundle,prefabName)
         {
@@ -53,12 +52,13 @@ internal abstract class AssetItem : IAssetItem
         SetupItem();
     }
 
-    internal AssetItem(string prefabName, string itemName)
+    internal AssetItem(string assetName, string prefabName, string itemName)
     {
-        _prefabName = prefabName;
-        _itemName = itemName;
+        AssetName = assetName;
+        PrefabName = prefabName;
+        ItemName = itemName;
 
-        _item = new Item(AssetName, PrefabName, AssetFolderName)
+        _item = new Item(AssetName, PrefabName, _assetFolderName)
         {
             Configurable = Configurability.Disabled
         };
