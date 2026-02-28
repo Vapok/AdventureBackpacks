@@ -13,7 +13,7 @@
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
-        <VALHEIM_INSTALL>..\..\References\Valheim\0.221.4</VALHEIM_INSTALL>
+        <VALHEIM_INSTALL>..\..\References\Valheim\0.221.12</VALHEIM_INSTALL>
         <BEPINEX_PATH>..\..\References\BepInEx\5.4.2333\BepInEx</BEPINEX_PATH>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -64,16 +64,16 @@
             <HintPath>..\..\References\APIManager\APIManager.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_guiutils_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_postprocessing">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_postprocessing_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_postprocessing_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_utils_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_valheim_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_valheim_publicized.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx, Version=5.4.23.3, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\References\BepInEx\5.4.2333\BepInEx\core\BepInEx.dll</HintPath>
@@ -93,25 +93,25 @@
         <Reference Include="System.Xml" />
         <Reference Include="System.Xml.Linq" />
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.AnimationModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.InputLegacyModule">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UI">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.UI.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.UI.dll</HintPath>
         </Reference>
         <Reference Include="Vapok.Valheim.Common, Version=2.11.2214.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\Vapok.Valheim.Common.2.11.2214\lib\net48\Vapok.Valheim.Common.dll</HintPath>

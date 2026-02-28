@@ -1,3 +1,13 @@
+# 1.9.11 - Valheim Version Maintenance - Compatibility Note
+* Updated to Valheim Version 0.221.12
+* ZenUI/ZenModLib Compatibility
+  * ZenUI removes the Vanilla InventoryGui.Show() method
+  * As a result, a change has been made, that if Show() method is missing, look further up.
+    * If another mod removes the vanilla Player.ShowTutorial(), this fix is cooked.
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
 # 1.9.10 - Additional Fixes
 * Fixed: Issue when backpack size x or y get set to 0, causes game crash.
 * Fixed: Item loss issue when upgrading non-equipped backpacks while having a backpack equipped.
@@ -7,9 +17,6 @@
     * Tested on XPortal, Advanced Portals, Vanilla Portals (normal and stone), all work for me.
     * Tested with ExtraSlots, and a number of other mods provided, all working..
   * If you come across something that is found, please join my Discord and let me know.
-
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.9.9 - Regression Issue on Backpack Equiping and Upgrades
 * Last Update caused a regression issue on backup equiping and upgrading
