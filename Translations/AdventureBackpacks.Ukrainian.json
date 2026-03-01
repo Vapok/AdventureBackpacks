@@ -41,5 +41,6 @@
 
   "vapok_mod_se_cold_immunity": "Стійкість до холоду",
   "vapok_mod_se_frost_resistance": "Опір морозу",
-  "vapok_mod_se_wet_resistance": "Стійкість до води"
+  "vapok_mod_se_wet_resistance": "Стійкість до води",
+  "vapok_mod_yard_sale_blocked": "Не вдалося спорожнити рюкзак; видалення предметів заблоковано. Рюкзак не було переміщено."
 }

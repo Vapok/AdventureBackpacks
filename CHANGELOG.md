@@ -1,3 +1,11 @@
+# 1.9.12 - External References Updated and Item Duplication Guardrails
+* Still getting a few random reports about item duplication, around the yard sale function.
+  * I've implemented additional checks and guardrails to see if we can prevent this.
+    * This could mean that Thor might strike you down after trying to put a backpack in a backpack, and then nothing happens (and the backpack doesn't move)
+    * If you are getting duplication issues, please join my Discord and let me know. Log files are helpful.
+* Updating to Vapok.Valheim.Common 2.11.22112
+* Updating to Jotunn 2.27.1
+
 # 1.9.11 - Valheim Version Maintenance - Compatibility Note
 * Updated to Valheim Version 0.221.12
 * ZenUI/ZenModLib Compatibility

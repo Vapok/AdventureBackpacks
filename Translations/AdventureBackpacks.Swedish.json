@@ -41,5 +41,6 @@
 
   "vapok_mod_se_cold_immunity": "Kyla Immunitet",
   "vapok_mod_se_frost_resistance": "Frostmotstånd",
-  "vapok_mod_se_wet_resistance": "Vattenmotstånd"
+  "vapok_mod_se_wet_resistance": "Vattenmotstånd",
+  "vapok_mod_yard_sale_blocked": "Kunde inte tömma ryggsäcken; borttagning av föremål blockerades. Ryggsäcken flyttades inte."
 }

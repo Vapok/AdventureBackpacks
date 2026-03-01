@@ -1,4 +1,4 @@
-﻿using AdventureBackpacks.Components;
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Patches;
 using UnityEngine;
 using Vapok.Common.Managers;
@@ -98,7 +98,16 @@ public static class PlayerExtensions
         // we had it equipped all along and fails to update player model, resulting in invisible backpack.
         player.RemoveEquipAction(backpack.Item);
         player.UnequipItem(backpack.Item, true);
-        player.m_inventory.RemoveItem(backpack.Item);
+
+        if (!player.m_inventory.RemoveItem(backpack.Item))
+        {
+            // Removal failed (e.g. another mod blocked it). Do not drop — would duplicate the backpack.
+            if (swapItemActivated)
+                playerInventory.AddItem(tempItemRemoval);
+            AdventureBackpacks.QuickDropping = false;
+            player.Message(MessageHud.MessageType.Center, "$vapok_mod_quick_drop_unavailable");
+            return;
+        }
 
         // This drops a copy of the backpack itemDrop.itemData
         var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);

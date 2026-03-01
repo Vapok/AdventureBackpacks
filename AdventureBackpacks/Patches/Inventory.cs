@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -125,10 +125,16 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class RemoveItem1Patch
     {
-        static void Prefix(Inventory __instance, ItemDrop.ItemData item)
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item, ref bool __result)
         {
-            if (item != null && __instance != null)
-                RemoveItemPrefix(__instance, item);
+            if (item == null || __instance == null)
+                return true;
+            if (!RemoveItemPrefix(__instance, item))
+            {
+                __result = false;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -136,10 +142,16 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class RemoveItem2Patch
     {
-        static void Prefix(Inventory __instance, ItemDrop.ItemData item)
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item, ref bool __result)
         {
-            if (item != null && __instance != null)
-                RemoveItemPrefix(__instance, item);
+            if (item == null || __instance == null)
+                return true;
+            if (!RemoveItemPrefix(__instance, item))
+            {
+                __result = false;
+                return false;
+            }
+            return true;
         }
     }
 
@@ -147,57 +159,67 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class RemoveItem3Patch
     {
-        static void Prefix(Inventory __instance, ItemDrop.ItemData item)
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item, ref bool __result)
         {
-            if (item != null && __instance != null)
-                RemoveItemPrefix(__instance, item);
+            if (item == null || __instance == null)
+                return true;
+            if (!RemoveItemPrefix(__instance, item))
+            {
+                __result = false;
+                return false;
+            }
+            return true;
         }
     }
 
-    
-    private static void RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
+    /// <summary>
+    /// Returns true to run the original RemoveItem; false to block (e.g. when yard sale could not empty backpack — prevents inception).
+    /// </summary>
+    private static bool RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
     {
         if (__instance == null || Player.m_localPlayer == null)
-            return;
-        
+            return true;
+
         if (_movingItemBetweenContainers || _droppingOutside)
-        {
-            return;
-        }
+            return true;
 
         if (IsDoingCrafting)
         {
-            //Save Backpack contents
             if (item.IsBackpack())
-            {
                 _savedBackpackData = item.Data().Get<BackpackComponent>();
-            }
+            return true;
+        }
 
-            return;
-        }
-        
         if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping || AdventureBackpacks.BypassMoveProtection)
-            return;
-            
-        if (item.TryGetBackpackItem(out var backpackItem))
+            return true;
+
+        if (!item.TryGetBackpackItem(out _))
+            return true;
+
+        AdventureBackpacks.Log.Debug($"Checking for Backpack {item.m_shared.m_name}");
+        if (IsItemFromQueue(item))
         {
-            AdventureBackpacks.Log.Debug($"Checking for Backpack {item.m_shared.m_name}");
-            if (IsItemFromQueue(item))
-            {
-                AdventureBackpacks.Log.Debug($"Exiting RemoveItem for {item.m_shared.m_name}");
-                return;
-            }
-            
-            var backpack = item.Data().Get<BackpackComponent>();
-            if (backpack == null)
-                return;
-            var inventory = backpack.GetInventory();
-                
-            if (inventory != null && inventory.m_inventory.Count > 0)
-            {
-                Backpacks.PerformYardSale(Player.m_localPlayer, item, true);
-            }
+            AdventureBackpacks.Log.Debug($"Exiting RemoveItem for {item.m_shared.m_name}");
+            return true;
         }
+
+        var backpack = item.Data().Get<BackpackComponent>();
+        if (backpack == null)
+            return true;
+
+        var inventory = backpack.GetInventory();
+        if (inventory == null || inventory.m_inventory.Count == 0)
+            return true;
+
+        // Empty backpack first so we don't allow "backpack with contents" to be moved into another backpack (inception).
+        // If yard sale fails (e.g. another mod blocks drop), block the remove so backpack stays put.
+        if (!Backpacks.PerformYardSale(Player.m_localPlayer, item, true))
+        {
+            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_yard_sale_blocked");
+            return false;
+        }
+
+        return true;
     }
 
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem),

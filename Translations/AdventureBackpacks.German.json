@@ -39,5 +39,6 @@
 
   "vapok_mod_se_cold_immunity": "Kälteimmunität",
   "vapok_mod_se_frost_resistance": "Frostwiderstand",
-  "vapok_mod_se_wet_resistance": "Wasserresistenz"
+  "vapok_mod_se_wet_resistance": "Wasserresistenz",
+  "vapok_mod_yard_sale_blocked": "Rucksack konnte nicht geleert werden; Entfernen wurde blockiert. Rucksack wurde nicht bewegt."
 }

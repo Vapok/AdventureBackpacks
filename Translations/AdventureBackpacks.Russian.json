@@ -39,5 +39,6 @@
 
   "vapok_mod_se_cold_immunity": "Устойчивость к холоду",
   "vapok_mod_se_frost_resistance": "Сопротивление морозу",
-  "vapok_mod_se_wet_resistance": "Устойчивость к намоканию"
+  "vapok_mod_se_wet_resistance": "Устойчивость к намоканию",
+  "vapok_mod_yard_sale_blocked": "Не удалось опустошить рюкзак; удаление предметов заблокировано. Рюкзак не был перемещён."
 }

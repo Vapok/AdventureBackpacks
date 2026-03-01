@@ -39,5 +39,6 @@
 
   "vapok_mod_se_cold_immunity": "耐冷",
   "vapok_mod_se_frost_resistance": "抗霜",
-  "vapok_mod_se_wet_resistance": "防水"
+  "vapok_mod_se_wet_resistance": "防水",
+  "vapok_mod_yard_sale_blocked": "无法清空背包；物品移除被阻挡。背包未移动。"
 }
