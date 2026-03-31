@@ -39,5 +39,6 @@
 
   "vapok_mod_se_cold_immunity": "寒冷耐性",
   "vapok_mod_se_frost_resistance": "凍結耐性",
-  "vapok_mod_se_wet_resistance": "防水耐性"
+  "vapok_mod_se_wet_resistance": "防水耐性",
+  "vapok_mod_yard_sale_blocked": "バッグを空にできませんでした。アイテムの削除がブロックされました。バッグは移動されませんでした。"
 }

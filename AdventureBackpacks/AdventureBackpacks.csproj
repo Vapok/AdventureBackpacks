@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="..\packages\JotunnLib.2.27.0\build\JotunnLib.props" Condition="Exists('..\packages\JotunnLib.2.27.0\build\JotunnLib.props')" />
+    <Import Project="..\packages\JotunnLib.2.27.1\build\JotunnLib.props" Condition="Exists('..\packages\JotunnLib.2.27.1\build\JotunnLib.props')" />
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -13,7 +13,7 @@
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
-        <VALHEIM_INSTALL>..\..\References\Valheim\0.221.4</VALHEIM_INSTALL>
+        <VALHEIM_INSTALL>..\..\References\Valheim\0.221.12</VALHEIM_INSTALL>
         <BEPINEX_PATH>..\..\References\BepInEx\5.4.2333\BepInEx</BEPINEX_PATH>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -56,6 +56,19 @@
         <DocumentationFile>bin\API\AdventureBackpacksAPI.xml</DocumentationFile>
         <VsxmdAutoDeleteXml>True</VsxmdAutoDeleteXml>
     </PropertyGroup>
+    <!-- Local: like Debug but uses project ref to Vapok.Common (for dev under VapokModBase) -->
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Local\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <NoWarn>MSB3245;MSB3243</NoWarn>
+    </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\References\BepInEx\5.4.2333\BepInEx\core\0Harmony.dll</HintPath>
@@ -64,16 +77,16 @@
             <HintPath>..\..\References\APIManager\APIManager.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_guiutils_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_postprocessing">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_postprocessing_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_postprocessing_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_utils_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
-            <HintPath>..\..\References\Valheim\0.221.4\assembly_valheim_publicized.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\assembly_valheim_publicized.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx, Version=5.4.23.3, Culture=neutral, PublicKeyToken=null">
             <HintPath>..\..\References\BepInEx\5.4.2333\BepInEx\core\BepInEx.dll</HintPath>
@@ -81,8 +94,8 @@
         <Reference Include="BepInEx.Harmony">
             <HintPath>..\..\References\BepInEx\5.4.2333\BepInEx\core\BepInEx.Harmony.dll</HintPath>
         </Reference>
-        <Reference Include="Jotunn, Version=2.27.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\JotunnLib.2.27.0\lib\net462\Jotunn.dll</HintPath>
+        <Reference Include="Jotunn, Version=2.27.1.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\JotunnLib.2.27.1\lib\net462\Jotunn.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="System" />
@@ -93,28 +106,33 @@
         <Reference Include="System.Xml" />
         <Reference Include="System.Xml.Linq" />
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.AnimationModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.InputLegacyModule">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UI">
-            <HintPath>..\..\References\Valheim\0.221.4\Managed\UnityEngine.UI.dll</HintPath>
+            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.UI.dll</HintPath>
+        </Reference>
+        <!-- NuGet package: used for Debug, Release, API -->
+        <!-- Local config: use DLL built from Vapok.Common project (build Common first, then build this) -->
+        <Reference Include="Vapok.Valheim.Common, Version=2.11.2214.0, Culture=neutral, processorArchitecture=MSIL" Condition="'$(Configuration)' == 'Local'">
+          <HintPath>..\..\Vapok.Common\Vapok.Valheim.Common\bin\Debug\net48\Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="Vapok.Valheim.Common, Version=2.11.2214.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\Vapok.Valheim.Common.2.11.2214\lib\net48\Vapok.Valheim.Common.dll</HintPath>
+          <HintPath>..\packages\Vapok.Valheim.Common.2.11.22112\lib\net48\Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=16.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\YamlDotNet.16.3.0\lib\net47\YamlDotNet.dll</HintPath>
@@ -215,11 +233,11 @@
             <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
         </PropertyGroup>
         <Error Condition="!Exists('..\packages\Vsxmd.1.4.6\build\Vsxmd.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Vsxmd.1.4.6\build\Vsxmd.targets'))" />
-        <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.44\build\ILRepack.Lib.MSBuild.Task.targets'))" />
-        <Error Condition="!Exists('..\packages\JotunnLib.2.27.0\build\JotunnLib.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JotunnLib.2.27.0\build\JotunnLib.props'))" />
+        <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.1\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.1\build\ILRepack.Lib.MSBuild.Task.targets'))" />
+        <Error Condition="!Exists('..\packages\JotunnLib.2.27.1\build\JotunnLib.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JotunnLib.2.27.1\build\JotunnLib.props'))" />
     </Target>
     <Import Project="..\packages\Vsxmd.1.4.6\build\Vsxmd.targets" Condition="Exists('..\packages\Vsxmd.1.4.6\build\Vsxmd.targets')" />
-    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.44\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44\build\ILRepack.Lib.MSBuild.Task.targets')" />
+    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.1\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.1\build\ILRepack.Lib.MSBuild.Task.targets')" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

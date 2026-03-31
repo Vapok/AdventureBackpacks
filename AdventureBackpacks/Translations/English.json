@@ -40,6 +40,7 @@
   "vapok_mod_se_cold_immunity": "Cold Immunity",
   "vapok_mod_se_frost_resistance": "Frost Resistance",
   "vapok_mod_se_wet_resistance": "Water Resistance",
-  
+  "vapok_mod_yard_sale_blocked": "Could not empty backpack; item removal was blocked. Backpack was not moved.",
+
   "item_friendlyskeletonwand_spectralshroud_backpack": "Spectral Shroud of Holding"
 }

@@ -39,5 +39,6 @@
 
   "vapok_mod_se_cold_immunity": "Kuldeimmunitet",
   "vapok_mod_se_frost_resistance": "Frostmotstand",
-  "vapok_mod_se_wet_resistance": "Vanntett"
+  "vapok_mod_se_wet_resistance": "Vanntett",
+  "vapok_mod_yard_sale_blocked": "Kunne ikke tømme ryggsekken; fjerning av gjenstander ble blokkert. Ryggsekken ble ikke flyttet."
 }

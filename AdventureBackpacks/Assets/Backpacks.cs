@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -238,92 +238,117 @@ namespace AdventureBackpacks.Assets
             return true;
         }
 
-        public static void PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false, int numberItems = 0)
+        /// <summary>
+        /// Empties backpack (and optionally player) by dropping items. Returns false if drop was blocked (e.g. by another mod) so caller can block remove and avoid inception.
+        /// </summary>
+        public static bool PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false, int numberItems = 0)
         {
-            if (itemData.IsBackpack())
+            if (!itemData.IsBackpack())
+                return true;
+
+            var backpack = itemData.Data().Get<BackpackComponent>();
+            if (backpack == null)
+                return true;
+
+            var dropWasBlocked = false;
+
+            void EmtpyInventory(Inventory inventory)
             {
-                var backpack = itemData.Data().Get<BackpackComponent>();
-                if (backpack != null)
+                if (backpack.IsEmptyingBackpack)
+                    return;
+
+                AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}]Number of Items: {numberItems}");
+                AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}]Inventory Count: {inventory.m_inventory.Count}");
+
+                backpack.IsEmptyingBackpack = true;
+                try
                 {
-
-                    void EmtpyInventory(Inventory inventory)
+                    if (numberItems == 0)
                     {
-                        if (backpack.IsEmptyingBackpack)
-                            return;
-                        
-                        AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}]Number of Items: {numberItems}");
-                        AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}]Inventory Count: {inventory.m_inventory.Count}");
-                        
-                        backpack.IsEmptyingBackpack = true;
-                        try
+                        while (inventory.m_inventory.Count > 0)
                         {
-                            if (numberItems == 0)
+                            if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
+                                break;
+
+                            var item = inventory.m_inventory[0];
+
+                            var amount = inventory.CountItems(item.m_shared.m_name, -1);
+
+                            var dropAmount = amount > item.m_stack ? item.m_stack : amount;
+                            var totalBefore = inventory.CountItems(item.m_shared.m_name, -1);
+                            mLocalPlayer.DropItem(inventory,item,dropAmount);
+                            if (inventory.CountItems(item.m_shared.m_name, -1) >= totalBefore)
                             {
-                                while (inventory.m_inventory.Count > 0)
-                                {
-                                    if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
-                                        break;
-                                    
-                                    var item = inventory.m_inventory[0];
-                        
-                                    var amount = inventory.CountItems(item.m_shared.m_name, -1);
-
-                                    var dropAmount = amount > item.m_stack ? item.m_stack : amount;
-                        
-                                    mLocalPlayer.DropItem(inventory,item,dropAmount);
-                                }
+                                AdventureBackpacks.Log.Warning($"[{itemData.m_shared.m_name}] DropItem did not remove from inventory (another mod may have blocked it). Stopping to avoid duplication.");
+                                dropWasBlocked = true;
+                                break;
                             }
-                            else
-                            {
-                                var dropped = 0;
-                                while (dropped < numberItems && inventory.m_inventory.Count > 0)
-                                {
-                                    if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
-                                        break;
-                                    
-                                    var item = inventory.m_inventory[0]; // safe because of Count check
-
-                                    var amount = inventory.CountItems(item.m_shared.m_name, -1);
-                                    AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Number of {item.m_shared.m_name}: {amount}");
-                                    AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Stack Size of {item.m_shared.m_name}: {item.m_stack}");
-
-                                    var dropAmount = amount > item.m_stack ? item.m_stack : amount;
-                                    AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Drop Amount: {dropAmount}");
-
-                                    mLocalPlayer.DropItem(inventory, item, dropAmount);
-
-                                    dropped++;
-                                }
-                            }
-                            AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Inventory Count (end): {inventory.m_inventory.Count}");
                         }
-                        finally
-                        {
-                            backpack.IsEmptyingBackpack = false;
-                        }
-                    }
-                    
-                    var inventory = backpack.GetInventory();
-                    EmtpyInventory(inventory);
-
-                    if (!backpackOnly)
-                    {
-                        var playerInventory = mLocalPlayer.GetInventory();
-                        EmtpyInventory(playerInventory);
-                    
-                        mLocalPlayer.UnequipAllItems();
-                    
-                        EmtpyInventory(playerInventory);
-                        
-                        Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception5");
-                        AdventureBackpacks.PerformYardSale = false;
                     }
                     else
                     {
-                        Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_thor_saves_contents");
+                        var dropped = 0;
+                        while (dropped < numberItems && inventory.m_inventory.Count > 0)
+                        {
+                            if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
+                                break;
+
+                            var item = inventory.m_inventory[0]; // safe because of Count check
+
+                            var amount = inventory.CountItems(item.m_shared.m_name, -1);
+                            AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Number of {item.m_shared.m_name}: {amount}");
+                            AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Stack Size of {item.m_shared.m_name}: {item.m_stack}");
+
+                            var dropAmount = amount > item.m_stack ? item.m_stack : amount;
+                            AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Drop Amount: {dropAmount}");
+
+                            var totalBefore = inventory.CountItems(item.m_shared.m_name, -1);
+                            mLocalPlayer.DropItem(inventory, item, dropAmount);
+                            if (inventory.CountItems(item.m_shared.m_name, -1) >= totalBefore)
+                            {
+                                AdventureBackpacks.Log.Warning($"[{itemData.m_shared.m_name}] DropItem did not remove from inventory (another mod may have blocked it). Stopping to avoid duplication.");
+                                dropWasBlocked = true;
+                                break;
+                            }
+                            dropped++;
+                        }
                     }
+                    AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Inventory Count (end): {inventory.m_inventory.Count}");
+                }
+                finally
+                {
+                    backpack.IsEmptyingBackpack = false;
                 }
             }
+
+            var inventory = backpack.GetInventory();
+            EmtpyInventory(inventory);
+
+            if (dropWasBlocked)
+            {
+                if (!backpackOnly)
+                    AdventureBackpacks.PerformYardSale = false;
+                return false;
+            }
+
+            if (!backpackOnly)
+            {
+                var playerInventory = mLocalPlayer.GetInventory();
+                EmtpyInventory(playerInventory);
+
+                mLocalPlayer.UnequipAllItems();
+
+                EmtpyInventory(playerInventory);
+
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_no_inception5");
+                AdventureBackpacks.PerformYardSale = false;
+            }
+            else
+            {
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_thor_saves_contents");
+            }
+
+            return true;
         }
         
         private static void YardSaleEvent(BackpackItem backpack)

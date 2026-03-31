@@ -39,5 +39,6 @@
 
   "vapok_mod_se_cold_immunity": "Inmunidad al frío",
   "vapok_mod_se_frost_resistance": "Resistencia al hielo",
-  "vapok_mod_se_wet_resistance": "Resistencia al agua"
+  "vapok_mod_se_wet_resistance": "Resistencia al agua",
+  "vapok_mod_yard_sale_blocked": "No se pudo vaciar la mochila; la eliminación de objetos fue bloqueada. La mochila no se movió."
 }

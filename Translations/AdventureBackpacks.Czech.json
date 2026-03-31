@@ -39,5 +39,6 @@
 
   "vapok_mod_se_cold_immunity": "Odpovídavost proti chladu",
   "vapok_mod_se_frost_resistance": "Odolnost proti mrazu",
-  "vapok_mod_se_wet_resistance": "Odolnost proti vodě"
+  "vapok_mod_se_wet_resistance": "Odolnost proti vodě",
+  "vapok_mod_yard_sale_blocked": "Batoh se nepodařilo vyprázdnit; odebrání předmětů bylo zablokováno. Batoh nebyl přesunut."
 }

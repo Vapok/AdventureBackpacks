@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventureBackpacks", "AdventureBackpacks\AdventureBackpacks.csproj", "{997CB563-FCC7-44B7-8F71-069747D27CC5}"
 EndProject
@@ -39,6 +39,7 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 		API|Any CPU = API|Any CPU
+		Local|Any CPU = Local|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{997CB563-FCC7-44B7-8F71-069747D27CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -47,6 +48,8 @@ Global
 		{997CB563-FCC7-44B7-8F71-069747D27CC5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{997CB563-FCC7-44B7-8F71-069747D27CC5}.API|Any CPU.ActiveCfg = API|Any CPU
 		{997CB563-FCC7-44B7-8F71-069747D27CC5}.API|Any CPU.Build.0 = API|Any CPU
+		{997CB563-FCC7-44B7-8F71-069747D27CC5}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{997CB563-FCC7-44B7-8F71-069747D27CC5}.Local|Any CPU.Build.0 = Local|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{453B1EE0-9980-4B66-93B3-2DDBD21FEE03} = {125A2AE5-FB75-4EED-B971-3E0C9C056DA0}

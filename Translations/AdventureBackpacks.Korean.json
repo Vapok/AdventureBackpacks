@@ -39,5 +39,6 @@
 
    "vapok_mod_se_cold_immunity": "한파 면역",
    "vapok_mod_se_frost_resistance": "서리 저항",
-   "vapok_mod_se_wet_resistance": "물 저항"
+   "vapok_mod_se_wet_resistance": "물 저항",
+   "vapok_mod_yard_sale_blocked": "가방을 비울 수 없습니다. 아이템 제거가 차단되었습니다. 가방이 이동되지 않았습니다."
 }

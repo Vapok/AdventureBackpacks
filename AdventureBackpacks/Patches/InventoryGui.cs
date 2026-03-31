@@ -306,6 +306,7 @@ internal static class InventoryGuiPatches
             var menuVisibleMethod = AccessTools.DeclaredMethod(typeof(Menu), nameof(Menu.IsVisible));
             var hideMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Hide));
             var showMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Show));
+            var tutorialMethod = AccessTools.DeclaredMethod(typeof(Player), nameof(Player.ShowTutorial));
             var zInputKeyDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetKeyDown), new []{typeof(KeyCode), typeof(bool)});
             var zInputButtonDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetButtonDown), new []{typeof(string)});
 
@@ -335,10 +336,14 @@ internal static class InventoryGuiPatches
 
                     patchedHideBackpackMethod = true;
                     
-                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(showMethod) &&
+                } else if (i > 6 && (instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(showMethod) &&
                            instrs[i - 1].opcode == OpCodes.Ldc_I4_1 && instrs[i - 2].opcode == OpCodes.Ldnull &&
-                           instrs[i - 3].opcode == OpCodes.Ldarg_0)
+                           instrs[i - 3].opcode == OpCodes.Ldarg_0 || instrs[i - 4].opcode == OpCodes.Callvirt && instrs[i - 4].operand.Equals(tutorialMethod)))
                 {
+                    // instrs[i - 4].opcode == OpCodes.Callvirt && instrs[i - 4].operand.Equals(tutorialMethod)
+                    // ZenUI mod is removing the vanilla showMethod.  Making an update th at if i can't find showMethod, try to find another method further up, but at a distance.
+                    // Not ideal, but does work.
+                    
                     //Call to Show Backpack
                     //Get localPlayer at ldloc.1
                     var localPlayerInstruction = new CodeInstruction(OpCodes.Ldloc_1);

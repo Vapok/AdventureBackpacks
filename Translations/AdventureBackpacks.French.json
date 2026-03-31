@@ -41,5 +41,6 @@
 
   "vapok_mod_se_cold_immunity": "Immunité au froid",
   "vapok_mod_se_frost_resistance": "Résistance au gel",
-  "vapok_mod_se_wet_resistance": "Résistance à l'eau"
+  "vapok_mod_se_wet_resistance": "Résistance à l'eau",
+  "vapok_mod_yard_sale_blocked": "Impossible de vider le sac ; la suppression d'objet a été bloquée. Le sac n'a pas été déplacé."
 }
