@@ -28,6 +28,7 @@ internal class BackpackBlackForest : BackpackItem
         Item.DropsFrom.Add("Greydwarf_Elite", 0.004f, 1);
         Item.DropsFrom.Add("Greydwarf_Shaman", 0.004f, 1);
         Item.DropsFrom.Add("Troll", 0.01f, 1);
+        Item.DropsFrom.Add("Bjorn", 0.04f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()
