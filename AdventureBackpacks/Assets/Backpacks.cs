@@ -9,6 +9,7 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using BepInEx;
 using UnityEngine;
+using UnityEngine.Android;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -402,6 +403,7 @@ namespace AdventureBackpacks.Assets
             
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default
+            //TODO: Make this configurable
             itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel * backpackQuality;
             
             //Apply Frost Resistance if configured.
