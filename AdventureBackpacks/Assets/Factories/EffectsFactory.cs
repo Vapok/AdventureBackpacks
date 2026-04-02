@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Effects;
 using Vapok.Common.Abstractions;
@@ -30,7 +29,7 @@ public class EffectsFactory : FactoryBase
     
     private static HashSet<EffectsBase> _externalEffects = new();
     private static HashSet<EffectsBase> _allEffects = new();
-    /// <summary>True after <see cref="RegisterEffects"/> has finished; used so late API registration still runs config binding once.</summary>
+    
     private static bool _registerEffectsCompleted;
     public static EffectsFactory Instance;
     
