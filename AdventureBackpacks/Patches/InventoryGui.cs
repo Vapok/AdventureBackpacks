@@ -77,18 +77,16 @@ internal static class InventoryGuiPatches
             {
                 if (__exception is NullReferenceException)
                 {
-                    if (__instance != null && __instance.m_currentContainer == null && grid.GetInventory() != null && Player.m_localPlayer != null)
+                    if (__instance != null && __instance.m_currentContainer == null && grid != null && grid.GetInventory() != null && Player.m_localPlayer != null
+                        && item != null && item.m_shared != null
+                        && Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
                     {
-                        //Is item a backpack
-                        if (Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
-                        {
                             Player.m_localPlayer.DropItem(Player.m_localPlayer.GetInventory(), item, 1);
                             BackpackIsOpen = false;
                             __instance.Hide();
                             Player.m_localPlayer.Message(MessageHud.MessageType.TopLeft, "$vapok_mod_you_droped_bag");
                             
                             return null;
-                        }
                     }
                 }
                 AdventureBackpacks.Log.Warning($"The following error was captured by Adventure Backpacks, but was caused by another mod. Advanced Backpacks is going to allow the operation to continue, but is going to replay the error below:");

@@ -30,6 +30,8 @@ public class EffectsFactory : FactoryBase
     
     private static HashSet<EffectsBase> _externalEffects = new();
     private static HashSet<EffectsBase> _allEffects = new();
+    /// <summary>True after <see cref="RegisterEffects"/> has finished; used so late API registration still runs config binding once.</summary>
+    private static bool _registerEffectsCompleted;
     public static EffectsFactory Instance;
     
     public EffectsFactory(ILogIt logger, ConfigSyncBase configs) : base(logger, configs)
@@ -58,6 +60,9 @@ public class EffectsFactory : FactoryBase
         
         var externalEffect = new ExternalEffect(effectDefinition);
         _externalEffects.Add(externalEffect);
+
+        if (_registerEffectsCompleted)
+            externalEffect.RegisterEffectConfiguration();
     }
 
     public void RegisterEffects()
@@ -93,6 +98,8 @@ public class EffectsFactory : FactoryBase
                     break;
             }
         }
+
+        _registerEffectsCompleted = true;
     }
 
     public void ToggleEffects()

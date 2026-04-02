@@ -29,8 +29,6 @@ public abstract class EffectsBase
         _isSetItemStatusEffect = IsItemSetStatusEffect;
 
         AdventureBackpacks.Waiter.StatusChanged += (_,_)=>LoadStatusEffect();
-
-        RegisterEffectConfiguration();
     }
 
     public abstract void LoadStatusEffect();

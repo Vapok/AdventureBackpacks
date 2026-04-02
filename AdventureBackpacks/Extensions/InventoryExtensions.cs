@@ -4,7 +4,9 @@ public static class InventoryExtensions
 {
     public static bool IsBackPackInventory(this Inventory inventory)
     {
-        return inventory.m_name.Contains("$vapok_mod_level");
+        return inventory != null
+               && !string.IsNullOrEmpty(inventory.m_name)
+               && inventory.m_name.Contains("$vapok_mod_level");
     }
 
     public static bool ContainsBackpack(this Inventory inventory, ItemDrop.ItemData backpackItem)

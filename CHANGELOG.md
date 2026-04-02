@@ -6,6 +6,9 @@
   * I am not sure if this error was caused by Adventure Backpacks or another mod compatibility issue, as it seems random when the error occurs.
   * Additionally, swaping backpacks back and forth fixes the inventory grid issue.
   * I have implemented a fix that corrects the InventoryGrid regardless.
+* Fixed: Container Prefix Patch incorrectly referencing ArmorStand
+* Fixed: A number of areas where possible NRE's could occur.
+* Fixed: Effect Registration was happening twice.
 
 # 1.9.12 - External References Updated and Item Duplication Guardrails
 * Still getting a few random reports about item duplication, around the yard sale function.
