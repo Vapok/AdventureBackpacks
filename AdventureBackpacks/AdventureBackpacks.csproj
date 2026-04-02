@@ -193,6 +193,7 @@
         <Compile Include="API\Privates.cs" />
         <Compile Include="API\Structs.cs" />
         <Compile Include="Compats\ContentsWithin.cs" />
+        <Compile Include="Patches\InventoryGrid.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <EmbeddedResource Include="Assets\Bundles\backpack_black_forest" />
         <EmbeddedResource Include="Assets\Bundles\backpack_meadows" />

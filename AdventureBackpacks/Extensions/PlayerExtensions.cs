@@ -60,6 +60,9 @@ public static class PlayerExtensions
         
         var backpackContainer = player.gameObject.GetComponent<Container>();
 
+        var backpack = player.GetEquippedBackpack();
+        backpack?.UpdateContainerSizing(ref backpackContainer);
+        
         InventoryGuiPatches.BackpackIsOpen = true;
         instance.Show(backpackContainer);
     }

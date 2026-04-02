@@ -36,7 +36,7 @@ namespace AdventureBackpacks.Components
             return _backpackInventory;
         }
 
-        public void UpdateContainerSizing(Container backpackContainer)
+        public void UpdateContainerSizing(ref Container backpackContainer)
         {
 
             var inventory = GetInventory();
