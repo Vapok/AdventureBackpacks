@@ -27,7 +27,8 @@ internal class BackpackSwamp : BackpackItem
         Item.DropsFrom.Add("Draugr", 0.002f, 1);
         Item.DropsFrom.Add("Draugr_Ranged", 0.004f, 1);
         Item.DropsFrom.Add("Draugr_Elite", 0.004f, 1);
-        Item.DropsFrom.Add("Troll", 0.008f, 1);
+        Item.DropsFrom.Add("Abomination", 0.008f, 1);
+        Item.DropsFrom.Add("Bonemass", 0.04f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

@@ -24,7 +24,9 @@ internal class BackpackMountains : BackpackItem
         AddUpgradeIngredient("Silver", 5);
         
         Item.DropsFrom.Add("Fenring_Cultist", 0.002f, 1);
+        Item.DropsFrom.Add("Ulv", 0.001f, 1);
         Item.DropsFrom.Add("Fenring", 0.008f, 1);
+        Item.DropsFrom.Add("Dragon", 0.04f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

@@ -15,6 +15,8 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 * Keybindings and Actions are Controller Supported
 
 ## How To Install Adventure Backpacks
+* AdventureBackpacks works best when installed using R2ModMan
+  * JVL and YamlDotNet Mods are dependencies
 * Install Adventure Backpacks into it's own FOLDER inside of the `BepInEx/plugins` folder.
   * Create a folder called `Translations` and ensure all Translation files are stored in there.
     * Translations files should be named `AdventureBackpacks.<language key>.json`
@@ -22,7 +24,7 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
   * If using on Dedicated Servers:
     * Configuration Lock and Sync is automatically enabled for configured Admins
       * All Syncable settings will be synced to connected clients, and server configs will be enforced.
-      * Admins can change server configs using a Configuration Management mod.
+      * Admins can change server configs using a Configuration Management mod or adjusting the config file directly on the server.
   * Network Compatibility Enforcement is enabled.
     * This is to prevent data loss on a dedicated server if one client is running the mod, but another client isn't. In particular, you could lose your backpacks and everything in them if someone opens a chest and doesn't have the mod.
 ---
@@ -137,17 +139,15 @@ learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye w
 ## Compatible Mods (Verified)
 * Epic Loot 0.9.3+
   * Check out our Discord to get Epic Loot Patches for Dropping backpacks as Epic Loot!
-* Equipment and Quickslots
+* Extra Slots
 * Advanced Portals
 * AnyPortal
 * XPortal
-* Project Auga
 * Quick Stack Store
 * Auto Split Stack
 * AzuCraftyBoxes
 * Multi-User-Chests
 * Fast Item Transfer
-* Equipment and Quick Slots
 * Jewelcrafting
 * Shield Me Bruh!
 * Cheb's Necromancy
