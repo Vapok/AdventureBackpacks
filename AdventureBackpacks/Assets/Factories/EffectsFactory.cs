@@ -29,6 +29,9 @@ public class EffectsFactory : FactoryBase
     
     private static HashSet<EffectsBase> _externalEffects = new();
     private static HashSet<EffectsBase> _allEffects = new();
+
+    // Effects whose EffectsBase.RequiresPerFrameToggle is true; rebuilt when registration completes.
+    private static readonly List<EffectsBase> PerFrameToggleEffects = new();
     
     private static bool _registerEffectsCompleted;
     public static EffectsFactory Instance;
@@ -61,7 +64,12 @@ public class EffectsFactory : FactoryBase
         _externalEffects.Add(externalEffect);
 
         if (_registerEffectsCompleted)
+        {
             externalEffect.RegisterEffectConfiguration();
+            _allEffects.Add(externalEffect);
+            if (externalEffect.RequiresPerFrameToggle)
+                PerFrameToggleEffects.Add(externalEffect);
+        }
     }
 
     public void RegisterEffects()
@@ -99,10 +107,22 @@ public class EffectsFactory : FactoryBase
         }
 
         _registerEffectsCompleted = true;
+        RebuildPerFrameToggleList();
+    }
+
+    private static void RebuildPerFrameToggleList()
+    {
+        PerFrameToggleEffects.Clear();
+        foreach (var effect in _allEffects)
+        {
+            if (effect.RequiresPerFrameToggle)
+                PerFrameToggleEffects.Add(effect);
+        }
     }
 
     public void ToggleEffects()
     {
-        _effectList.Values.ToList().ForEach(x => x.ToggleEffect());
+        for (var i = 0; i < PerFrameToggleEffects.Count; i++)
+            PerFrameToggleEffects[i].ToggleEffect();
     }
 }

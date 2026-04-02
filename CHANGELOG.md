@@ -9,6 +9,7 @@
 * Fixed: Container Prefix Patch incorrectly referencing ArmorStand
 * Fixed: A number of areas where possible NRE's could occur.
 * Fixed: Effect Registration was happening twice.
+* Optimization: Optimized Effect Toggle Handling
 
 # 1.9.12 - External References Updated and Item Duplication Guardrails
 * Still getting a few random reports about item duplication, around the yard sale function.

@@ -96,6 +96,12 @@ public abstract class EffectsBase
     {
         
     }
+
+
+    // When true, AdventureBackpacks.Assets.Factories.EffectsFactory.ToggleEffects includes this instance each frame.
+    // Override and return true only if ToggleEffect does meaningful per-frame work (input, biome edges, etc.).
+
+    public virtual bool RequiresPerFrameToggle => false;
     
     public virtual void ToggleEffectSwitch()
     {
