@@ -193,6 +193,7 @@
         <Compile Include="API\Privates.cs" />
         <Compile Include="API\Structs.cs" />
         <Compile Include="Compats\ContentsWithin.cs" />
+        <Compile Include="Patches\InventoryGrid.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <EmbeddedResource Include="Assets\Bundles\backpack_black_forest" />
         <EmbeddedResource Include="Assets\Bundles\backpack_meadows" />
@@ -216,8 +217,8 @@
         <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;M:\Code\VapokModBase\References\ABAPI\&quot; /q /y /i" />
     </Target>
     <Target Name="CopyToDev" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' ">
-        <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;C:\Users\Pete\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\Only BepInEx\BepInEx\plugins\$(ProjectName)\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\Translations\*.json&quot; &quot;C:\Users\Pete\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\Only BepInEx\BepInEx\plugins\$(ProjectName)\Translations\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;X:\UserProfiles\Vapok\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\Only BepInEx\BepInEx\plugins\$(ProjectName)\&quot; /q /y /i" />
+        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\Translations\*.json&quot; &quot;X:\UserProfiles\Vapok\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\Only BepInEx\BepInEx\plugins\$(ProjectName)\Translations\&quot; /q /y /i" />
     </Target>
     <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\plugins\&quot; /q /y /i" />

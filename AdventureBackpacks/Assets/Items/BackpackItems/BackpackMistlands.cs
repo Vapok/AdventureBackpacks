@@ -32,6 +32,7 @@ internal class BackpackMistlands : BackpackItem
         Item.DropsFrom.Add("DvergerMageFire", 0.002f, 1);
         Item.DropsFrom.Add("DvergerMageIce", 0.002f, 1);
         Item.DropsFrom.Add("DvergerMageSupport", 0.002f, 1);
+        Item.DropsFrom.Add("SeekerQueen", 0.08f, 1);
     }
     internal sealed override void RegisterConfigSettings()
     {

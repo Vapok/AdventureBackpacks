@@ -36,7 +36,7 @@ namespace AdventureBackpacks.Components
             return _backpackInventory;
         }
 
-        public void UpdateContainerSizing(Container backpackContainer)
+        public void UpdateContainerSizing(ref Container backpackContainer)
         {
 
             var inventory = GetInventory();
@@ -166,6 +166,12 @@ namespace AdventureBackpacks.Components
 
         public override void Save()
         {
+            if (_backpackInventory == null)
+            {
+                Serialize();
+                return;
+            }
+
             _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting Value = {Value}");
             _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting backpack count {_backpackInventory.m_inventory.Count}");
             Value = Serialize();
@@ -174,7 +180,12 @@ namespace AdventureBackpacks.Components
 
         public void Save(Inventory backpack)
         {
-            
+            if (backpack == null)
+            {
+                _log.Warning($"[Save(Inventory) - {Item.m_shared.m_name}-Q{Item.m_quality}] Ignoring save: inventory argument was null.");
+                return;
+            }
+
             _log.Debug($"[Save(Inventory) - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting backpack count {backpack.m_inventory.Count}");
             _backpackInventory = backpack;
             Save();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Effects;
 using Vapok.Common.Abstractions;
@@ -30,6 +29,11 @@ public class EffectsFactory : FactoryBase
     
     private static HashSet<EffectsBase> _externalEffects = new();
     private static HashSet<EffectsBase> _allEffects = new();
+
+    // Effects whose EffectsBase.RequiresPerFrameToggle is true; rebuilt when registration completes.
+    private static readonly List<EffectsBase> PerFrameToggleEffects = new();
+    
+    private static bool _registerEffectsCompleted;
     public static EffectsFactory Instance;
     
     public EffectsFactory(ILogIt logger, ConfigSyncBase configs) : base(logger, configs)
@@ -58,6 +62,14 @@ public class EffectsFactory : FactoryBase
         
         var externalEffect = new ExternalEffect(effectDefinition);
         _externalEffects.Add(externalEffect);
+
+        if (_registerEffectsCompleted)
+        {
+            externalEffect.RegisterEffectConfiguration();
+            _allEffects.Add(externalEffect);
+            if (externalEffect.RequiresPerFrameToggle)
+                PerFrameToggleEffects.Add(externalEffect);
+        }
     }
 
     public void RegisterEffects()
@@ -93,10 +105,24 @@ public class EffectsFactory : FactoryBase
                     break;
             }
         }
+
+        _registerEffectsCompleted = true;
+        RebuildPerFrameToggleList();
+    }
+
+    private static void RebuildPerFrameToggleList()
+    {
+        PerFrameToggleEffects.Clear();
+        foreach (var effect in _allEffects)
+        {
+            if (effect.RequiresPerFrameToggle)
+                PerFrameToggleEffects.Add(effect);
+        }
     }
 
     public void ToggleEffects()
     {
-        _effectList.Values.ToList().ForEach(x => x.ToggleEffect());
+        for (var i = 0; i < PerFrameToggleEffects.Count; i++)
+            PerFrameToggleEffects[i].ToggleEffect();
     }
 }

@@ -27,6 +27,8 @@ internal class BackpackPlains : BackpackItem
         Item.DropsFrom.Add("GoblinArcher", 0.002f, 1);
         Item.DropsFrom.Add("GoblinBrute", 0.002f, 1);
         Item.DropsFrom.Add("GoblinShaman", 0.002f, 1);
+        Item.DropsFrom.Add("Unbjorn", 0.02f, 1);
+        Item.DropsFrom.Add("GoblinKing", 0.04f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

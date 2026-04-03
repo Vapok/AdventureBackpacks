@@ -23,9 +23,13 @@ public class PlayerPatches
 
         if (num < 1 || !resource.m_resItem.m_itemData.IsEquipable())
             return num;
+
+        var inventory = player?.GetInventory();
+        if (inventory == null)
+            return num;
             
         var itemName = resource.m_resItem.m_itemData.m_shared.m_name;
-        var equippedItems = player.GetInventory().GetEquippedItems();
+        var equippedItems = inventory.GetEquippedItems();
 
         if (equippedItems.Any(x => x.m_shared.m_name.Equals(itemName)))
         {

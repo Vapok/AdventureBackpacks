@@ -140,6 +140,9 @@ public static class QuickTransfer
             if (!_processingRightClick)
                 return true;
 
+            if (_toInventory == null || _fromInventory == null || _inventoryGuiInstance == null || item == null)
+                return true;
+
             _toInventory.MoveItemToThis(_fromInventory, item);
             _inventoryGuiInstance.m_moveItemEffects.Create(_inventoryGuiInstance.transform.position, Quaternion.identity);
 

@@ -41,7 +41,7 @@ public class HumanoidPatches
 
                 //In Humanoid.UpdateEquipmentStatusEffects, Local Variable 0, or loc_0 is the target HashSet variable 
                 //listed as "other".  So, patching after Stloc_0 is called immediately after Newobj, which creates the object.
-                if (instrs[i].opcode == OpCodes.Stloc_0 && instrs[i-1].opcode == OpCodes.Newobj)
+                if (i > 0 && instrs[i].opcode == OpCodes.Stloc_0 && instrs[i - 1].opcode == OpCodes.Newobj)
                 {
                     //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)
@@ -106,13 +106,16 @@ public class HumanoidPatches
                 var inventoryGui = InventoryGui.instance;
 
                 // Close the backpack inventory if it's currently open
-                if (inventoryGui.IsContainerOpen())
+                if (inventoryGui != null && inventoryGui.IsContainerOpen())
                 {
                     inventoryGui.CloseContainer();
                     InventoryGuiPatches.BackpackIsOpen = false;
                 }
                 
                 var backpackContainer = player.gameObject.GetComponent<Container>();
+                if (backpackContainer == null)
+                    return;
+
                 backpackContainer.m_inventory = new Inventory("Empty", null, 1, 1);
                 InventoryGuiPatches.BackpackEquipped = false;
             }
@@ -126,8 +129,11 @@ public class HumanoidPatches
         {
             AdventureBackpacks.Log.Debug($"##########   EquipItem Start");
             if (__0 is null) return;
-            
-            if ( Player.m_localPlayer == null && !__result)
+
+            if (!__result)
+                return;
+
+            if (Player.m_localPlayer == null)
                 return;
             
             if (SceneManager.GetActiveScene().name.Equals("start"))
@@ -147,13 +153,13 @@ public class HumanoidPatches
                     var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
                     if (backpackItem.InventoryNeedsValidating(size))
                     {
-                        AdventureBackpacks.Log.Debug($"##########   EquipItem: InventoryNeedsValidating: {backpack.BackpackSize[backpackItem.Item.m_quality].Value}");
                         Backpacks.ValidateBackpackInventorySizing(player, backpackItem.Item);
                     }
                     else
                     {
                         var backpackContainer = player.gameObject.GetComponent<Container>();
-                        backpackItem.UpdateContainerSizing(backpackContainer);
+                        if (backpackContainer != null)
+                            backpackItem.UpdateContainerSizing(ref backpackContainer);
                     }
                 }
             }

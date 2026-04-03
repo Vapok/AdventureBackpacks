@@ -60,6 +60,9 @@ public static class PlayerExtensions
         
         var backpackContainer = player.gameObject.GetComponent<Container>();
 
+        var backpack = player.GetEquippedBackpack();
+        backpack?.UpdateContainerSizing(ref backpackContainer);
+        
         InventoryGuiPatches.BackpackIsOpen = true;
         instance.Show(backpackContainer);
     }
@@ -111,9 +114,15 @@ public static class PlayerExtensions
 
         // This drops a copy of the backpack itemDrop.itemData
         var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
-        itemDrop.GetComponent<Rigidbody>().linearVelocity = (Vector3.up - player.transform.forward) * 5f;
+        if (itemDrop != null)
+        {
+            var rb = itemDrop.GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.linearVelocity = (Vector3.up - player.transform.forward) * 5f;
+            itemDrop.Save();
+        }
+
         player.m_dropEffects.Create(player.transform.position, Quaternion.identity);
-        itemDrop.Save();
 
         if (swapItemActivated)
             playerInventory.AddItem(tempItemRemoval);

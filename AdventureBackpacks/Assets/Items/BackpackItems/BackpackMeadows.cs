@@ -26,6 +26,7 @@ internal class BackpackMeadows : BackpackItem
         AddUpgradeIngredient("DeerHide", 3);
         
         Item.DropsFrom.Add("Greyling", 0.002f, 1);
+        Item.DropsFrom.Add("Eikthyr", 0.04f, 1);
     }
 
     internal sealed override void RegisterConfigSettings()

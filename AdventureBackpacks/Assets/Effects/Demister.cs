@@ -16,6 +16,8 @@ public class Demister: EffectsBase
     {
     }
 
+    public override bool RequiresPerFrameToggle => true;
+
     public override void ToggleEffect()
     {
         if (!Player.m_localPlayer || !ZNetScene.instance)

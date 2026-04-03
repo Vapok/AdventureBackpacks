@@ -1,3 +1,16 @@
+# 1.9.13 - Refreshed Drop Lists & Bugfixes
+* Refreshed Drop Lists for All Backpacks
+  * All Biome Bosses through Plains now have a drop change by default.
+  * Bears, Viles, and other newly introduced mobs have been added to drop lists.
+* Fixed: InventoryGrid Index Error when opening a backpack up for the first time upon game load.
+  * I am not sure if this error was caused by Adventure Backpacks or another mod compatibility issue, as it seems random when the error occurs.
+  * Additionally, swaping backpacks back and forth fixes the inventory grid issue.
+  * I have implemented a fix that corrects the InventoryGrid regardless.
+* Fixed: Container Prefix Patch incorrectly referencing ArmorStand
+* Fixed: A number of areas where possible NRE's could occur.
+* Fixed: Effect Registration was happening twice.
+* Optimization: Optimized Effect Toggle Handling
+
 # 1.9.12 - External References Updated and Item Duplication Guardrails
 * Still getting a few random reports about item duplication, around the yard sale function.
   * I've implemented additional checks and guardrails to see if we can prevent this.

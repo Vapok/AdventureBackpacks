@@ -13,15 +13,20 @@ public class ExternalEffect : EffectsBase
     public ExternalEffect(ABAPI.EffectDefinition effectDefinition) : base(effectDefinition.Name, effectDefinition.Description)
     {
         _effectDefinition = effectDefinition;
-        
-        if (_effectDefinition.StatusEffect == null)
-        {
-            AdventureBackpacks.Log.Error($"Status Effect is null {_effectName} - Disabling Status Effect");
-            EnabledEffect.Value = false;
-        }
 
         if (!string.IsNullOrEmpty(_effectDefinition.EffectName))
             _effectName = _effectDefinition.EffectName;
+    }
+
+    public override void RegisterEffectConfiguration()
+    {
+        base.RegisterEffectConfiguration();
+
+        if (_effectDefinition.StatusEffect == null)
+        {
+            AdventureBackpacks.Log.Error($"Status Effect is null for {_effectDefinition.Name} - Disabling Status Effect");
+            EnabledEffect.Value = false;
+        }
     }
 
     public override void AdditionalConfiguration(string configSection)

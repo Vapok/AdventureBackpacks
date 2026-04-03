@@ -59,7 +59,8 @@ namespace AdventureBackpacks.Assets
 
             var player = Player.m_localPlayer;
             //Close Inventory before making changes.  Leaving open can have undesirable effects.
-            InventoryGui.instance.Hide();
+            if (InventoryGui.instance != null)
+                InventoryGui.instance.Hide();
             
             void SearchInventory(List<ItemDrop.ItemData> inventory)
             {
@@ -131,6 +132,9 @@ namespace AdventureBackpacks.Assets
 
         public static void ValidateBackpackInventorySizing(Player player, ItemDrop.ItemData currentBackpack)
         {
+            if (player == null || currentBackpack?.m_shared == null)
+                return;
+
             AdventureBackpacks.Log.Debug($"############################################");
             AdventureBackpacks.Log.Debug($"####  ValidateBackpackInventorySizing  #####");
             AdventureBackpacks.Log.Debug($"{currentBackpack.m_shared.m_name}");
@@ -165,6 +169,12 @@ namespace AdventureBackpacks.Assets
                         
             var backpackItem = currentBackpack.Data().GetOrCreate<BackpackComponent>();
             var currentInventory = backpackItem.GetInventory();
+            if (currentInventory == null)
+            {
+                AdventureBackpacks.Log.Warning($"[{currentBackpack.m_shared.m_name}] ValidateBackpackInventorySizing: backpack inventory was null; skipping.");
+                return;
+            }
+
             AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### Current Inventory Slot Size: {currentInventory.m_inventory.Count}");
 
             if (backpackSize < currentInventory.m_inventory.Count)
@@ -177,19 +187,28 @@ namespace AdventureBackpacks.Assets
                 AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### New Inventory Size {newInventorySize}");
                 backpackItem.IsLoadingInventory = true;
                 var newInventory = NewInventoryInstance(backpackDefinition.ItemName, currentBackpack.m_quality);
-                
-                newInventory.MoveAll(currentInventory);
-                
-                backpackItem.IsLoadingInventory = false;
-                
-                backpackItem.Save(newInventory);
+                if (newInventory == null)
+                {
+                    AdventureBackpacks.Log.Warning(
+                        $"[{currentBackpack.m_shared.m_name}] Could not create resized inventory instance; skipping MoveAll.");
+                    backpackItem.IsLoadingInventory = false;
+                }
+                else
+                {
+                    newInventory.MoveAll(currentInventory);
+
+                    backpackItem.IsLoadingInventory = false;
+
+                    backpackItem.Save(newInventory);
+                }
             }
             
             backpackItem.Load();
             if (player.IsThisBackpackEquipped(currentBackpack))
             {
                 var backpackContainer = player.gameObject.GetComponent<Container>();
-                backpackItem.UpdateContainerSizing(backpackContainer);
+                if (backpackContainer != null)
+                    backpackItem.UpdateContainerSizing(ref backpackContainer);
             }
             AdventureBackpacks.Log.Debug($"############################################");
             AdventureBackpacks.Log.Debug($"DONE  ValidateBackpackInventorySizing  DONE");
