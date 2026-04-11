@@ -9,7 +9,6 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using BepInEx;
 using UnityEngine;
-using UnityEngine.Android;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
