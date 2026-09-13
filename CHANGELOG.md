@@ -1,3 +1,6 @@
+# 2.0.1 - ZenDragon ModLib Compatibility
+* Added in defensive transpiler checks to ensure compatibility with ZenDragon's MobLib
+
 # 2.0.0 - Valheim 1.0+ Adventure Backpacks
 * Updated Adventure Backpacks for 2.0.0
   * Updated All Transpilers and Harmony References for Valheim 1.0
