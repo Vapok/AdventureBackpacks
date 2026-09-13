@@ -2,6 +2,7 @@
 
 using System;
 using System.Reflection;
+using System.Threading;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Compats;
@@ -30,7 +31,7 @@ namespace AdventureBackpacks
     [BepInIncompatibility("JotunnBackpacks")]
     [BepInDependency(Jotunn.Main.ModGuid)]
     [BepInDependency("com.ValheimModding.YamlDotNetDetector")]
-    [BepInDependency("com.chebgonaz.ChebsNecromancy",BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.chebgonaz.ChebsNecromancy", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.maxsch.valheim.contentswithin", BepInDependency.DependencyFlags.SoftDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
     public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
@@ -38,14 +39,14 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "1.9.13";
-        
+        private const string _version = "2.0.0";
+
         //Interface Properties
         public string PluginId => _pluginId;
         public string DisplayName => _displayName;
         public string Version => _version;
         public BaseUnityPlugin Instance => _instance;
-        
+
         //Class Properties
         public static ILogIt Log => _log;
         public static bool ValheimAwake;
@@ -54,40 +55,40 @@ namespace AdventureBackpacks
         public static bool BypassMoveProtection = false;
         public static Waiting Waiter;
         public static ConfigSyncBase ActiveConfig => _config;
-        
+
         //Class Privates
         private static AdventureBackpacks _instance;
         private static ConfigSyncBase _config;
         private static ILogIt _log;
         private Harmony _harmony;
-       
-        
+
+
         [UsedImplicitly]
         // This the main function of the mod. BepInEx will call this.
         private void Awake()
         {
             //I'm awake!
             _instance = this;
-            
-            Patcher.Patch(new []{"AdventureBackpacks.API"});
-            
+
+            Patcher.Patch(new[] { "AdventureBackpacks.API" });
+
             //Waiting For Startup
             Waiter = new Waiting();
-            
+
             //Jotunn Localization
             var localization = LocalizationManager.Instance.GetLocalization();
 
             //Register Logger
-            LogManager.Init(PluginId,out _log);
-            
+            LogManager.Init(PluginId, out _log);
+
             //Initialize Managers
-            Initializer.LoadManagers(localization,false, true, true, true, false, false, true);
+            Initializer.LoadManagers(localization, true, true, true, true, false, false, true);
 
             //Register Configuration Settings
             _config = new ConfigRegistry(_instance);
 
             PrefabManager.Initalized = true;
-           
+
             //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -100,9 +101,9 @@ namespace AdventureBackpacks
 
             if (Chainloader.PluginInfos.ContainsKey("com.maxsch.valheim.contentswithin"))
             {
-                ContentsWithin.Awake(_harmony,"com.maxsch.valheim.contentswithin");
+                ContentsWithin.Awake(_harmony, "com.maxsch.valheim.contentswithin");
             }
-            
+
             //???
 
             //Profit
@@ -112,7 +113,7 @@ namespace AdventureBackpacks
         private void Start()
         {
             Localizer.Waiter.StatusChanged += InitializeBackpacks;
-            
+
             //Initialized Features
             QuickTransfer.FeatureInitialized = true;
         }
@@ -129,14 +130,15 @@ namespace AdventureBackpacks
                     Backpacks.PerformYardSale(Player.m_localPlayer, backpack.Item);
             }
 
-            if ((ZInput.GetButton("Forward") || ZInput.GetButton("Backward") || ZInput.GetButton("Left") ||ZInput.GetButton("Right")) 
-                && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey) &&  ConfigRegistry.OutwardMode.Value)
+            if ((ZInput.GetButton("Forward") || ZInput.GetButton("Backward") || ZInput.GetButton("Left") ||
+                 ZInput.GetButton("Right"))
+                && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey) && ConfigRegistry.OutwardMode.Value)
             {
                 Player.m_localPlayer.QuickDropBackpack();
             }
-            
+
             EffectsFactory.Instance.ToggleEffects();
-            
+
             InventoryPatches.ProcessItemsAddedQueue();
         }
 
@@ -144,26 +146,26 @@ namespace AdventureBackpacks
         {
             if (ValheimAwake)
                 return;
-            
+
             //Register Effects
             var effectsFactory = new EffectsFactory(_log, _config);
             effectsFactory.RegisterEffects();
-            
+
             //Register Assets
             var backpackFactory = new BackpackFactory(_log, _config);
             backpackFactory.CreateAssets();
-            
+
             //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
-            
+
             //Enable BoneReorder
             BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
-            
+
             ConfigRegistry.Waiter.ConfigurationComplete(true);
 
             ValheimAwake = true;
         }
-        
+
         private void OnDestroy()
         {
             _instance = null;
@@ -176,7 +178,8 @@ namespace AdventureBackpacks
                 if (awakeFlag)
                     StatusChanged?.Invoke(this, EventArgs.Empty);
             }
-            public event EventHandler StatusChanged;            
+
+            public event EventHandler StatusChanged;
         }
     }
 }

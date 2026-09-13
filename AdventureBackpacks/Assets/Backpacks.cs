@@ -122,14 +122,34 @@ namespace AdventureBackpacks.Assets
 
         public static Vector2 ValidateMinMaxChestSize(float x, float y)
         {
+            //In Valheim 1.0, UI is max 8 columns.
+            if (x > 8)
+                x = 8;
+
+            //If values are below 1, min size is 1 for both width and height.
             if (x < 1)
                 x = 1;
+            
             if (y < 1)
                 y = 1;
 
             return new Vector2(x, y);
         }
+        public static Vector2i ValidateMinMaxChestSizeInt(int x, int y)
+        {
+            //In Valheim 1.0, UI is max 8 columns.
+            if (x > 8)
+                x = 8;
 
+            //If values are below 1, min size is 1 for both width and height.
+            if (x < 1)
+                x = 1;
+            
+            if (y < 1)
+                y = 1;
+
+            return new Vector2i(x, y);
+        }
         public static void ValidateBackpackInventorySizing(Player player, ItemDrop.ItemData currentBackpack)
         {
             if (player == null || currentBackpack?.m_shared == null)
@@ -402,6 +422,7 @@ namespace AdventureBackpacks.Assets
             
             var modifierList = new List<HitData.DamageModPair>();
             //Set Armor Default
+            //TODO: Make this configurable
             itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel * backpackQuality;
             
             //Apply Frost Resistance if configured.

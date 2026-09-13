@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
@@ -60,6 +61,8 @@ namespace AdventureBackpacks.Configuration
             UnsyncedConfig("Local Config", "Replace Shader", true,
                 new ConfigDescription("Toggle To use the Material Shader Replacer (Requires Game Restart)",
                     null, new ConfigurationManagerAttributes { Order = 1 }), ref ReplaceShader);
+            
+            _config.Save();
         }
     }
     

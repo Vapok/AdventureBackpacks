@@ -23,12 +23,12 @@ internal class BackpackPlains : BackpackItem
         AddUpgradeIngredient("LoxPelt", 2);
         AddUpgradeIngredient("BlackMetal", 5);
 
-        Item.DropsFrom.Add("Goblin", 0.002f, 1);
-        Item.DropsFrom.Add("GoblinArcher", 0.002f, 1);
-        Item.DropsFrom.Add("GoblinBrute", 0.002f, 1);
-        Item.DropsFrom.Add("GoblinShaman", 0.002f, 1);
-        Item.DropsFrom.Add("Unbjorn", 0.02f, 1);
-        Item.DropsFrom.Add("GoblinKing", 0.04f, 1);
+        Item.DropsFrom.Add("Goblin", 0.002f, 1,dontScale:true);
+        Item.DropsFrom.Add("GoblinArcher", 0.002f, 1,dontScale:true);
+        Item.DropsFrom.Add("GoblinBrute", 0.002f, 1,dontScale:true);
+        Item.DropsFrom.Add("GoblinShaman", 0.002f, 1,dontScale:true);
+        Item.DropsFrom.Add("Unbjorn", 0.02f, 1,dontScale:true);
+        Item.DropsFrom.Add("GoblinKing", 0.04f, 1,dontScale:true);
     }
 
     internal sealed override void RegisterConfigSettings()

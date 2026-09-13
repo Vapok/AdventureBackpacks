@@ -226,7 +226,7 @@ public static class InventoryPatches
         new[]
         {
             typeof(string), typeof(int), typeof(int), typeof(int), typeof(long), typeof(string), typeof(Vector2i),
-            typeof(bool)
+            typeof(bool) ,typeof(bool) ,typeof(bool)
         })]
     [HarmonyPriority(Priority.First)]
     static class AddItemCraftingPatch
@@ -424,7 +424,7 @@ public static class InventoryPatches
                     if (Player.m_localPlayer.IsBackpackEquipped())
                     {
                         var backpack = Player.m_localPlayer.GetEquippedBackpack();
-                        if (backpack != null && !backpack.GetInventory().IsTeleportable())
+                        if (backpack != null && !backpack.GetInventory().IsTeleportable(false))
                         {
                             __result = false;
                             return;
@@ -440,7 +440,7 @@ public static class InventoryPatches
                     
                         if (item.IsBackpack())
                         {
-                            if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable())
+                            if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable(false))
                             {
                                 // A backpack's inventory inside player inventory was not teleportable.
                                 __result = false;

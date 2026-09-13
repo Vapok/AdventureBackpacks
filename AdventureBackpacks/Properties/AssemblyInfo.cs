@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AdventureBackpacks")]
 [assembly: AssemblyDescription("A Valheim Mod for adding progression multiple backpacks as an item/utility gear addition.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Vapok Gaming")]
+[assembly: AssemblyCompany("Vapok Modding")]
 [assembly: AssemblyProduct("AdventureBackpacks")]
-[assembly: AssemblyCopyright("Copyright ©  2024")]
+[assembly: AssemblyCopyright("Copyright © Vapok Modding  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 #if ! API
-[assembly: AssemblyVersion("1.9.13.0")]
-[assembly: AssemblyFileVersion("1.9.13.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
 #else
 [assembly: AssemblyVersion("1.2.0")]
 [assembly: AssemblyFileVersion("1.2.0")]

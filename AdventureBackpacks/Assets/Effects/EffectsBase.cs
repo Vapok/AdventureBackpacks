@@ -45,7 +45,7 @@ public abstract class EffectsBase
 
     public virtual void SetStatusEffect(string effectName)
     {
-        _statusEffect = _statusEffect == null ? ObjectDB.instance.GetStatusEffect(effectName.GetHashCode()) : _statusEffect;
+        _statusEffect = _statusEffect == null ? ObjectDB.instance.GetStatusEffect(effectName.GetStableHashCode()) : _statusEffect;
     }
 
     public virtual bool HasActiveStatusEffect(Humanoid human, out StatusEffect statusEffect)
