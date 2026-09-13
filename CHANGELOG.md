@@ -1,3 +1,20 @@
+# 2.0.0 - Valheim 1.0+ Adventure Backpacks
+* Updated Adventure Backpacks for 2.0.0
+  * Updated All Transpilers and Harmony References for Valheim 1.0
+  * Fixed: Bug on Drops were not taking into account World Scaling and Level/Star rating of creatures.
+    * Enhancements:
+      * Two New Config Settings
+        * Adjust Drops by Level Factor
+        * Adjust Drops by World Scaling Factor
+  * Tested Extensively without other mods.
+    * I DO NOT KNOW IF THERE ARE COMPATIBILITY ISSUES WITH OTHER MODS BUT PLEASE LET ME KNOW <3 XOXO.
+  * No New Content in this version, this is to get AB working quickly with 1.0
+    * I see you Ashlands. There will be more bags, but wanted to get the initial 1.0 out to get you all rolling.
+  * Please inform me of any errors or issues to my GitHub or Discord and I'll respond quickly.
+
+<details>
+<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
+
 # 1.9.13 - Refreshed Drop Lists & Bugfixes
 * Refreshed Drop Lists for All Backpacks
   * All Biome Bosses through Plains now have a drop change by default.
@@ -26,8 +43,6 @@
   * As a result, a change has been made, that if Show() method is missing, look further up.
     * If another mod removes the vanilla Player.ShowTutorial(), this fix is cooked.
 
-<details>
-<summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
 
 # 1.9.10 - Additional Fixes
 * Fixed: Issue when backpack size x or y get set to 0, causes game crash.

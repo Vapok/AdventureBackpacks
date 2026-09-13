@@ -24,11 +24,11 @@ internal class BackpackSwamp : BackpackItem
         AddUpgradeIngredient("Bloodbag", 2);
         AddUpgradeIngredient("Iron", 5);
         
-        Item.DropsFrom.Add("Draugr", 0.002f, 1);
-        Item.DropsFrom.Add("Draugr_Ranged", 0.004f, 1);
-        Item.DropsFrom.Add("Draugr_Elite", 0.004f, 1);
-        Item.DropsFrom.Add("Abomination", 0.008f, 1);
-        Item.DropsFrom.Add("Bonemass", 0.04f, 1);
+        Item.DropsFrom.Add("Draugr", 0.002f, 1,dontScale:true);
+        Item.DropsFrom.Add("Draugr_Ranged", 0.004f, 1,dontScale:true);
+        Item.DropsFrom.Add("Draugr_Elite", 0.004f, 1,dontScale:true);
+        Item.DropsFrom.Add("Abomination", 0.008f, 1,dontScale:true);
+        Item.DropsFrom.Add("Bonemass", 0.04f, 1,dontScale:true);
     }
 
     internal sealed override void RegisterConfigSettings()

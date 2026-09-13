@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="..\packages\JotunnLib.2.29.0\build\JotunnLib.props" Condition="Exists('..\packages\JotunnLib.2.29.0\build\JotunnLib.props')" />
+    <Import Project="..\packages\JotunnLib.2.30.0\build\JotunnLib.props" Condition="Exists('..\packages\JotunnLib.2.30.0\build\JotunnLib.props')" />
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,11 +10,15 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>AdventureBackpacks</RootNamespace>
         <AssemblyName>AdventureBackpacks</AssemblyName>
+        <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <LangVersion>latest</LangVersion>
-        <VALHEIM_INSTALL>..\..\References\Valheim\0.221.12</VALHEIM_INSTALL>
-        <BEPINEX_PATH>..\..\References\BepInEx\5.4.2333\BepInEx</BEPINEX_PATH>
+        <VALHEIM_INSTALL>$(ReferencesRoot)\Valheim\1.0.12</VALHEIM_INSTALL>
+        <BEPINEX_PATH>$(ReferencesRoot)\BepInEx\5.4.2350\BepInEx</BEPINEX_PATH>
+        <ReferencesRoot Condition="'$(ReferencesRoot)' == ''">/home/vapok/Modding/References</ReferencesRoot>
+        <ReleaseRoot>/home/vapok/Modding/Releases</ReleaseRoot>
+        <ModRoot>/home/vapok/Modding/Valheim/</ModRoot>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -71,31 +75,31 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\BepInEx\5.4.2333\BepInEx\core\0Harmony.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\BepInEx\5.4.2350\BepInEx\core\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="APIManager">
-            <HintPath>..\..\References\APIManager\APIManager.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\APIManager\APIManager.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils">
-            <HintPath>..\..\References\Valheim\0.221.12\assembly_guiutils_publicized.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\assembly_guiutils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_postprocessing">
-            <HintPath>..\..\References\Valheim\0.221.12\assembly_postprocessing_publicized.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\assembly_postprocessing_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_utils">
-            <HintPath>..\..\References\Valheim\0.221.12\assembly_utils_publicized.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\assembly_utils_publicized.dll</HintPath>
         </Reference>
         <Reference Include="assembly_valheim">
-            <HintPath>..\..\References\Valheim\0.221.12\assembly_valheim_publicized.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\assembly_valheim_publicized.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx, Version=5.4.23.3, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\BepInEx\5.4.2333\BepInEx\core\BepInEx.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\BepInEx\5.4.2350\BepInEx\core\BepInEx.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx.Harmony">
-            <HintPath>..\..\References\BepInEx\5.4.2333\BepInEx\core\BepInEx.Harmony.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\BepInEx\5.4.2350\BepInEx\core\BepInEx.Harmony.dll</HintPath>
         </Reference>
-        <Reference Include="Jotunn, Version=2.29.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\JotunnLib.2.29.0\lib\net462\Jotunn.dll</HintPath>
+        <Reference Include="Jotunn, Version=2.30.0.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\JotunnLib.2.30.0\lib\net462\Jotunn.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="System" />
@@ -106,33 +110,33 @@
         <Reference Include="System.Xml" />
         <Reference Include="System.Xml.Linq" />
         <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\Managed\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.AnimationModule.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\Managed\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\Managed\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.InputLegacyModule">
-            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
-            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\Managed\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UI">
-            <HintPath>..\..\References\Valheim\0.221.12\Managed\UnityEngine.UI.dll</HintPath>
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.12\Managed\UnityEngine.UI.dll</HintPath>
         </Reference>
-        <!-- NuGet package: used for Debug, Release, API -->
         <!-- Local config: use DLL built from Vapok.Common project (build Common first, then build this) -->
-        <Reference Include="Vapok.Valheim.Common, Version=2.11.2214.0, Culture=neutral, processorArchitecture=MSIL" Condition="'$(Configuration)' == 'Local'">
-          <HintPath>..\..\Vapok.Common\Vapok.Valheim.Common\bin\Debug\net48\Vapok.Valheim.Common.dll</HintPath>
+        <!-- NuGet package: used for Debug, Release, API -->
+        <Reference Include="Vapok.Valheim.Common" Condition=" '$(Configuration)' == 'Local' ">
+          <HintPath>/home/vapok/Modding/Valheim/Vapok.Common/Vapok.Valheim.Common/bin/Debug/net48/Vapok.Valheim.Common.dll</HintPath>
         </Reference>
-        <Reference Include="Vapok.Valheim.Common, Version=2.11.2214.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\Vapok.Valheim.Common.2.11.22112\lib\net48\Vapok.Valheim.Common.dll</HintPath>
+        <Reference Include="Vapok.Valheim.Common, Version=2.11.2214.0, Culture=neutral, processorArchitecture=MSIL" Condition=" '$(Configuration)' != 'Local' ">
+          <HintPath>..\packages\Vapok.Valheim.Common.3.1.1012\lib\net48\Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=16.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\YamlDotNet.16.3.0\lib\net47\YamlDotNet.dll</HintPath>
@@ -213,32 +217,35 @@
         <EmbeddedResource Include="Assets\Bundles\vapokbackpacks" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <PropertyGroup>
+        <DevPluginsFolder Condition="'$(DevPluginsFolder)' == ''">/home/vapok/Modding/Gale Profiles/Default/BepInEx/plugins</DevPluginsFolder>
+    </PropertyGroup>
+    
     <Target Name="CopyApi" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'API|AnyCPU' ">
-        <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;M:\Code\VapokModBase\References\ABAPI\&quot; /q /y /i" />
+        <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(ReferencesRoot)\ABAPI" SkipUnchangedFiles="true" />
     </Target>
-    <Target Name="CopyToDev" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' ">
-        <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;X:\UserProfiles\Vapok\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\Only BepInEx\BepInEx\plugins\$(ProjectName)\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\Translations\*.json&quot; &quot;X:\UserProfiles\Vapok\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\Only BepInEx\BepInEx\plugins\$(ProjectName)\Translations\&quot; /q /y /i" />
+    <Target Name="CopyToDev" AfterTargets="ILRepack" Condition="('$(Configuration)' == 'Debug' or '$(Configuration)' == 'Local' or '$(Configuration)' == 'Release') and Exists('$(DevPluginsFolder)')">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DevPluginsFolder)/Vapok-$(ProjectName)" SkipUnchangedFiles="true" />
     </Target>
     <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\plugins\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\Translations\*.json&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\plugins\Translations\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\LICENSE.md&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\manifest.json&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\CHANGELOG.md&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\README.md&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
-        <Exec Command="xcopy &quot;M:\Code\VapokModBase\AdventureBackpacks\icon.png&quot; &quot;M:\Code\VapokModBase\Releases\AdventureBackpacks-Vapok\&quot; /q /y /i" />
+        <ItemGroup>
+            <TranslationFiles Include="$(ModRoot)/$(ProjectName)/Translations/*.json" />
+            <PackageDocs Include="$(ModRoot)/$(ProjectName)/LICENSE.md;$(ModRoot)/$(ProjectName)/manifest.json;$(ModRoot)/$(ProjectName)/CHANGELOG.md;$(ModRoot)/$(ProjectName)/README.md;$(ModRoot)/$(ProjectName)/icon.png" />
+        </ItemGroup>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ReleaseRoot)/$(ProjectName)-Vapok/plugins" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(TranslationFiles)" DestinationFolder="$(ReleaseRoot)/$(ProjectName)-Vapok/plugins/Translations" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(PackageDocs)" DestinationFolder="$(ReleaseRoot)/$(ProjectName)-Vapok" SkipUnchangedFiles="true" />
     </Target>
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
         <PropertyGroup>
-            <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+            <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
         </PropertyGroup>
-        <Error Condition="!Exists('..\packages\Vsxmd.1.4.6\build\Vsxmd.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Vsxmd.1.4.6\build\Vsxmd.targets'))" />
-        <Error Condition="!Exists('..\packages\JotunnLib.2.29.0\build\JotunnLib.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JotunnLib.2.29.0\build\JotunnLib.props'))" />
         <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
+        <Error Condition="!Exists('..\packages\JotunnLib.2.30.0\build\JotunnLib.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JotunnLib.2.30.0\build\JotunnLib.props'))" />
+        <Error Condition="!Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets'))" />
     </Target>
-    <Import Project="..\packages\Vsxmd.1.4.6\build\Vsxmd.targets" Condition="Exists('..\packages\Vsxmd.1.4.6\build\Vsxmd.targets')" />
     <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
+    <Import Project="..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets" Condition="Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">
@@ -246,5 +253,4 @@
     <Target Name="AfterBuild">
     </Target>
     -->
-
 </Project>

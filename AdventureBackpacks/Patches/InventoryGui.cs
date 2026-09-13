@@ -166,7 +166,7 @@ internal static class InventoryGuiPatches
                     continue;
                 
                 var hoveredElement = grid.GetHoveredElement();
-                hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
+                hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
             }
 
             if (ZInput.IsGamepadActive() && hoveredItem == null)
@@ -211,7 +211,7 @@ internal static class InventoryGuiPatches
                         continue;
                 
                     var hoveredElement = grid.GetHoveredElement();
-                    hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.m_pos.x, hoveredElement.m_pos.y);
+                    hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
                 }
 
                 if (ZInput.IsGamepadActive() && hoveredItem == null)

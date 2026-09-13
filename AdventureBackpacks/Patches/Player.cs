@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using HarmonyLib;
@@ -105,8 +106,8 @@ public class PlayerPatches
                     yield return LogMessage(ldArgInstruction);
                     counter++;
                     
-                    //Piece.Requirement resource
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_2));
+                    //Piece.Requirement resource (local variable 3)
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_3));
                     counter++;
                     
                     //int num
@@ -117,7 +118,7 @@ public class PlayerPatches
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(AdjustCountIfEquipped))));
                     counter++;
 
-                    //Save output of calling method to local variable 0
+                    //Save output of calling method to local variable
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand));
                     counter++;
                     
@@ -165,8 +166,11 @@ public class PlayerPatches
                 yield return LogMessage(instrs[i]);
                 counter++;
 
-                if (i > 5 && instrs[i].opcode == OpCodes.Stloc_3 && instrs[i-1].opcode == OpCodes.Mul && instrs[i-2].opcode == OpCodes.Ldarg_S
-                    && instrs[i-3].opcode == OpCodes.Callvirt && instrs[i-3].operand.Equals(getAmountMethod))
+                if (i > 5 && (instrs[i].opcode == OpCodes.Stloc_S || instrs[i].opcode == OpCodes.Stloc_3 || instrs[i].opcode == OpCodes.Stloc)
+                    && instrs[i-1].opcode == OpCodes.Mul
+                    && (instrs[i-2].opcode == OpCodes.Ldarg_S || instrs[i-2].opcode == OpCodes.Ldarg_3 || instrs[i-2].opcode == OpCodes.Ldarg)
+                    && instrs[i-3].opcode == OpCodes.Callvirt
+                    && (instrs[i-3].operand.Equals(getAmountMethod) || (instrs[i-3].operand is MethodInfo m && m.Name == nameof(Piece.Requirement.GetAmount))))
                 {
                     //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)
@@ -176,20 +180,22 @@ public class PlayerPatches
                     yield return LogMessage(ldArgInstruction);
                     counter++;
                     
-                    //Piece.Requirement resource
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_2));
+                    //Piece.Requirement resource (local variable 3)
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_3));
                     counter++;
                     
                     //int amount
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_3));
+                    var ldLocAmount = instrs[i].operand != null ? new CodeInstruction(OpCodes.Ldloc_S, instrs[i].operand) : new CodeInstruction(OpCodes.Ldloc_3);
+                    yield return LogMessage(ldLocAmount);
                     counter++;
           
                     //Patch Calling Method
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(ConsumeUnEquippedItems))));
                     counter++;
 
-                    //Save output of calling method to local variable 0
-                    yield return LogMessage(new CodeInstruction(OpCodes.Stloc_3));
+                    //Save output of calling method to local variable
+                    var stLocAmount = instrs[i].operand != null ? new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand) : new CodeInstruction(OpCodes.Stloc_3);
+                    yield return LogMessage(stLocAmount);
                     counter++;
                     
                     patchedSuccess = true;

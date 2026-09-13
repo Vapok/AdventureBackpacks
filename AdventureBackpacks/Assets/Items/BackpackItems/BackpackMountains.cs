@@ -23,10 +23,10 @@ internal class BackpackMountains : BackpackItem
         AddUpgradeIngredient("WolfPelt", 5);
         AddUpgradeIngredient("Silver", 5);
         
-        Item.DropsFrom.Add("Fenring_Cultist", 0.002f, 1);
-        Item.DropsFrom.Add("Ulv", 0.001f, 1);
-        Item.DropsFrom.Add("Fenring", 0.008f, 1);
-        Item.DropsFrom.Add("Dragon", 0.04f, 1);
+        Item.DropsFrom.Add("Fenring_Cultist", 0.002f, 1,dontScale:true);
+        Item.DropsFrom.Add("Ulv", 0.001f, 1,dontScale:true);
+        Item.DropsFrom.Add("Fenring", 0.008f, 1,dontScale:true);
+        Item.DropsFrom.Add("Dragon", 0.04f, 1,dontScale:true);
     }
 
     internal sealed override void RegisterConfigSettings()

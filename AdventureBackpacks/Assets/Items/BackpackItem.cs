@@ -125,7 +125,9 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         //If quantity entering here is higher than 4, let's Clamp it at 4.
         quality = Mathf.Clamp(quality, 1, 4);
         
-        return new Vector2i(Mathf.Clamp((int)BackpackSize[quality].Value.x,1,256),Mathf.Clamp((int)BackpackSize[quality].Value.y, 1, 256));    
+        var backpackSize =new Vector2i(Mathf.Clamp((int)BackpackSize[quality].Value.x,1,256),Mathf.Clamp((int)BackpackSize[quality].Value.y, 1, 256));
+
+        return Backpacks.ValidateMinMaxChestSizeInt(backpackSize.x, backpackSize.y);
     }
     
     internal abstract void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData);

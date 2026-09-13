@@ -1,3 +1,4 @@
+using System.Threading;
 using AdventureBackpacks.Assets.Factories;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -15,7 +16,16 @@ public class EnvManPatches
         {
             if (Player.m_localPlayer == null)
                 return true;
+
+            if (EffectsFactory.EffectList.Count == 0)
+            {
+                //We have a deeper issue that needs to be figured out, but let's not make this a locking issue.
+                AdventureBackpacks.Log.Error($"[Error] Effect List is Empty - This should not be the case.");
+                return true;
+            }
+
             var effect = EffectsFactory.EffectList[BackpackEffect.ColdResistance];
+            
             if (effect.IsEffectActive(Player.m_localPlayer))
             {
                 __result = false;
@@ -35,7 +45,15 @@ public class EnvManPatches
             if (Player.m_localPlayer == null)
                 return true;
 
+            if (EffectsFactory.EffectList.Count == 0)
+            {
+                //We have a deeper issue that needs to be figured out, but let's not make this a locking issue.
+                AdventureBackpacks.Log.Error($"[Error] Effect List is Empty - This should not be the case.");
+                return true;
+            }
+
             var waterResistEffect = EffectsFactory.EffectList[BackpackEffect.WaterResistance];
+
             if (waterResistEffect.IsEffectActive(Player.m_localPlayer))
             {
                 __result = false;
