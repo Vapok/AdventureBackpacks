@@ -300,6 +300,21 @@ internal static class InventoryGuiPatches
                 return FindInstructionWithLabel(codeInstructions, index + 1, label);
             }
 
+            CodeInstruction CreateLdlocFromStloc(CodeInstruction stloc)
+            {
+                if (stloc.opcode == OpCodes.Stloc_0) return new CodeInstruction(OpCodes.Ldloc_0);
+                if (stloc.opcode == OpCodes.Stloc_1) return new CodeInstruction(OpCodes.Ldloc_1);
+                if (stloc.opcode == OpCodes.Stloc_2) return new CodeInstruction(OpCodes.Ldloc_2);
+                if (stloc.opcode == OpCodes.Stloc_3) return new CodeInstruction(OpCodes.Ldloc_3);
+                if (stloc.opcode == OpCodes.Stloc_S) return new CodeInstruction(OpCodes.Ldloc_S, stloc.operand);
+                return new CodeInstruction(OpCodes.Ldloc, stloc.operand);
+            }
+
+            CodeInstruction CreateStlocFromStloc(CodeInstruction stloc)
+            {
+                return new CodeInstruction(stloc.opcode, stloc.operand);
+            }
+
             var resetButtonStatus = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.ResetButtonStatus));
             var menuVisibleMethod = AccessTools.DeclaredMethod(typeof(Menu), nameof(Menu.IsVisible));
             var hideMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Hide));
@@ -307,6 +322,7 @@ internal static class InventoryGuiPatches
             var tutorialMethod = AccessTools.DeclaredMethod(typeof(Player), nameof(Player.ShowTutorial));
             var zInputKeyDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetKeyDown), new []{typeof(KeyCode), typeof(bool)});
             var zInputButtonDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetButtonDown), new []{typeof(string)});
+            var hiddenFramesField = AccessTools.DeclaredField(typeof(InventoryGui), nameof(InventoryGui.m_hiddenFrames));
 
             for (int i = 0; i < instrs.Count; ++i)
             {
@@ -421,53 +437,44 @@ internal static class InventoryGuiPatches
 
                     patchedDetectInputHideMethod = true;
 
-                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(zInputButtonDown) 
-                           && instrs[i - 1].operand.Equals("Inventory") && instrs[i + 1].opcode == OpCodes.Brtrue 
-                           && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("JoyButtonY"))
+                } else if (i > 6 && (instrs[i].opcode == OpCodes.Stloc_3 || instrs[i].opcode == OpCodes.Stloc_S || instrs[i].opcode == OpCodes.Stloc || instrs[i].opcode == OpCodes.Stloc_0 || instrs[i].opcode == OpCodes.Stloc_1 || instrs[i].opcode == OpCodes.Stloc_2)
+                           && instrs[i + 1].opcode == OpCodes.Ldarg_0
+                           && instrs[i + 2].opcode == OpCodes.Ldfld && instrs[i + 2].operand.Equals(hiddenFramesField)
+                           && instrs.GetRange(Math.Max(0, i - 10), Math.Min(10, i)).Any(inst => inst.opcode == OpCodes.Ldstr && "JoyButtonY".Equals(inst.operand)))
                 {
-                    //1. Output current spot.
+                    // 1. Output current stloc instruction (stores the vanilla / ModLib flag result)
                     yield return LogMessage(instrs[i]);
                     counter++;
 
-                    //2. Output i + 1 (this is the brtrue).
-                    yield return LogMessage(instrs[i + 1]);
+                    // 2. Define skip label
+                    var skipLabel = ilGenerator.DefineLabel();
+
+                    // 3. Load flag (same local variable as instrs[i])
+                    yield return LogMessage(CreateLdlocFromStloc(instrs[i]));
                     counter++;
 
-                    //3. Grab label from brtrue.
-                    Label originalLabel = (Label)instrs[i + 1].operand;
-                    
-                    //4. Look ahead and find instruction with label.
-                    var instWithLabel = FindInstructionWithLabel(instrs, i + 2, originalLabel);
+                    // 4. Branch to skip if flag is already true
+                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, skipLabel));
+                    counter++;
 
-                    if (instWithLabel == null)
-                    {
-                        AdventureBackpacks.Log.Error($"Can't Find Instruction with Label {originalLabel}");
-                        continue;
-                    }
-                    
-                    i++;
-                    
-                    //5. Generate new label.
-                    var detectShowLabel = ilGenerator.DefineLabel();
-                    
-                    //6. Save Label to instruction ahead.
-                    instWithLabel.labels.Add(detectShowLabel);
-                    
-                    //7. Write Player Var
+                    // 5. Load Player (ldloc.1)
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
                     counter++;
-                    
-                    //8. Write LdArg Var
+
+                    // 6. Load InventoryGui (ldarg.0)
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
-                    
-                    //9. Write Call instruction
+
+                    // 7. Call DetectInputToShow
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToShow))));
                     counter++;
 
-                    //10. Write Brture instruction with new label
-                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectShowLabel));
+                    // 8. Store result back into the flag local variable
+                    yield return LogMessage(CreateStlocFromStloc(instrs[i]));
                     counter++;
+
+                    // 9. Attach the skip label to the next instruction (ldarg.0)
+                    instrs[i + 1].labels.Add(skipLabel);
 
                     patchedDetectInputShowMethod = true;
                 }
