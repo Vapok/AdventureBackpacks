@@ -54,11 +54,13 @@
         <DebugType>pdbonly</DebugType>
         <PlatformTarget>AnyCPU</PlatformTarget>
         <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <DocumentationMarkdown>$(MSBuildProjectDirectory)\..\Docs\AdventureBackpacksAPI.md</DocumentationMarkdown>
         <DocumentationFile>bin\API\AdventureBackpacksAPI.xml</DocumentationFile>
         <VsxmdAutoDeleteXml>True</VsxmdAutoDeleteXml>
+        <NoWarn>MSB3245;MSB3243</NoWarn>
     </PropertyGroup>
     <!-- Local: like Debug but uses project ref to Vapok.Common (for dev under VapokModBase) -->
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Local|AnyCPU' ">
@@ -188,33 +190,31 @@
         <Compile Include="Assets\Effects\ExternalEffect.cs" />
         <Compile Include="Assets\Items\BackpackItems\ExternalBackpack.cs" />
         <Compile Include="Compats\ChebsNecromancy.cs" />
-        <Compile Include="Features\Utilities.cs" />
-        <EmbeddedResource Include="Assets\Bundles\chebsbackpack" />
-        <Compile Include="Patches\ItemStand.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="API\ABAPI.cs" />
-        <Compile Include="API\Privates.cs" />
-        <Compile Include="API\Structs.cs" />
         <Compile Include="Compats\ContentsWithin.cs" />
+        <Compile Include="Features\Utilities.cs" />
         <Compile Include="Patches\InventoryGrid.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Patches\ItemStand.cs" />
         <EmbeddedResource Include="Assets\Bundles\backpack_black_forest" />
         <EmbeddedResource Include="Assets\Bundles\backpack_meadows" />
         <EmbeddedResource Include="Assets\Bundles\backpack_mistlands" />
         <EmbeddedResource Include="Assets\Bundles\backpack_mountains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_plains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_swamp" />
+        <EmbeddedResource Include="Assets\Bundles\chebsbackpack" />
+        <EmbeddedResource Include="Assets\Bundles\vapokbackpacks" />
+        <EmbeddedResource Include="Translations\English.json" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="API\ABAPI.cs" />
+        <Compile Include="API\Privates.cs" />
+        <Compile Include="API\Structs.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
         <Content Include="ILRepack.Config.props" />
         <Content Include="ILRepack.targets" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
         <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup Condition=" '$(Configuration)|$(Platform)' != 'API|AnyCPU' ">
-        <EmbeddedResource Include="Translations\English.json" />
-        <EmbeddedResource Include="Assets\Bundles\vapokbackpacks" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <PropertyGroup>
