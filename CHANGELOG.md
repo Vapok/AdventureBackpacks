@@ -1,3 +1,14 @@
+# 2.0.2 - Transpiler Resilience & Mod Compatibility Update
+* Overhauled Transpilers for `Player.HaveRequirementItems`, `Player.ConsumeResources`, and `InventoryGui.SetupRequirement`:
+  * Migrated requirement counting and resource consumption logic to direct evaluation-stack interception.
+  * Dynamically resolves requirement locals from IL rather than relying on strict opcode positions or hardcoded indices.
+  * Fixes transpiler patching failures and crashes when running alongside mods that inject crafting/inventory calculation logic (e.g. Valheim Plus CraftFromChest, AzuCraftyBoxes, AzuAutoStore, EpicLoot).
+* Made `Humanoid.UpdateEquipmentStatusEffects` transpiler resilient to opcode variations (`Stloc_0`, `Stloc_S`, `Stloc`).
+* Added defensive null checks across requirement parsing and unequipped item consumption helpers.
+
+# 2.0.1 - ZenDragon ModLib Compatibility
+* Added in defensive transpiler checks to ensure compatibility with ZenDragon's MobLib
+
 # 2.0.0 - Valheim 1.0+ Adventure Backpacks
 * Updated Adventure Backpacks for 2.0.0
   * Updated All Transpilers and Harmony References for Valheim 1.0
@@ -9,8 +20,7 @@
   * Tested Extensively without other mods.
     * I DO NOT KNOW IF THERE ARE COMPATIBILITY ISSUES WITH OTHER MODS BUT PLEASE LET ME KNOW <3 XOXO.
   * No New Content in this version, this is to get AB working quickly with 1.0
-    * I see you Ashlands. There will be more bags, but wanted to get the initial 1.0 out to get you all rolling.
-  * Please inform me of any errors or issues to my GitHub or Discord and I'll respond quickly.
+    * I see you Ashlands. There will be more bags, but wanted to get the initial 1.0 out to get you all rolling.\n  * Please inform me of any errors or issues to my GitHub or Discord and I'll respond quickly.
 
 <details>
 <summary><b>Changelog History</b> (<i>click to expand</i>)</summary>
@@ -159,6 +169,7 @@
   * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
 * Cheb's Necromany Backpack Integration converted to API
 * Updated to 0.218.28 Valheim
+* Upgraded to .net 4.7.2
 
 # 1.7.0 - Release of the Adventure Backpacks API
 * Initial Release of the ABAPI.

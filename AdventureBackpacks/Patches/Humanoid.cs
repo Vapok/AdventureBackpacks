@@ -41,7 +41,7 @@ public class HumanoidPatches
 
                 //In Humanoid.UpdateEquipmentStatusEffects, Local Variable 0, or loc_0 is the target HashSet variable 
                 //listed as "other".  So, patching after Stloc_0 is called immediately after Newobj, which creates the object.
-                if (i > 0 && instrs[i].opcode == OpCodes.Stloc_0 && instrs[i - 1].opcode == OpCodes.Newobj)
+                if (i > 0 && (instrs[i].opcode == OpCodes.Stloc_0 || instrs[i].opcode == OpCodes.Stloc_S || instrs[i].opcode == OpCodes.Stloc) && instrs[i - 1].opcode == OpCodes.Newobj)
                 {
                     //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)

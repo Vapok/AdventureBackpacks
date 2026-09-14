@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using AdventureBackpacks.Assets;
@@ -278,11 +279,6 @@ internal static class InventoryGuiPatches
             var instrs = instructions.ToList();
             var counter = 0;
 
-            var patchedHideBackpackMethod = false;
-            var patchedShowBackpackMethod = false;
-            var patchedDetectInputHideMethod = false;
-            var patchedDetectInputShowMethod = false;
-
             CodeInstruction LogMessage(CodeInstruction instruction)
             {
                 AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
@@ -300,6 +296,21 @@ internal static class InventoryGuiPatches
                 return FindInstructionWithLabel(codeInstructions, index + 1, label);
             }
 
+            CodeInstruction CreateLdlocFromStloc(CodeInstruction stloc)
+            {
+                if (stloc.opcode == OpCodes.Stloc_0) return new CodeInstruction(OpCodes.Ldloc_0);
+                if (stloc.opcode == OpCodes.Stloc_1) return new CodeInstruction(OpCodes.Ldloc_1);
+                if (stloc.opcode == OpCodes.Stloc_2) return new CodeInstruction(OpCodes.Ldloc_2);
+                if (stloc.opcode == OpCodes.Stloc_3) return new CodeInstruction(OpCodes.Ldloc_3);
+                if (stloc.opcode == OpCodes.Stloc_S) return new CodeInstruction(OpCodes.Ldloc_S, stloc.operand);
+                return new CodeInstruction(OpCodes.Ldloc, stloc.operand);
+            }
+
+            CodeInstruction CreateStlocFromStloc(CodeInstruction stloc)
+            {
+                return new CodeInstruction(stloc.opcode, stloc.operand);
+            }
+
             var resetButtonStatus = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.ResetButtonStatus));
             var menuVisibleMethod = AccessTools.DeclaredMethod(typeof(Menu), nameof(Menu.IsVisible));
             var hideMethod = AccessTools.DeclaredMethod(typeof(InventoryGui), nameof(InventoryGui.Hide));
@@ -307,6 +318,12 @@ internal static class InventoryGuiPatches
             var tutorialMethod = AccessTools.DeclaredMethod(typeof(Player), nameof(Player.ShowTutorial));
             var zInputKeyDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetKeyDown), new []{typeof(KeyCode), typeof(bool)});
             var zInputButtonDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetButtonDown), new []{typeof(string)});
+            var hiddenFramesField = AccessTools.DeclaredField(typeof(InventoryGui), nameof(InventoryGui.m_hiddenFrames));
+
+            var patchedHideBackpackMethod = false;
+            var patchedShowBackpackMethod = false;
+            var patchedDetectInputHideMethod = false;
+            var patchedDetectInputShowMethod = false;
 
             for (int i = 0; i < instrs.Count; ++i)
             {
@@ -316,8 +333,7 @@ internal static class InventoryGuiPatches
                 {
                     //Call to Hide Backpack
                     var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_0);
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
+                    //Move Any Labels from the instruction position being patched to new instruction.\n                    if (instrs[i].labels.Count > 0)
                         instrs[i].MoveLabelsTo(ldArgInstruction);
                     
                     //Output current Operation
@@ -421,53 +437,44 @@ internal static class InventoryGuiPatches
 
                     patchedDetectInputHideMethod = true;
 
-                } else if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(zInputButtonDown) 
-                           && instrs[i - 1].operand.Equals("Inventory") && instrs[i + 1].opcode == OpCodes.Brtrue 
-                           && instrs[i + 2].opcode == OpCodes.Ldstr && instrs[i + 2].operand.Equals("JoyButtonY"))
+                } else if (i > 6 && (instrs[i].opcode == OpCodes.Stloc_3 || instrs[i].opcode == OpCodes.Stloc_S || instrs[i].opcode == OpCodes.Stloc || instrs[i].opcode == OpCodes.Stloc_0 || instrs[i].opcode == OpCodes.Stloc_1 || instrs[i].opcode == OpCodes.Stloc_2)
+                           && instrs[i + 1].opcode == OpCodes.Ldarg_0
+                           && instrs[i + 2].opcode == OpCodes.Ldfld && instrs[i + 2].operand.Equals(hiddenFramesField)
+                           && instrs.GetRange(Math.Max(0, i - 10), Math.Min(10, i)).Any(inst => inst.opcode == OpCodes.Ldstr && "JoyButtonY".Equals(inst.operand)))
                 {
-                    //1. Output current spot.
+                    // 1. Output current stloc instruction (stores the vanilla / ModLib flag result)
                     yield return LogMessage(instrs[i]);
                     counter++;
 
-                    //2. Output i + 1 (this is the brtrue).
-                    yield return LogMessage(instrs[i + 1]);
+                    // 2. Define skip label
+                    var skipLabel = ilGenerator.DefineLabel();
+
+                    // 3. Load flag (same local variable as instrs[i])
+                    yield return LogMessage(CreateLdlocFromStloc(instrs[i]));
                     counter++;
 
-                    //3. Grab label from brtrue.
-                    Label originalLabel = (Label)instrs[i + 1].operand;
-                    
-                    //4. Look ahead and find instruction with label.
-                    var instWithLabel = FindInstructionWithLabel(instrs, i + 2, originalLabel);
+                    // 4. Branch to skip if flag is already true
+                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, skipLabel));
+                    counter++;
 
-                    if (instWithLabel == null)
-                    {
-                        AdventureBackpacks.Log.Error($"Can't Find Instruction with Label {originalLabel}");
-                        continue;
-                    }
-                    
-                    i++;
-                    
-                    //5. Generate new label.
-                    var detectShowLabel = ilGenerator.DefineLabel();
-                    
-                    //6. Save Label to instruction ahead.
-                    instWithLabel.labels.Add(detectShowLabel);
-                    
-                    //7. Write Player Var
+                    // 5. Load Player (ldloc.1)
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
                     counter++;
-                    
-                    //8. Write LdArg Var
+
+                    // 6. Load InventoryGui (ldarg.0)
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
-                    
-                    //9. Write Call instruction
+
+                    // 7. Call DetectInputToShow
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(InventoryGuiPatches), nameof(DetectInputToShow))));
                     counter++;
 
-                    //10. Write Brture instruction with new label
-                    yield return LogMessage(new CodeInstruction(OpCodes.Brtrue, detectShowLabel));
+                    // 8. Store result back into the flag local variable
+                    yield return LogMessage(CreateStlocFromStloc(instrs[i]));
                     counter++;
+
+                    // 9. Attach the skip label to the next instruction (ldarg.0)
+                    instrs[i + 1].labels.Add(skipLabel);
 
                     patchedDetectInputShowMethod = true;
                 }
@@ -508,39 +515,27 @@ internal static class InventoryGuiPatches
                 return instruction;
             }
 
-            var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_2);
             var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) }); 
 
             for (int i = 0; i < instrs.Count; ++i)
             {
-
                 yield return LogMessage(instrs[i]);
                 counter++;
 
-                if (i > 5 && instrs[i-1].opcode == OpCodes.Callvirt && instrs[i-1].operand.Equals(countItemsMethod) && instrs[i].opcode == OpCodes.Stloc_S)
+                if (instrs[i].opcode == OpCodes.Callvirt && 
+                    (instrs[i].operand.Equals(countItemsMethod) || (instrs[i].operand is MethodInfo m && m.Name == nameof(Inventory.CountItems))))
                 {
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldArgInstruction);
-          
-                    //Player ldArg2
-                    yield return LogMessage(ldArgInstruction);
-                    counter++;
-                    
-                    //Piece.Requirement resource
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_1));
-                    counter++;
-                    
-                    //int num
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_S, instrs[i].operand));
-                    counter++;
-          
-                    //Patch Calling Method
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(PlayerPatches.AdjustCountIfEquipped))));
+                    // CountItems left [int itemCount] on top of the stack.
+                    // In SetupRequirement(Transform, Piece.Requirement req, Player player, bool discover, int quality, int craftMultiplier):
+                    // Arg 2 is Player, Arg 1 is Piece.Requirement.
+                    // We push Player (ldarg.2) and Requirement (ldarg.1) and call AdjustCountIfEquipped(itemCount, player, resource) -> returns adjusted int.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_2));
                     counter++;
 
-                    //Save output of calling method to local variable 0
-                    yield return LogMessage(new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand));
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_1));
+                    counter++;
+
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(PlayerPatches.AdjustCountIfEquipped), new[] { typeof(int), typeof(Player), typeof(Piece.Requirement) })));
                     counter++;
 
                     patchedSuccess = true;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,21 +19,24 @@ public class PlayerPatches
         }
     }
 
-    public static int AdjustCountIfEquipped(Player player, Piece.Requirement resource, int itemCount)
+    public static int AdjustCountIfEquipped(int itemCount, Player player, Piece.Requirement resource)
     {
         var num = itemCount;
 
-        if (num < 1 || !resource.m_resItem.m_itemData.IsEquipable())
+        if (num < 1 || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null || !resource.m_resItem.m_itemData.IsEquipable())
             return num;
 
         var inventory = player?.GetInventory();
         if (inventory == null)
             return num;
             
-        var itemName = resource.m_resItem.m_itemData.m_shared.m_name;
+        var itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
+        if (string.IsNullOrEmpty(itemName))
+            return num;
+
         var equippedItems = inventory.GetEquippedItems();
 
-        if (equippedItems.Any(x => x.m_shared.m_name.Equals(itemName)))
+        if (equippedItems != null && equippedItems.Any(x => x.m_shared != null && x.m_shared.m_name.Equals(itemName)))
         {
             num -= 1;
         }
@@ -40,15 +44,27 @@ public class PlayerPatches
         return num;
     }
 
-    public static int ConsumeUnEquippedItems(Player player, Piece.Requirement resource, int amount)
+    public static int AdjustCountIfEquipped(Player player, Piece.Requirement resource, int itemCount)
+    {
+        return AdjustCountIfEquipped(itemCount, player, resource);
+    }
+
+    public static int ConsumeUnEquippedItems(int amount, Player player, Piece.Requirement resource)
     {
         var num = amount;
 
-        if (num < 1 || !resource.m_resItem.m_itemData.IsEquipable())
+        if (num < 1 || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null || !resource.m_resItem.m_itemData.IsEquipable())
             return num;
             
-        var itemName = resource.m_resItem.m_itemData.m_shared.m_name;
-        var resourceItems = player.m_inventory.GetAllItems().Where(x => x.m_shared.m_name.Equals(itemName)).ToList();
+        var itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
+        if (string.IsNullOrEmpty(itemName))
+            return num;
+
+        var allItems = player?.m_inventory?.GetAllItems();
+        if (allItems == null)
+            return num;
+
+        var resourceItems = allItems.Where(x => x.m_shared != null && x.m_shared.m_name.Equals(itemName)).ToList();
 
         var removedCounter = 0;
         for (int i = 0; i < num; i++)
@@ -60,7 +76,7 @@ public class PlayerPatches
 
                 if (removedCounter < amount)
                 {
-                    player.m_inventory.RemoveItem(item,1);
+                    player.m_inventory.RemoveItem(item, 1);
                     removedCounter++;
                 }
             }
@@ -69,16 +85,18 @@ public class PlayerPatches
         return num - removedCounter;
     }
 
+    public static int ConsumeUnEquippedItems(Player player, Piece.Requirement resource, int amount)
+    {
+        return ConsumeUnEquippedItems(amount, player, resource);
+    }
+
     [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirementItems))]
     static class PlayerHaveRequirementItemsPatch
     {
-        
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var patchedSuccess = false;
-            
             var instrs = instructions.ToList();
-
             var counter = 0;
 
             CodeInstruction LogMessage(CodeInstruction instruction)
@@ -87,48 +105,43 @@ public class PlayerPatches
                 return instruction;
             }
 
-            var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_0);
             var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) });
 
-            
             for (int i = 0; i < instrs.Count; ++i)
             {
-                if (i > 5 && instrs[i].opcode == OpCodes.Stloc_S && instrs[i + 1].opcode == OpCodes.Ldloc_S && instrs[i + 2].opcode == OpCodes.Ldloc_S && instrs[i - 1].opcode == OpCodes.Callvirt)
+                yield return LogMessage(instrs[i]);
+                counter++;
+
+                if (instrs[i].opcode == OpCodes.Callvirt && 
+                    (instrs[i].operand.Equals(countItemsMethod) || (instrs[i].operand is MethodInfo m && m.Name == nameof(Inventory.CountItems))))
                 {
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldArgInstruction);
+                    CodeInstruction ldLocReq = null;
+                    for (int j = i - 1; j >= Math.Max(0, i - 15); j--)
+                    {
+                        if (instrs[j].opcode == OpCodes.Ldfld && instrs[j].operand is FieldInfo fi && fi.Name == nameof(Piece.Requirement.m_resItem))
+                        {
+                            ldLocReq = new CodeInstruction(instrs[j - 1].opcode, instrs[j - 1].operand);
+                            break;
+                        }
+                    }
 
-                    yield return LogMessage(instrs[i]);
-                    counter++;
-          
-                    //Player this
-                    yield return LogMessage(ldArgInstruction);
-                    counter++;
-                    
-                    //Piece.Requirement resource (local variable 3)
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_3));
-                    counter++;
-                    
-                    //int num
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_S, instrs[i].operand));
-                    counter++;
-          
-                    //Patch Calling Method
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(AdjustCountIfEquipped))));
+                    if (ldLocReq == null)
+                    {
+                        ldLocReq = new CodeInstruction(OpCodes.Ldloc_3);
+                    }
+
+                    // CountItems left [int itemCount] on top of the stack.
+                    // We push Player (ldarg.0) and Requirement (ldLocReq) and call AdjustCountIfEquipped(itemCount, player, resource) -> returns adjusted int.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
 
-                    //Save output of calling method to local variable
-                    yield return LogMessage(new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand));
+                    yield return LogMessage(ldLocReq);
                     counter++;
-                    
+
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(AdjustCountIfEquipped), new[] { typeof(int), typeof(Player), typeof(Piece.Requirement) })));
+                    counter++;
+
                     patchedSuccess = true;
-                    
-                }
-                else
-                {
-                    yield return LogMessage(instrs[i]);
-                    counter++;
                 }
             }
             
@@ -143,12 +156,10 @@ public class PlayerPatches
     [HarmonyPatch(typeof(Player), nameof(Player.ConsumeResources))]
     static class PlayerConsumeResourcesPatch
     {
-        
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var patchedSuccess = false;
             var instrs = instructions.ToList();
-
             var counter = 0;
 
             CodeInstruction LogMessage(CodeInstruction instruction)
@@ -157,48 +168,58 @@ public class PlayerPatches
                 return instruction;
             }
 
-            var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_0);
             var getAmountMethod = AccessTools.DeclaredMethod(typeof(Piece.Requirement), "GetAmount", new[] { typeof(int) }); 
 
             for (int i = 0; i < instrs.Count; ++i)
             {
-
                 yield return LogMessage(instrs[i]);
                 counter++;
 
-                if (i > 5 && (instrs[i].opcode == OpCodes.Stloc_S || instrs[i].opcode == OpCodes.Stloc_3 || instrs[i].opcode == OpCodes.Stloc)
-                    && instrs[i-1].opcode == OpCodes.Mul
-                    && (instrs[i-2].opcode == OpCodes.Ldarg_S || instrs[i-2].opcode == OpCodes.Ldarg_3 || instrs[i-2].opcode == OpCodes.Ldarg)
-                    && instrs[i-3].opcode == OpCodes.Callvirt
-                    && (instrs[i-3].operand.Equals(getAmountMethod) || (instrs[i-3].operand is MethodInfo m && m.Name == nameof(Piece.Requirement.GetAmount))))
+                if (instrs[i].opcode == OpCodes.Mul && i >= 2)
                 {
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldArgInstruction);
-          
-                    //Player this
-                    yield return LogMessage(ldArgInstruction);
-                    counter++;
-                    
-                    //Piece.Requirement resource (local variable 3)
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_3));
-                    counter++;
-                    
-                    //int amount
-                    var ldLocAmount = instrs[i].operand != null ? new CodeInstruction(OpCodes.Ldloc_S, instrs[i].operand) : new CodeInstruction(OpCodes.Ldloc_3);
-                    yield return LogMessage(ldLocAmount);
-                    counter++;
-          
-                    //Patch Calling Method
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(ConsumeUnEquippedItems))));
-                    counter++;
+                    int getAmountIndex = -1;
+                    for (int j = i - 1; j >= Math.Max(0, i - 5); j--)
+                    {
+                        if (instrs[j].opcode == OpCodes.Callvirt && 
+                            (instrs[j].operand.Equals(getAmountMethod) || (instrs[j].operand is MethodInfo m && m.Name == nameof(Piece.Requirement.GetAmount))))
+                        {
+                            getAmountIndex = j;
+                            break;
+                        }
+                    }
 
-                    //Save output of calling method to local variable
-                    var stLocAmount = instrs[i].operand != null ? new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand) : new CodeInstruction(OpCodes.Stloc_3);
-                    yield return LogMessage(stLocAmount);
-                    counter++;
-                    
-                    patchedSuccess = true;
+                    if (getAmountIndex >= 0)
+                    {
+                        CodeInstruction ldLocReq = null;
+                        for (int k = getAmountIndex - 1; k >= Math.Max(0, getAmountIndex - 5); k--)
+                        {
+                            if (instrs[k].opcode == OpCodes.Ldloc_3 || instrs[k].opcode == OpCodes.Ldloc_S || 
+                                instrs[k].opcode == OpCodes.Ldloc || instrs[k].opcode == OpCodes.Ldloc_0 || 
+                                instrs[k].opcode == OpCodes.Ldloc_1 || instrs[k].opcode == OpCodes.Ldloc_2)
+                            {
+                                ldLocReq = new CodeInstruction(instrs[k].opcode, instrs[k].operand);
+                                break;
+                            }
+                        }
+
+                        if (ldLocReq == null)
+                        {
+                            ldLocReq = new CodeInstruction(OpCodes.Ldloc_3);
+                        }
+
+                        // Mul left [int amount] on top of the stack.
+                        // We push Player (ldarg.0) and Requirement (ldLocReq) and call ConsumeUnEquippedItems(amount, player, resource) -> returns adjusted amount.
+                        yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
+                        counter++;
+
+                        yield return LogMessage(ldLocReq);
+                        counter++;
+
+                        yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(ConsumeUnEquippedItems), new[] { typeof(int), typeof(Player), typeof(Piece.Requirement) })));
+                        counter++;
+
+                        patchedSuccess = true;
+                    }
                 }
             }
             
