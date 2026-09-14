@@ -142,4 +142,32 @@ Adventure Backpacks includes community translations for:
 
 </div>
 
-*Don't see your language? We welcome community translations! Please submit a PR on [GitHub](https://github.com/Vapok/AdventureBackpacks) or stop by our [Discord](https://discord.gg/5YAJkRFBXt).*\n\n---\n\n## 📥 Installation & Server Setup\n\n### Mod Manager (Recommended)\n1. Install via **R2ModMan** or **Thunderstore Mod Manager**.\n2. Dependencies are automatically installed: `BepInExPack`, `Jotunn (JVL)`, and `YamlDotNet`.\n\n### Dedicated Servers\n* **Required on Both Client & Server**: Adventure Backpacks must be present on both the server and all connecting clients.\n* **Network Compatibility**: Built-in version checking ensures game-state and inventory consistency across clients.\n* **ServerSync**: Server configuration files automatically lock and sync settings down to non-admin players in real-time.\n\n---\n\n<div align="center">\n\n### 👨‍💻 Created by Vapok Gaming\n\n[![Vapok Gaming](https://avatars.githubusercontent.com/u/1264136?s=120&v=4)](https://github.com/Vapok)\n\n**Author**: [Vapok](https://github.com/Vapok)  \n**Source Code**: [GitHub Repository](https://github.com/Vapok/AdventureBackpacks)  \n**Community & Support**: [Discord Server](https://discord.gg/5YAJkRFBXt)  \n**Changelog**: [Release Notes](https://github.com/Vapok/AdventureBackpacks/blob/main/CHANGELOG.md)\n\n</div>\n
+*Don't see your language? We welcome community translations! Please submit a PR on [GitHub](https://github.com/Vapok/AdventureBackpacks) or stop by our [Discord](https://discord.gg/5YAJkRFBXt).*
+
+---
+
+## 📥 Installation & Server Setup
+
+### Mod Manager (Recommended)
+1. Install via **R2ModMan** or **Thunderstore Mod Manager**.
+2. Dependencies are automatically installed: `BepInExPack`, `Jotunn (JVL)`, and `YamlDotNet`.
+
+### Dedicated Servers
+* **Required on Both Client & Server**: Adventure Backpacks must be present on both the server and all connecting clients.
+* **Network Compatibility**: Built-in version checking ensures game-state and inventory consistency across clients.
+* **ServerSync**: Server configuration files automatically lock and sync settings down to non-admin players in real-time.
+
+---
+
+<div align="center">
+
+### 👨‍💻 Created by Vapok Gaming
+
+[![Vapok Gaming](https://avatars.githubusercontent.com/u/1264136?s=120&v=4)](https://github.com/Vapok)
+
+**Author**: [Vapok](https://github.com/Vapok)  
+**Source Code**: [GitHub Repository](https://github.com/Vapok/AdventureBackpacks)  
+**Community & Support**: [Discord Server](https://discord.gg/5YAJkRFBXt)  
+**Changelog**: [Release Notes](https://github.com/Vapok/AdventureBackpacks/blob/main/CHANGELOG.md)
+
+</div>
