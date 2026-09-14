@@ -1,4 +1,3 @@
-using System.Threading;
 using AdventureBackpacks.Assets.Factories;
 using HarmonyLib;
 using JetBrains.Annotations;
