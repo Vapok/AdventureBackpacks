@@ -1,174 +1,145 @@
-# Adventure Backpacks by Vapok
+<div align="center">
 
-This Valheim mod seeks to introduce the concept of Backpacks throughout the Valheim progression. 
-Starting as a wee Viking, rummaging through the tranquil fields of the Meadows, you'll happen upon materials 
-that you think will eventually lead to a more meaningful destiny.  From Deer Hide capes and beyond, you'll soon 
-learn how to make your very own, Adventure Backpacks!  Go forth and wander, ye wanderer of the wanders! 
+# 🎒 Adventure Backpacks
 
----
+### *A progression-based adventuring backpack mod for Valheim.*
 
-## How to Use Adventure Backpacks
-* Play Valheim as you would As you craft items and explore materials you will learn new recipes for Adventuring Backpacks
-* The default hotkey is `I` to open the equipped backpack.
-* Each backpack is completely different in form, function, and size.  Upgrading backpacks will unlock additional features depending on the progresion that backpack is intended to be used with.
-* Check the Configuration for ALL the different ways that you can modify these packs.
-* Keybindings and Actions are Controller Supported
-
-## How To Install Adventure Backpacks
-* AdventureBackpacks works best when installed using R2ModMan
-  * JVL and YamlDotNet Mods are dependencies
-* Install Adventure Backpacks into it's own FOLDER inside of the `BepInEx/plugins` folder.
-  * Create a folder called `Translations` and ensure all Translation files are stored in there.
-    * Translations files should be named `AdventureBackpacks.<language key>.json`
-* Adventure Backpacks is a client-side **AND** server-side mod and should be installed on both.
-  * If using on Dedicated Servers:
-    * Configuration Lock and Sync is automatically enabled for configured Admins
-      * All Syncable settings will be synced to connected clients, and server configs will be enforced.
-      * Admins can change server configs using a Configuration Management mod or adjusting the config file directly on the server.
-  * Network Compatibility Enforcement is enabled.
-    * This is to prevent data loss on a dedicated server if one client is running the mod, but another client isn't. In particular, you could lose your backpacks and everything in them if someone opens a chest and doesn't have the mod.
----
-
-## Gear Introduced In This Mod
-* The 6 Original Adventure Backpacks are:
-    * **Satchel** - _A small backpack capable of holding things._
-    * **Rugged Backpack**  - _A rugged backpack, complete with buckles and fine leather straps._
-    * **Bloodbag Wetpack** - _A durable backpack sealed using waterproof blood bags._
-    * **Arctic Sherpa Pack** - _An arctic backpack, fit for long treks through the mountains._
-    * **Lox Hide Knappsack** - _An adventuring backpack made from extremely durable lox hide._
-    * **Explorers Wisppack** - _A finely crafted, mystical backpack. Complete with it's own Box of Holding. No one is quite sure how it works._
-
-## Features of Backpacks
-* Adventure Backpacks API Available
-  * [Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
-  * [Download ABAPI.DLL from GitHub](https://github.com/Vapok/AdventureBackpacks/releases)
-    * API Features Include:
-      * Registering Your Own Status Effects
-      * Registering your own Backpacks (including models)
-      * Getting Information about the Player worn backpack.
-        * Is Item a Backpack
-        * Is Backpack Equipped
-        * Get Backpack Information (including Inventory on any backpack item, not just equipped)
-        * Get Active Backpack Effects
-      * View which effects are registered to Adventure Backpacks
-* Each Backpack Biome can be fully configured for progression.
-  * Configure Sizing
-    * Each Quality Level of Backpack can have a different inventory grid size. Simply adjust the width and height in configuration for each quality level.
-  * Configure Recipes
-    * Default Recipes can be found in the configuration.
-  * Configure Drops
-    * Creatures and Drop Rates can be fully customized.
-    * Drops are **DISABLED** by default. (as of version 1.6.3)
-  * Configure Effects
-    * Each Backpack Biome can be configured for any number of effects that are included in this mod.  There is nothing hardcoded about the effects.
-  * Configure Carry Weight Maximum
-    * Allows configuration for adjusting the additional carry weight allowed, per level of backpack.
-  * Configure Speed Modification
-    * Configure Speed Modification (slowness).
-      * Upon each quality upgrade of backpack, speed modification is reduced (never eliminated).
-  * Configure Opening of Backpack with Inventory
-    * When enabled, opens backpack inventory with player inventory without additional interaction
-    * Can also set Mouse, Keyboard, and Gamepad bindings.
-  * Configure Opening of Backpack with Hover + Interaction
-    * When enabled, will open backpack when hovered over in Player Inventory and the Open Hot Key is pressed.
-    * This feature overrides Close with Inventory.
-* Backpack Inventory Protection Guard
-  * Every backpack inventory is specially handled by Thor himself and is monitored for any interactions that might otherwise harm the existence of items in your backpacks.
-  * Backpacks in Backpacks is not allowed and the only feature that is not configurable. This is how the Allfather dreamt of it.
-  * Current verified list of Compatible Inventory Mods:
-    * Quick Stack Store
-    * Fast Item Transfer (function is included in Backpacks)
-    * Multi-User-Chest
-* Backpack Monitoring System
-  * Features complete support for Portal Technology to ensure no undesired items are hiding inside of backpacks in Player Inventory.
-    * This feature will work with any Portal/Teleportation Mod that uses the `Inventory.IsTeleportable()` method.
-      * Protip: Do not use `Humanoid.IsTeleportable()` as it won't respect backpack inventory.
-      * Current List of verified Portal Compatibility:
-        * Valheim Vanilla Portals
-        * Advanced Portals
-        * AnyPortal
-        * XPortal
-  * Keys stored in **Equipped Backpack** will active appropriate locked doors without having to move the key to Player inventory.
-    * Swamp Key for Crypts
-* Optional Right Click Quick Transfer (Fast Item Transfer)
-  * Allows single right-click transfer of an item/stack of items between Player Inventory and any Open Container
-  * This is the same functionality that's available as the stand-alone mod **Fast Item Transfer** which is disabled when installed with Adventure Backpacks
-* Outward Run Away Mode
-  * Pressing the Quick Drop keybind (default is `Y`), will immediately release the equipped backpack and drop it behind the player on the ground.
-  * This feature is optional, and is disabled out of the box.
-       
-
-## Effects Used In This Mod
-* This mod utilizes the following effects depending on backpack and quality level:
-  * Carry Weight Modifications
-  * Speed Modifications
-  * Frost Resistance
-  * Cold Resistance
-  * Troll Armor Set
-  * Waterproof
-  * Slow Fall
-  * Demister (Wisplight effect that clears mist in Mistlands)
-    * Config Settings For Demister found in "Wisplight Client Settings"
-      * Toggle Wisplight with Keybind 
-        * Default: "L" key
-      * Wisplight Biome Logic to automatically turn off Wisplight when not in Mistlands.
-        * Default: Enabled
-
-## Currently Available Translations
-* Czech / čeština
-* Chinese / 简体中文
-* Chinese Traditional / 繁體中文
-* English
-* French / Français
-* German / Deutsch
-* Japanese / 日本
-* Korean / 한국인
-* Norwegian / norsk
-* Polish / Polski
-* Portuguese Brazilian / Português Brasileiro
-* Russian / Русский
-* Spanish / Español
-* Swedish / svenska
-* Turkish / Türkçe
-* Ukrainian / українська
-* *Don't see your language, I'm looking for submissions for additional languages. Please find me on Discord (see link below) or submit a Pull Request!*
-
-## Current Patch Notes
-[Adventure Backpack Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/CHANGELOG.md) 
-
-## Compatible Mods (Verified)
-* Epic Loot 0.9.3+
-  * Check out our Discord to get Epic Loot Patches for Dropping backpacks as Epic Loot!
-* Extra Slots
-* Advanced Portals
-* AnyPortal
-* XPortal
-* Quick Stack Store
-* Auto Split Stack
-* AzuCraftyBoxes
-* Multi-User-Chests
-* Fast Item Transfer
-* Jewelcrafting
-* Shield Me Bruh!
-* Cheb's Necromancy
-  * Spectral Shroud of Holding Backpack
-    * Necromancy Armor Status Effect
-    * Necromancy Skill Modifier
-* _There's probably a ton of others. This mod is friendly to most mods. If you see a conflict though, let me know!_
-
-## Incompatible Mods
-* JotunnBackpacks
-  * This will convert bags, but safe to revert back to JotunnBackpacks.
+[![GitHub Release](https://img.shields.io/github/v/release/Vapok/AdventureBackpacks?include_prereleases&logo=github&style=for-the-badge)](https://github.com/Vapok/AdventureBackpacks/releases)
+[![Thunderstore Version](https://img.shields.io/thunderstore/v/Vapok/AdventureBackpacks?logo=thunderstore&style=for-the-badge)](https://thunderstore.io/c/valheim/p/Vapok/AdventureBackpacks/)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Community-7289da?logo=discord&logoColor=white&style=for-the-badge)](https://discord.gg/5YAJkRFBXt)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 ---
 
-### About Vapok Gaming
-![Vapok Gaming](https://avatars.githubusercontent.com/u/1264136?s=180&v=4)
+</div>
 
-Author: [Vapok](https://github.com/Vapok)
+Starting as a wee Viking rummaging through the tranquil fields of the Meadows, you'll gather materials that lead to your destiny. From Deer Hide and Leather Scraps to mystical Wisp-infused fabrics, you'll learn how to craft, upgrade, and customize your very own **Adventure Backpacks**! Go forth and wander, ye wanderer of the wanders!
 
-Source: [Github](https://github.com/Vapok/AdventureBackpacks)
+---
 
-Discord: [Vapok's Mod's Community](https://discord.gg/5YAJkRFBXt)
+## 🧭 How to Use Adventure Backpacks
 
-Patch notes: [Github Patchnotes](https://github.com/Vapok/AdventureBackpacks/blob/main/CHANGELOG.md)
+* 🔨 **Discover & Craft**: As you explore biomes, defeat creatures, and collect new materials, you will unlock recipes for Adventuring Backpacks.
+* 🎒 **Open Your Backpack**: The default hotkey is <kbd>I</kbd> to open your equipped backpack. Fully customizable for Keyboard, Mouse, and Gamepad / Controller inputs.
+* 📈 **Progression & Upgrades**: Each backpack features unique inventory sizing, carry weight bonuses, movement speed modifiers, and environmental perks. Upgrading your backpack at a workbench or forge expands capacity and strengthens bonuses.
+* ⚙️ **Full Customization**: Almost every aspect of these backpacks (sizes, recipes, drop chances, effects, and weight multipliers) can be tailored via configuration files or the in-game Configuration Manager.
+
+---
+
+## 📦 Backpack Catalogue
+
+| Backpack | Biome / Tier | Description & Key Traits |
+| :--- | :--- | :--- |
+| **Satchel** | 🌸 Meadows | *A small, lightweight starter pack crafted from early Meadow materials.* |
+| **Rugged Backpack** | 🌲 Black Forest | *A sturdy leather pack complete with brass buckles and fine strapping.* |
+| **Bloodbag Wetpack** | 🐸 Swamp | *A durable Swamp pack sealed with bloodbags; grants the **Waterproof** perk.* |
+| **Arctic Sherpa Pack** | ❄️ Mountain | *An insulated Mountain pack fit for freezing treks; grants **Frost & Cold Resistance**.* |
+| **Lox Hide Knappsack** | 🌾 Plains | *A massive Plains pack made from thick, durable lox hide with high carry capacity.* |
+| **Explorers Wisppack** | 🌫️ Mistlands | *A mystical backpack with a Box of Holding, built-in **Demister / Wisplight**, and **Slow Fall**.* |
+| **Ashlands Pack** | 🔥 Ashlands | *🔥 Coming Soon — Forged for the volcanic fires and molten depths.* |
+| **Deep North Pack** | 🧊 Deep North | *🧊 Coming Soon — Prepared for the sub-zero permafrost.* |
+| **Legacy Packs** | ⚔️ Legacy | *Original Iron and Silver backpacks preserved for existing world saves.* |
+
+> [!TIP]
+> ### 🚀 Coming Soon: Ashlands & Deep North Backpacks
+> New biome-specific backpacks for the **Ashlands** and **Deep North** are actively in development, featuring custom models, materials, and unique biome status effects!
+
+---
+
+## 🕹️ Controls & Interaction Modes
+
+| Control Mode | Input / Keybind | Description |
+| :--- | :--- | :--- |
+| **Toggle Backpack** | <kbd>I</kbd> *(Default)* | Opens or closes your equipped backpack inventory. |
+| **Hover Interaction** | *Hover + Hotkey* | Hover over an equipped backpack in your main inventory and press the hotkey to open it directly. |
+| **Open with Inventory** | *Configurable* | Automatically opens your backpack inventory whenever you open your player inventory. |
+| **Outward Quick Drop** | <kbd>Y</kbd> *(Default)* | Press while moving to immediately detach and drop your backpack behind you to escape danger. |
+| **Gamepad / Controller** | 🎮 Native | Full controller navigation support for opening, closing, and managing backpack inventories. |
+
+---
+
+## 🛡️ Advanced Mechanics & Safeguards
+
+* ⚡ **Thor's Inventory Guard (Inception Prevention)**:
+  * Backpack-in-backpack nesting is strictly prevented to safeguard against data corruption and infinite inventory loops.
+* 🏷️ **Yard Sale Overflow Safeguard**:
+  * If a backpack is resized or upgraded in a way that reduces slots below the stored item count, excess items are cleanly dropped at the player's feet rather than lost.
+* 🔀 **Right-Click Quick Transfer (Fast Item Transfer)**:
+  * Move single items or entire stacks between your inventory and any open backpack or container with a single right-click.
+* 🌀 **Portal & Teleportation Compatibility**:
+  * Fully respects Valheim's `Inventory.IsTeleportable()` checks. Non-teleportable ores/items inside backpacks will properly restrict portal usage across all portal mods.
+* 🗝️ **Key & Quest Item Recognition**:
+  * Keys (such as Swamp Crypt Keys) and quest items in your **equipped backpack** are recognized by locked doors and crypt entrances without moving them to player inventory.
+* 🖼️ **Armor Stand & Item Stand Mounting**:
+  * Safely mount backpacks on Item Stands and Armor Stands for base decoration without item loss or duplication.
+
+---
+
+## ✨ Status Effects & Passive Perks
+
+* 💪 **Carry Weight Modification**: Increases base carrying capacity per upgrade level.
+* ⚖️ **Weight Reduction Multiplier**: Configures how much weight items inside the backpack contribute *(0% = weightless contents; 100% = normal weight)*.
+* 🏃 **Speed Modifiers**: Configurable movement speed adjustments per tier that improve as packs are upgraded.
+* ❄️ **Frost & Cold Resistance**: Keeps you warm in freezing Mountain biomes.
+* 🌧️ **Waterproof**: Prevents the "Wet" debuff in rain and swamp water.
+* 🦹 **Troll Armor Set Synergy**: Integrates into the Sneak set bonus when wearing Troll Leather gear.
+* 🪶 **Slow Fall / Feather Fall**: Eliminates fatal fall damage when leaping from mountain peaks.
+* 💡 **Demister (Wisplight)**:
+  * Clears mist in the Mistlands.
+  * Configurable toggle keybind (default <kbd>L</kbd>).
+  * Includes smart biome logic to automatically stow the light outside the Mistlands.
+
+---
+
+## 🧩 Adventure Backpacks API (ABAPI)
+
+Mod developers can easily build custom backpacks and register effects using our dedicated API assembly:
+
+* 📖 [ABAPI Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
+* 💾 [Download ABAPI.DLL Releases](https://github.com/Vapok/AdventureBackpacks/releases)
+
+### API Capabilities:
+* 🎒 Register custom 3D backpack prefabs, textures, and recipes.
+* 🪄 Register and attach custom status effects.
+* 🔍 Query backpack state, equipped equipment, and inspect backpack contents.
+
+---
+
+## 🤝 Verified Mod Compatibility
+
+<div align="center">
+
+| Mod | Compatibility Status |
+| :--- | :--- |
+| **AzuCraftyBoxes & AzuAutoStore** | 🟢 Fully Supported (Crafting & auto-storing from equipped backpack) |
+| **Valheim Plus (CraftFromChest)** | 🟢 Fully Supported (Crafting calculation stack-interception) |
+| **Epic Loot** | 🟢 Fully Supported (Loot tables, enchanting, and weightless modifiers) |
+| **Cheb's Necromancy** | 🟢 Fully Supported (Includes *Spectral Shroud of Holding*) |
+| **ContentsWithin** | 🟢 Fully Supported (Backpack contents obfuscation) |
+| **ZenUI / ZenDragon ModLib** | 🟢 Fully Supported (Defensive UI transpiler hooks) |
+| **Quick Stack Store / Auto Split Stack** | 🟢 Fully Supported |
+| **Multi-User-Chests (MUC)** | 🟢 Fully Supported |
+| **Extra Slots / Equipment & Quick Slots** | 🟢 Fully Supported |
+| **Jewelcrafting** | 🟢 Fully Supported |
+| **Smoothbrain's Mods (Blacksmithing, etc.)** | 🟢 Fully Supported |
+
+</div>
+
+> [!NOTE]
+> **JotunnBackpacks**: Incompatible. Adventure Backpacks automatically converts existing JotunnBackpacks saves into new Adventure Backpacks.
+
+---
+
+## 🌐 Available Translations
+
+Adventure Backpacks includes community translations for:
+
+<div align="center">
+
+🇨🇳 **Chinese (Simplified & Traditional)** • 🇨🇿 **Czech** • 🇺🇸 **English** • 🇫🇷 **French** • 🇩🇪 **German**  
+🇯🇵 **Japanese** • 🇰🇷 **Korean** • 🇳🇴 **Norwegian** • 🇵🇱 **Polish** • 🇧🇷 **Portuguese (BR)**  
+🇷🇺 **Russian** • 🇪🇸 **Spanish** • 🇸🇪 **Swedish** • 🇹🇷 **Turkish** • 🇺🇦 **Ukrainian**
+
+</div>
+
+*Don't see your language? We welcome community translations! Please submit a PR on [GitHub](https://github.com/Vapok/AdventureBackpacks) or stop by our [Discord](https://discord.gg/5YAJkRFBXt).*\n\n---\n\n## 📥 Installation & Server Setup\n\n### Mod Manager (Recommended)\n1. Install via **R2ModMan** or **Thunderstore Mod Manager**.\n2. Dependencies are automatically installed: `BepInExPack`, `Jotunn (JVL)`, and `YamlDotNet`.\n\n### Dedicated Servers\n* **Required on Both Client & Server**: Adventure Backpacks must be present on both the server and all connecting clients.\n* **Network Compatibility**: Built-in version checking ensures game-state and inventory consistency across clients.\n* **ServerSync**: Server configuration files automatically lock and sync settings down to non-admin players in real-time.\n\n---\n\n<div align="center">\n\n### 👨‍💻 Created by Vapok Gaming\n\n[![Vapok Gaming](https://avatars.githubusercontent.com/u/1264136?s=120&v=4)](https://github.com/Vapok)\n\n**Author**: [Vapok](https://github.com/Vapok)  \n**Source Code**: [GitHub Repository](https://github.com/Vapok/AdventureBackpacks)  \n**Community & Support**: [Discord Server](https://discord.gg/5YAJkRFBXt)  \n**Changelog**: [Release Notes](https://github.com/Vapok/AdventureBackpacks/blob/main/CHANGELOG.md)\n\n</div>\n

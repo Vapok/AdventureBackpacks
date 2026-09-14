@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using AdventureBackpacks.Assets;
@@ -278,11 +279,6 @@ internal static class InventoryGuiPatches
             var instrs = instructions.ToList();
             var counter = 0;
 
-            var patchedHideBackpackMethod = false;
-            var patchedShowBackpackMethod = false;
-            var patchedDetectInputHideMethod = false;
-            var patchedDetectInputShowMethod = false;
-
             CodeInstruction LogMessage(CodeInstruction instruction)
             {
                 AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
@@ -324,6 +320,11 @@ internal static class InventoryGuiPatches
             var zInputButtonDown = AccessTools.DeclaredMethod(typeof(ZInput), nameof(ZInput.GetButtonDown), new []{typeof(string)});
             var hiddenFramesField = AccessTools.DeclaredField(typeof(InventoryGui), nameof(InventoryGui.m_hiddenFrames));
 
+            var patchedHideBackpackMethod = false;
+            var patchedShowBackpackMethod = false;
+            var patchedDetectInputHideMethod = false;
+            var patchedDetectInputShowMethod = false;
+
             for (int i = 0; i < instrs.Count; ++i)
             {
                 if (i > 6 && instrs[i].opcode == OpCodes.Call && instrs[i].operand.Equals(resetButtonStatus) &&
@@ -332,8 +333,7 @@ internal static class InventoryGuiPatches
                 {
                     //Call to Hide Backpack
                     var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_0);
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
+                    //Move Any Labels from the instruction position being patched to new instruction.\n                    if (instrs[i].labels.Count > 0)
                         instrs[i].MoveLabelsTo(ldArgInstruction);
                     
                     //Output current Operation
@@ -515,39 +515,27 @@ internal static class InventoryGuiPatches
                 return instruction;
             }
 
-            var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_2);
             var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) }); 
 
             for (int i = 0; i < instrs.Count; ++i)
             {
-
                 yield return LogMessage(instrs[i]);
                 counter++;
 
-                if (i > 5 && instrs[i-1].opcode == OpCodes.Callvirt && instrs[i-1].operand.Equals(countItemsMethod) && instrs[i].opcode == OpCodes.Stloc_S)
+                if (instrs[i].opcode == OpCodes.Callvirt && 
+                    (instrs[i].operand.Equals(countItemsMethod) || (instrs[i].operand is MethodInfo m && m.Name == nameof(Inventory.CountItems))))
                 {
-                    //Move Any Labels from the instruction position being patched to new instruction.
-                    if (instrs[i].labels.Count > 0)
-                        instrs[i].MoveLabelsTo(ldArgInstruction);
-          
-                    //Player ldArg2
-                    yield return LogMessage(ldArgInstruction);
-                    counter++;
-                    
-                    //Piece.Requirement resource
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_1));
-                    counter++;
-                    
-                    //int num
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_S, instrs[i].operand));
-                    counter++;
-          
-                    //Patch Calling Method
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(PlayerPatches.AdjustCountIfEquipped))));
+                    // CountItems left [int itemCount] on top of the stack.
+                    // In SetupRequirement(Transform, Piece.Requirement req, Player player, bool discover, int quality, int craftMultiplier):
+                    // Arg 2 is Player, Arg 1 is Piece.Requirement.
+                    // We push Player (ldarg.2) and Requirement (ldarg.1) and call AdjustCountIfEquipped(itemCount, player, resource) -> returns adjusted int.
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_2));
                     counter++;
 
-                    //Save output of calling method to local variable 0
-                    yield return LogMessage(new CodeInstruction(OpCodes.Stloc_S, instrs[i].operand));
+                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_1));
+                    counter++;
+
+                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(PlayerPatches.AdjustCountIfEquipped), new[] { typeof(int), typeof(Player), typeof(Piece.Requirement) })));
                     counter++;
 
                     patchedSuccess = true;
