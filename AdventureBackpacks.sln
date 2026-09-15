@@ -32,6 +32,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{D68E7D37-E82E-4419-BA0E-18C7EAD3F38B}"
 	ProjectSection(SolutionItems) = preProject
 		Docs\AdventureBackpacksAPI.md = Docs\AdventureBackpacksAPI.md
+		Docs\PATCHNOTES.md = Docs\PATCHNOTES.md
 	EndProjectSection
 EndProject
 Global

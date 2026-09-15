@@ -40,9 +40,10 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
 | **Deep North Pack** | 🧊 Deep North | *🧊 Coming Soon — Prepared for the sub-zero permafrost.* |
 | **Legacy Packs** | ⚔️ Legacy | *Original Iron and Silver backpacks preserved for existing world saves.* |
 
-> [!TIP]
-> ### 🚀 Coming Soon: Ashlands & Deep North Backpacks
-> New biome-specific backpacks for the **Ashlands** and **Deep North** are actively in development, featuring custom models, materials, and unique biome status effects!
+<blockquote style="background-color: rgba(56, 139, 253, 0.08); border-left: 4px solid #388bfd; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
+  <p style="margin: 0 0 6px 0;">💡 <strong>Coming Soon: Ashlands &amp; Deep North Backpacks</strong></p>
+  <p style="margin: 0;">New biome-specific backpacks for the <strong>Ashlands</strong> and <strong>Deep North</strong> are actively in development, featuring custom models, materials, and unique biome status effects!</p>
+</blockquote>
 
 ---
 
@@ -125,8 +126,9 @@ Mod developers can easily build custom backpacks and register effects using our 
 
 </div>
 
-> [!NOTE]
-> **JotunnBackpacks**: Incompatible. Adventure Backpacks automatically converts existing JotunnBackpacks saves into new Adventure Backpacks.
+<blockquote style="background-color: rgba(235, 87, 87, 0.08); border-left: 4px solid #eb5757; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
+  <p style="margin: 0;"><strong>⚠️ NOTE — JotunnBackpacks Incompatibility:</strong> Adventure Backpacks is incompatible with JotunnBackpacks. However, Adventure Backpacks will automatically convert existing JotunnBackpacks saves into new Adventure Backpacks upon loading your character.</p>
+</blockquote>
 
 ---
 

@@ -183,8 +183,9 @@ namespace AdventureBackpacks.Assets
             }
             
             var vectorSize = ValidateMinMaxChestSize(vectorConfig.Value.x, vectorConfig.Value.y);
-            
-            var backpackSize = (int)Math.Floor(vectorSize.x) * (int)Math.Floor(vectorSize.y);
+            var targetWidth = (int)Math.Floor(vectorSize.x);
+            var targetHeight = (int)Math.Floor(vectorSize.y);
+            var backpackSize = targetWidth * targetHeight;
             AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### Backpack Slot Size: {backpackSize}");
                         
             var backpackItem = currentBackpack.Data().GetOrCreate<BackpackComponent>();
@@ -195,16 +196,19 @@ namespace AdventureBackpacks.Assets
                 return;
             }
 
-            AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### Current Inventory Slot Size: {currentInventory.m_inventory.Count}");
+            AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### Current Inventory Dimensions: {currentInventory.m_width}x{currentInventory.m_height}, Slot Count: {currentInventory.m_inventory.Count}");
 
-            if (backpackSize < currentInventory.m_inventory.Count)
+            if (currentInventory.m_width != targetWidth || currentInventory.m_height != targetHeight)
             {
-                var diff = currentInventory.m_inventory.Count - backpackSize;
-                AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### I need to YEET {diff} items");
-                PerformYardSale(player, backpackItem.Item, true, diff);
+                AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}] Resizing backpack inventory from ({currentInventory.m_width}x{currentInventory.m_height}) to ({targetWidth}x{targetHeight})");
 
-                var newInventorySize = currentInventory.m_inventory.Count;
-                AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### New Inventory Size {newInventorySize}");
+                if (backpackSize < currentInventory.m_inventory.Count)
+                {
+                    var diff = currentInventory.m_inventory.Count - backpackSize;
+                    AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### I need to YEET {diff} items");
+                    PerformYardSale(player, backpackItem.Item, true, diff);
+                }
+
                 backpackItem.IsLoadingInventory = true;
                 var newInventory = NewInventoryInstance(backpackDefinition.ItemName, currentBackpack.m_quality);
                 if (newInventory == null)
@@ -216,14 +220,11 @@ namespace AdventureBackpacks.Assets
                 else
                 {
                     newInventory.MoveAll(currentInventory);
-
                     backpackItem.IsLoadingInventory = false;
-
-                    backpackItem.Save(newInventory);
+                    backpackItem.SetInventory(newInventory);
                 }
             }
             
-            backpackItem.Load();
             if (player.IsThisBackpackEquipped(currentBackpack))
             {
                 var backpackContainer = player.gameObject.GetComponent<Container>();
