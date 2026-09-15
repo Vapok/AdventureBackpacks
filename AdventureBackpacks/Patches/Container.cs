@@ -27,12 +27,40 @@ public static class ContainerPatches
     {
         static bool Prefix(Container __instance, ref bool __result)
         {
-            if (__instance.name.Equals("Player(Clone)"))
+            if (__instance.name.Equals("Player(Clone)") || __instance.GetComponent<Player>() != null)
             {
                 __result = false;
                 return false;
             }
 
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Container), nameof(Container.Save))]
+    static class ContainerSavePatch
+    {
+        static bool Prefix(Container __instance)
+        {
+            if (__instance != null && (__instance.name.Equals("Player(Clone)") || __instance.GetComponent<Player>() != null))
+            {
+                // Backpack items are saved via BackpackComponent/ItemData, not through the player ZDO's s_items field.
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Container), nameof(Container.Load))]
+    static class ContainerLoadPatch
+    {
+        static bool Prefix(Container __instance)
+        {
+            if (__instance != null && (__instance.name.Equals("Player(Clone)") || __instance.GetComponent<Player>() != null))
+            {
+                // Backpack items are loaded via BackpackComponent/ItemData, not through the player ZDO's s_items field.
+                return false;
+            }
             return true;
         }
     }
@@ -42,11 +70,10 @@ public static class ContainerPatches
     {
         static void UpdateZDO(Container instance, ZNetView nview)
         {
-            if (instance.name.Equals("Player(Clone)"))
+            if (instance.name.Equals("Player(Clone)") || instance.GetComponent<Player>() != null)
             {
                 nview.GetZDO().Set("creator".GetStableHashCode(),1L);
             }
-                
         }
         
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)

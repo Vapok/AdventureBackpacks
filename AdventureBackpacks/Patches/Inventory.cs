@@ -51,33 +51,57 @@ public static class InventoryPatches
             // If the inventory changed belongs to a backpack...
             if (__instance.IsBackPackInventory())
             {
-                var stackTrace = new StackTrace();
-
-                AdventureBackpacks.Log.Debug($"#### Patch Inventory Changed: {__instance.m_name}");
-                AdventureBackpacks.Log.Debug($"#### Patch Inventory Count: {__instance.m_inventory.Count}");
-                
+                AdventureBackpacks.Log.Debug($"#### Patch Inventory Changed: {__instance.m_name} (HashCode: {__instance.GetHashCode()}, Slots: {__instance.m_inventory.Count})");
                 
                 if (player.IsBackpackEquipped())
                 {
                     var backpack = player.GetEquippedBackpack();
-                    AdventureBackpacks.Log.Debug($"########################################");
-                    AdventureBackpacks.Log.Debug($"####       Inventory.Changed       #####");
-                    AdventureBackpacks.Log.Debug($"Inventory Instance: {__instance.m_name}");
-                    AdventureBackpacks.Log.Debug($"Backpack Name: {backpack.Item.m_shared.m_name}");
-                    AdventureBackpacks.Log.Debug($"########################################");
-
-                    if (backpack.GetInventory() == __instance)
+                    if (backpack != null)
                     {
-                        AdventureBackpacks.Log.Debug($"#### Before Save BackpackComponent Inventory Count: {backpack.GetInventory().m_inventory.Count}");
-                        if (backpack.IsLoadingInventory)
+                        var bpInventory = backpack.GetInventory();
+                        AdventureBackpacks.Log.Debug($"########################################");
+                        AdventureBackpacks.Log.Debug($"####       Inventory.Changed       #####");
+                        AdventureBackpacks.Log.Debug($"Changed Inventory: {__instance.m_name} (HashCode: {__instance.GetHashCode()})");
+                        AdventureBackpacks.Log.Debug($"Backpack Item: {backpack.Item?.m_shared?.m_name}");
+                        AdventureBackpacks.Log.Debug($"Backpack Inventory: {bpInventory?.m_name} (HashCode: {bpInventory?.GetHashCode()})");
+                        AdventureBackpacks.Log.Debug($"########################################");
+
+                        if (bpInventory == __instance)
                         {
-                            AdventureBackpacks.Log.Debug($"Bypassing Save - Inventory Is Loading ----->");
+                            AdventureBackpacks.Log.Debug($"#### Before Save BackpackComponent Inventory Count: {bpInventory.m_inventory.Count}");
+                            if (backpack.IsLoadingInventory)
+                            {
+                                AdventureBackpacks.Log.Debug($"Bypassing Save - Inventory Is Loading ----->");
+                            }
+                            else
+                            {
+                                backpack.Save(__instance);
+                            }
+                            AdventureBackpacks.Log.Debug($"#### After Save BackpackComponent Inventory Count: {bpInventory.m_inventory.Count}");
                         }
                         else
                         {
-                            backpack.Save(__instance);
+                            var backpackContainer = player.gameObject.GetComponent<Container>();
+                            if (backpackContainer != null && backpackContainer.m_inventory == __instance)
+                            {
+                                backpack.SetInventory(__instance);
+                            }
+                            else
+                            {
+                                var allItems = player.GetInventory()?.GetAllItems();
+                                var matchingBackpack = allItems?.FirstOrDefault(i => i.IsBackpack() && i.Data().Get<BackpackComponent>()?.GetInventory() == __instance);
+                                if (matchingBackpack != null)
+                                {
+                                    var comp = matchingBackpack.Data().Get<BackpackComponent>();
+                                    if (comp != null && !comp.IsLoadingInventory)
+                                        comp.Save(__instance);
+                                }
+                            }
                         }
-                        AdventureBackpacks.Log.Debug($"#### After Save BackpackComponent Inventory Count: {backpack.GetInventory().m_inventory.Count}");
+                    }
+                    else
+                    {
+                        AdventureBackpacks.Log.Warning($"#### Player.IsBackpackEquipped() was true, but GetEquippedBackpack() returned null!");
                     }
                 }
             }
@@ -380,7 +404,8 @@ public static class InventoryPatches
     
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.UpdateTotalWeight))]
     static class UpdateTotalWeightPatch
-    { static void Postfix(Inventory __instance)
+    { 
+        static void Postfix(Inventory __instance)
         {
             if (__instance == null || Player.m_localPlayer == null)
                 return;
@@ -389,68 +414,69 @@ public static class InventoryPatches
             
             if (__instance.IsBackPackInventory())
             {
-
                 // When the equipped backpack inventory total weight is updated, the player inventory total weight should also be updated.
                 if (player.IsBackpackEquipped())
                 {
                     var backpack = player.GetEquippedBackpack();
-                    AdventureBackpacks.Log.Debug($"########################################");
-                    AdventureBackpacks.Log.Debug($"####       UpdateTotalWeight       #####");
-                    AdventureBackpacks.Log.Debug($"Inventory Instance: {__instance.m_name}");
-                    AdventureBackpacks.Log.Debug($"Backpack Name: {backpack.Item.m_shared.m_name}");
-                    AdventureBackpacks.Log.Debug($"########################################");
-                    
-                    if (backpack.GetInventory() == __instance)
-                        player.GetInventory().UpdateTotalWeight();
+                    if (backpack != null && backpack.GetInventory() == __instance)
+                    {
+                        AdventureBackpacks.Log.Debug($"########################################");
+                        AdventureBackpacks.Log.Debug($"####       UpdateTotalWeight       #####");
+                        AdventureBackpacks.Log.Debug($"Inventory Instance: {__instance.m_name}");
+                        AdventureBackpacks.Log.Debug($"Backpack Name: {backpack.Item?.m_shared?.m_name}");
+                        AdventureBackpacks.Log.Debug($"########################################");
+                        
+                        player.GetInventory()?.UpdateTotalWeight();
+                    }
                 }
             }
         }
+    }
 
-        [HarmonyPatch(typeof(Inventory), nameof(Inventory.IsTeleportable))]
-        static class IsTeleportablePatch
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.IsTeleportable))]
+    static class IsTeleportablePatch
+    {
+        static void Postfix(Inventory __instance, ref bool __result)
         {
-            static void Postfix(Inventory __instance, ref bool __result)
-            {
-                if (__instance == null || Player.m_localPlayer == null)
-                    return;
+            if (__instance == null || Player.m_localPlayer == null)
+                return;
 
-                // Get a list of all items on the player.
-                List<ItemDrop.ItemData> items = __instance.GetAllItems();
-                
-                // If the inventory being checked for teleportability is the Player's inventory, see whether it contains any backpacks, and then check the backpack inventories for teleportability too
-                if (__instance == Player.m_localPlayer.GetInventory())
+            // Get a list of all items on the player.
+            List<ItemDrop.ItemData> items = __instance.GetAllItems();
+            
+            // If the inventory being checked for teleportability is the Player's inventory, see whether it contains any backpacks, and then check the backpack inventories for teleportability too
+            if (__instance == Player.m_localPlayer.GetInventory())
+            {
+                //am I wearing a backpack?
+                if (Player.m_localPlayer.IsBackpackEquipped())
                 {
-                    //am I wearing a backpack?
-                    if (Player.m_localPlayer.IsBackpackEquipped())
+                    var backpack = Player.m_localPlayer.GetEquippedBackpack();
+                    if (backpack != null && !backpack.GetInventory().IsTeleportable(false))
                     {
-                        var backpack = Player.m_localPlayer.GetEquippedBackpack();
-                        if (backpack != null && !backpack.GetInventory().IsTeleportable(false))
+                        __result = false;
+                        return;
+                    }
+                }
+                
+                // Go through all the items, match them for any of the names in backpackTypes.
+                // For each match found, check if the Inventory of that backpack is teleportable.
+                foreach (ItemDrop.ItemData item in items)
+                {
+                    if (item == null)
+                        continue;
+                
+                    if (item.IsBackpack())
+                    {
+                        if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable(false))
                         {
+                            // A backpack's inventory inside player inventory was not teleportable.
                             __result = false;
                             return;
                         }
                     }
-                    
-                    // Go through all the items, match them for any of the names in backpackTypes.
-                    // For each match found, check if the Inventory of that backpack is teleportable.
-                    foreach (ItemDrop.ItemData item in items)
-                    {
-                        if (item == null)
-                            continue;
-                    
-                        if (item.IsBackpack())
-                        {
-                            if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable(false))
-                            {
-                                // A backpack's inventory inside player inventory was not teleportable.
-                                __result = false;
-                                return;
-                            }
-                        }
-                    }
                 }
-                // We don't need to search for backpacks inside backpacks, because those are immediately chucked out when you try to put them in anyway.
             }
+            // We don't need to search for backpacks inside backpacks, because those are immediately chucked out when you try to put them in anyway.
         }
     }
 }
