@@ -4,8 +4,6 @@
 
 ### *A progression-based adventuring backpack mod for Valheim.*
 
-[![Survival Servers](https://ibin.co/5RCcxHBNFp)](https://www.survivalservers.com/services/game_servers/valheim/?ref=vapok)
-
 [![GitHub Release](https://img.shields.io/github/v/release/Vapok/AdventureBackpacks?include_prereleases&logo=github&style=for-the-badge)](https://github.com/Vapok/AdventureBackpacks/releases)
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/Vapok/AdventureBackpacks?logo=thunderstore&style=for-the-badge)](https://thunderstore.io/c/valheim/p/Vapok/AdventureBackpacks/)
 [![Nexus Mods](https://img.shields.io/badge/Nexus_Mods-Available-da8e35?logo=nexusmods&style=for-the-badge)](https://www.nexusmods.com/valheim/mods/2204)
@@ -20,6 +18,14 @@
 Starting as a wee Viking rummaging through the tranquil fields of the Meadows, you'll gather materials that lead to your destiny. From Deer Hide and Leather Scraps to mystical Wisp-infused fabrics, you'll learn how to craft, upgrade, and customize your very own **Adventure Backpacks**! Go forth and wander, ye wanderer of the wanders!
 
 ---
+
+<div align="center">
+
+<br>
+
+[![Survival Servers](https://raw.githubusercontent.com/Vapok/AdventureBackpacks/refs/heads/main/images/survivalservers_banner.png)](https://www.survivalservers.com/services/game_servers/valheim/?ref=vapok)
+
+</div>
 
 ## 🧭 How to Use Adventure Backpacks
 
