@@ -1,8 +1,10 @@
 # 2.0.5 - Unified Splash Screen & Telemetry Controls
-* **Unified Startup Splash Screen**: Integrated with the centralized Vapok mod startup splash screen and multi-language cyber-console.
-* **Anonymous Telemetry Controls**: Added configurable `Show on Game Startup` and `Enable Anonymous Telemetry` configuration options with default auto-opt-in on launch.
-* **Core Library Update**: Updated to `Vapok.Valheim.Common` 3.5.1012 with suppressed font asset warnings and streamlined configuration management.
-
+* **Unified Startup Splash Screen**: Integrated with a centralized startup splash screen.
+  * Added configurable `Show on Game Startup` which can be enabled or disabled in the configuration file.
+* **Anonymous Telemetry**: 
+  * Added configurable `Enable Anonymous Telemetry` configuration which can be enabled or disabled in the configuration file.
+    * Defaults to enabled with auto-opt-in on launch. Uncheck to Opt-Out
+    * ANONYMOUS DATA ONLY - I track version number and usage data. No personal data is ever collected. For more information, see the [Privacy Policy](https://vapok.io/privacy-policy/).
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
