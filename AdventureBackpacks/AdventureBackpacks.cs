@@ -1,6 +1,7 @@
-﻿/* Adventure Backpacks by Vapok */
+/* Adventure Backpacks by Vapok */
 
 using System;
+using System.Linq;
 using System.Reflection;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
@@ -20,6 +21,7 @@ using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Managers.LocalizationManager;
+using Vapok.Common.Managers.Splash;
 using Vapok.Common.Tools;
 using BoneReorder = Vapok.Common.Tools.BoneReorder;
 using PrefabManager = ItemManager.PrefabManager;
@@ -38,7 +40,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.0.4";
+        private const string _version = "2.0.5";
 
         //Interface Properties
         public string PluginId => _pluginId;
@@ -102,6 +104,14 @@ namespace AdventureBackpacks
             {
                 ContentsWithin.Awake(_harmony, "com.maxsch.valheim.contentswithin");
             }
+
+            //Register Mod Splash Screen
+            ModSplashManager.Register(new ModSplashDossier(_instance)
+            {
+                Tagline = "A feature-rich backpack progression system with custom models, effects, and inventory mechanics.",
+                ShowOnStartup = ConfigRegistry.ShowSplashOnStartup,
+                EnableTelemetry = ConfigRegistry.EnableTelemetry,
+            });
 
             //???
 
