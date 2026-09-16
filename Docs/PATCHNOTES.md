@@ -1,3 +1,8 @@
+# 2.0.5 - Unified Splash Screen & Telemetry Controls
+* **ModSplashManager Integration**: Registered Adventure Backpacks with the unified Vapok startup splash screen, including tagline and localization support.
+* **Anonymous Telemetry Configuration**: Added local configuration bindings (`Show Splash on Startup`, `Enable Anonymous Telemetry`) to manage opt-in anonymous startup and session reporting.
+* **Vapok.Common Dependency Bump**: Updated internalized dependency to `Vapok.Valheim.Common` 3.5.1012.
+
 # 2.0.4 - Container Mod Compatibility & Item Duplication Fix
 * Fixed: Item duplication and inventory reset issue when building or crafting with container mods (e.g. AzuCraftyBoxes).
   * Resolved an inventory instance desynchronization where `FirstLoad()` and `Deserialize()` instantiated separate `Inventory` objects.

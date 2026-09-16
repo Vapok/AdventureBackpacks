@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
@@ -16,6 +16,8 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<bool> CloseInventory;
         internal static ConfigEntry<bool> OutwardMode;
         internal static ConfigEntry<bool> ReplaceShader;
+        internal static ConfigEntry<bool> ShowSplashOnStartup;
+        internal static ConfigEntry<bool> EnableTelemetry;
         
         public static Waiting Waiter;
 
@@ -33,6 +35,14 @@ namespace AdventureBackpacks.Configuration
                 return;
             
             //User Configs
+            UnsyncedConfig("Local Config", "Show Splash on Startup", true,
+                new ConfigDescription("If enabled, displays the mod overview and links splash screen on game startup.",
+                    null, new ConfigurationManagerAttributes { Order = 4 }), ref ShowSplashOnStartup);
+
+            UnsyncedConfig("Local Config", "Enable Anonymous Telemetry", true,
+                new ConfigDescription("If enabled, sends anonymous mod launch and heartbeat telemetry to help improve mod stability and track active versions.",
+                    null, new ConfigurationManagerAttributes { Order = 5 }), ref EnableTelemetry);
+
             UnsyncedConfig("Local Config", "Open Backpack", new KeyboardShortcut(KeyCode.I),
                 new ConfigDescription("Hotkey to open backpack.", null, new ConfigurationManagerAttributes{ Order = 3 }), ref HotKeyOpen);
             

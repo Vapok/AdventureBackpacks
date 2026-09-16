@@ -1,11 +1,16 @@
-# 2.0.4 - Container Mod Compatibility & Item Duplication Fix
+# 2.0.5 - Unified Splash Screen & Telemetry Controls
+* **Unified Startup Splash Screen**: Integrated with the centralized Vapok mod startup splash screen and multi-language cyber-console.
+* **Anonymous Telemetry Controls**: Added configurable `Show on Game Startup` and `Enable Anonymous Telemetry` configuration options with default auto-opt-in on launch.
+* **Core Library Update**: Updated to `Vapok.Valheim.Common` 3.5.1012 with suppressed font asset warnings and streamlined configuration management.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.0.4 - Container Mod Compatibility & Item Duplication Fix
 * Fixed: Item duplication and inventory reset when building or crafting with container-scanning mods (e.g. AzuCraftyBoxes, CraftFromContainers).
 * Fixed: Inventory desynchronization between player container component and equipped backpack data.
 * Fixed: Prevented container-saving logic from writing to the player character's network ZDO data.
 * Minor stability and null-safety improvements during backpack resizing.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.0.3 - Fix API DLL Size
 * Fixed: `AdventureBackpacksAPI.dll` size bloat by excluding asset bundles and mod-only source files from API build configuration.
