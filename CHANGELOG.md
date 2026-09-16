@@ -1,12 +1,17 @@
-# 2.0.6 - Unified Splash Screen & Telemetry Controls
+# 2.0.7 - Updated README with Telemetry Information
+* Updated the README.md with Anonymous Telemetry information per request of mod stores.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 2.0.6 - Unified Splash Screen & Telemetry Controls
 * **Unified Startup Splash Screen**: Integrated with a centralized startup splash screen.
   * Added configurable `Show on Game Startup` which can be enabled or disabled in the configuration file.
 * **Anonymous Telemetry**: 
   * Added configurable `Enable Anonymous Telemetry` configuration which can be enabled or disabled in the configuration file.
     * Defaults to enabled with auto-opt-in on launch. Uncheck to Opt-Out
     * ANONYMOUS DATA ONLY - I track version number and usage data. No personal data is ever collected. For more information, see the [Privacy Policy](https://vapok.io/privacy-policy/).
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.0.4 - Container Mod Compatibility & Item Duplication Fix
 * Fixed: Item duplication and inventory reset when building or crafting with container-scanning mods (e.g. AzuCraftyBoxes, CraftFromContainers).

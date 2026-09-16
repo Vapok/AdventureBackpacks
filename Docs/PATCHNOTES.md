@@ -1,3 +1,7 @@
+# 2.0.7 - Updated README with Telemetry Information
+* **Documentation Update**: Updated the README.md with Anonymous Telemetry and Privacy section per request of mod stores.
+* **Vapok.Common Dependency Bump**: Updated internalized dependency to `Vapok.Valheim.Common` 3.9.1012.
+
 # 2.0.6 - Unified Splash Screen & Telemetry Controls
 * **ModSplashManager Integration**: Registered Adventure Backpacks with the unified Vapok startup splash screen, including tagline and localization support.
 * **Anonymous Telemetry Configuration**: Added local configuration bindings (`Show Splash on Startup`, `Enable Anonymous Telemetry`) to manage opt-in anonymous startup and session reporting.
