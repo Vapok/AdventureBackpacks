@@ -1,4 +1,4 @@
-# 2.0.5 - Unified Splash Screen & Telemetry Controls
+# 2.0.6 - Unified Splash Screen & Telemetry Controls
 * **Unified Startup Splash Screen**: Integrated with a centralized startup splash screen.
   * Added configurable `Show on Game Startup` which can be enabled or disabled in the configuration file.
 * **Anonymous Telemetry**: 
