@@ -23,7 +23,7 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
 
 <br>
 
-[![Survival Servers](https://raw.githubusercontent.com/Vapok/AdventureBackpacks/refs/heads/main/images/survivalservers_banner.png)](https://www.survivalservers.com/services/game_servers/valheim/?ref=vapok)
+[![Survival Servers](https://raw.githubusercontent.com/Vapok/AdventureBackpacks/main/images/survivalservers_banner.png)](https://www.survivalservers.com/services/game_servers/valheim/?ref=vapok)
 
 </div>
 
