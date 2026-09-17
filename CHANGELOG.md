@@ -1,9 +1,11 @@
-# 2.0.7 - Updated README with Telemetry Information
-* Updated the README.md with Anonymous Telemetry information per request of mod stores.
+# 2.0.8 - Jewelcrafting Font Compatibility
+* Fixed: Jewelcrafting packages it's own font which was overriding part of a vanilla font, causing the Splash screen to appear blank.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
+### 2.0.7 - Updated README with Telemetry Information
+* Updated the README.md with Anonymous Telemetry information per request of mod stores.
 
 ### 2.0.6 - Unified Splash Screen & Telemetry Controls
 * **Unified Startup Splash Screen**: Integrated with a centralized startup splash screen.

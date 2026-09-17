@@ -1,3 +1,7 @@
+# 2.0.8 - Jewelcrafting Font Compatibility
+* **Compatibility Fix**: Fixed issue where Jewelcrafting packages its own font which was overriding part of a vanilla font, causing the Splash screen to appear blank.
+* **Vapok.Common Dependency Bump**: Updated internalized dependency to `Vapok.Valheim.Common` 3.11.1012.
+
 # 2.0.7 - Updated README with Telemetry Information
 * **Documentation Update**: Updated the README.md with Anonymous Telemetry and Privacy section per request of mod stores.
 * **Vapok.Common Dependency Bump**: Updated internalized dependency to `Vapok.Valheim.Common` 3.9.1012.
