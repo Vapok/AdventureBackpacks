@@ -15,7 +15,20 @@ public class PlayerPatches
     {
         static void Postfix(Player __instance)
         {
-            __instance.gameObject.AddComponent<Container>();
+            if (__instance == null || __instance.gameObject == null)
+                return;
+
+            if (__instance.gameObject.GetComponent<Container>() == null)
+            {
+                try
+                {
+                    __instance.gameObject.AddComponent<Container>();
+                }
+                catch (System.Exception ex)
+                {
+                    AdventureBackpacks.Log?.Warning($"Error adding Container component to Player in Awake: {ex.Message}");
+                }
+            }
         }
     }
 

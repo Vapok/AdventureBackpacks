@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AdventureBackpacks.Configuration;
 using ItemManager;
 using UnityEngine;
@@ -28,7 +28,7 @@ internal abstract class AssetItem : IAssetItem
 
     internal AssetItem(GameObject goItem, string itemName)
     {
-        PrefabName = goItem.name;
+        PrefabName = goItem != null ? goItem.name : string.Empty;
         ItemName = itemName;
 
         _item = new Item(goItem)
@@ -101,30 +101,44 @@ internal abstract class AssetItem : IAssetItem
 
     internal ItemDrop GetItemDrop()
     {
-        return _item?.Prefab.GetComponent<ItemDrop>();
+        return _item?.Prefab != null ? _item.Prefab.GetComponent<ItemDrop>() : null;
     }
 
     internal void RegisterShaderSwap(MaterialReplacer.ShaderType shaderType = MaterialReplacer.ShaderType.PieceShader)
     {
         if (!ConfigRegistry.ReplaceShader.Value)
             return;
-        
-        MaterialReplacer.RegisterGameObjectForShaderSwap(_item.Prefab,shaderType);
+
+        if (_item?.Prefab != null)
+        {
+            MaterialReplacer.RegisterGameObjectForShaderSwap(_item.Prefab, shaderType);
+        }
     }
 
     internal void SetPersistence()
     {
-        _item.Prefab.GetComponent<ZNetView>().m_persistent = true;
+        if (_item?.Prefab != null)
+        {
+            var znetView = _item.Prefab.GetComponent<ZNetView>();
+            if (znetView != null)
+                znetView.m_persistent = true;
+        }
     }
 
     internal void ResetPrefabArmor()
     {
         var itemDrop = GetItemDrop();
+        if (itemDrop == null)
+            return;
+
         var itemData = itemDrop.m_itemData;
         if (itemData != null)
         {
             itemDrop.m_autoPickup = true;
-            itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel;
+            if (itemData.m_shared != null)
+            {
+                itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel;
+            }
             itemDrop.Save();
         }
     }

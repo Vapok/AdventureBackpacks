@@ -40,7 +40,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.0.8";
+        private const string _version = "2.0.9";
 
         //Interface Properties
         public string PluginId => _pluginId;
@@ -111,6 +111,7 @@ namespace AdventureBackpacks
                 Tagline = "A feature-rich backpack progression system with custom models, effects, and inventory mechanics.",
                 ShowOnStartup = ConfigRegistry.ShowSplashOnStartup,
                 EnableTelemetry = ConfigRegistry.EnableTelemetry,
+                SendErrorReports = ConfigRegistry.SendErrorReports,
             });
 
             //???

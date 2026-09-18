@@ -1,3 +1,16 @@
+# 2.0.9 - General Bugfixes and Splash Window Updates
+* **Bugfixes & Null Safety Guards**:
+  * Added defensive null checks in `AssetItem` across `GetItemDrop()`, `RegisterShaderSwap()`, `SetPersistence()`, and `ResetPrefabArmor()` to prevent `NullReferenceException` and `ArgumentNullException` during early asset instantiation.
+  * Added null validation and defensive `try/catch` error handling in `PlayerExtensions.OpenBackpack()` when retrieving and attaching `Container` components on the player `GameObject`.
+  * Guarded `PlayerPatches.AwakePostfix` with defensive `GetComponent<Container>()` checks and `try/catch` handlers.
+  * Added defensive exception handling to `InventoryGuiPatches.CheckForTextInput()`.
+* **Configuration & Error Reporting**:
+  * Added `Send Error Reports` configuration setting (`ConfigRegistry.SendErrorReports`), defaulting to enabled (Opt-Out).
+  * Set `Enable Anonymous Telemetry` default to false (Opt-In).
+  * Registered `SendErrorReports` with `ModSplashManager`.
+* **Vapok.Common Dependency Bump**:
+  * Updated internalized dependency to `Vapok.Valheim.Common` 3.12.1014 bringing in-game scrollable Privacy Policy overlay, multi-language localization, and hover data disclaimers.
+
 # 2.0.8 - Jewelcrafting Font Compatibility
 * **Compatibility Fix**: Fixed issue where Jewelcrafting packages its own font which was overriding part of a vanilla font, causing the Splash screen to appear blank.
 * **Vapok.Common Dependency Bump**: Updated internalized dependency to `Vapok.Valheim.Common` 3.11.1012.

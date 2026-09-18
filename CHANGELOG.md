@@ -1,8 +1,23 @@
-# 2.0.8 - Jewelcrafting Font Compatibility
-* Fixed: Jewelcrafting packages it's own font which was overriding part of a vanilla font, causing the Splash screen to appear blank.
+# 2.0.9 - General Bugfixes and Splash Window Updates
+* **Bugs Fixed from Submitted Error Reports**:
+  * 5x NullReferenceExceptions
+  * 3x ArgumentNullExceptions
+  * 3x TypeLoadExceptions
+  * 1x AmbiguousMatchException
+  * 1x JsonReaderException
+  * 1x FieldAccessException
+  * 1x IOException, SemanticErrorException, and MethodAccessException
+* **Splash Window Updates**:
+  * Telemetry is now unchecked when first loaded (Opt-In visibility)
+  * Added Send Error Logs (Opt-Out)
+  * Privacy Policy is now available directly in-game
+  * Added Data Disclaimers on hover over checkboxes for transparency on what data is sent
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.0.8 - Jewelcrafting Font Compatibility
+* Fixed: Jewelcrafting packages its own font which was overriding part of a vanilla font, causing the Splash screen to appear blank.
 
 ### 2.0.7 - Updated README with Telemetry Information
 * Updated the README.md with Anonymous Telemetry information per request of mod stores.

@@ -55,16 +55,38 @@ public static class PlayerExtensions
 
     public static void OpenBackpack(this Player player, InventoryGui instance)
     {
-        if (player == null)
+        if (player == null || player.gameObject == null)
             return;
-        
-        var backpackContainer = player.gameObject.GetComponent<Container>();
+
+        if (instance == null)
+            instance = InventoryGui.instance;
+
+        if (instance == null)
+            return;
 
         var backpack = player.GetEquippedBackpack();
-        backpack?.UpdateContainerSizing(ref backpackContainer);
-        
+        if (backpack == null)
+            return;
+
+        var backpackContainer = player.gameObject.GetComponent<Container>();
+        if (backpackContainer == null)
+            backpackContainer = player.gameObject.AddComponent<Container>();
+
+        backpack.UpdateContainerSizing(ref backpackContainer);
+
+        if (backpackContainer == null)
+            return;
+
         InventoryGuiPatches.BackpackIsOpen = true;
-        instance.Show(backpackContainer);
+        try
+        {
+            instance.Show(backpackContainer);
+        }
+        catch (System.Exception ex)
+        {
+            InventoryGuiPatches.BackpackIsOpen = false;
+            AdventureBackpacks.Log?.Warning($"Error opening backpack container in InventoryGui: {ex.Message}");
+        }
     }
 
     public static void QuickDropBackpack(this Player player)

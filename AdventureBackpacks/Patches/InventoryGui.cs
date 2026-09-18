@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -102,16 +102,14 @@ internal static class InventoryGuiPatches
 
     public static bool CheckForTextInput()
     {
-        /*var textInputVisible = false;
-        var textInputPanel = GameObject.Find("_GameMain/LoadingGUI/PixelFix/IngameGui(Clone)/TextInput/panel");
-        
-        if (textInputPanel != null)
+        try
         {
-            if (textInputPanel.activeInHierarchy)
-                textInputVisible = true;
-        }*/
-        
-        return TextInput.IsVisible();
+            return TextInput.IsVisible();
+        }
+        catch
+        {
+            return false;
+        }
     }
     
     public static void ShowBackpack(Player player, InventoryGui instance)

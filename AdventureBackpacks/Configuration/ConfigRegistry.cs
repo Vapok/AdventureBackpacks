@@ -18,6 +18,7 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<bool> ReplaceShader;
         internal static ConfigEntry<bool> ShowSplashOnStartup;
         internal static ConfigEntry<bool> EnableTelemetry;
+        internal static ConfigEntry<bool> SendErrorReports;
         
         public static Waiting Waiter;
 
@@ -39,9 +40,13 @@ namespace AdventureBackpacks.Configuration
                 new ConfigDescription("If enabled, displays the mod overview and links splash screen on game startup.",
                     null, new ConfigurationManagerAttributes { Order = 4 }), ref ShowSplashOnStartup);
 
-            UnsyncedConfig("Local Config", "Enable Anonymous Telemetry", true,
+            UnsyncedConfig("Local Config", "Enable Anonymous Telemetry", false,
                 new ConfigDescription("If enabled, sends anonymous mod launch and heartbeat telemetry to help improve mod stability and track active versions.",
                     null, new ConfigurationManagerAttributes { Order = 5 }), ref EnableTelemetry);
+
+            UnsyncedConfig("Local Config", "Send Error Reports", true,
+                new ConfigDescription("If enabled, sends anonymous mod crash and error logs to help identify and resolve bugs.",
+                    null, new ConfigurationManagerAttributes { Order = 5 }), ref SendErrorReports);
 
             UnsyncedConfig("Local Config", "Open Backpack", new KeyboardShortcut(KeyCode.I),
                 new ConfigDescription("Hotkey to open backpack.", null, new ConfigurationManagerAttributes{ Order = 3 }), ref HotKeyOpen);
