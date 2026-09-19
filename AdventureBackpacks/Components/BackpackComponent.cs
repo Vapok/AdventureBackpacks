@@ -1,4 +1,4 @@
-﻿/* BackpackComponent.cs */
+/* BackpackComponent.cs */
 
 using System;
 using System.Diagnostics;
@@ -80,7 +80,16 @@ namespace AdventureBackpacks.Components
             if (_backpackInventory == null)
                 _backpackInventory = Backpacks.NewInventoryInstance(Item.m_shared.m_name, Item.m_quality);
 
-            _backpackInventory.Save(pkg);
+            try
+            {
+                _backpackInventory.Save(pkg);
+            }
+            catch (Exception ex)
+            {
+                _log.Warning($"[Serialize() - {Item.m_shared.m_name}-Q{Item.m_quality}] Standard Inventory.Save threw an exception ({ex.GetType().Name}: {ex.Message}). Falling back to direct item serialization.");
+                pkg.Clear();
+                SaveInventoryDirect(_backpackInventory, pkg);
+            }
 
             string data = pkg.GetBase64();
             Value = data;
@@ -88,6 +97,32 @@ namespace AdventureBackpacks.Components
 
             // Return the data to be deserialized in the method below
             return data;
+        }
+
+        private void SaveInventoryDirect(Inventory inventory, ZPackage pkg)
+        {
+            if (inventory == null || pkg == null)
+                return;
+
+            const int currentVersion = 109;
+            pkg.Write(currentVersion);
+            var items = inventory.m_inventory;
+            pkg.Write((ushort)(items?.Count ?? 0));
+            if (items != null)
+            {
+                foreach (var item in items)
+                {
+                    if (item != null)
+                    {
+                        try
+                        {
+                            item.Data()?.Save();
+                        }
+                        catch {}
+                        item.Save(pkg);
+                    }
+                }
+            }
         }
 
         // This code is run on game start for objects with a BackpackComponent, and it converts the inventory info from string format (ZPackage) to object format (Inventory) so the game can use it.
@@ -155,6 +190,7 @@ namespace AdventureBackpacks.Components
                     _log.Debug($"[FirstLoad - {Item.m_shared.m_name}-Q{Item.m_quality}] Backpack null, creating...");
                     _backpackInventory = Backpacks.NewInventoryInstance(name, Item.m_quality);
                     Serialize();
+                    _statusEffects = Backpacks.UpdateStatusEffects(Item);
                 }
             }
         }
@@ -179,6 +215,7 @@ namespace AdventureBackpacks.Components
                 }
                 
                 Serialize();
+                _statusEffects = Backpacks.UpdateStatusEffects(Item);
             }
             IsLoadingInventory = false;
         }

@@ -1,8 +1,9 @@
-# 2.0.10 - Fix Single-Ingredient Recipe Upgrades
+# 2.0.10 - Fix Recipe Upgrades & Backpack Status Effects
+* **Fix for Backpack Status Effect Initialization**:
+  * Fixed an issue where newly crafted or spawned backpacks did not immediately activate their equipment status effects (including Frost Resistance, carry weight bonus, and speed modifiers) until restarting or reloading the game.
+  * Fixed an issue where the "Frost Resistance" buff icon could display in the status bar while the player still suffered from the Freezing debuff in Mountain biomes.
 * **Fix for "Require Only One Resource" Configuration**:
   * Fixed an issue where enabling `Require only one resource` in the configuration caused backpack upgrade recipes to falsely indicate they were ready to craft when missing required materials.
-  * Resolved an issue where clicking Upgrade with `Require only one resource` enabled would silently fail to upgrade the backpack.
-  * Backpacks can now be crafted and upgraded properly regardless of whether `Require only one resource` is enabled or disabled.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>

@@ -1,4 +1,5 @@
-﻿using AdventureBackpacks.Extensions;
+using System.Collections.Generic;
+using AdventureBackpacks.Extensions;
 using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
 
@@ -19,6 +20,7 @@ public class FrostResistance : EffectsBase
             var se = new CustomSE(Enums.StatusEffects.Stats, "SE_vapok_ab_frost_resistance");
             se.Effect.m_name = "$vapok_mod_se_frost_resistance";
             se.Effect.m_icon = freezing.m_icon;
+            ((SE_Stats)se.Effect).m_mods = new List<HitData.DamageModPair> { EffectMod };
             _externalStatusEffect = se.Effect;
             SetStatusEffect(_externalStatusEffect);
         }

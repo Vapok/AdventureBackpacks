@@ -1,4 +1,7 @@
-# 2.0.10 - Fix Single-Ingredient Recipe Upgrades
+# 2.0.10 - Fix Recipe Upgrades & Backpack Status Effects
+* **Backpack Status Effects & Frost Resistance Initialization (`BackpackComponent` & `FrostResistance`)**:
+  * In `BackpackComponent.FirstLoad()` and `BackpackComponent.Load()`, added explicit calls to `Backpacks.UpdateStatusEffects(Item)` when instantiating a new backpack inventory. This ensures that `item.m_shared.m_equipStatusEffect`, armor calculations, carry weight bonuses, speed modifiers, and Troll set bonuses are initialized immediately upon crafting or spawning rather than waiting for a subsequent `Deserialize()` event on game reload.
+  * In `FrostResistance.LoadExternalStatusEffect()`, assigned `FrostResistance.EffectMod` (`HitData.DamageModifier.Resistant` for Frost) directly to `SE_vapok_ab_frost_resistance`'s `m_mods`. This guarantees that the buff status effect itself directly grants Frost resistance to the player via `m_seman`, eliminating any desync between the HUD buff icon and actual environmental protection against the Freezing debuff.
 * **Vanilla Crafting & Upgrade Fixes (`m_requireOnlyOneIngredient`)**:
   * Added Harmony Prefix on `Player.HaveRequirementItems`:
     * When `recipe.m_requireOnlyOneIngredient` is enabled, explicitly filters out and skips requirements where `neededAmount <= 0` for that quality tier.
