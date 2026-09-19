@@ -132,6 +132,7 @@ public static class ContainerPatches
     [HarmonyPatch(typeof(Container), nameof(Container.SetInUse))]
     static class ContainerSetInUsePatch
     {
+        [HarmonyPriority(Priority.First)]
         static bool Prefix(Container __instance)
         {
             if (__instance != null && __instance.IsBackpackProxy())

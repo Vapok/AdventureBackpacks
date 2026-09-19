@@ -1,7 +1,17 @@
-# 2.1.3 - Auto-Store Hotfix
+# 2.1.4 - Container Proxy Compatibility & Defensive Null Safety
+* **External Storage Mod Compatibility (AzuAutoStore)**:
+  * Assigned player network view reference to the backpack UI proxy container and elevated intercept priority to prevent external storage and sorting mods from encountering errors when closing or updating containers (`NullReferenceException` in `Container.SetInUse`).
+  * Dynamically synchronized the UI proxy container title with the equipped backpack's localized name instead of defaulting to a generic chest name.
+* **Defensive Null Safety & Error Handling**:
+  * Added defensive safeguards and null checks across item equipping, unequipping, inventory UI detection, crafting consumption, and proxy management.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.3 - Auto-Store Hotfix
 * Fixed an issue where auto-storing items into the equipped backpack could cause errors when interacting with external container, drawer, or sorting mods.
 
-# 2.1.2 - Player Container Isolation & Ecosystem Compatibility
+### 2.1.2 - Player Container Isolation & Ecosystem Compatibility
 * **Player Entity Container Isolation**:
   * Removed the direct `Container` component from the root Player character object, preventing external container mods and vanilla systems from misidentifying the player as a world chest or container piece.
   * Migrated all backpack container operations to a dedicated, isolated child proxy GameObject (`AB_BackpackProxy`) that exists exclusively to back the backpack UI window.
@@ -9,9 +19,6 @@
   * Added safeguards to intercept container network routines on the local proxy, resolving an issue where opening, updating, or closing the backpack could cause errors (`NullReferenceException` in `Container.SetInUse`).
   * Ensured container actions like `Take All` and `Stack All` interact smoothly with the backpack proxy and local inventory.
   * Added lifecycle management to guarantee clean destruction and cleanup of the proxy upon unequipping gear, character death, or respawning.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.1.1 - Crafting & Container Mod Compatibility
 * **Compatibility with ValheimPlus, ItemDrawers & Container Mods**:

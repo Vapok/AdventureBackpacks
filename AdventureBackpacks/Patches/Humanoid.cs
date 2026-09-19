@@ -80,36 +80,43 @@ public class HumanoidPatches
     {
         static void Prefix(Humanoid __instance, ItemDrop.ItemData __0)
         {
-            if (__0 is null || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
-                return;
-
-            if (string.Equals(SceneManager.GetActiveScene().name, "start"))
-                return;
-
-            var player = Player.m_localPlayer;
-
-            var item = __0;
-
-            // Check if the item being unequipped is a backpack, and see if it is the same backpack the player is wearing
-            if (item.IsBackpack() && player.m_shoulderItem == item)
+            try
             {
-                var backpackInventory = player.GetEquippedBackpack();
-                if (backpackInventory is null) return;
+                if (__0 is null || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                    return;
 
-                //Save Backpack
-                backpackInventory.Save();
+                var scene = SceneManager.GetActiveScene();
+                if (scene.name == null || string.Equals(scene.name, "start"))
+                    return;
 
-                var inventoryGui = InventoryGui.instance;
+                var player = Player.m_localPlayer;
+                var item = __0;
 
-                // Close the backpack inventory if it's currently open
-                if (inventoryGui != null && inventoryGui.IsContainerOpen())
+                // Check if the item being unequipped is a backpack, and see if it is the same backpack the player is wearing
+                if (item.IsBackpack() && player.m_shoulderItem == item)
                 {
-                    inventoryGui.CloseContainer();
-                    InventoryGuiPatches.BackpackIsOpen = false;
+                    var backpackInventory = player.GetEquippedBackpack();
+                    if (backpackInventory is null) return;
+
+                    //Save Backpack
+                    backpackInventory.Save();
+
+                    var inventoryGui = InventoryGui.instance;
+
+                    // Close the backpack inventory if it's currently open
+                    if (inventoryGui != null && inventoryGui.IsContainerOpen())
+                    {
+                        inventoryGui.CloseContainer();
+                        InventoryGuiPatches.BackpackIsOpen = false;
+                    }
+                    
+                    player.DestroyBackpackContainerProxy();
+                    InventoryGuiPatches.BackpackEquipped = false;
                 }
-                
-                player.DestroyBackpackContainerProxy();
-                InventoryGuiPatches.BackpackEquipped = false;
+            }
+            catch (System.Exception ex)
+            {
+                AdventureBackpacks.Log?.Warning($"Error during Humanoid.UnequipItem: {ex.Message}");
             }
         }
     }
@@ -119,38 +126,46 @@ public class HumanoidPatches
     {
         static void Postfix(Humanoid __instance, ItemDrop.ItemData __0, bool __result)
         {
-            AdventureBackpacks.Log.Debug($"##########   EquipItem Start");
-            if (__0 is null || !__result || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
-                return;
-            
-            if (string.Equals(SceneManager.GetActiveScene().name, "start"))
-                return;
-            
-            var player = Player.m_localPlayer;
-            var item = __0;
-
-            if (item.IsBackpack() && item.TryGetBackpackItem(out var backpack))
+            try
             {
-                InventoryGuiPatches.BackpackEquipped = true;
+                AdventureBackpacks.Log.Debug($"##########   EquipItem Start");
+                if (__0 is null || !__result || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                    return;
                 
-                var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
+                var scene = SceneManager.GetActiveScene();
+                if (scene.name == null || string.Equals(scene.name, "start"))
+                    return;
                 
-                if (!backpackItem.IsEmptyingBackpack)
+                var player = Player.m_localPlayer;
+                var item = __0;
+
+                if (item.IsBackpack() && item.TryGetBackpackItem(out var backpack))
                 {
-                    var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
-                    if (backpackItem.InventoryNeedsValidating(size))
+                    InventoryGuiPatches.BackpackEquipped = true;
+                    
+                    var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
+                    
+                    if (!backpackItem.IsEmptyingBackpack)
                     {
-                        Backpacks.ValidateBackpackInventorySizing(player, backpackItem.Item);
-                    }
-                    else
-                    {
-                        var backpackContainer = player.GetBackpackContainerProxy();
-                        if (backpackContainer != null)
-                            backpackItem.UpdateContainerSizing(ref backpackContainer);
+                        var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
+                        if (backpackItem.InventoryNeedsValidating(size))
+                        {
+                            Backpacks.ValidateBackpackInventorySizing(player, backpackItem.Item);
+                        }
+                        else
+                        {
+                            var backpackContainer = player.GetBackpackContainerProxy();
+                            if (backpackContainer != null)
+                                backpackItem.UpdateContainerSizing(ref backpackContainer);
+                        }
                     }
                 }
+                AdventureBackpacks.Log.Debug($"##########   EquipItem End");
             }
-            AdventureBackpacks.Log.Debug($"##########   EquipItem End");
+            catch (System.Exception ex)
+            {
+                AdventureBackpacks.Log?.Warning($"Error during Humanoid.EquipItem: {ex.Message}");
+            }
         }
     }
 }

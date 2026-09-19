@@ -101,54 +101,61 @@ public static class CraftFromBackpack
         if (remaining <= 0 || player == null || string.IsNullOrEmpty(itemName))
             return remaining;
 
-        // 1. Consume from player inventory first (skip equipped items)
-        var playerInventory = player.GetInventory();
-        if (playerInventory != null)
+        try
         {
-            var allItems = playerInventory.GetAllItems();
-            if (allItems != null)
+            // 1. Consume from player inventory first (skip equipped items)
+            var playerInventory = player.GetInventory();
+            if (playerInventory != null)
             {
-                var matchingItems = allItems.Where(x => 
-                    x != null &&
-                    !x.m_equipped && 
-                    x.m_shared != null && 
-                    string.Equals(x.m_shared.m_name, itemName) &&
-                    (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
-
-                foreach (var item in matchingItems)
+                var allItems = playerInventory.GetAllItems();
+                if (allItems != null)
                 {
-                    if (remaining <= 0)
-                        break;
+                    var matchingItems = allItems.Where(x => 
+                        x != null &&
+                        !x.m_equipped && 
+                        x.m_shared != null && 
+                        string.Equals(x.m_shared.m_name, itemName) &&
+                        (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
 
-                    var toRemove = Mathf.Min(item.m_stack, remaining);
-                    playerInventory.RemoveItem(item, toRemove);
-                    remaining -= toRemove;
+                    foreach (var item in matchingItems)
+                    {
+                        if (remaining <= 0)
+                            break;
+
+                        var toRemove = Mathf.Min(item.m_stack, remaining);
+                        playerInventory.RemoveItem(item, toRemove);
+                        remaining -= toRemove;
+                    }
+                }
+            }
+
+            // 2. Consume remainder from equipped backpack if enabled
+            if (remaining > 0 && CanCraftFromBackpack(player, out var backpackInventory) && backpackInventory != null)
+            {
+                var allBpItems = backpackInventory.GetAllItems();
+                if (allBpItems != null)
+                {
+                    var matchingBpItems = allBpItems.Where(x => 
+                        x != null &&
+                        x.m_shared != null && 
+                        string.Equals(x.m_shared.m_name, itemName) &&
+                        (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
+
+                    foreach (var item in matchingBpItems)
+                    {
+                        if (remaining <= 0)
+                            break;
+
+                        var toRemove = Mathf.Min(item.m_stack, remaining);
+                        backpackInventory.RemoveItem(item, toRemove);
+                        remaining -= toRemove;
+                    }
                 }
             }
         }
-
-        // 2. Consume remainder from equipped backpack if enabled
-        if (remaining > 0 && CanCraftFromBackpack(player, out var backpackInventory))
+        catch (System.Exception ex)
         {
-            var allBpItems = backpackInventory.GetAllItems();
-            if (allBpItems != null)
-            {
-                var matchingBpItems = allBpItems.Where(x => 
-                    x != null &&
-                    x.m_shared != null && 
-                    string.Equals(x.m_shared.m_name, itemName) &&
-                    (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
-
-                foreach (var item in matchingBpItems)
-                {
-                    if (remaining <= 0)
-                        break;
-
-                    var toRemove = Mathf.Min(item.m_stack, remaining);
-                    backpackInventory.RemoveItem(item, toRemove);
-                    remaining -= toRemove;
-                }
-            }
+            AdventureBackpacks.Log?.Warning($"Error during ConsumeCraftingItem for {itemName}: {ex.Message}");
         }
 
         return remaining;

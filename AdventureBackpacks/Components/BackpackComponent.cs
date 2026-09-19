@@ -65,6 +65,7 @@ namespace AdventureBackpacks.Components
                 return;
             
             backpackContainer.m_inventory = inventory;
+            backpackContainer.m_name = Item?.m_shared?.m_name ?? inventory.GetName();
             backpackContainer.m_width = inventory.m_width;
             backpackContainer.m_height = inventory.m_height;
             if (Item?.m_shared?.m_icons != null && Item.m_shared.m_icons.Length > 0)

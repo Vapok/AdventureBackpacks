@@ -1,3 +1,13 @@
+# 2.1.4 - Container Proxy Compatibility & Defensive Null Safety
+* **External Storage Mod Compatibility & Proxy Virtualization (`Patches/Container.cs`, `Components/BackpackComponent.cs`, `Extensions/PlayerExtensions.cs`)**:
+  * Added `[HarmonyPriority(Priority.First)]` to `ContainerSetInUsePatch` on `Container.SetInUse(bool)`. Ensures Adventure Backpacks' intercept runs before third-party container management mods (specifically `AzuAutoStore.Patches.ContainerSetInUseClearWithoutOwnershipPatch`), suppressing the call chain and preventing `NullReferenceException` when closing or updating the backpack container.
+  * In `PlayerExtensions.GetBackpackContainerProxy()`, assigned `_backpackProxyContainer.m_nview = player.m_nview` and changed default proxy container name from generic `$piece_container` to `"Backpack"`. Ensures any external mod inspecting `container.m_nview` evaluates cleanly against the player's network view without null dereferences.
+  * In `BackpackComponent.UpdateContainerSizing()`, dynamically synchronized `backpackContainer.m_name = Item?.m_shared?.m_name ?? inventory.GetName()`, so open backpack containers accurately identify by their specific backpack item name rather than a generic piece name.
+* **Defensive Null Safety & Exception Guards (`Patches/Humanoid.cs`, `Patches/InventoryGui.cs`, `Patches/Player.cs`, `Features/CraftFromBackpack.cs`)**:
+  * Added comprehensive `try/catch` handlers and null guards in `HumanoidPatches.UnequipItemPrefix` and `EquipItemPostfix` around scene verification and proxy destruction.
+  * Added defensive null checks and `try/catch` error trapping in `InventoryGuiPatches.HideBackpack()`, `ShowBackpack()`, and `DetectInputToHide()` / `DetectInputToShow()` to prevent UI update failures.
+  * Added null validation in `PlayerPatches.ConsumeUnEquippedItems` and `CraftFromBackpack.ConsumeCraftingItem` preventing null dereferencing when searching or consuming crafting materials across inventories.
+
 # 2.1.3 - Auto-Store Item Data & Stack Space Null Safety
 * **Defensive Stack Space Scanning (`Extensions/InventoryExtensions.cs`, `Features/StoreToBackpack.cs`)**:
   * Implemented `SafeFindFreeStackSpace(this Inventory, string, float)` extension method to replace vanilla `Inventory.FindFreeStackSpace`. Vanilla `FindFreeStackSpace` iterates over `m_inventory` without null-checking items or `item.m_shared`, throwing `NullReferenceException` ([ADVENTUREBACKPACKS-W](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-W)) if an external container or inventory management mod leaves an uninitialized slot or null entry in the backpack inventory.

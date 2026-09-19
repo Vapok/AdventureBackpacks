@@ -56,7 +56,7 @@ public class PlayerPatches
 
     public static int ConsumeUnEquippedItems(int amount, Player player, Piece.Requirement resource)
     {
-        if (amount < 1 || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null)
+        if (amount < 1 || player == null || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null)
             return amount;
             
         var itemName = resource.m_resItem.m_itemData.m_shared?.m_name;

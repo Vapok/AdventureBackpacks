@@ -114,6 +114,9 @@ internal static class InventoryGuiPatches
     
     public static void ShowBackpack(Player player, InventoryGui instance)
     {
+        if (player == null || instance == null)
+            return;
+
         if (ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
         {
             _showBackpack = true;
@@ -134,18 +137,36 @@ internal static class InventoryGuiPatches
     
     public static void HideBackpack(InventoryGui instance)
     {
-        if (BackpackIsOpen)
+        try
         {
-            instance.CloseContainer();
+            if (BackpackIsOpen)
+            {
+                if (instance != null)
+                {
+                    instance.CloseContainer();
+                    BackpackIsOpen = false;
+                    
+                    if (ConfigRegistry.CloseInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value)
+                        instance.Hide();
+                }
+                else
+                {
+                    BackpackIsOpen = false;
+                }
+            }
+        }
+        catch (System.Exception ex)
+        {
             BackpackIsOpen = false;
-            
-            if (ConfigRegistry.CloseInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value)
-                instance.Hide();
+            AdventureBackpacks.Log?.Warning($"Error hiding backpack: {ex.Message}");
         }
     }
 
     public static bool DetectInputToHide(Player player, InventoryGui instance)
     {
+        if (player == null || instance == null)
+            return false;
+
         var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
         var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value;
         var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
@@ -153,7 +174,8 @@ internal static class InventoryGuiPatches
         var openBackpack = hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value;
         
         var grids = new List<InventoryGrid>();
-        grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
+        if (instance.m_player != null)
+            grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
 
         if (hotKeyDown && !BackpackIsOpen && ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
         {
@@ -161,18 +183,20 @@ internal static class InventoryGuiPatches
             
             foreach (var grid in grids)
             {
-                if (grid.GetHoveredElement() == null)
+                if (grid == null || grid.GetHoveredElement() == null)
                     continue;
                 
                 var hoveredElement = grid.GetHoveredElement();
-                hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
+                var gridInv = grid.GetInventory();
+                if (gridInv != null)
+                    hoveredItem = gridInv.GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
             }
 
             if (ZInput.IsGamepadActive() && hoveredItem == null)
             {
                 foreach (var grid in grids)
                 {
-                    if (grid.GetGamepadSelectedItem() == null)
+                    if (grid == null || grid.GetGamepadSelectedItem() == null)
                         continue;
                     hoveredItem = grid.GetGamepadSelectedItem();
                 }
@@ -206,18 +230,20 @@ internal static class InventoryGuiPatches
             
                 foreach (var grid in grids)
                 {
-                    if (grid.GetHoveredElement() == null)
+                    if (grid == null || grid.GetHoveredElement() == null)
                         continue;
                 
                     var hoveredElement = grid.GetHoveredElement();
-                    hoveredItem = grid.GetInventory().GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
+                    var gridInv = grid.GetInventory();
+                    if (gridInv != null)
+                        hoveredItem = gridInv.GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
                 }
 
                 if (ZInput.IsGamepadActive() && hoveredItem == null)
                 {
                     foreach (var grid in grids)
                     {
-                        if (grid.GetGamepadSelectedItem() == null)
+                        if (grid == null || grid.GetGamepadSelectedItem() == null)
                             continue;
                         hoveredItem = grid.GetGamepadSelectedItem();
                     }
@@ -251,6 +277,9 @@ internal static class InventoryGuiPatches
     
     public static bool DetectInputToShow(Player player, InventoryGui instance)
     {
+        if (player == null || instance == null)
+            return false;
+
         var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
         var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
 

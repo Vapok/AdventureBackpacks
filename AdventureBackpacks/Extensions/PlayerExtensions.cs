@@ -57,51 +57,73 @@ public static class PlayerExtensions
 
     public static Container GetBackpackContainerProxy(this Player player)
     {
-        if (player == null || player.gameObject == null)
-            return null;
-
-        if (_backpackProxyContainer != null && _backpackProxyContainer.gameObject != null && _backpackProxyContainer.transform.parent == player.transform)
-            return _backpackProxyContainer;
-
-        var existingTransform = player.transform.Find(BackpackProxyName);
-        if (existingTransform != null && existingTransform.gameObject != null)
+        try
         {
-            _backpackProxyContainer = existingTransform.GetComponent<Container>();
-            if (_backpackProxyContainer != null)
-                return _backpackProxyContainer;
+            if (player == null || player.gameObject == null || player.transform == null)
+                return null;
 
-            _backpackProxyContainer = existingTransform.gameObject.AddComponent<Container>();
-            _backpackProxyContainer.m_name = "$piece_container";
+            if (_backpackProxyContainer != null &&
+                _backpackProxyContainer.gameObject != null &&
+                _backpackProxyContainer.transform != null &&
+                _backpackProxyContainer.transform.parent == player.transform)
+            {
+                return _backpackProxyContainer;
+            }
+
+            var existingTransform = player.transform.Find(BackpackProxyName);
+            if (existingTransform != null && existingTransform.gameObject != null)
+            {
+                _backpackProxyContainer = existingTransform.GetComponent<Container>();
+                if (_backpackProxyContainer != null)
+                    return _backpackProxyContainer;
+
+                _backpackProxyContainer = existingTransform.gameObject.AddComponent<Container>();
+                _backpackProxyContainer.m_name = "Backpack";
+                _backpackProxyContainer.m_nview = player.m_nview;
+                return _backpackProxyContainer;
+            }
+
+            var proxyObj = new GameObject(BackpackProxyName);
+            proxyObj.transform.SetParent(player.transform, false);
+
+            _backpackProxyContainer = proxyObj.AddComponent<Container>();
+            _backpackProxyContainer.m_name = "Backpack";
+            _backpackProxyContainer.m_nview = player.m_nview;
+
             return _backpackProxyContainer;
         }
-
-        var proxyObj = new GameObject(BackpackProxyName);
-        proxyObj.transform.SetParent(player.transform, false);
-
-        _backpackProxyContainer = proxyObj.AddComponent<Container>();
-        _backpackProxyContainer.m_name = "$piece_container";
-
-        return _backpackProxyContainer;
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error obtaining backpack container proxy: {ex.Message}");
+            return null;
+        }
     }
 
     public static void DestroyBackpackContainerProxy(this Player player)
     {
-        if (_backpackProxyContainer != null)
+        try
         {
-            if (_backpackProxyContainer.gameObject != null)
+            if (_backpackProxyContainer != null)
             {
-                Object.Destroy(_backpackProxyContainer.gameObject);
+                if (_backpackProxyContainer.gameObject != null)
+                {
+                    Object.Destroy(_backpackProxyContainer.gameObject);
+                }
+                _backpackProxyContainer = null;
             }
-            _backpackProxyContainer = null;
-        }
 
-        if (player != null && player.gameObject != null)
-        {
-            var existingTransform = player.transform.Find(BackpackProxyName);
-            if (existingTransform != null && existingTransform.gameObject != null)
+            if (player != null && player.gameObject != null && player.transform != null)
             {
-                Object.Destroy(existingTransform.gameObject);
+                var existingTransform = player.transform.Find(BackpackProxyName);
+                if (existingTransform != null && existingTransform.gameObject != null)
+                {
+                    Object.Destroy(existingTransform.gameObject);
+                }
             }
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Debug($"Exception during DestroyBackpackContainerProxy: {ex.Message}");
         }
     }
 
