@@ -1,4 +1,13 @@
-# 2.0.9 - General Bugfixes and Splash Window Updates
+# 2.0.10 - Fix Single-Ingredient Recipe Upgrades
+* **Fix for "Require Only One Resource" Configuration**:
+  * Fixed an issue where enabling `Require only one resource` in the configuration caused backpack upgrade recipes to falsely indicate they were ready to craft when missing required materials.
+  * Resolved an issue where clicking Upgrade with `Require only one resource` enabled would silently fail to upgrade the backpack.
+  * Backpacks can now be crafted and upgraded properly regardless of whether `Require only one resource` is enabled or disabled.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.0.9 - General Bugfixes and Splash Window Updates
 * **Bugs Fixed from Submitted Error Reports**:
   * 5x NullReferenceExceptions
   * 3x ArgumentNullExceptions
@@ -12,9 +21,6 @@
   * Added Send Error Logs (Opt-Out)
   * Privacy Policy is now available directly in-game
   * Added Data Disclaimers on hover over checkboxes for transparency on what data is sent
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.0.8 - Jewelcrafting Font Compatibility
 * Fixed: Jewelcrafting packages its own font which was overriding part of a vanilla font, causing the Splash screen to appear blank.

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 
 namespace AdventureBackpacks.Patches;
@@ -106,6 +107,73 @@ public class PlayerPatches
     [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirementItems))]
     static class PlayerHaveRequirementItemsPatch
     {
+        [HarmonyPrefix]
+        static bool Prefix(Player __instance, Recipe piece, bool discover, int qualityLevel, int amount, ref bool __result)
+        {
+            if (piece == null || !piece.m_requireOnlyOneIngredient)
+            {
+                return true;
+            }
+
+            var currentCraftingStation = __instance.GetCurrentCraftingStation();
+            var resources = piece.m_resources;
+            if (resources == null)
+            {
+                __result = false;
+                return false;
+            }
+
+            foreach (var requirement in resources)
+            {
+                if ((!discover && currentCraftingStation != null && currentCraftingStation.m_upgrader != requirement.m_upgraderResource) ||
+                    (currentCraftingStation == null && requirement.m_upgraderResource) ||
+                    !requirement.m_resItem)
+                {
+                    continue;
+                }
+
+                if (discover)
+                {
+                    if (requirement.m_amount <= 0)
+                        continue;
+
+                    if (__instance.IsMaterialKnown(requirement.m_resItem.m_itemData.m_shared.m_name))
+                    {
+                        __result = true;
+                        return false;
+                    }
+                    continue;
+                }
+
+                int neededAmount = requirement.GetAmount(qualityLevel) * amount;
+                if (neededAmount <= 0)
+                {
+                    // Vanilla bug fix: skip 0-amount requirements so 0 items cannot falsely satisfy m_requireOnlyOneIngredient!
+                    continue;
+                }
+
+                int maxInInventory = 0;
+                for (int q = 1; q <= requirement.m_resItem.m_itemData.m_shared.m_maxQuality; q++)
+                {
+                    int count = __instance.GetInventory().CountItems(requirement.m_resItem.m_itemData.m_shared.m_name, q);
+                    count = AdjustCountIfEquipped(count, __instance, requirement);
+                    if (count > maxInInventory)
+                    {
+                        maxInInventory = count;
+                    }
+                }
+
+                if (maxInInventory >= neededAmount)
+                {
+                    __result = true;
+                    return false;
+                }
+            }
+
+            __result = false;
+            return false;
+        }
+
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var patchedSuccess = false;
@@ -241,6 +309,76 @@ public class PlayerPatches
                 AdventureBackpacks.Log.Error($"{nameof(Player.ConsumeResources)} Transpiler Failed To Patch");
                 Thread.Sleep(5000);
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.GetFirstRequiredItem))]
+    static class PlayerGetFirstRequiredItemPatch
+    {
+        [HarmonyPrefix]
+        static bool Prefix(Player __instance, Inventory inventory, Recipe recipe, int qualityLevel, out int amount, out int extraAmount, int craftMultiplier, ref ItemDrop.ItemData __result)
+        {
+            amount = 0;
+            extraAmount = 0;
+            __result = null;
+
+            if (recipe == null || recipe.m_resources == null)
+                return false;
+
+            var currentCraftingStation = __instance.GetCurrentCraftingStation();
+            var resources = recipe.m_resources;
+
+            foreach (var requirement in resources)
+            {
+                if ((currentCraftingStation != null && currentCraftingStation.m_upgrader != requirement.m_upgraderResource) ||
+                    (currentCraftingStation == null && requirement.m_upgraderResource) ||
+                    !requirement.m_resItem)
+                {
+                    continue;
+                }
+
+                int neededAmount = requirement.GetAmount(qualityLevel) * craftMultiplier;
+                if (neededAmount <= 0)
+                {
+                    // Vanilla bug fix: skip 0-amount requirements
+                    continue;
+                }
+
+                for (int q = 1; q <= requirement.m_resItem.m_itemData.m_shared.m_maxQuality; q++)
+                {
+                    int count = inventory.CountItems(requirement.m_resItem.m_itemData.m_shared.m_name, q);
+                    count = AdjustCountIfEquipped(count, __instance, requirement);
+                    if (count >= neededAmount)
+                    {
+                        var allItems = inventory.GetAllItems();
+                        var matchingItem = allItems?.FirstOrDefault(x => 
+                            !x.m_equipped && 
+                            x.m_shared != null && 
+                            x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                            x.m_quality == q && 
+                            x.m_stack >= neededAmount);
+
+                        if (matchingItem == null)
+                        {
+                            matchingItem = allItems?.FirstOrDefault(x => 
+                                !x.m_equipped && 
+                                x.m_shared != null && 
+                                x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                                x.m_quality == q);
+                        }
+
+                        if (matchingItem != null)
+                        {
+                            amount = neededAmount;
+                            extraAmount = requirement.m_extraAmountOnlyOneIngredient;
+                            __result = matchingItem;
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

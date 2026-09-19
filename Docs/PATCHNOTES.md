@@ -1,3 +1,15 @@
+# 2.0.10 - Fix Single-Ingredient Recipe Upgrades
+* **Vanilla Crafting & Upgrade Fixes (`m_requireOnlyOneIngredient`)**:
+  * Added Harmony Prefix on `Player.HaveRequirementItems`:
+    * When `recipe.m_requireOnlyOneIngredient` is enabled, explicitly filters out and skips requirements where `neededAmount <= 0` for that quality tier.
+    * Resolves vanilla issue where $0 \ge 0$ false-positive match on 0-cost base items (e.g. `CapeFeather` on higher tier upgrades) caused the Craft/Upgrade button to illuminate without actual materials in inventory.
+  * Added Harmony Prefix on `Player.GetFirstRequiredItem`:
+    * Skips requirements where `neededAmount <= 0`.
+    * Iterates item quality starting from valid quality $q = 1$ through `maxQuality` (vanilla started at $j = 0$ returning `null`).
+    * Selects unequipped items to prevent equipped gear from being consumed.
+  * Added Harmony Prefix on `Recipe.GetAmount`:
+    * Added null-safety guard for `singleReqItem != null` prior to calculating quality bonus multipliers, preventing unhandled `NullReferenceException` crashes.
+
 # 2.0.9 - General Bugfixes and Splash Window Updates
 * **Bugfixes & Null Safety Guards**:
   * Added defensive null checks in `AssetItem` across `GetItemDrop()`, `RegisterShaderSwap()`, `SetPersistence()`, and `ResetPrefabArmor()` to prevent `NullReferenceException` and `ArgumentNullException` during early asset instantiation.
