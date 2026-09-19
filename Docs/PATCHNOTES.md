@@ -1,3 +1,20 @@
+# 2.1.0 - Craft From Backpack & Auto Store To Backpack
+* **Craft From Backpack (`Features/CraftFromBackpack.cs`)**:
+  * Implemented `CraftFromBackpack` feature allowing placeable building (hammer) and crafting stations to consider items in the equipped backpack.
+  * Added Harmony Prefix on `Player.HaveRequirements(Piece, Player.RequirementMode)` to include equipped backpack inventory items when checking building requirements.
+  * Updated `PlayerPatches.AdjustCountIfEquipped` to add items present in the equipped backpack inventory (supporting quality-specific checks), feeding directly into existing `Player.HaveRequirementItems` and `InventoryGui.SetupRequirement` transpilers so recipe requirements and HUD counts reflect backpack inventory.
+  * Updated `PlayerPatches.ConsumeUnEquippedItems` and `CraftFromBackpack.ConsumeCraftingItem` to pull required resources from Player inventory first (skipping equipped items), then pull any remaining needed amount from the equipped backpack inventory, returning 0 to vanilla `Player.ConsumeResources`.
+  * Updated `PlayerPatches.PlayerGetFirstRequiredItemPatch` to check equipped backpack inventory as a fallback for single-ingredient recipes.
+  * Added Harmony Prefix on `Inventory.RemoveItem(string, int, int, bool)` during active crafting (`IsDoingCrafting`) to route through `CraftFromBackpack.ConsumeCraftingItem`.
+  * Added server-synced configurations: `Enable Craft From Backpack` and `Enable Craft Output To Backpack` under `Server Config`.
+* **Auto Store To Backpack (`Features/StoreToBackpack.cs`)**:
+  * Implemented `StoreToBackpack` feature allowing picked up, looted, or gained items to store automatically into the equipped backpack if the backpack already has $\ge 1$ of that item and has available space.
+  * Added overflow protection: if the player inventory is full and the equipped backpack is empty or has space, incoming items automatically store into the backpack instead of triggering "Inventory Full" (`$msg_noroom`) feedback.
+  * Added Harmony Prefix on `Inventory.CanAddItem(ItemDrop.ItemData, int)` on the player inventory to return `true` when `StoreToBackpack.ShouldStoreToBackpack` allows the item or when crafting output overflows into the backpack, enabling `Player.AutoPickup`, container loot-all, and crafting station creation when player inventory is full.
+  * Updated `InventoryPatches.AddItemPatch` on `Inventory.AddItem(ItemDrop.ItemData)` to route eligible items into `StoreToBackpack.TryStoreItem`, supporting partial stack storage and falling back to player inventory for remainders or when backpack space is exhausted.
+  * Safeguards implemented: strictly excludes backpacks (preventing backpack inception), skips when moving items between containers or when `BackpackIsOpen` in `InventoryGui`, and bypasses during yard sales or quick dropping.
+  * Added server-synced configurations: `Enable Auto Store to Backpack` and `Enable Inventory Overflow To Backpack` under `Server Config`.
+
 # 2.0.10 - Fix Recipe Upgrades & Backpack Status Effects
 * **Backpack Status Effects & Frost Resistance Initialization (`BackpackComponent` & `FrostResistance`)**:
   * In `BackpackComponent.FirstLoad()` and `BackpackComponent.Load()`, added explicit calls to `Backpacks.UpdateStatusEffects(Item)` when instantiating a new backpack inventory. This ensures that `item.m_shared.m_equipStatusEffect`, armor calculations, carry weight bonuses, speed modifiers, and Troll set bonuses are initialized immediately upon crafting or spawning rather than waiting for a subsequent `Deserialize()` event on game reload.

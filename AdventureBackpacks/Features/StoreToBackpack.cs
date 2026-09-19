@@ -1,0 +1,171 @@
+using System;
+using AdventureBackpacks.Assets;
+using AdventureBackpacks.Components;
+using AdventureBackpacks.Configuration;
+using AdventureBackpacks.Extensions;
+using AdventureBackpacks.Patches;
+using BepInEx.Configuration;
+using UnityEngine;
+using Vapok.Common.Managers.Configuration;
+using Vapok.Common.Shared;
+
+namespace AdventureBackpacks.Features;
+
+public static class StoreToBackpack
+{
+    public static bool FeatureInitialized = false;
+    public static ConfigEntry<bool> EnableStoreToBackpack;
+    public static ConfigEntry<bool> EnableInventoryOverflowToBackpack;
+
+    static StoreToBackpack()
+    {
+        ConfigRegistry.Waiter.StatusChanged += (_, _) => RegisterConfigurationFile();
+    }
+
+    private static void RegisterConfigurationFile()
+    {
+        ConfigSyncBase.SyncedConfig("Server Config", "Enable Auto Store to Backpack", true,
+            new ConfigDescription("When enabled, picked up or looted items already present in the equipped backpack are automatically stored in the backpack.",
+                null,
+                new ConfigurationManagerAttributes { Order = 5 }), ref EnableStoreToBackpack);
+
+        ConfigSyncBase.SyncedConfig("Server Config", "Enable Inventory Overflow To Backpack", true,
+            new ConfigDescription("When enabled, if the player inventory is full, picked up or looted items will automatically overflow into the equipped backpack if space is available.",
+                null,
+                new ConfigurationManagerAttributes { Order = 4 }), ref EnableInventoryOverflowToBackpack);
+    }
+
+    /// <summary>
+    /// Checks if an item qualifies to be stored in the equipped backpack according to feature rules and safeguards.
+    /// </summary>
+    public static bool ShouldStoreToBackpack(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)
+    {
+        backpackInventory = null;
+
+        if (!FeatureInitialized || EnableStoreToBackpack == null || EnableInventoryOverflowToBackpack == null)
+            return false;
+
+        if (player == null || item == null || item.m_shared == null)
+            return false;
+
+        // Never store backpacks inside backpacks (inception prevention)
+        if (item.IsBackpack() || item.TryGetBackpackItem(out _))
+            return false;
+
+        // Safeguard against automated storing while player is actively moving items in open backpack or dropping
+        if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping || AdventureBackpacks.BypassMoveProtection)
+            return false;
+
+        if (InventoryGuiPatches.BackpackIsOpen)
+            return false;
+
+        if (!player.IsBackpackEquipped())
+            return false;
+
+        var backpack = player.GetEquippedBackpack();
+        if (backpack == null)
+            return false;
+
+        backpackInventory = backpack.GetInventory();
+        if (backpackInventory == null)
+            return false;
+
+        var playerInventory = player.GetInventory();
+        if (playerInventory == null)
+            return false;
+
+        // Condition 1: Item already exists in the backpack, and backpack has room
+        if (EnableStoreToBackpack.Value && backpackInventory.HaveItem(item.m_shared.m_name))
+        {
+            if (CanInventoryAccept(backpackInventory, item, item.m_stack))
+                return true;
+
+            // Check if backpack can take at least part of the stack
+            var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - backpackInventory.m_inventory.Count;
+            if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
+                return true;
+        }
+
+        // Condition 2: Player inventory is full, and overflow to backpack is enabled
+        if (EnableInventoryOverflowToBackpack.Value && !CanInventoryAccept(playerInventory, item, item.m_stack))
+        {
+            if (CanInventoryAccept(backpackInventory, item, item.m_stack))
+                return true;
+
+            var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - backpackInventory.m_inventory.Count;
+            if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Checks directly whether an inventory has room for the given item without triggering Harmony patches.
+    /// </summary>
+    public static bool CanInventoryAccept(Inventory inventory, ItemDrop.ItemData item, int stack = -1)
+    {
+        if (inventory == null || item == null || item.m_shared == null)
+            return false;
+
+        if (inventory.HaveEmptySlot())
+            return true;
+
+        if (item.m_shared.m_maxStackSize <= 1)
+            return false;
+
+        if (stack <= 0)
+            stack = item.m_stack;
+
+        return inventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel) >= stack;
+    }
+
+    /// <summary>
+    /// Attempts to store the item into the equipped backpack.
+    /// Returns true if the entire item stack was absorbed by the backpack.
+    /// Returns false if partially stored (in which case item.m_stack is reduced) or not stored at all.
+    /// </summary>
+    public static bool TryStoreItem(Player player, ItemDrop.ItemData item, Inventory backpackInventory)
+    {
+        if (player == null || item == null || backpackInventory == null)
+            return false;
+
+        // Strict inception prevention: never allow backpacks inside backpacks
+        if (item.IsBackpack() || item.TryGetBackpackItem(out _) || !Backpacks.CheckForInception(backpackInventory, item))
+            return false;
+
+        // If the backpack can accept the entire item stack directly
+        if (CanInventoryAccept(backpackInventory, item, item.m_stack))
+        {
+            var added = backpackInventory.AddItem(item);
+            if (added)
+                return true;
+        }
+
+        // Handle partial stack transfer if item is stackable
+        if (item.m_shared.m_maxStackSize > 1 && item.m_stack > 1)
+        {
+            var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - backpackInventory.m_inventory.Count;
+            var availableSpace = freeStack + (emptySlots * item.m_shared.m_maxStackSize);
+
+            if (availableSpace > 0)
+            {
+                var transferAmount = Mathf.Min(item.m_stack, availableSpace);
+                var partialItem = item.Clone();
+                partialItem.m_stack = transferAmount;
+
+                if (backpackInventory.AddItem(partialItem))
+                {
+                    item.m_stack -= transferAmount;
+                    if (item.m_stack <= 0)
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}

@@ -172,8 +172,10 @@
         <Compile Include="Extensions\InventoryExtensions.cs" />
         <Compile Include="Extensions\ItemDataExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
+        <Compile Include="Features\CraftFromBackpack.cs" />
         <Compile Include="Features\EquipmentEffectCache.cs" />
         <Compile Include="Features\QuickTransfer.cs" />
+        <Compile Include="Features\StoreToBackpack.cs" />
         <Compile Include="Patches\ArmorStand.cs" />
         <Compile Include="Patches\Container.cs" />
         <Compile Include="Patches\Door.cs" />

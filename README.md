@@ -31,6 +31,8 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
 
 * 🔨 **Discover & Craft**: As you explore biomes, defeat creatures, and collect new materials, you will unlock recipes for Adventuring Backpacks.
 * 🎒 **Open Your Backpack**: The default hotkey is <kbd>I</kbd> to open your equipped backpack. Fully customizable for Keyboard, Mouse, and Gamepad / Controller inputs.
+* 🛠️ **Craft From Backpack**: Build with the hammer or craft at stations using supplies stored in your equipped backpack without needing to manually move materials.
+* 📥 **Auto Store & Overflow**: Route gathered loot into matching backpack stacks or overflow new items into your backpack when your main inventory is full.
 * 📈 **Progression & Upgrades**: Each backpack features unique inventory sizing, carry weight bonuses, movement speed modifiers, and environmental perks. Upgrading your backpack at a workbench or forge expands capacity and strengthens bonuses.
 * ⚙️ **Full Customization**: Almost every aspect of these backpacks (sizes, recipes, drop chances, effects, and weight multipliers) can be tailored via configuration files or the in-game Configuration Manager.
 
@@ -71,8 +73,18 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
 
 ## 🛡️ Advanced Mechanics & Safeguards
 
+* 🛠️ **Craft From Backpack**:
+  * **Hammer Building & Stations**: Available resources for building placeables and crafting station recipes take into account both your Player inventory and your currently equipped backpack.
+  * **Tiered Consumption**: Materials are consumed from the Player inventory first (skipping equipped items), only drawing from the backpack for any remaining unmet quantities.
+  * **Craft Output to Backpack**: When enabled and your player inventory is full, newly crafted items are placed directly into your equipped backpack if space is available (strictly excluding backpacks).
+* 📥 **Auto Store to Backpack & Inventory Overflow**:
+  * **Auto Store Existing Items**: When picking up or looting items that already exist in your equipped backpack, they automatically route directly into the backpack if space is available.
+  * **Inventory Overflow**: If your main player inventory is completely full, newly acquired items continue to enter your equipped backpack without triggering "Inventory Full" errors.
+  * **Partial Stack Support**: If a backpack only has room for a partial stack, it absorbs what fits and routes the remainder to player inventory.
+* 🌐 **Server-Enforced Configuration (`Server Config`)**:
+  * Craft from backpack, craft output overflow, auto-storing, and inventory overflow are server-authoritative. When playing on a dedicated server, the server dictates these settings globally for all connected clients.
 * ⚡ **Thor's Inventory Guard (Inception Prevention)**:
-  * Backpack-in-backpack nesting is strictly prevented to safeguard against data corruption and infinite inventory loops.
+  * Backpack-in-backpack nesting is strictly prevented across all crafting, auto-storing, and inventory interactions to safeguard against data corruption and infinite loops.
 * 🏷️ **Yard Sale Overflow Safeguard**:
   * If a backpack is resized or upgraded in a way that reduces slots below the stored item count, excess items are cleanly dropped at the player's feet rather than lost.
 * 🔀 **Right-Click Quick Transfer (Fast Item Transfer)**:
@@ -122,7 +134,7 @@ Mod developers can easily build custom backpacks and register effects using our 
 
 | Mod | Compatibility Status |
 | :--- | :--- |
-| **AzuCraftyBoxes & AzuAutoStore** | 🟢 Fully Supported (Crafting & auto-storing from equipped backpack) |
+| **AzuCraftyBoxes & AzuAutoStore** | 🟢 Fully Supported (External chest crafting & auto-storing; AdventureBackpacks also includes native Craft From Backpack and Store To Backpack) |
 | **Valheim Plus (CraftFromChest)** | 🟢 Fully Supported (Crafting calculation stack-interception) |
 | **Epic Loot** | 🟢 Fully Supported (Loot tables, enchanting, and weightless modifiers) |
 | **Cheb's Necromancy** | 🟢 Fully Supported (Includes *Spectral Shroud of Holding*) |

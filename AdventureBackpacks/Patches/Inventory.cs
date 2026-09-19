@@ -5,6 +5,7 @@ using System.Linq;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
+using AdventureBackpacks.Features;
 using HarmonyLib;
 using Vapok.Common.Managers;
 namespace AdventureBackpacks.Patches;
@@ -263,6 +264,55 @@ public static class InventoryPatches
             }
         }
     }
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.CanAddItem), new[] { typeof(ItemDrop.ItemData), typeof(int) })]
+    [HarmonyPriority(Priority.First)]
+    static class CanAddItemPatch
+    {
+        private static bool _evaluatingCanAddItem;
+
+        static bool Prefix(Inventory __instance, ItemDrop.ItemData item, int stack, ref bool __result)
+        {
+            if (_evaluatingCanAddItem)
+                return true;
+
+            if (item == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+                return true;
+
+            if (_movingItemBetweenContainers)
+                return true;
+
+            _evaluatingCanAddItem = true;
+            try
+            {
+                // If player inventory can already accept the item, let vanilla handle it
+                if (StoreToBackpack.CanInventoryAccept(__instance, item, stack))
+                    return true;
+
+                // Check if crafting output overflow to backpack is active (strictly excluding backpacks)
+                if (IsDoingCrafting && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out var craftBpInventory))
+                {
+                    if (StoreToBackpack.CanInventoryAccept(craftBpInventory, item, stack))
+                    {
+                        __result = true;
+                        return false;
+                    }
+                }
+
+                if (StoreToBackpack.ShouldStoreToBackpack(Player.m_localPlayer, item, out _))
+                {
+                    __result = true;
+                    return false;
+                }
+
+                return true;
+            }
+            finally
+            {
+                _evaluatingCanAddItem = false;
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(ItemDrop.ItemData) })]
     [HarmonyPriority(Priority.First)]
     static class AddItemPatch
@@ -289,7 +339,53 @@ public static class InventoryPatches
                     return noInception;
                 }
             }
+
+            if (Player.m_localPlayer != null && __instance == Player.m_localPlayer.GetInventory() && !_movingItemBetweenContainers)
+            {
+                // If crafting result and player inventory is full, store to equipped backpack if enabled (never for backpacks)
+                if (IsDoingCrafting && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out var craftBpInventory))
+                {
+                    if (!StoreToBackpack.CanInventoryAccept(__instance, item, item.m_stack))
+                    {
+                        var fullyStoredCraft = StoreToBackpack.TryStoreItem(Player.m_localPlayer, item, craftBpInventory);
+                        if (fullyStoredCraft)
+                        {
+                            __result = true;
+                            return false;
+                        }
+                    }
+                }
+
+                if (StoreToBackpack.ShouldStoreToBackpack(Player.m_localPlayer, item, out var backpackInventory))
+                {
+                    var fullyStored = StoreToBackpack.TryStoreItem(Player.m_localPlayer, item, backpackInventory);
+                    if (fullyStored)
+                    {
+                        __result = true;
+                        return false;
+                    }
+                }
+            }
             
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(string), typeof(int), typeof(int), typeof(bool) })]
+    [HarmonyPriority(Priority.First)]
+    static class RemoveItemByNamePatch
+    {
+        static bool Prefix(Inventory __instance, string name, int amount, int itemQuality)
+        {
+            if (!IsDoingCrafting || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+                return true;
+
+            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out _))
+            {
+                CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
+                return false;
+            }
+
             return true;
         }
     }

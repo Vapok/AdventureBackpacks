@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using AdventureBackpacks.Extensions;
+using AdventureBackpacks.Features;
 using HarmonyLib;
 
 namespace AdventureBackpacks.Patches;
@@ -33,55 +34,73 @@ public class PlayerPatches
         }
     }
 
-    public static int AdjustCountIfEquipped(int itemCount, Player player, Piece.Requirement resource)
+    public static int AdjustCountIfEquipped(int itemCount, Player player, Piece.Requirement resource, int quality = -1)
     {
         var num = itemCount;
 
-        if (num < 1 || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null || !resource.m_resItem.m_itemData.IsEquipable())
+        if (resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null)
             return num;
 
-        var inventory = player?.GetInventory();
-        if (inventory == null)
-            return num;
-            
         var itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
         if (string.IsNullOrEmpty(itemName))
             return num;
 
-        var equippedItems = inventory.GetEquippedItems();
-
-        if (equippedItems != null && equippedItems.Any(x => x.m_shared != null && x.m_shared.m_name.Equals(itemName)))
+        // Deduct 1 if the player is actively equipping this item
+        if (num > 0 && resource.m_resItem.m_itemData.IsEquipable())
         {
-            num -= 1;
+            var inventory = player?.GetInventory();
+            var equippedItems = inventory?.GetEquippedItems();
+            if (equippedItems != null && equippedItems.Any(x => x.m_shared != null && x.m_shared.m_name.Equals(itemName)))
+            {
+                num -= 1;
+            }
+        }
+
+        // Add backpack materials if CraftFromBackpack is active
+        if (CraftFromBackpack.CanCraftFromBackpack(player, out _))
+        {
+            num += CraftFromBackpack.GetBackpackItemCount(player, itemName, quality);
         }
 
         return num;
     }
 
+    public static int AdjustCountIfEquipped(int itemCount, Player player, Piece.Requirement resource)
+    {
+        return AdjustCountIfEquipped(itemCount, player, resource, -1);
+    }
+
     public static int AdjustCountIfEquipped(Player player, Piece.Requirement resource, int itemCount)
     {
-        return AdjustCountIfEquipped(itemCount, player, resource);
+        return AdjustCountIfEquipped(itemCount, player, resource, -1);
     }
 
     public static int ConsumeUnEquippedItems(int amount, Player player, Piece.Requirement resource)
     {
-        var num = amount;
-
-        if (num < 1 || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null || !resource.m_resItem.m_itemData.IsEquipable())
-            return num;
+        if (amount < 1 || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null)
+            return amount;
             
         var itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
         if (string.IsNullOrEmpty(itemName))
-            return num;
+            return amount;
+
+        // If Craft From Backpack is enabled and active, consume from player inventory first, then backpack
+        if (CraftFromBackpack.CanCraftFromBackpack(player, out _))
+        {
+            return CraftFromBackpack.ConsumeCraftingItem(player, itemName, amount);
+        }
+
+        if (!resource.m_resItem.m_itemData.IsEquipable())
+            return amount;
 
         var allItems = player?.m_inventory?.GetAllItems();
         if (allItems == null)
-            return num;
+            return amount;
 
         var resourceItems = allItems.Where(x => x.m_shared != null && x.m_shared.m_name.Equals(itemName)).ToList();
 
         var removedCounter = 0;
-        for (int i = 0; i < num; i++)
+        for (int i = 0; i < amount; i++)
         {
             foreach (var item in resourceItems)
             {
@@ -96,12 +115,95 @@ public class PlayerPatches
             }
         }
 
-        return num - removedCounter;
+        return amount - removedCounter;
     }
 
     public static int ConsumeUnEquippedItems(Player player, Piece.Requirement resource, int amount)
     {
         return ConsumeUnEquippedItems(amount, player, resource);
+    }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirements), new[] { typeof(Piece), typeof(Player.RequirementMode) })]
+    static class PlayerHaveRequirementsPatch
+    {
+        static bool Prefix(Player __instance, Piece piece, Player.RequirementMode mode, ref bool __result)
+        {
+            if (piece == null || !CraftFromBackpack.CanCraftFromBackpack(__instance, out var bpInventory))
+                return true;
+
+            if (mode == Player.RequirementMode.IsKnown)
+                return true;
+
+            if (piece.m_craftingStation != null)
+            {
+                if (mode == Player.RequirementMode.CanAlmostBuild)
+                {
+                    if (!__instance.m_knownStations.ContainsKey(piece.m_craftingStation.m_name))
+                    {
+                        __result = false;
+                        return false;
+                    }
+                }
+                else if (!CraftingStation.HaveBuildStationInRange(piece.m_craftingStation.m_name, __instance.transform.position) && !ZoneSystem.instance.GetGlobalKey(GlobalKeys.NoWorkbench))
+                {
+                    __result = false;
+                    return false;
+                }
+            }
+
+            if (piece.m_dlc.Length > 0 && !DLCMan.instance.IsDLCInstalled(piece.m_dlc))
+            {
+                __result = false;
+                return false;
+            }
+
+            if (ZoneSystem.instance.GetGlobalKey(piece.FreeBuildKey()))
+            {
+                __result = true;
+                return false;
+            }
+
+            var resources = piece.m_resources;
+            if (resources == null)
+            {
+                __result = true;
+                return false;
+            }
+
+            foreach (var requirement in resources)
+            {
+                if (!requirement.m_resItem || requirement.m_amount <= 0)
+                    continue;
+
+                var itemName = requirement.m_resItem.m_itemData.m_shared?.m_name;
+                if (string.IsNullOrEmpty(itemName))
+                    continue;
+
+                switch (mode)
+                {
+                    case Player.RequirementMode.CanAlmostBuild:
+                        if (!__instance.m_inventory.HaveItem(itemName) && !bpInventory.HaveItem(itemName))
+                        {
+                            __result = false;
+                            return false;
+                        }
+                        break;
+
+                    case Player.RequirementMode.CanBuild:
+                        var count = __instance.m_inventory.CountItems(itemName);
+                        count = AdjustCountIfEquipped(count, __instance, requirement);
+                        if (count < requirement.m_amount)
+                        {
+                            __result = false;
+                            return false;
+                        }
+                        break;
+                }
+            }
+
+            __result = true;
+            return false;
+        }
     }
 
     [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirementItems))]
@@ -365,6 +467,24 @@ public class PlayerPatches
                                 x.m_shared != null && 
                                 x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
                                 x.m_quality == q);
+                        }
+
+                        if (matchingItem == null && CraftFromBackpack.CanCraftFromBackpack(__instance, out var bpInventory))
+                        {
+                            var allBpItems = bpInventory.GetAllItems();
+                            matchingItem = allBpItems?.FirstOrDefault(x => 
+                                x.m_shared != null && 
+                                x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                                x.m_quality == q && 
+                                x.m_stack >= neededAmount);
+
+                            if (matchingItem == null)
+                            {
+                                matchingItem = allBpItems?.FirstOrDefault(x => 
+                                    x.m_shared != null && 
+                                    x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                                    x.m_quality == q);
+                            }
                         }
 
                         if (matchingItem != null)

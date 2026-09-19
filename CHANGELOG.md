@@ -1,4 +1,20 @@
-# 2.0.10 - Fix Recipe Upgrades & Backpack Status Effects
+# 2.1.0 - Craft From Backpack & Auto Store To Backpack
+* **New Feature: Craft From Backpack**:
+  * When enabled, crafting at crafting stations and building placeables with the hammer considers materials in both the Player inventory and the currently equipped backpack.
+  * When crafting or building, materials are pulled from the Player inventory first, and then the equipped backpack inventory.
+  * When player inventory is full, newly crafted items can optionally be placed directly into the equipped backpack if space is available.
+  * Added server-synced settings: `Enable Craft From Backpack` and `Enable Craft Output To Backpack` under `Server Config`.
+* **New Feature: Auto Store To Backpack**:
+  * When enabled, picked up or looted items already present in the equipped backpack (at least 1 item) automatically store into the equipped backpack instead of Player inventory (assuming room).
+  * If the backpack has no room for the item, storage automatically falls back to Player inventory.
+  * If Player inventory is full, items automatically continue storing into the equipped backpack without showing "Inventory Full" (configurable overflow).
+  * Full compatibility with storage and container mods (AzuAutoStore, CraftFromContainers, AzuCraftyBoxes) and safeguards to prevent accidental storing when manually moving items in open backpack containers.
+  * Added server-synced settings: `Enable Auto Store to Backpack` and `Enable Inventory Overflow To Backpack` under `Server Config`.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.0.10 - Fix Recipe Upgrades & Backpack Status Effects
 * **Fix for Backpack Status Effect Initialization**:
   * Fixed an issue where newly crafted or spawned backpacks did not immediately activate their equipment status effects (including Frost Resistance, carry weight bonus, and speed modifiers) until restarting or reloading the game.
   * Fixed an issue where the "Frost Resistance" buff icon could display in the status bar while the player still suffered from the Freezing debuff in Mountain biomes.
@@ -7,9 +23,6 @@
 * **Bugs Fixed from Submitted Error Reports**:
   * Fixed an issue where backpacks initialized early during startup could cause an error when game localization was not yet loaded.
   * Fixed a configuration issue where mod settings could trigger a missing field error when interacting with third-party configuration managers.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.0.9 - General Bugfixes and Splash Window Updates
 * **Bugs Fixed from Submitted Error Reports**:
