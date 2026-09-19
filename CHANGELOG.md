@@ -4,6 +4,9 @@
   * Fixed an issue where the "Frost Resistance" buff icon could display in the status bar while the player still suffered from the Freezing debuff in Mountain biomes.
 * **Fix for "Require Only One Resource" Configuration**:
   * Fixed an issue where enabling `Require only one resource` in the configuration caused backpack upgrade recipes to falsely indicate they were ready to craft when missing required materials.
+* **Bugs Fixed from Submitted Error Reports**:
+  * Fixed an issue where backpacks initialized early during startup could cause an error when game localization was not yet loaded.
+  * Fixed a configuration issue where mod settings could trigger a missing field error when interacting with third-party configuration managers.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>

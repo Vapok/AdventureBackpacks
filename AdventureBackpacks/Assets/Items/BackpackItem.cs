@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Timers;
 using AdventureBackpacks.API;
 using BepInEx.Configuration;
@@ -7,6 +7,7 @@ using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
 using Vapok.Common.Managers.LocalizationManager;
 using Vapok.Common.Managers.StatusEffects;
+using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Assets.Items;
 
@@ -75,24 +76,25 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         _englishSection = Localizer.GetTranslation("English",_configSection);
 
         if (externalLocalize)
-            _localizedCategory = Localization.m_instance.Localize(_configSection);
+            _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
         else
-            _localizedCategory = Localization.instance.Localize(_configSection);
+            _localizedCategory = Localization.instance?.Localize(_configSection) ?? Localization.m_instance?.Localize(_configSection) ?? _configSection;
         
         SetupBackpackDef();
     }
 
     internal void SetupLocalization()
     {
-        _englishSection = Localizer.GetTranslation("English",_configSection);;
-        _localizedCategory = Localization.m_instance.Localize(_configSection);
-        if (_localizedCategory.Equals(_configSection))
-            _localizedCategory = Localization.instance.Localize(_configSection);
+        _englishSection = Localizer.GetTranslation("English",_configSection);
+        _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
     }
     
     private void SetupBackpackDef()
     {
-        Item.SectionName = _configSection;
+        if (Item != null)
+        {
+            Item.SectionName = _configSection;
+        }
         BackpackSize = new();
         InceptionTimer = new System.Timers.Timer(10000);
         InceptionTimer.AutoReset = false;

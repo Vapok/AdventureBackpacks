@@ -12,6 +12,10 @@
     * Selects unequipped items to prevent equipped gear from being consumed.
   * Added Harmony Prefix on `Recipe.GetAmount`:
     * Added null-safety guard for `singleReqItem != null` prior to calculating quality bonus multipliers, preventing unhandled `NullReferenceException` crashes.
+* **Bugfixes & Null Safety Guards**:
+  * In `BackpackItem.cs`, added defensive null-conditional checks on Valheim's `Localization.instance` and `Localization.m_instance` during early startup to prevent `NullReferenceException` before game localization is initialized.
+  * In `BackpackItem.cs`, imported `Vapok.Common.Shared` to bind directly to internal `ConfigurationManagerAttributes`, preventing runtime `MissingFieldException` on `Category` when third-party configuration managers are present.
+  * Added null validation on `Item` before setting `Item.SectionName` in `SetupBackpackDef()`.
 
 # 2.0.9 - General Bugfixes and Splash Window Updates
 * **Bugfixes & Null Safety Guards**:
