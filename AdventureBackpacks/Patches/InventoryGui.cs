@@ -57,7 +57,7 @@ internal static class InventoryGuiPatches
 
                 if (player.IsThisBackpackEquipped(backpack.Item))
                 {
-                    var backpackContainer = player.gameObject.GetComponent<Container>();
+                    var backpackContainer = player.GetBackpackContainerProxy();
                     backpack?.UpdateContainerSizing(ref backpackContainer);
                 }
                     

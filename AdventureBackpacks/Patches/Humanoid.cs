@@ -108,11 +108,7 @@ public class HumanoidPatches
                     InventoryGuiPatches.BackpackIsOpen = false;
                 }
                 
-                var backpackContainer = player.gameObject.GetComponent<Container>();
-                if (backpackContainer == null)
-                    return;
-
-                backpackContainer.m_inventory = new Inventory("Empty", null, 1, 1);
+                player.DestroyBackpackContainerProxy();
                 InventoryGuiPatches.BackpackEquipped = false;
             }
         }
@@ -148,7 +144,7 @@ public class HumanoidPatches
                     }
                     else
                     {
-                        var backpackContainer = player.gameObject.GetComponent<Container>();
+                        var backpackContainer = player.GetBackpackContainerProxy();
                         if (backpackContainer != null)
                             backpackItem.UpdateContainerSizing(ref backpackContainer);
                     }

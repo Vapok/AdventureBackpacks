@@ -33,7 +33,7 @@ namespace AdventureBackpacks.Components
         {
             if (Player.m_localPlayer != null && Player.m_localPlayer.IsThisBackpackEquipped(Item))
             {
-                var container = Player.m_localPlayer.gameObject.GetComponent<Container>();
+                var container = Player.m_localPlayer.GetBackpackContainerProxy();
                 if (container != null && _backpackInventory != null)
                 {
                     container.m_inventory = _backpackInventory;

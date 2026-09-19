@@ -1,4 +1,16 @@
-# 2.1.1 - Crafting & Container Mod Compatibility
+# 2.1.2 - Player Container Isolation & Ecosystem Compatibility
+* **Player Entity Container Isolation**:
+  * Removed the direct `Container` component from the root Player character object, preventing external container mods and vanilla systems from misidentifying the player as a world chest or container piece.
+  * Migrated all backpack container operations to a dedicated, isolated child proxy GameObject (`AB_BackpackProxy`) that exists exclusively to back the backpack UI window.
+* **Container Proxy Virtualization & Stability Fixes**:
+  * Added safeguards to intercept container network routines on the local proxy, resolving an issue where opening, updating, or closing the backpack could cause errors (`NullReferenceException` in `Container.SetInUse`).
+  * Ensured container actions like `Take All` and `Stack All` interact smoothly with the backpack proxy and local inventory.
+  * Added lifecycle management to guarantee clean destruction and cleanup of the proxy upon unequipping gear, character death, or respawning.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.1 - Crafting & Container Mod Compatibility
 * **Compatibility with ValheimPlus, ItemDrawers & Container Mods**:
   * Fixed an issue where enabling `Enable Craft From Backpack` prevented building hammer pieces and crafting recipes from detecting materials in nearby chests.
   * Converted crafting requirement checks to cooperative hooks so vanilla game systems and other crafting/container mods evaluate uninterrupted.
@@ -9,9 +21,6 @@
 * **Equipment & Stability Fixes**:
   * Fixed an error that could occur when unequipping gear (`NullReferenceException` in `Humanoid.UnequipItem`).
   * Added error handling during localization loading so malformed community translation files no longer prevent backpacks from initializing.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.1.0 - Craft From Backpack & Auto Store To Backpack
 * **New Feature: Craft From Backpack**:
@@ -90,60 +99,3 @@
 
 </details>
 
-<details>
-<summary><b>1.0 Changelog History (Valheim Early Access)</b> (<i>click to expand</i>)</summary>
-
-### 1.9.13 - Refreshed Drop Lists & Bugfixes
-* Refreshed Drop Lists for all backpacks with new biomes and creatures.
-* Fixed first-load InventoryGrid indexing issues.
-* Fixed Container prefix patch referencing ArmorStand.
-* Optimized effect registration and toggle handling.
-
-### 1.9.12 - External References Updated and Item Duplication Guardrails
-* Added guardrails and validation checks against item duplication.
-* Updated Vapok.Valheim.Common and Jotunn references.
-
-### 1.9.11 - Valheim Version Maintenance
-* Updated for Valheim 0.221.12.
-* Added ZenUI / ZenModLib compatibility handling.
-
-### 1.9.10 - Additional Fixes
-* Fixed crash when backpack size is configured to 0.
-* Fixed item loss when upgrading unequipped backpacks.
-* Fixed character load failures.
-
-### 1.9.9 - Regression Fixes
-* Fixed backpack equipping and upgrading regressions.
-
-### 1.9.8 - Backpack Resizing Fix
-* Fixed item duplication during backpack resizing.
-* Clarified configuration hints for weight reduction multiplier.
-* Updated API DLL to .NET 4.8.
-
-### 1.9.7 - Dedicated Server Strictness & Wisplight Config
-* Enabled network compatibility enforcement on dedicated servers.
-* Reorganized Wisplight configuration settings.
-
-### 1.9.6 - Wisplight Biome Logic
-* Added config setting to allow Wisplight usage across all biomes.
-
-### 1.9.5 - Explorer's Wisppack & Asset Updates
-* Wisplight is now togglable via hotkey (default 'L').
-* Updated AssetBundles to Unity 6.
-* Migrated configuration to Jotunn.
-
-### 1.9.4 - Translations & Upgrades
-* Added Turkish translation.
-* Improved backpack upgrading with inventory contents.
-* Overhauled localization system.
-
-### 1.9.3 - Dedicated Server Config Syncing
-* Fixed server-to-client configuration syncing via Jotunn.
-
-### 1.9.2 - Dependency Cleanup
-* Removed ServerSync and finalized Jotunn config management.
-
-### 1.9.0 - Valheim Update
-* Updated for Valheim 0.221.4.
-
-</details>

@@ -1,3 +1,18 @@
+# 2.1.2 - Player Container Isolation & Ecosystem Compatibility
+* **Player Root Container De-Pollution (`Patches/Player.cs`, `Patches/Humanoid.cs`)**:
+  * Removed `PlayerAwakePatch` which added a `Container` component directly to `Player.gameObject`.
+  * Eliminates component pollution on the root player entity, preventing external container mods (ValheimPlus, AzuCraftyBoxes, ItemDrawers, etc.) and vanilla systems from misidentifying the player character as a world chest or piece container.
+* **Dedicated Child Proxy Architecture (`Extensions/PlayerExtensions.cs`)**:
+  * Created `GetBackpackContainerProxy(this Player)` to host the `Container` component exclusively on a dedicated child GameObject (`AB_BackpackProxy`) parented under `player.transform`.
+  * Added transform hierarchy verification (`_backpackProxyContainer.transform.parent == player.transform`) to ensure stale proxy instances are discarded across player deaths, respawns, or character switches.
+  * Added `DestroyBackpackContainerProxy(this Player)` to cleanly destroy the proxy GameObject and reset references upon unequipping backpacks or player death (`Player.UnequipDeathDropItems`).
+* **Container Proxy Virtualization Patches (`Patches/Container.cs`)**:
+  * Added `ContainerSetInUsePatch` on `Container.SetInUse(bool)` to suppress vanilla execution for `IsBackpackProxy()`, preventing `NullReferenceException` crashes caused by `m_nview.IsOwner()` on proxies without a `ZNetView` during `InventoryGui.UpdateContainer()` and `InventoryGui.CloseContainer()`.
+  * Added `ContainerTakeAllPatch` on `Container.TakeAll(Humanoid character, ref bool __result)` matching vanilla parameter names, delegating item transfers from backpack to player inventory, and setting `__result = true;`.
+  * Added `ContainerLoadPatch` on `Container.Load(ref bool __result)` and `ContainerSavePatch` on `Container.Save()` to prevent attempts to serialize or deserialize backpack proxy inventories into the player ZDO.
+  * Added `ContainerAwakePatch` on `Container.Awake()` to suppress RPC registrations and repeating `CheckForChanges` polling on the proxy.
+  * Added `ContainerIsOwnerPatch` (`__result = true;`), `ContainerIsInUsePatch` (`__result = false;`), `ContainerCheckAccessPatch` (`__result = true;`), and `ContainerStackAllPatch` to cleanly virtualize container UI behaviors.
+
 # 2.1.1 - Crafting & Container Mod Compatibility
 * **Cooperative, Non-Destructive Crafting Requirement Hooks (`Patches/Player.cs`)**:
   * Refactored `PlayerHaveRequirementsPatch` on `Player.HaveRequirements(Piece, Player.RequirementMode)` from a destructive Harmony Prefix (`return false`) to a cooperative, additive `[HarmonyPostfix]`. If vanilla or external container mods (such as **ValheimPlus `CraftFromChest`** or **ItemDrawers**) already satisfy the piece requirement (`__result == true`), the postfix exits immediately without interference. Only when `__result == false` does it check if the equipped backpack inventory satisfies any remaining shortfall.

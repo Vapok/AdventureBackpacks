@@ -52,10 +52,67 @@ public static class PlayerExtensions
     {
         return IsBackpackEquipped(player);
     }
+    public const string BackpackProxyName = "AB_BackpackProxy";
+    private static Container _backpackProxyContainer;
 
-    public static void OpenBackpack(this Player player, InventoryGui instance)
+    public static Container GetBackpackContainerProxy(this Player player)
     {
         if (player == null || player.gameObject == null)
+            return null;
+
+        if (_backpackProxyContainer != null && _backpackProxyContainer.gameObject != null && _backpackProxyContainer.transform.parent == player.transform)
+            return _backpackProxyContainer;
+
+        var existingTransform = player.transform.Find(BackpackProxyName);
+        if (existingTransform != null && existingTransform.gameObject != null)
+        {
+            _backpackProxyContainer = existingTransform.GetComponent<Container>();
+            if (_backpackProxyContainer != null)
+                return _backpackProxyContainer;
+
+            _backpackProxyContainer = existingTransform.gameObject.AddComponent<Container>();
+            _backpackProxyContainer.m_name = "$piece_container";
+            return _backpackProxyContainer;
+        }
+
+        var proxyObj = new GameObject(BackpackProxyName);
+        proxyObj.transform.SetParent(player.transform, false);
+
+        _backpackProxyContainer = proxyObj.AddComponent<Container>();
+        _backpackProxyContainer.m_name = "$piece_container";
+
+        return _backpackProxyContainer;
+    }
+
+    public static void DestroyBackpackContainerProxy(this Player player)
+    {
+        if (_backpackProxyContainer != null)
+        {
+            if (_backpackProxyContainer.gameObject != null)
+            {
+                Object.Destroy(_backpackProxyContainer.gameObject);
+            }
+            _backpackProxyContainer = null;
+        }
+
+        if (player != null && player.gameObject != null)
+        {
+            var existingTransform = player.transform.Find(BackpackProxyName);
+            if (existingTransform != null && existingTransform.gameObject != null)
+            {
+                Object.Destroy(existingTransform.gameObject);
+            }
+        }
+    }
+
+    public static void DestroyBackpackContainerProxy()
+    {
+        DestroyBackpackContainerProxy(null);
+    }
+
+    public static void OpenBackpack(this Player player, InventoryGui instance = null)
+    {
+        if (player == null || !player.IsBackpackEquipped())
             return;
 
         if (instance == null)
@@ -68,14 +125,11 @@ public static class PlayerExtensions
         if (backpack == null)
             return;
 
-        var backpackContainer = player.gameObject.GetComponent<Container>();
-        if (backpackContainer == null)
-            backpackContainer = player.gameObject.AddComponent<Container>();
-
-        backpack.UpdateContainerSizing(ref backpackContainer);
-
+        var backpackContainer = player.GetBackpackContainerProxy();
         if (backpackContainer == null)
             return;
+
+        backpack.UpdateContainerSizing(ref backpackContainer);
 
         InventoryGuiPatches.BackpackIsOpen = true;
         try

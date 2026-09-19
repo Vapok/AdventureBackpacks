@@ -82,7 +82,7 @@ public static class InventoryPatches
                         }
                         else
                         {
-                            var backpackContainer = player.gameObject.GetComponent<Container>();
+                            var backpackContainer = player.GetBackpackContainerProxy();
                             if (backpackContainer != null && backpackContainer.m_inventory == __instance)
                             {
                                 backpack.SetInventory(__instance);

@@ -227,7 +227,7 @@ namespace AdventureBackpacks.Assets
             
             if (player.IsThisBackpackEquipped(currentBackpack))
             {
-                var backpackContainer = player.gameObject.GetComponent<Container>();
+                var backpackContainer = player.GetBackpackContainerProxy();
                 if (backpackContainer != null)
                     backpackItem.UpdateContainerSizing(ref backpackContainer);
             }

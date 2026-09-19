@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Threading;
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using UnityEngine;
 
@@ -9,13 +8,33 @@ namespace AdventureBackpacks.Patches;
 
 public static class ContainerPatches
 {
+    public static bool IsBackpackProxy(this Container container)
+    {
+        if (container == null || container.gameObject == null) return false;
+        return container.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName) ||
+               container.gameObject.name.Equals("Player(Clone)") ||
+               container.GetComponentInParent<Player>() != null;
+    }
+
     [HarmonyPatch(typeof(Container), nameof(Container.TakeAll))]
     static class ContainerTakeAllPatch
     {
-        static void Prefix(Container __instance)
+        static bool Prefix(Container __instance, Humanoid character, ref bool __result)
         {
             AdventureBackpacks.BypassMoveProtection = true;
+            if (__instance.IsBackpackProxy())
+            {
+                var player = character as Player ?? Player.m_localPlayer;
+                if (player != null && __instance.GetInventory() != null)
+                {
+                    player.GetInventory().MoveAll(__instance.GetInventory());
+                }
+                __result = true;
+                return false;
+            }
+            return true;
         }
+
         static void Postfix(Container __instance)
         {
             AdventureBackpacks.BypassMoveProtection = false;
@@ -27,7 +46,7 @@ public static class ContainerPatches
     {
         static bool Prefix(Container __instance, ref bool __result)
         {
-            if (__instance.name.Equals("Player(Clone)") || __instance.GetComponent<Player>() != null)
+            if (__instance.IsBackpackProxy())
             {
                 __result = false;
                 return false;
@@ -42,7 +61,7 @@ public static class ContainerPatches
     {
         static bool Prefix(Container __instance)
         {
-            if (__instance != null && (__instance.name.Equals("Player(Clone)") || __instance.GetComponent<Player>() != null))
+            if (__instance != null && __instance.IsBackpackProxy())
             {
                 // Backpack items are saved via BackpackComponent/ItemData, not through the player ZDO's s_items field.
                 return false;
@@ -54,77 +73,103 @@ public static class ContainerPatches
     [HarmonyPatch(typeof(Container), nameof(Container.Load))]
     static class ContainerLoadPatch
     {
-        static bool Prefix(Container __instance)
+        static bool Prefix(Container __instance, ref bool __result)
         {
-            if (__instance != null && (__instance.name.Equals("Player(Clone)") || __instance.GetComponent<Player>() != null))
+            if (__instance != null && __instance.IsBackpackProxy())
             {
                 // Backpack items are loaded via BackpackComponent/ItemData, not through the player ZDO's s_items field.
+                __result = false;
                 return false;
             }
             return true;
         }
     }
-    
+
     [HarmonyPatch(typeof(Container), nameof(Container.Awake))]
     static class ContainerAwakePatch
     {
-        static void UpdateZDO(Container instance, ZNetView nview)
+        static bool Prefix(Container __instance)
         {
-            if (instance.name.Equals("Player(Clone)") || instance.GetComponent<Player>() != null)
+            if (__instance.IsBackpackProxy())
             {
-                nview.GetZDO().Set("creator".GetStableHashCode(),1L);
+                // Suppress vanilla Container.Awake for the backpack UI proxy.
+                // Prevents NullReferenceException on missing ZNetView, stops network RPC registrations,
+                // and prevents CheckForChanges polling.
+                return false;
             }
+            return true;
         }
-        
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
+    }
+
+    [HarmonyPatch(typeof(Container), nameof(Container.IsOwner))]
+    static class ContainerIsOwnerPatch
+    {
+        static bool Prefix(Container __instance, ref bool __result)
         {
-            var patchedSuccess = false;
-            
-            var instrs = instructions.ToList();
-
-            var counter = 0;
-
-            CodeInstruction LogMessage(CodeInstruction instruction)
+            if (__instance.IsBackpackProxy())
             {
-                AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
-                return instruction;
+                __result = true;
+                return false;
             }
+            return true;
+        }
+    }
 
-            var invokeRepeatingMethod = AccessTools.DeclaredMethod(typeof(MonoBehaviour), nameof(MonoBehaviour.InvokeRepeating), new []{typeof(string), typeof(float), typeof(float)});
-            var nviewField = AccessTools.DeclaredField(typeof(Container),nameof(Container.m_nview));
-
-            for (int i = 0; i < instrs.Count; ++i)
+    [HarmonyPatch(typeof(Container), nameof(Container.IsInUse))]
+    static class ContainerIsInUsePatch
+    {
+        static bool Prefix(Container __instance, ref bool __result)
+        {
+            if (__instance.IsBackpackProxy())
             {
-                if (i > 5 && instrs[i].opcode == OpCodes.Ret && instrs[i-1].opcode == OpCodes.Call && instrs[i-1].operand.Equals(invokeRepeatingMethod))
+                __result = false;
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Container), nameof(Container.SetInUse))]
+    static class ContainerSetInUsePatch
+    {
+        static bool Prefix(Container __instance)
+        {
+            if (__instance != null && __instance.IsBackpackProxy())
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Container), nameof(Container.CheckAccess))]
+    static class ContainerCheckAccessPatch
+    {
+        static bool Prefix(Container __instance, ref bool __result)
+        {
+            if (__instance.IsBackpackProxy())
+            {
+                __result = true;
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Container), nameof(Container.StackAll))]
+    static class ContainerStackAllPatch
+    {
+        static bool Prefix(Container __instance)
+        {
+            if (__instance.IsBackpackProxy())
+            {
+                if (Player.m_localPlayer != null && __instance.GetInventory() != null)
                 {
-                    //Container this (arg #1)
-                    yield return new CodeInstruction(OpCodes.Ldarg_0);
-                    counter++;
-                    
-                    //Container this (for arg #2)
-                    yield return new CodeInstruction(OpCodes.Ldarg_0);
-                    counter++;
-                    
-                    //Container Field nview (arg #2)
-                    yield return new CodeInstruction(OpCodes.Ldfld,nviewField);
-                    counter++;
-          
-                    //Patch Calling Method
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(ContainerAwakePatch), nameof(UpdateZDO))));
-                    counter++;
-
-                    patchedSuccess = true;
+                    __instance.GetInventory().StackAll(Player.m_localPlayer.GetInventory());
                 }
-
-                yield return LogMessage(instrs[i]);
-                counter++;
+                return false;
             }
-            
-            if (!patchedSuccess)
-            {
-                AdventureBackpacks.Log.Error($"Container.Awake Transpiler Failed To Patch");
-                Thread.Sleep(5000);
-            }
+            return true;
         }
     }
 }
