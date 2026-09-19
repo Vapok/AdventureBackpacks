@@ -1,3 +1,13 @@
+# 2.1.3 - Auto-Store Item Data & Stack Space Null Safety
+* **Defensive Stack Space Scanning (`Extensions/InventoryExtensions.cs`, `Features/StoreToBackpack.cs`)**:
+  * Implemented `SafeFindFreeStackSpace(this Inventory, string, float)` extension method to replace vanilla `Inventory.FindFreeStackSpace`. Vanilla `FindFreeStackSpace` iterates over `m_inventory` without null-checking items or `item.m_shared`, throwing `NullReferenceException` ([ADVENTUREBACKPACKS-W](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-W)) if an external container or inventory management mod leaves an uninitialized slot or null entry in the backpack inventory.
+  * Replaced all calls to `FindFreeStackSpace` in `StoreToBackpack.ShouldStoreToBackpack`, `StoreToBackpack.CanInventoryAccept`, and `StoreToBackpack.TryStoreItem` with `SafeFindFreeStackSpace`.
+* **Defensive Item Presence Scanning (`Extensions/InventoryExtensions.cs`, `Features/StoreToBackpack.cs`, `Patches/Player.cs`, `Patches/Door.cs`)**:
+  * Implemented `SafeHaveItem(this Inventory, string)` extension method guarding against null items and uninitialized `m_shared` entries.
+  * Updated `StoreToBackpack.ShouldStoreToBackpack` to use `backpackInventory.SafeHaveItem` when evaluating whether to auto-store.
+  * Updated `PlayerPatches.PlayerHaveRequirementsPatch` to use `SafeHaveItem` when checking crafting requirements against player and backpack inventories.
+  * Updated `DoorPatches.HaveDoorKeyPatch` to safely evaluate key availability with null-propagation and `SafeHaveItem`.
+
 # 2.1.2 - Player Container Isolation & Ecosystem Compatibility
 * **Player Root Container De-Pollution (`Patches/Player.cs`, `Patches/Humanoid.cs`)**:
   * Removed `PlayerAwakePatch` which added a `Container` component directly to `Player.gameObject`.

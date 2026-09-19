@@ -152,7 +152,7 @@ public class PlayerPatches
                 switch (mode)
                 {
                     case Player.RequirementMode.CanAlmostBuild:
-                        if (!__instance.m_inventory.HaveItem(itemName) && !bpInventory.HaveItem(itemName))
+                        if (!__instance.m_inventory.SafeHaveItem(itemName) && !bpInventory.SafeHaveItem(itemName))
                         {
                             return;
                         }

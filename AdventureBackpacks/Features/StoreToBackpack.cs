@@ -75,13 +75,13 @@ public static class StoreToBackpack
             return false;
 
         // Condition 1: Item already exists in the backpack, and backpack has room
-        if (EnableStoreToBackpack.Value && backpackInventory.HaveItem(item.m_shared.m_name))
+        if (EnableStoreToBackpack.Value && backpackInventory.SafeHaveItem(item.m_shared.m_name))
         {
             if (CanInventoryAccept(backpackInventory, item, item.m_stack))
                 return true;
 
             // Check if backpack can take at least part of the stack
-            var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
             var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
                 return true;
@@ -93,7 +93,7 @@ public static class StoreToBackpack
             if (CanInventoryAccept(backpackInventory, item, item.m_stack))
                 return true;
 
-            var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
             var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
                 return true;
@@ -107,7 +107,7 @@ public static class StoreToBackpack
     /// </summary>
     public static bool CanInventoryAccept(Inventory inventory, ItemDrop.ItemData item, int stack = -1)
     {
-        if (inventory == null || item == null || item.m_shared == null)
+        if (inventory?.m_inventory == null || item?.m_shared == null)
             return false;
 
         if (inventory.HaveEmptySlot())
@@ -119,7 +119,7 @@ public static class StoreToBackpack
         if (stack <= 0)
             stack = item.m_stack;
 
-        return inventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel) >= stack;
+        return inventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel) >= stack;
     }
 
     /// <summary>
@@ -147,7 +147,7 @@ public static class StoreToBackpack
         // Handle partial stack transfer if item is stackable
         if (item.m_shared.m_maxStackSize > 1 && item.m_stack > 1)
         {
-            var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
             var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             var availableSpace = freeStack + (emptySlots * item.m_shared.m_maxStackSize);
 

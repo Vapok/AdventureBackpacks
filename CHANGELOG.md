@@ -1,3 +1,6 @@
+# 2.1.3 - Auto-Store Hotfix
+* Fixed an issue where auto-storing items into the equipped backpack could cause errors when interacting with external container, drawer, or sorting mods.
+
 # 2.1.2 - Player Container Isolation & Ecosystem Compatibility
 * **Player Entity Container Isolation**:
   * Removed the direct `Container` component from the root Player character object, preventing external container mods and vanilla systems from misidentifying the player as a world chest or container piece.

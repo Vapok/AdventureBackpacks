@@ -16,7 +16,8 @@ public static class DoorPatches
             if (Player.m_localPlayer.IsBackpackEquipped() && __result == false)
             {
                 var backpack = Player.m_localPlayer.GetEquippedBackpack();
-                __result = (__instance.m_keyItem == null || backpack.GetInventory().HaveItem(__instance.m_keyItem.m_itemData.m_shared.m_name));
+                var keyName = __instance.m_keyItem?.m_itemData?.m_shared?.m_name;
+                __result = (__instance.m_keyItem == null || (!string.IsNullOrEmpty(keyName) && (backpack?.GetInventory()?.SafeHaveItem(keyName) ?? false)));
             }
         }
     }
