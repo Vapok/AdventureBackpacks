@@ -1,3 +1,21 @@
+# 2.1.1 - Crafting & Container Mod Compatibility
+* **Cooperative, Non-Destructive Crafting Requirement Hooks (`Patches/Player.cs`)**:
+  * Refactored `PlayerHaveRequirementsPatch` on `Player.HaveRequirements(Piece, Player.RequirementMode)` from a destructive Harmony Prefix (`return false`) to a cooperative, additive `[HarmonyPostfix]`. If vanilla or external container mods (such as **ValheimPlus `CraftFromChest`** or **ItemDrawers**) already satisfy the piece requirement (`__result == true`), the postfix exits immediately without interference. Only when `__result == false` does it check if the equipped backpack inventory satisfies any remaining shortfall.
+  * Refactored `PlayerGetFirstRequiredItemPatch` on `Player.GetFirstRequiredItem` from an unconditional destructive Prefix (`return false`) to a cooperative `[HarmonyPostfix]`. If vanilla or an external mod resolves a matching ingredient (`__result != null`), it yields immediately; otherwise, it searches the equipped backpack inventory as a fallback.
+  * Refactored `PlayerHaveRequirementItemsPatch` for single-ingredient recipes (`m_requireOnlyOneIngredient`) from a destructive Prefix to a cooperative `[HarmonyPostfix]` that only intervenes when `__result == false`.
+* **Crafting Item Consumption & Sentry Bugfix (`Features/CraftFromBackpack.cs` & `Patches/Player.cs`)**:
+  * Fixed `NullReferenceException` in `CraftFromBackpack.ConsumeCraftingItem` ([ADVENTUREBACKPACKS-V](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-V)) by adding defensive `x != null && x.m_shared != null` guards and safe `string.Equals` checks across all inventory and backpack item LINQ queries.
+  * Added matching null-safety checks in `PlayerPatches.ConsumeUnEquippedItems` and `PlayerPatches.AdjustCountIfEquipped`.
+* **Auto Store Item Data Null Safety (`Features/StoreToBackpack.cs`, `Assets/Backpacks.cs`, `Extensions/ItemDataExtensions.cs`)**:
+  * Fixed `NullReferenceException` in `StoreToBackpack.TryStoreItem` ([ADVENTUREBACKPACKS-W](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-W)) by adding comprehensive null checks in `ItemDataExtensions.IsBackpack`, `Backpacks.TryGetBackpackItem`, and `StoreToBackpack.TryStoreItem` before querying `m_shared` properties or stack sizes.
+  * Added null-safe empty slot calculation guarding against null `backpackInventory.m_inventory`.
+* **Equipment & Scene Transition Guards (`Patches/Humanoid.cs`)**:
+  * Fixed `NullReferenceException` in `Humanoid.UnequipItem` and `Humanoid.EquipItem` ([ADVENTUREBACKPACKS-S](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-S)) by verifying `__instance == Player.m_localPlayer` before executing player-specific backpack unequip operations and guarding scene name checks.
+* **Community Translation Error Handling (`Assets/Items/BackpackItem.cs`)**:
+  * Wrapped localization translation fetching in `SafeGetTranslation` to catch unhandled `SemanticErrorException` crashes ([ADVENTUREBACKPACKS-A](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-A)) caused by malformed community YAML/JSON translation files.
+* **Inventory Crafting Consumption Coordination (`Patches/Inventory.cs`)**:
+  * Refactored `RemoveItemByNamePatch` on `Inventory.RemoveItem(string, int, int, bool)` to remove `[HarmonyPriority(Priority.First)]` and allow partial consumption delegation. If `ConsumeCraftingItem` cannot completely fulfill the required amount, `amount` is updated to `remaining` and the call proceeds to vanilla/external container managers (`return true`) instead of destructively swallowing the removal.
+
 # 2.1.0 - Craft From Backpack & Auto Store To Backpack
 * **Craft From Backpack (`Features/CraftFromBackpack.cs`)**:
   * Implemented `CraftFromBackpack` feature allowing placeable building (hammer) and crafting stations to consider items in the equipped backpack.

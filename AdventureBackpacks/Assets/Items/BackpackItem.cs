@@ -73,7 +73,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     protected BackpackItem(string assetName, string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(assetName, prefabName,itemName)
     {
         _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
-        _englishSection = Localizer.GetTranslation("English",_configSection);
+        _englishSection = SafeGetTranslation("English", _configSection);
 
         if (externalLocalize)
             _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
@@ -85,8 +85,21 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
 
     internal void SetupLocalization()
     {
-        _englishSection = Localizer.GetTranslation("English",_configSection);
+        _englishSection = SafeGetTranslation("English", _configSection);
         _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
+    }
+
+    private static string SafeGetTranslation(string language, string text)
+    {
+        try
+        {
+            return Localizer.GetTranslation(language, text);
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log.Warning($"Failed to get translation for '{text}': {ex.Message}");
+            return text;
+        }
     }
     
     private void SetupBackpackDef()

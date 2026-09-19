@@ -50,7 +50,7 @@ public class PlayerPatches
         {
             var inventory = player?.GetInventory();
             var equippedItems = inventory?.GetEquippedItems();
-            if (equippedItems != null && equippedItems.Any(x => x.m_shared != null && x.m_shared.m_name.Equals(itemName)))
+            if (equippedItems != null && equippedItems.Any(x => x != null && x.m_shared != null && string.Equals(x.m_shared.m_name, itemName)))
             {
                 num -= 1;
             }
@@ -97,7 +97,7 @@ public class PlayerPatches
         if (allItems == null)
             return amount;
 
-        var resourceItems = allItems.Where(x => x.m_shared != null && x.m_shared.m_name.Equals(itemName)).ToList();
+        var resourceItems = allItems.Where(x => x != null && x.m_shared != null && string.Equals(x.m_shared.m_name, itemName)).ToList();
 
         var removedCounter = 0;
         for (int i = 0; i < amount; i++)
@@ -126,48 +126,39 @@ public class PlayerPatches
     [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirements), new[] { typeof(Piece), typeof(Player.RequirementMode) })]
     static class PlayerHaveRequirementsPatch
     {
-        static bool Prefix(Player __instance, Piece piece, Player.RequirementMode mode, ref bool __result)
+        static void Postfix(Player __instance, Piece piece, Player.RequirementMode mode, ref bool __result)
         {
+            // If already satisfied (by vanilla inventory or container mods like ValheimPlus/ItemDrawers), do nothing!
+            if (__result)
+                return;
+
             if (piece == null || !CraftFromBackpack.CanCraftFromBackpack(__instance, out var bpInventory))
-                return true;
+                return;
 
             if (mode == Player.RequirementMode.IsKnown)
-                return true;
+                return;
 
             if (piece.m_craftingStation != null)
             {
                 if (mode == Player.RequirementMode.CanAlmostBuild)
                 {
                     if (!__instance.m_knownStations.ContainsKey(piece.m_craftingStation.m_name))
-                    {
-                        __result = false;
-                        return false;
-                    }
+                        return;
                 }
                 else if (!CraftingStation.HaveBuildStationInRange(piece.m_craftingStation.m_name, __instance.transform.position) && !ZoneSystem.instance.GetGlobalKey(GlobalKeys.NoWorkbench))
                 {
-                    __result = false;
-                    return false;
+                    return;
                 }
             }
 
             if (piece.m_dlc.Length > 0 && !DLCMan.instance.IsDLCInstalled(piece.m_dlc))
-            {
-                __result = false;
-                return false;
-            }
-
-            if (ZoneSystem.instance.GetGlobalKey(piece.FreeBuildKey()))
-            {
-                __result = true;
-                return false;
-            }
+                return;
 
             var resources = piece.m_resources;
             if (resources == null)
             {
                 __result = true;
-                return false;
+                return;
             }
 
             foreach (var requirement in resources)
@@ -175,7 +166,7 @@ public class PlayerPatches
                 if (!requirement.m_resItem || requirement.m_amount <= 0)
                     continue;
 
-                var itemName = requirement.m_resItem.m_itemData.m_shared?.m_name;
+                var itemName = requirement.m_resItem.m_itemData?.m_shared?.m_name;
                 if (string.IsNullOrEmpty(itemName))
                     continue;
 
@@ -184,8 +175,7 @@ public class PlayerPatches
                     case Player.RequirementMode.CanAlmostBuild:
                         if (!__instance.m_inventory.HaveItem(itemName) && !bpInventory.HaveItem(itemName))
                         {
-                            __result = false;
-                            return false;
+                            return;
                         }
                         break;
 
@@ -194,42 +184,42 @@ public class PlayerPatches
                         count = AdjustCountIfEquipped(count, __instance, requirement);
                         if (count < requirement.m_amount)
                         {
-                            __result = false;
-                            return false;
+                            return;
                         }
                         break;
                 }
             }
 
             __result = true;
-            return false;
         }
     }
 
     [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirementItems))]
     static class PlayerHaveRequirementItemsPatch
     {
-        [HarmonyPrefix]
-        static bool Prefix(Player __instance, Recipe piece, bool discover, int qualityLevel, int amount, ref bool __result)
+        [HarmonyPostfix]
+        static void Postfix(Player __instance, Recipe piece, bool discover, int qualityLevel, int amount, ref bool __result)
         {
+            // If already satisfied (by vanilla inventory or container mods like ValheimPlus/ItemDrawers), do nothing!
+            if (__result)
+                return;
+
             if (piece == null || !piece.m_requireOnlyOneIngredient)
-            {
-                return true;
-            }
+                return;
+
+            if (!CraftFromBackpack.CanCraftFromBackpack(__instance, out _))
+                return;
 
             var currentCraftingStation = __instance.GetCurrentCraftingStation();
             var resources = piece.m_resources;
             if (resources == null)
-            {
-                __result = false;
-                return false;
-            }
+                return;
 
             foreach (var requirement in resources)
             {
                 if ((!discover && currentCraftingStation != null && currentCraftingStation.m_upgrader != requirement.m_upgraderResource) ||
                     (currentCraftingStation == null && requirement.m_upgraderResource) ||
-                    !requirement.m_resItem)
+                    !requirement.m_resItem || requirement.m_resItem.m_itemData == null || requirement.m_resItem.m_itemData.m_shared == null)
                 {
                     continue;
                 }
@@ -242,7 +232,7 @@ public class PlayerPatches
                     if (__instance.IsMaterialKnown(requirement.m_resItem.m_itemData.m_shared.m_name))
                     {
                         __result = true;
-                        return false;
+                        return;
                     }
                     continue;
                 }
@@ -250,7 +240,6 @@ public class PlayerPatches
                 int neededAmount = requirement.GetAmount(qualityLevel) * amount;
                 if (neededAmount <= 0)
                 {
-                    // Vanilla bug fix: skip 0-amount requirements so 0 items cannot falsely satisfy m_requireOnlyOneIngredient!
                     continue;
                 }
 
@@ -258,7 +247,7 @@ public class PlayerPatches
                 for (int q = 1; q <= requirement.m_resItem.m_itemData.m_shared.m_maxQuality; q++)
                 {
                     int count = __instance.GetInventory().CountItems(requirement.m_resItem.m_itemData.m_shared.m_name, q);
-                    count = AdjustCountIfEquipped(count, __instance, requirement);
+                    count = AdjustCountIfEquipped(count, __instance, requirement, q);
                     if (count > maxInInventory)
                     {
                         maxInInventory = count;
@@ -268,12 +257,9 @@ public class PlayerPatches
                 if (maxInInventory >= neededAmount)
                 {
                     __result = true;
-                    return false;
+                    return;
                 }
             }
-
-            __result = false;
-            return false;
         }
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
@@ -417,15 +403,18 @@ public class PlayerPatches
     [HarmonyPatch(typeof(Player), nameof(Player.GetFirstRequiredItem))]
     static class PlayerGetFirstRequiredItemPatch
     {
-        [HarmonyPrefix]
-        static bool Prefix(Player __instance, Inventory inventory, Recipe recipe, int qualityLevel, out int amount, out int extraAmount, int craftMultiplier, ref ItemDrop.ItemData __result)
+        [HarmonyPostfix]
+        static void Postfix(Player __instance, Inventory inventory, Recipe recipe, int qualityLevel, ref int amount, ref int extraAmount, int craftMultiplier, ref ItemDrop.ItemData __result)
         {
-            amount = 0;
-            extraAmount = 0;
-            __result = null;
+            // If vanilla or an external mod already found a valid item, do not interfere!
+            if (__result != null)
+                return;
 
             if (recipe == null || recipe.m_resources == null)
-                return false;
+                return;
+
+            if (!CraftFromBackpack.CanCraftFromBackpack(__instance, out var bpInventory))
+                return;
 
             var currentCraftingStation = __instance.GetCurrentCraftingStation();
             var resources = recipe.m_resources;
@@ -434,7 +423,7 @@ public class PlayerPatches
             {
                 if ((currentCraftingStation != null && currentCraftingStation.m_upgrader != requirement.m_upgraderResource) ||
                     (currentCraftingStation == null && requirement.m_upgraderResource) ||
-                    !requirement.m_resItem)
+                    !requirement.m_resItem || requirement.m_resItem.m_itemData == null || requirement.m_resItem.m_itemData.m_shared == null)
                 {
                     continue;
                 }
@@ -442,49 +431,30 @@ public class PlayerPatches
                 int neededAmount = requirement.GetAmount(qualityLevel) * craftMultiplier;
                 if (neededAmount <= 0)
                 {
-                    // Vanilla bug fix: skip 0-amount requirements
                     continue;
                 }
 
                 for (int q = 1; q <= requirement.m_resItem.m_itemData.m_shared.m_maxQuality; q++)
                 {
                     int count = inventory.CountItems(requirement.m_resItem.m_itemData.m_shared.m_name, q);
-                    count = AdjustCountIfEquipped(count, __instance, requirement);
+                    count = AdjustCountIfEquipped(count, __instance, requirement, q);
                     if (count >= neededAmount)
                     {
-                        var allItems = inventory.GetAllItems();
-                        var matchingItem = allItems?.FirstOrDefault(x => 
-                            !x.m_equipped && 
+                        var allBpItems = bpInventory.GetAllItems();
+                        var matchingItem = allBpItems?.FirstOrDefault(x => 
+                            x != null &&
                             x.m_shared != null && 
-                            x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                            string.Equals(x.m_shared.m_name, requirement.m_resItem.m_itemData.m_shared.m_name) && 
                             x.m_quality == q && 
                             x.m_stack >= neededAmount);
 
                         if (matchingItem == null)
                         {
-                            matchingItem = allItems?.FirstOrDefault(x => 
-                                !x.m_equipped && 
-                                x.m_shared != null && 
-                                x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
-                                x.m_quality == q);
-                        }
-
-                        if (matchingItem == null && CraftFromBackpack.CanCraftFromBackpack(__instance, out var bpInventory))
-                        {
-                            var allBpItems = bpInventory.GetAllItems();
                             matchingItem = allBpItems?.FirstOrDefault(x => 
+                                x != null &&
                                 x.m_shared != null && 
-                                x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
-                                x.m_quality == q && 
-                                x.m_stack >= neededAmount);
-
-                            if (matchingItem == null)
-                            {
-                                matchingItem = allBpItems?.FirstOrDefault(x => 
-                                    x.m_shared != null && 
-                                    x.m_shared.m_name.Equals(requirement.m_resItem.m_itemData.m_shared.m_name) && 
-                                    x.m_quality == q);
-                            }
+                                string.Equals(x.m_shared.m_name, requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                                x.m_quality == q);
                         }
 
                         if (matchingItem != null)
@@ -492,13 +462,11 @@ public class PlayerPatches
                             amount = neededAmount;
                             extraAmount = requirement.m_extraAmountOnlyOneIngredient;
                             __result = matchingItem;
-                            return false;
+                            return;
                         }
                     }
                 }
             }
-
-            return false;
         }
     }
 }

@@ -109,9 +109,10 @@ public static class CraftFromBackpack
             if (allItems != null)
             {
                 var matchingItems = allItems.Where(x => 
+                    x != null &&
                     !x.m_equipped && 
                     x.m_shared != null && 
-                    x.m_shared.m_name.Equals(itemName) &&
+                    string.Equals(x.m_shared.m_name, itemName) &&
                     (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
 
                 foreach (var item in matchingItems)
@@ -133,8 +134,9 @@ public static class CraftFromBackpack
             if (allBpItems != null)
             {
                 var matchingBpItems = allBpItems.Where(x => 
+                    x != null &&
                     x.m_shared != null && 
-                    x.m_shared.m_name.Equals(itemName) &&
+                    string.Equals(x.m_shared.m_name, itemName) &&
                     (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
 
                 foreach (var item in matchingBpItems)

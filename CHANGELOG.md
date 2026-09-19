@@ -1,4 +1,19 @@
-# 2.1.0 - Craft From Backpack & Auto Store To Backpack
+# 2.1.1 - Crafting & Container Mod Compatibility
+* **Compatibility with ValheimPlus, ItemDrawers & Container Mods**:
+  * Fixed an issue where enabling `Enable Craft From Backpack` prevented building hammer pieces and crafting recipes from detecting materials in nearby chests.
+  * Converted crafting requirement checks to cooperative hooks so vanilla game systems and other crafting/container mods evaluate uninterrupted.
+* **Auto Store to Backpack & Crafting Item Fixes**:
+  * Resolved an issue where empty or mod-manipulated inventory slots could cause an error when crafting or building (`NullReferenceException` in `ConsumeCraftingItem`).
+  * Resolved an issue where uninitialized or modded items could cause an error during automatic storage (`NullReferenceException` in `StoreToBackpack.TryStoreItem`).
+  * Ensured partial item consumption smoothly delegates remaining material requirements to external container networks.
+* **Equipment & Stability Fixes**:
+  * Fixed an error that could occur when unequipping gear (`NullReferenceException` in `Humanoid.UnequipItem`).
+  * Added error handling during localization loading so malformed community translation files no longer prevent backpacks from initializing.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.0 - Craft From Backpack & Auto Store To Backpack
 * **New Feature: Craft From Backpack**:
   * When enabled, crafting at crafting stations and building placeables with the hammer considers materials in both the Player inventory and the currently equipped backpack.
   * When crafting or building, materials are pulled from the Player inventory first, and then the equipped backpack inventory.
@@ -10,9 +25,6 @@
   * If Player inventory is full, items automatically continue storing into the equipped backpack without showing "Inventory Full" (configurable overflow).
   * Full compatibility with storage and container mods (AzuAutoStore, CraftFromContainers, AzuCraftyBoxes) and safeguards to prevent accidental storing when manually moving items in open backpack containers.
   * Added server-synced settings: `Enable Auto Store to Backpack` and `Enable Inventory Overflow To Backpack` under `Server Config`.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.0.10 - Fix Recipe Upgrades & Backpack Status Effects
 * **Fix for Backpack Status Effect Initialization**:

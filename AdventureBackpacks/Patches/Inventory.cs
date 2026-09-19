@@ -372,18 +372,23 @@ public static class InventoryPatches
     }
 
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(string), typeof(int), typeof(int), typeof(bool) })]
-    [HarmonyPriority(Priority.First)]
     static class RemoveItemByNamePatch
     {
-        static bool Prefix(Inventory __instance, string name, int amount, int itemQuality)
+        static bool Prefix(Inventory __instance, string name, ref int amount, int itemQuality)
         {
             if (!IsDoingCrafting || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
                 return true;
 
             if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out _))
             {
-                CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
-                return false;
+                var remaining = CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
+                if (remaining <= 0)
+                {
+                    return false;
+                }
+
+                amount = remaining;
+                return true;
             }
 
             return true;

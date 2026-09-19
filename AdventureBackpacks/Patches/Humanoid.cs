@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
@@ -78,16 +78,12 @@ public class HumanoidPatches
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UnequipItem))]
     static class HumanoidUnequipItemPatch
     {
-        // The "__instance" here is a Humanoid type, but we want the ItemData argument, so we use "__0" instead.
-        // "__0" fetches the argument passed into the first parameter of the original method, which in this case is an ItemData object.
-        static void Prefix(ItemDrop.ItemData __0)
+        static void Prefix(Humanoid __instance, ItemDrop.ItemData __0)
         {
-            if (__0 is null) return;
-            
-            if ( Player.m_localPlayer == null)
+            if (__0 is null || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
                 return;
 
-            if (SceneManager.GetActiveScene().name.Equals("start"))
+            if (string.Equals(SceneManager.GetActiveScene().name, "start"))
                 return;
 
             var player = Player.m_localPlayer;
@@ -125,18 +121,13 @@ public class HumanoidPatches
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.EquipItem))]
     static class HumanoidEquipItemPatch
     {
-        static void Postfix(ItemDrop.ItemData __0, bool __result)
+        static void Postfix(Humanoid __instance, ItemDrop.ItemData __0, bool __result)
         {
             AdventureBackpacks.Log.Debug($"##########   EquipItem Start");
-            if (__0 is null) return;
-
-            if (!__result)
-                return;
-
-            if (Player.m_localPlayer == null)
+            if (__0 is null || !__result || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
                 return;
             
-            if (SceneManager.GetActiveScene().name.Equals("start"))
+            if (string.Equals(SceneManager.GetActiveScene().name, "start"))
                 return;
             
             var player = Player.m_localPlayer;

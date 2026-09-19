@@ -35,7 +35,7 @@ namespace AdventureBackpacks.Assets
         {
             backpack = null;
             
-            if (itemData == null)
+            if (itemData?.m_shared?.m_name == null)
                 return false;
 
             return TryGetBackpackItemByName(itemData.m_shared.m_name, out backpack);
@@ -45,10 +45,10 @@ namespace AdventureBackpacks.Assets
         {
             backpack = null;
             
-            if (name.IsNullOrWhiteSpace())
+            if (string.IsNullOrWhiteSpace(name) || BackpackFactory.BackpackItems == null)
                 return false;
             
-            backpack = BackpackFactory.BackpackItems.FirstOrDefault(x => x.ItemName.Equals(name));
+            backpack = BackpackFactory.BackpackItems.FirstOrDefault(x => x != null && string.Equals(x.ItemName, name));
             return backpack != null;
         }
 

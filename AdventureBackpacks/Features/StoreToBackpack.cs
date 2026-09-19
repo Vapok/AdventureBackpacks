@@ -82,7 +82,7 @@ public static class StoreToBackpack
 
             // Check if backpack can take at least part of the stack
             var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
-            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - backpackInventory.m_inventory.Count;
+            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
                 return true;
         }
@@ -94,7 +94,7 @@ public static class StoreToBackpack
                 return true;
 
             var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
-            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - backpackInventory.m_inventory.Count;
+            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
                 return true;
         }
@@ -129,7 +129,7 @@ public static class StoreToBackpack
     /// </summary>
     public static bool TryStoreItem(Player player, ItemDrop.ItemData item, Inventory backpackInventory)
     {
-        if (player == null || item == null || backpackInventory == null)
+        if (player == null || item == null || backpackInventory == null || item.m_shared == null || string.IsNullOrEmpty(item.m_shared.m_name))
             return false;
 
         // Strict inception prevention: never allow backpacks inside backpacks
@@ -148,7 +148,7 @@ public static class StoreToBackpack
         if (item.m_shared.m_maxStackSize > 1 && item.m_stack > 1)
         {
             var freeStack = backpackInventory.FindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
-            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - backpackInventory.m_inventory.Count;
+            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             var availableSpace = freeStack + (emptySlots * item.m_shared.m_maxStackSize);
 
             if (availableSpace > 0)
