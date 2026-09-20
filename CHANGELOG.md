@@ -1,4 +1,7 @@
 # 2.1.5 - Multi-Player Isolation & Crafting Mod Compatibility
+> **Author's Note**:
+> I apologize for the rush updates that occurred today which ended up in 2.1.4 having a number of issues in multi-player as well as various crafting mods. This has been resolved and tested. As always, please let me know if you encounter issues.
+
 * **AzuCraftyBoxes & Crafting Mod Support**:
   * Added seamless integration with AzuCraftyBoxes so crafting stations properly show and consume crafting materials directly from your equipped backpack.
   * Building pieces with the hammer and bulk-crafting now recognize backpack resources smoothly.
