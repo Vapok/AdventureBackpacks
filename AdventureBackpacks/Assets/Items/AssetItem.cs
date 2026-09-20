@@ -28,42 +28,63 @@ internal abstract class AssetItem : IAssetItem
 
     internal AssetItem(GameObject goItem, string itemName)
     {
-        PrefabName = goItem != null ? goItem.name : string.Empty;
-        ItemName = itemName;
-
-        _item = new Item(goItem)
+        try
         {
-            Configurable = Configurability.Disabled
-        };
-        
-        SetupItem();
+            PrefabName = goItem != null ? goItem.name : string.Empty;
+            ItemName = itemName;
+
+            _item = new Item(goItem)
+            {
+                Configurable = Configurability.Disabled
+            };
+            
+            SetupItem();
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error initializing item '{itemName}': {ex.Message}");
+        }
     }
 
     internal AssetItem(AssetBundle bundle, string prefabName, string itemName)
     {
-        PrefabName = prefabName;
-        ItemName = itemName;
-        
-        _item = new Item(bundle,prefabName)
+        try
         {
-            Configurable = Configurability.Disabled
-        };
-        
-        SetupItem();
+            PrefabName = prefabName;
+            ItemName = itemName;
+            
+            _item = new Item(bundle, prefabName)
+            {
+                Configurable = Configurability.Disabled
+            };
+            
+            SetupItem();
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error initializing item '{itemName}' from bundle: {ex.Message}");
+        }
     }
 
     internal AssetItem(string assetName, string prefabName, string itemName)
     {
-        AssetName = assetName;
-        PrefabName = prefabName;
-        ItemName = itemName;
-
-        _item = new Item(AssetName, PrefabName, _assetFolderName)
+        try
         {
-            Configurable = Configurability.Disabled
-        };
-        
-        SetupItem();
+            AssetName = assetName;
+            PrefabName = prefabName;
+            ItemName = itemName;
+
+            _item = new Item(AssetName, PrefabName, _assetFolderName)
+            {
+                Configurable = Configurability.Disabled
+            };
+            
+            SetupItem();
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error initializing item '{itemName}' ({prefabName} from {assetName}): {ex.Message}");
+        }
     }
 
     private void SetupItem()
