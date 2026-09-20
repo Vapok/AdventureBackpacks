@@ -71,11 +71,11 @@ public class HumanoidPatches
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UnequipItem))]
     static class HumanoidUnequipItemPatch
     {
-        static void Prefix(Humanoid __instance, ItemDrop.ItemData __0)
+        static void Prefix(ItemDrop.ItemData __0)
         {
             try
             {
-                if (__0 is null || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                if (__0 is null || Player.m_localPlayer == null)
                     return;
 
                 var scene = SceneManager.GetActiveScene();

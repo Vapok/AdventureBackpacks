@@ -1,4 +1,17 @@
-# 2.1.5 - Multi-Player Isolation & Crafting Mod Compatibility
+# 2.1.6 - Bug Fixes & Slot Mod Compatibility
+> **Author's Note**:
+> A huge thank you to **shudnal** for the wonderful support and integration work provided for Adventure Backpacks! I apologize for inadvertently changing method signatures on you in recent updates. Moving forward, backwards compatibility for mods interfacing with Adventure Backpacks is a top priority.
+
+* **shudnal's Extra Slots Compatibility & Death Safeguard**:
+  * Fixed an issue where dying while wearing a backpack alongside **shudnal's ExtraSlotsCustomSlots** (Extra Slots) caused the game to hang on a black screen without dropping items or creating a tombstone.
+  * Restored full compatibility with equipment and slot extension mods when unequipping backpacks.
+* **Storage & Crafting Mod Safeguards**:
+  * Added safeguards when opening and closing backpacks alongside chest and crafting mods to prevent crashes and errors in the background.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.5 - Multi-Player Isolation & Crafting Mod Compatibility
 > **Author's Note**:
 > I apologize for the rush updates that occurred today which ended up in 2.1.4 having a number of issues in multi-player as well as various crafting mods. This has been resolved and tested. As always, please let me know if you encounter issues.
 
@@ -13,9 +26,6 @@
 * **Stability & Compatibility Fixes**:
   * Added safeguards to prevent crashes when loading backpacks, crafting items, or opening inventory with other chest and sorting mods installed.
   * Fixed an issue where saving or loading character data could sometimes encounter an error.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.1.4 - Container Proxy Compatibility & Defensive Safety
 * **External Storage Mod Compatibility**:

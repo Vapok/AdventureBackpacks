@@ -93,6 +93,12 @@ public static class ContainerPatches
         {
             if (__instance != null && __instance.IsBackpackProxy())
             {
+                if (__instance.m_nview == null && Player.m_localPlayer != null)
+                    __instance.m_nview = Player.m_localPlayer.m_nview;
+
+                if (__instance.m_inventory == null)
+                    __instance.m_inventory = new Inventory("Backpack", null, 1, 1);
+
                 return false;
             }
             return true;

@@ -1,3 +1,12 @@
+# 2.1.6 - Bug Fixes & Slot Mod Compatibility
+* **Downstream Reflection Signature Restoration (`Patches/Humanoid.cs`)**:
+  * Restored the 1-argument `Prefix(ItemDrop.ItemData __0)` signature on `HumanoidUnequipItemPatch.Prefix`.
+  * Downstream ecosystem slot extension mods (specifically `shudnal-ExtraSlotsCustomSlots`) unpatch our Harmony hook and dynamically invoke `HumanoidUnequipItemPatch.Prefix` via reflection with a single `ItemDrop.ItemData` argument during unequip sequences.
+  * Resolves an unhandled `TargetParameterCountException` during `Player.CreateTombStone` -> `Humanoid.UnequipAllItems` that aborted tombstone spawning, item dropping, and player respawn timers on character death.
+* **Proxy Container Awake Guard & Network View Initialization (`Patches/Container.cs`)**:
+  * In `ContainerAwakePatch.Prefix`, initialized `m_nview` (pointing to `Player.m_localPlayer.m_nview`) and `m_inventory` on `AB_BackpackProxy` if null before returning `false`.
+  * Resolves Sentry regression [ADVENTUREBACKPACKS-Z](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-Z) where third-party mod postfixes on `Container.Awake` (such as `AzuCraftyBoxes.Patches.ContainerAwakePatch.Postfix`) dereferenced `container.m_nview.IsValid()` before `AddComponent<Container>()` finished returning.
+
 # 2.1.5 - Multi-Player Isolation & Crafting Mod Compatibility
 * **AzuCraftyBoxes Dynamic Compatibility Bridge (`Compats/AzuCraftyBoxesCompat.cs` & `Compats/BackpackContainerRealProxy.cs`)**:
   * Implemented decoupled dynamic compatibility for Azumatt's `AzuCraftyBoxes` without compile-time binary dependencies, eliminating `TypeLoadException` risks if the mod is absent or updated.
