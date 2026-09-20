@@ -35,9 +35,6 @@ public static class StoreToBackpack
                 new ConfigurationManagerAttributes { Order = 4 }), ref EnableInventoryOverflowToBackpack);
     }
 
-    /// <summary>
-    /// Checks if an item qualifies to be stored in the equipped backpack according to feature rules and safeguards.
-    /// </summary>
     public static bool ShouldStoreToBackpack(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)
     {
         backpackInventory = null;
@@ -48,11 +45,9 @@ public static class StoreToBackpack
         if (player == null || item == null || item.m_shared == null)
             return false;
 
-        // Never store backpacks inside backpacks (inception prevention)
         if (item.IsBackpack() || item.TryGetBackpackItem(out _))
             return false;
 
-        // Safeguard against automated storing while player is actively moving items in open backpack or dropping
         if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping || AdventureBackpacks.BypassMoveProtection)
             return false;
 
@@ -74,20 +69,17 @@ public static class StoreToBackpack
         if (playerInventory == null)
             return false;
 
-        // Condition 1: Item already exists in the backpack, and backpack has room
         if (EnableStoreToBackpack.Value && backpackInventory.SafeHaveItem(item.m_shared.m_name))
         {
             if (CanInventoryAccept(backpackInventory, item, item.m_stack))
                 return true;
 
-            // Check if backpack can take at least part of the stack
             var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
             var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
                 return true;
         }
 
-        // Condition 2: Player inventory is full, and overflow to backpack is enabled
         if (EnableInventoryOverflowToBackpack.Value && !CanInventoryAccept(playerInventory, item, item.m_stack))
         {
             if (CanInventoryAccept(backpackInventory, item, item.m_stack))
@@ -102,9 +94,6 @@ public static class StoreToBackpack
         return false;
     }
 
-    /// <summary>
-    /// Checks directly whether an inventory has room for the given item without triggering Harmony patches.
-    /// </summary>
     public static bool CanInventoryAccept(Inventory inventory, ItemDrop.ItemData item, int stack = -1)
     {
         if (inventory?.m_inventory == null || item?.m_shared == null)
@@ -122,21 +111,14 @@ public static class StoreToBackpack
         return inventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel) >= stack;
     }
 
-    /// <summary>
-    /// Attempts to store the item into the equipped backpack.
-    /// Returns true if the entire item stack was absorbed by the backpack.
-    /// Returns false if partially stored (in which case item.m_stack is reduced) or not stored at all.
-    /// </summary>
     public static bool TryStoreItem(Player player, ItemDrop.ItemData item, Inventory backpackInventory)
     {
         if (player == null || item == null || backpackInventory == null || item.m_shared == null || string.IsNullOrEmpty(item.m_shared.m_name))
             return false;
 
-        // Strict inception prevention: never allow backpacks inside backpacks
         if (item.IsBackpack() || item.TryGetBackpackItem(out _) || !Backpacks.CheckForInception(backpackInventory, item))
             return false;
 
-        // If the backpack can accept the entire item stack directly
         if (CanInventoryAccept(backpackInventory, item, item.m_stack))
         {
             var added = backpackInventory.AddItem(item);
@@ -144,7 +126,6 @@ public static class StoreToBackpack
                 return true;
         }
 
-        // Handle partial stack transfer if item is stackable
         if (item.m_shared.m_maxStackSize > 1 && item.m_stack > 1)
         {
             var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);

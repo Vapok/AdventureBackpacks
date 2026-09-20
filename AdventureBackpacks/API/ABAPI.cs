@@ -116,6 +116,64 @@ return null;
     }
 
     /// <summary>
+    /// Retrieves the Inventory of the equipped backpack on the specified player.
+    /// </summary>
+    /// <param name="player">Player, usually Player.m_localPlayer</param>
+    /// <returns>Inventory object, or null if no backpack equipped</returns>
+    public static Inventory GetEquippedBackpackInventory(Player player)
+    {
+#if ! API
+        if (player == null)
+            return null;
+        var component = player.GetEquippedBackpack();
+        return component?.GetInventory();
+#else
+        return null;
+#endif
+    }
+
+    /// <summary>
+    /// Tries to retrieve the Inventory of the equipped backpack on the specified player.
+    /// </summary>
+    /// <param name="player">Player, usually Player.m_localPlayer</param>
+    /// <param name="inventory">Out parameter for the backpack inventory</param>
+    /// <returns>true if backpack equipped and inventory exists, otherwise false</returns>
+    public static bool TryGetEquippedBackpackInventory(Player player, out Inventory inventory)
+    {
+        inventory = GetEquippedBackpackInventory(player);
+        return inventory != null;
+    }
+
+    /// <summary>
+    /// Retrieves the Inventory of a backpack from an ItemDrop.ItemData object.
+    /// </summary>
+    /// <param name="itemData">ItemDrop.ItemData object</param>
+    /// <returns>Inventory object, or null if not a backpack or uninitialized</returns>
+    public static Inventory GetBackpackInventory(ItemDrop.ItemData itemData)
+    {
+#if ! API
+        if (itemData == null)
+            return null;
+        var backpack = GetBackpack(itemData);
+        return backpack?.Inventory;
+#else
+        return null;
+#endif
+    }
+
+    /// <summary>
+    /// Tries to retrieve the Inventory of a backpack from an ItemDrop.ItemData object.
+    /// </summary>
+    /// <param name="itemData">ItemDrop.ItemData object</param>
+    /// <param name="inventory">Out parameter for the backpack inventory</param>
+    /// <returns>true if item is a backpack and inventory exists, otherwise false</returns>
+    public static bool TryGetBackpackInventory(ItemDrop.ItemData itemData, out Inventory inventory)
+    {
+        inventory = GetBackpackInventory(itemData);
+        return inventory != null;
+    }
+
+    /// <summary>
     /// Retrieves the current Active Backpack StatusEffects running in the local players game.
     /// </summary>
     /// <returns>HashSet of Status Effects.</returns>

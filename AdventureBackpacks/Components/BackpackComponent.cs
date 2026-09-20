@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Extensions;
+using AdventureBackpacks.Patches;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -31,9 +32,9 @@ namespace AdventureBackpacks.Components
 
         public void SyncContainerInventory()
         {
-            if (Player.m_localPlayer != null && Player.m_localPlayer.IsThisBackpackEquipped(Item))
+            if (Player.m_localPlayer != null && Player.m_localPlayer.IsThisBackpackEquipped(Item) && InventoryGuiPatches.BackpackIsOpen)
             {
-                var container = Player.m_localPlayer.GetBackpackContainerProxy();
+                var container = Player.m_localPlayer.GetBackpackContainerProxy(false);
                 if (container != null && _backpackInventory != null)
                 {
                     container.m_inventory = _backpackInventory;
@@ -96,7 +97,6 @@ namespace AdventureBackpacks.Components
             Value = data;
             _log.Debug($"[Serialize() - {Item.m_shared.m_name}-Q{Item.m_quality}] Value = {Value}");
 
-            // Return the data to be deserialized in the method below
             return data;
         }
 
@@ -119,70 +119,75 @@ namespace AdventureBackpacks.Components
                         {
                             item.Data()?.Save();
                         }
-                        catch {}
+                        catch (Exception ex)
+                        {
+                            _log.Warning($"Failed to save item data for {item.m_shared?.m_name}: {ex.Message}");
+                        }
                         item.Save(pkg);
                     }
                 }
             }
         }
 
-        // This code is run on game start for objects with a BackpackComponent, and it converts the inventory info from string format (ZPackage) to object format (Inventory) so the game can use it.
         public void Deserialize(string data)
         {
-            _log.Debug($"[Deserialize() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting.. data length: {data?.Length ?? 0}");
             try
             {
-                var type = Item.m_shared.m_name;
-                if (!Backpacks.TryGetBackpackItemByName(type, out var backpackDef))
+                var itemName = Item?.m_shared?.m_name ?? "UnknownBackpack";
+                var quality = Item?.m_quality ?? 1;
+
+                _log.Debug($"[Deserialize() - {itemName}-Q{quality}] Starting.. data length: {data?.Length ?? 0}");
+
+                if (Item?.m_shared == null || !Backpacks.TryGetBackpackItemByName(itemName, out var backpackDef))
                     return;
 
-                var targetSize = backpackDef.GetInventorySize(Item.m_quality);
+                var targetSize = backpackDef.GetInventorySize(quality);
                 if (_backpackInventory == null || _backpackInventory.m_width != targetSize.x || _backpackInventory.m_height != targetSize.y)
                 {
-                    _backpackInventory = Backpacks.NewInventoryInstance(type, Item.m_quality);
+                    _backpackInventory = Backpacks.NewInventoryInstance(itemName, quality);
                 }
                 else
                 {
-                    _backpackInventory.m_inventory.Clear();
+                    _backpackInventory.m_inventory?.Clear();
                 }
 
-                _log.Debug($"[Deserialize() - {Item.m_shared.m_name}-Q{Item.m_quality}] Value Before = {Value}");
+                _log.Debug($"[Deserialize() - {itemName}-Q{quality}] Value Before = {Value}");
                 Value = data;
-                _log.Debug($"[Deserialize() - {Item.m_shared.m_name}-Q{Item.m_quality}] Value After = {Value}");
+                _log.Debug($"[Deserialize() - {itemName}-Q{quality}] Value After = {Value}");
 
-                // Deserialising saved inventory data and storing it into the Inventory instance.
                 ZPackage pkg = new ZPackage(data);
-                _log.Debug($"[Deserialize() - {Item.m_shared.m_name}-Q{Item.m_quality}] Inventory Count Before Load: {_backpackInventory.m_inventory.Count}");
-                _backpackInventory.Load(pkg);
+                _log.Debug($"[Deserialize() - {itemName}-Q{quality}] Inventory Count Before Load: {_backpackInventory?.m_inventory?.Count ?? 0}");
+                _backpackInventory?.Load(pkg);
                 
-                _log.Debug($"[Deserialize() - {Item.m_shared.m_name}-Q{Item.m_quality}] Inventory Count After Load: {_backpackInventory.m_inventory.Count}");
+                _log.Debug($"[Deserialize() - {itemName}-Q{quality}] Inventory Count After Load: {_backpackInventory?.m_inventory?.Count ?? 0}");
                 
                 SyncContainerInventory();
 
-                //Update Status Effects
                 _statusEffects = Backpacks.UpdateStatusEffects(Item);
             }
             catch (Exception ex)
             {
-                _log.Error($" - {Item.m_shared.m_name} Backpack info is corrupt!\n{ex}");
+                var itemName = Item?.m_shared?.m_name ?? "UnknownBackpack";
+                _log.Error($" - {itemName} Backpack info is corrupt!\n{ex}");
             }
         }
 
         public override void FirstLoad()
         {
+            if (Item?.m_shared == null)
+                return;
+
             var name = Item.m_shared.m_name;
             _log.Debug($"[FirstLoad - {Item.m_shared.m_name}-Q{Item.m_quality}] {name}");
             
-            // Check whether the item created is of a type contained in backpackTypes
             if (Backpacks.BackpackTypes.Contains(name))
             {
                 if (!string.IsNullOrEmpty(Value))
                 {
                     Deserialize(Value);
                 }
-                else if (Item.m_customData.ContainsKey(OldPluginCustomData) && !string.IsNullOrEmpty(Item.m_customData[OldPluginCustomData]))
+                else if (Item.m_customData != null && Item.m_customData.TryGetValue(OldPluginCustomData, out var oldBackpack) && !string.IsNullOrEmpty(oldBackpack))
                 {
-                    var oldBackpack = Item.m_customData[OldPluginCustomData];
                     Value = oldBackpack;
                     Deserialize(Value);
                 }
@@ -198,7 +203,10 @@ namespace AdventureBackpacks.Components
     
         public override void Load()
         {
-            _log.Debug($"[Load - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting. Called by:\n{new StackTrace()}");
+            if (Item?.m_shared == null)
+                return;
+
+            _log.Debug($"[Load - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting.");
             IsLoadingInventory = true;
 
             if (!string.IsNullOrEmpty(Value))
@@ -229,10 +237,13 @@ namespace AdventureBackpacks.Components
                 return;
             }
 
+            if (Item?.m_shared == null)
+                return;
+
             _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting Value = {Value}");
-            _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting backpack count {_backpackInventory.m_inventory.Count}");
+            _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting backpack count {_backpackInventory.m_inventory?.Count ?? 0}");
             Value = Serialize();
-            _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Ending backpack count {_backpackInventory.m_inventory.Count}");
+            _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Ending backpack count {_backpackInventory.m_inventory?.Count ?? 0}");
         }
 
         public void Save(Inventory backpack)

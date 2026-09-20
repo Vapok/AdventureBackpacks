@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
@@ -20,10 +20,6 @@ public class ItemDropPatches
 
             if (!string.IsNullOrEmpty(item.m_shared.m_name) && item.TryGetBackpackItem(out var backpack))
             {
-                    
-                // If the item in GetWeight() is a backpack, call GetTotalWeight() on its Inventory.
-                // Note that GetTotalWeight() just returns a the value of m_totalWeight, and doesn't do any calculation on its own.
-                // If the Inventory has been changed at any point, it calls UpdateTotalWeight(), which should ensure that its m_totalWeight is accurate.
                 var backpackItem = item.Data().GetOrCreate<BackpackComponent>();
 
                 var size = backpack.GetInventorySize(backpackItem.Item.m_quality);
@@ -38,7 +34,6 @@ public class ItemDropPatches
                 
                 var inventoryWeight = backpackItem.GetInventory()?.GetTotalWeight() ?? 0;
 
-                // To the backpack's item weight, add the backpack's inventory weight multiplied by the weightMultiplier in the configs.
                 returnedWeight += inventoryWeight * backpack.WeightMultiplier.Value;
             }
 
@@ -67,23 +62,16 @@ public class ItemDropPatches
                     instrs[i - 3].opcode == OpCodes.Mul && instrs[i - 4].opcode == OpCodes.Ldfld &&
                     instrs[i - 4].operand.Equals(scaleWeightByQualityField))
                 {
-                    //Call to Hide Backpack
                     var ldArgInstruction = new CodeInstruction(OpCodes.Ldarg_0);
-                    //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)
                         instrs[i].MoveLabelsTo(ldArgInstruction);
 
-                    //Insert new instructions first.
-
-                    //Patch ldarg_0 this is instance of ItemData.
                     yield return LogMessage(ldArgInstruction);
                     counter++;
                     
-                    //Get Weight which is ldloc0
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldloc_1));
                     counter++;
 
-                    //Patch Call Method for Overriding the Weight.
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(ItemDataGetWeightTranspiler), nameof(OverrideBackpackWeight))));
                     counter++;
                     

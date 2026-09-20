@@ -46,8 +46,11 @@ public partial class ABAPI
 
     private static BackpackDefinition GetBackPackDefinitionFromComponent(BackpackComponent component)
     {
+        if (component == null || component.Item == null)
+            return null;
+
         var isBackpack = component.Item.TryGetBackpackItem(out var backpack);
-        if (isBackpack)
+        if (!isBackpack || backpack == null)
             return null;
         
         return GetBackPackDefinition(backpack);

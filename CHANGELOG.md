@@ -1,12 +1,25 @@
-# 2.1.4 - Container Proxy Compatibility & Defensive Null Safety
-* **External Storage Mod Compatibility (AzuAutoStore)**:
-  * Assigned player network view reference to the backpack UI proxy container and elevated intercept priority to prevent external storage and sorting mods from encountering errors when closing or updating containers (`NullReferenceException` in `Container.SetInUse`).
-  * Dynamically synchronized the UI proxy container title with the equipped backpack's localized name instead of defaulting to a generic chest name.
-* **Defensive Null Safety & Error Handling**:
-  * Added defensive safeguards and null checks across item equipping, unequipping, inventory UI detection, crafting consumption, and proxy management.
+# 2.1.5 - Multi-Player Isolation & Crafting Mod Compatibility
+* **AzuCraftyBoxes & Crafting Mod Support**:
+  * Added seamless integration with AzuCraftyBoxes so crafting stations properly show and consume crafting materials directly from your equipped backpack.
+  * Building pieces with the hammer and bulk-crafting now recognize backpack resources smoothly.
+* **Developer API Enhancements**:
+  * Added new methods to the public mod API allowing other mod developers to easily access equipped backpack storage.
+* **Dedicated Server & Multiplayer Improvements**:
+  * Fixed an issue that could cause errors on dedicated servers when players joined or equipped backpacks.
+  * Backpack inventory windows are now strictly isolated to your own character on your own screen, preventing multiplayer conflicts.
+* **Stability & Compatibility Fixes**:
+  * Added safeguards to prevent crashes when loading backpacks, crafting items, or opening inventory with other chest and sorting mods installed.
+  * Fixed an issue where saving or loading character data could sometimes encounter an error.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.4 - Container Proxy Compatibility & Defensive Safety
+* **External Storage Mod Compatibility**:
+  * Improved compatibility with chest sorting and storage mods when closing or updating backpack containers.
+  * Updated the backpack storage window to display your equipped backpack's name.
+* **Defensive Safety & Error Handling**:
+  * Added safeguards across equipping, unequipping, crafting, and backpack window management to prevent unexpected errors.
 
 ### 2.1.3 - Auto-Store Hotfix
 * Fixed an issue where auto-storing items into the equipped backpack could cause errors when interacting with external container, drawer, or sorting mods.

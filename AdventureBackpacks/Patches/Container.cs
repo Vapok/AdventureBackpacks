@@ -88,13 +88,11 @@ public static class ContainerPatches
     [HarmonyPatch(typeof(Container), nameof(Container.Awake))]
     static class ContainerAwakePatch
     {
+        [HarmonyPriority(Priority.First)]
         static bool Prefix(Container __instance)
         {
-            if (__instance.IsBackpackProxy())
+            if (__instance != null && __instance.IsBackpackProxy())
             {
-                // Suppress vanilla Container.Awake for the backpack UI proxy.
-                // Prevents NullReferenceException on missing ZNetView, stops network RPC registrations,
-                // and prevents CheckForChanges polling.
                 return false;
             }
             return true;

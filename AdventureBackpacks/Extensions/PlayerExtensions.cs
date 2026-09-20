@@ -52,45 +52,55 @@ public static class PlayerExtensions
     {
         return IsBackpackEquipped(player);
     }
-    public const string BackpackProxyName = "AB_BackpackProxy";
-    private static Container _backpackProxyContainer;
 
-    public static Container GetBackpackContainerProxy(this Player player)
+    public const string BackpackProxyName = "AB_BackpackProxy";
+
+    public static bool IsDedicatedOrHeadless()
+    {
+        if (ZNet.instance != null && ZNet.instance.IsDedicated())
+            return true;
+        if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null)
+            return true;
+        return false;
+    }
+
+    public static Container GetBackpackContainerProxy(this Player player, bool createIfMissing = true)
     {
         try
         {
             if (player == null || player.gameObject == null || player.transform == null)
                 return null;
 
-            if (_backpackProxyContainer != null &&
-                _backpackProxyContainer.gameObject != null &&
-                _backpackProxyContainer.transform != null &&
-                _backpackProxyContainer.transform.parent == player.transform)
-            {
-                return _backpackProxyContainer;
-            }
+            if (IsDedicatedOrHeadless() || player != Player.m_localPlayer)
+                return null;
 
             var existingTransform = player.transform.Find(BackpackProxyName);
             if (existingTransform != null && existingTransform.gameObject != null)
             {
-                _backpackProxyContainer = existingTransform.GetComponent<Container>();
-                if (_backpackProxyContainer != null)
-                    return _backpackProxyContainer;
+                var existingContainer = existingTransform.GetComponent<Container>();
+                if (existingContainer != null)
+                    return existingContainer;
 
-                _backpackProxyContainer = existingTransform.gameObject.AddComponent<Container>();
-                _backpackProxyContainer.m_name = "Backpack";
-                _backpackProxyContainer.m_nview = player.m_nview;
-                return _backpackProxyContainer;
+                if (!createIfMissing)
+                    return null;
+
+                existingContainer = existingTransform.gameObject.AddComponent<Container>();
+                existingContainer.m_name = "Backpack";
+                existingContainer.m_nview = player.m_nview;
+                return existingContainer;
             }
+
+            if (!createIfMissing)
+                return null;
 
             var proxyObj = new GameObject(BackpackProxyName);
             proxyObj.transform.SetParent(player.transform, false);
 
-            _backpackProxyContainer = proxyObj.AddComponent<Container>();
-            _backpackProxyContainer.m_name = "Backpack";
-            _backpackProxyContainer.m_nview = player.m_nview;
+            var newContainer = proxyObj.AddComponent<Container>();
+            newContainer.m_name = "Backpack";
+            newContainer.m_nview = player.m_nview;
 
-            return _backpackProxyContainer;
+            return newContainer;
         }
         catch (System.Exception ex)
         {
@@ -103,15 +113,6 @@ public static class PlayerExtensions
     {
         try
         {
-            if (_backpackProxyContainer != null)
-            {
-                if (_backpackProxyContainer.gameObject != null)
-                {
-                    Object.Destroy(_backpackProxyContainer.gameObject);
-                }
-                _backpackProxyContainer = null;
-            }
-
             if (player != null && player.gameObject != null && player.transform != null)
             {
                 var existingTransform = player.transform.Find(BackpackProxyName);
@@ -129,7 +130,8 @@ public static class PlayerExtensions
 
     public static void DestroyBackpackContainerProxy()
     {
-        DestroyBackpackContainerProxy(null);
+        if (Player.m_localPlayer != null)
+            Player.m_localPlayer.DestroyBackpackContainerProxy();
     }
 
     public static void OpenBackpack(this Player player, InventoryGui instance = null)
@@ -194,9 +196,7 @@ public static class PlayerExtensions
 
         AdventureBackpacks.QuickDropping = true;
         AdventureBackpacks.Log.Message("Quick dropping backpack.");        
-        // Unequip and remove backpack from player's back
-        // We need to unequip the item BEFORE we drop it, otherwise when we pick it up again the game thinks
-        // we had it equipped all along and fails to update player model, resulting in invisible backpack.
+        // Unequip before dropping
         player.RemoveEquipAction(backpack.Item);
         player.UnequipItem(backpack.Item, true);
 

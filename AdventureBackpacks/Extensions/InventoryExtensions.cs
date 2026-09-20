@@ -11,8 +11,8 @@ public static class InventoryExtensions
 
     public static bool ContainsBackpack(this Inventory inventory, ItemDrop.ItemData backpackItem)
     {
-        //This is a special contains method to prevent other extended inventory mods from checking other inventories 
-        //by prefixing Inventory.Contains() method.
+        if (inventory == null || backpackItem == null || inventory.m_width <= 0 || inventory.m_height <= 0)
+            return false;
         
         bool IsBackpackItemAt(int x, int y)
         {
@@ -35,8 +35,12 @@ public static class InventoryExtensions
 
         return IsBackpackItemAt(inventory.m_width - 1, inventory.m_height - 1);
     }
+
     public static bool HasEmptySlot(this Inventory inventory)
     {
+        if (inventory == null || inventory.m_width <= 0 || inventory.m_height <= 0)
+            return false;
+
         bool IsBackpackItemAt(int x, int y)
         {
             if (x < 0)
@@ -58,8 +62,11 @@ public static class InventoryExtensions
 
         return IsBackpackItemAt(inventory.m_width - 1, inventory.m_height - 1);
     }
+
     public static ItemDrop.ItemData FindNonBackpackItem(this Inventory inventory)
     {
+        if (inventory == null || inventory.m_width <= 0 || inventory.m_height <= 0)
+            return null;
         
         ItemDrop.ItemData GetNonBackpackItem(int x, int y)
         {
@@ -83,9 +90,6 @@ public static class InventoryExtensions
         return GetNonBackpackItem(inventory.m_width - 1, inventory.m_height - 1);
     }
 
-    /// <summary>
-    /// Safely checks whether an inventory contains an item with matching name, guarding against null items and uninitialized shared data.
-    /// </summary>
     public static bool SafeHaveItem(this Inventory inventory, string name)
     {
         if (inventory?.m_inventory == null || string.IsNullOrEmpty(name))
@@ -100,9 +104,6 @@ public static class InventoryExtensions
         return false;
     }
 
-    /// <summary>
-    /// Safely calculates available free stack space in an inventory, guarding against null items, uninitialized shared data, and external mod slot anomalies.
-    /// </summary>
     public static int SafeFindFreeStackSpace(this Inventory inventory, string name, float worldLevel)
     {
         if (inventory?.m_inventory == null || string.IsNullOrEmpty(name))

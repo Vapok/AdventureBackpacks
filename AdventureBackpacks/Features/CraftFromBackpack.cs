@@ -32,9 +32,6 @@ public static class CraftFromBackpack
                 new ConfigurationManagerAttributes { Order = 4 }), ref EnableCraftOutputToBackpack);
     }
 
-    /// <summary>
-    /// Checks whether the Craft From Backpack feature is enabled, player is valid, and an equipped backpack inventory is available.
-    /// </summary>
     public static bool CanCraftFromBackpack(Player player, out Inventory backpackInventory)
     {
         backpackInventory = null;
@@ -53,9 +50,6 @@ public static class CraftFromBackpack
         return backpackInventory != null;
     }
 
-    /// <summary>
-    /// Checks whether crafted items are allowed to overflow directly into the equipped backpack when player inventory is full.
-    /// </summary>
     public static bool CanCraftOutputToBackpack(Player player, out Inventory backpackInventory)
     {
         backpackInventory = null;
@@ -74,9 +68,6 @@ public static class CraftFromBackpack
         return backpackInventory != null;
     }
 
-    /// <summary>
-    /// Returns the number of items of the specified name and quality in the equipped backpack.
-    /// </summary>
     public static int GetBackpackItemCount(Player player, string itemName, int quality = -1)
     {
         if (!CanCraftFromBackpack(player, out var backpackInventory))
@@ -90,11 +81,6 @@ public static class CraftFromBackpack
             : backpackInventory.CountItems(itemName);
     }
 
-    /// <summary>
-    /// Consumes crafting or building materials from Player inventory first (skipping equipped items),
-    /// and then from the equipped backpack inventory for any remaining required amount.
-    /// Returns the remaining unmet amount (0 if completely fulfilled).
-    /// </summary>
     public static int ConsumeCraftingItem(Player player, string itemName, int amount, int itemQuality = -1)
     {
         var remaining = amount;
@@ -103,7 +89,6 @@ public static class CraftFromBackpack
 
         try
         {
-            // 1. Consume from player inventory first (skip equipped items)
             var playerInventory = player.GetInventory();
             if (playerInventory != null)
             {
@@ -129,7 +114,6 @@ public static class CraftFromBackpack
                 }
             }
 
-            // 2. Consume remainder from equipped backpack if enabled
             if (remaining > 0 && CanCraftFromBackpack(player, out var backpackInventory) && backpackInventory != null)
             {
                 var allBpItems = backpackInventory.GetAllItems();

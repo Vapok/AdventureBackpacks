@@ -7,6 +7,7 @@ using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
+using AdventureBackpacks.Patches;
 using BepInEx;
 using UnityEngine;
 using Vapok.Common.Abstractions;
@@ -58,7 +59,6 @@ namespace AdventureBackpacks.Assets
                 return;
 
             var player = Player.m_localPlayer;
-            //Close Inventory before making changes.  Leaving open can have undesirable effects.
             if (InventoryGui.instance != null)
                 InventoryGui.instance.Hide();
             
@@ -67,8 +67,6 @@ namespace AdventureBackpacks.Assets
                 if (inventory == null)
                     return;
                 
-                // Go through all the equipped items, match them for any of the names in backpackTypes.
-                // If a match is found, return the backpack ItemData object.
                 foreach (var item in inventory)
                 {
                     if (item == null)
@@ -122,11 +120,9 @@ namespace AdventureBackpacks.Assets
 
         public static Vector2 ValidateMinMaxChestSize(float x, float y)
         {
-            //In Valheim 1.0, UI is max 8 columns.
             if (x > 8)
                 x = 8;
 
-            //If values are below 1, min size is 1 for both width and height.
             if (x < 1)
                 x = 1;
             
@@ -137,11 +133,9 @@ namespace AdventureBackpacks.Assets
         }
         public static Vector2i ValidateMinMaxChestSizeInt(int x, int y)
         {
-            //In Valheim 1.0, UI is max 8 columns.
             if (x > 8)
                 x = 8;
 
-            //If values are below 1, min size is 1 for both width and height.
             if (x < 1)
                 x = 1;
             
@@ -225,9 +219,9 @@ namespace AdventureBackpacks.Assets
                 }
             }
             
-            if (player.IsThisBackpackEquipped(currentBackpack))
+            if (player.IsThisBackpackEquipped(currentBackpack) && InventoryGuiPatches.BackpackIsOpen)
             {
-                var backpackContainer = player.GetBackpackContainerProxy();
+                var backpackContainer = player.GetBackpackContainerProxy(false);
                 if (backpackContainer != null)
                     backpackItem.UpdateContainerSizing(ref backpackContainer);
             }
@@ -277,10 +271,6 @@ namespace AdventureBackpacks.Assets
             }
             return true;
         }
-
-        /// <summary>
-        /// Empties backpack (and optionally player) by dropping items. Returns false if drop was blocked (e.g. by another mod) so caller can block remove and avoid inception.
-        /// </summary>
         public static bool PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false, int numberItems = 0)
         {
             if (!itemData.IsBackpack())

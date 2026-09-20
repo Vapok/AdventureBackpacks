@@ -16,7 +16,6 @@ public static class InventoryPatches
     private static bool _movingItemBetweenContainers;
     private static bool _droppingOutside;
     public static bool IsDoingCrafting = false;
-    private static BackpackComponent _savedBackpackData = null;
 
     private static readonly Queue<KeyValuePair<ItemDrop.ItemData,DateTime>> ItemsAddedQueue = new();
 
@@ -82,7 +81,7 @@ public static class InventoryPatches
                         }
                         else
                         {
-                            var backpackContainer = player.GetBackpackContainerProxy();
+                            var backpackContainer = player.GetBackpackContainerProxy(false);
                             if (backpackContainer != null && backpackContainer.m_inventory == __instance)
                             {
                                 backpack.SetInventory(__instance);
@@ -196,10 +195,6 @@ public static class InventoryPatches
             return true;
         }
     }
-
-    /// <summary>
-    /// Returns true to run the original RemoveItem; false to block (e.g. when yard sale could not empty backpack — prevents inception).
-    /// </summary>
     private static bool RemoveItemPrefix(Inventory __instance, ItemDrop.ItemData item)
     {
         if (__instance == null || Player.m_localPlayer == null)
@@ -210,8 +205,6 @@ public static class InventoryPatches
 
         if (IsDoingCrafting)
         {
-            if (item.IsBackpack())
-                _savedBackpackData = item.Data().Get<BackpackComponent>();
             return true;
         }
 
@@ -236,8 +229,6 @@ public static class InventoryPatches
         if (inventory == null || inventory.m_inventory.Count == 0)
             return true;
 
-        // Empty backpack first so we don't allow "backpack with contents" to be moved into another backpack (inception).
-        // If yard sale fails (e.g. another mod blocks drop), block the remove so backpack stays put.
         if (!Backpacks.PerformYardSale(Player.m_localPlayer, item, true))
         {
             Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$vapok_mod_yard_sale_blocked");
@@ -247,23 +238,7 @@ public static class InventoryPatches
         return true;
     }
 
-    [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem),
-        new[]
-        {
-            typeof(string), typeof(int), typeof(int), typeof(int), typeof(long), typeof(string), typeof(Vector2i),
-            typeof(bool) ,typeof(bool) ,typeof(bool)
-        })]
-    [HarmonyPriority(Priority.First)]
-    static class AddItemCraftingPatch
-    {
-        static void Postfix(Inventory __instance, ref ItemDrop.ItemData __result)
-        {
-            if (IsDoingCrafting && __instance != null)
-            {
-                _savedBackpackData = null;
-            }
-        }
-    }
+
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.CanAddItem), new[] { typeof(ItemDrop.ItemData), typeof(int) })]
     [HarmonyPriority(Priority.First)]
     static class CanAddItemPatch
@@ -284,11 +259,9 @@ public static class InventoryPatches
             _evaluatingCanAddItem = true;
             try
             {
-                // If player inventory can already accept the item, let vanilla handle it
                 if (StoreToBackpack.CanInventoryAccept(__instance, item, stack))
                     return true;
 
-                // Check if crafting output overflow to backpack is active (strictly excluding backpacks)
                 if (IsDoingCrafting && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out var craftBpInventory))
                 {
                     if (StoreToBackpack.CanInventoryAccept(craftBpInventory, item, stack))
@@ -342,7 +315,6 @@ public static class InventoryPatches
 
             if (Player.m_localPlayer != null && __instance == Player.m_localPlayer.GetInventory() && !_movingItemBetweenContainers)
             {
-                // If crafting result and player inventory is full, store to equipped backpack if enabled (never for backpacks)
                 if (IsDoingCrafting && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out var craftBpInventory))
                 {
                     if (!StoreToBackpack.CanInventoryAccept(__instance, item, item.m_stack))
@@ -515,18 +487,11 @@ public static class InventoryPatches
             
             if (__instance.IsBackPackInventory())
             {
-                // When the equipped backpack inventory total weight is updated, the player inventory total weight should also be updated.
                 if (player.IsBackpackEquipped())
                 {
                     var backpack = player.GetEquippedBackpack();
                     if (backpack != null && backpack.GetInventory() == __instance)
                     {
-                        AdventureBackpacks.Log.Debug($"########################################");
-                        AdventureBackpacks.Log.Debug($"####       UpdateTotalWeight       #####");
-                        AdventureBackpacks.Log.Debug($"Inventory Instance: {__instance.m_name}");
-                        AdventureBackpacks.Log.Debug($"Backpack Name: {backpack.Item?.m_shared?.m_name}");
-                        AdventureBackpacks.Log.Debug($"########################################");
-                        
                         player.GetInventory()?.UpdateTotalWeight();
                     }
                 }
@@ -542,42 +507,40 @@ public static class InventoryPatches
             if (__instance == null || Player.m_localPlayer == null)
                 return;
 
-            // Get a list of all items on the player.
             List<ItemDrop.ItemData> items = __instance.GetAllItems();
             
-            // If the inventory being checked for teleportability is the Player's inventory, see whether it contains any backpacks, and then check the backpack inventories for teleportability too
             if (__instance == Player.m_localPlayer.GetInventory())
             {
-                //am I wearing a backpack?
                 if (Player.m_localPlayer.IsBackpackEquipped())
                 {
                     var backpack = Player.m_localPlayer.GetEquippedBackpack();
-                    if (backpack != null && !backpack.GetInventory().IsTeleportable(false))
+                    var bpInventory = backpack?.GetInventory();
+                    if (bpInventory != null && !bpInventory.IsTeleportable(false))
                     {
                         __result = false;
                         return;
                     }
                 }
                 
-                // Go through all the items, match them for any of the names in backpackTypes.
-                // For each match found, check if the Inventory of that backpack is teleportable.
-                foreach (ItemDrop.ItemData item in items)
+                if (items != null)
                 {
-                    if (item == null)
-                        continue;
-                
-                    if (item.IsBackpack())
+                    foreach (ItemDrop.ItemData item in items)
                     {
-                        if (!item.Data().GetOrCreate<BackpackComponent>().GetInventory().IsTeleportable(false))
+                        if (item == null)
+                            continue;
+                    
+                        if (item.IsBackpack())
                         {
-                            // A backpack's inventory inside player inventory was not teleportable.
-                            __result = false;
-                            return;
+                            var bpInventory = item.Data()?.GetOrCreate<BackpackComponent>()?.GetInventory();
+                            if (bpInventory != null && !bpInventory.IsTeleportable(false))
+                            {
+                                __result = false;
+                                return;
+                            }
                         }
                     }
                 }
             }
-            // We don't need to search for backpacks inside backpacks, because those are immediately chucked out when you try to put them in anyway.
         }
     }
 }

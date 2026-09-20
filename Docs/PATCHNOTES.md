@@ -1,3 +1,30 @@
+# 2.1.5 - Multi-Player Isolation & Crafting Mod Compatibility
+* **AzuCraftyBoxes Dynamic Compatibility Bridge (`Compats/AzuCraftyBoxesCompat.cs` & `Compats/BackpackContainerRealProxy.cs`)**:
+  * Implemented decoupled dynamic compatibility for Azumatt's `AzuCraftyBoxes` without compile-time binary dependencies, eliminating `TypeLoadException` risks if the mod is absent or updated.
+  * Utilized `System.Runtime.Remoting.Proxies.RealProxy` to dynamically implement `AzuCraftyBoxes.IContainers.IContainer` via a transparent proxy duck-typed at runtime.
+  * Injected the transparent proxy into `AzuCraftyBoxes.Util.Functions.Boxes.QueryFrame.Get<Player>` via Harmony postfix, automatically integrating equipped backpack storage into AzuCraftyBoxes' chest radius queries, crafting station consumption (`MiscFunctions.ProcessRequirements`), building piece requirements, and UI count computations (`UiItemBank`).
+  * Proxy implementation directly manages `ItemCount`, `ContainsItem`, `ProcessContainerInventory`, `GetInventory`, `GetPosition`, `Save`, `GetPrefabName`, and `RemoveItem`, cleanly decrementing stack counts, saving backpack state, and invoking `backpackInventory.Changed()`.
+  * Implemented explicit `Equals`, `GetHashCode`, and `ToString` dispatches on `BackpackContainerRealProxy` alongside reverse iteration deduplication in `AzuCraftyBoxesCompat.QueryFrameGetPostfix`. Prevents duplicate proxy instances from accumulating in Azu's 0.25-second `_cachedAll` list across game frames, eliminating fluctuating/spinning material numbers in the crafting UI.
+  * Added fallback postfixes on `UiItemBank.GetTotalAnyQuality` and `GetTotalAtQuality` that activate only if `QueryFrame.Get` fails to bind, guaranteeing accurate crafting requirement counts.
+  * Included graceful error trapping and BepInEx log warnings if AzuCraftyBoxes is detected but reflection binding fails.
+* **Public Developer API Enhancements & Bug Fixes (`API/ABAPI.cs` & `API/Privates.cs`)**:
+  * Fixed boolean inversion in `Privates.GetBackPackDefinitionFromComponent` (`if (!isBackpack || backpack == null) return null;`), resolving a critical bug where `ABAPI.GetEquippedBackpack()` and `ABAPI.GetBackpack()` returned `null` for all default mod backpacks.
+  * Added `ABAPI.GetEquippedBackpackInventory(Player player)` and `ABAPI.TryGetEquippedBackpackInventory(Player player, out Inventory inventory)` to provide direct, clean access to the equipped backpack's `Inventory`.
+  * Added `ABAPI.GetBackpackInventory(ItemDrop.ItemData itemData)` and `ABAPI.TryGetBackpackInventory(ItemDrop.ItemData itemData, out Inventory inventory)` allowing third-party mods to retrieve backpack inventories directly from inventory items.
+* **Multi-Player State Isolation & Dedicated Server Bypass (`Extensions/PlayerExtensions.cs`)**:
+  * Removed static `_backpackProxyContainer` field that previously caused multi-player state clobbering across concurrent character instances.
+  * Proxies are now stored per-player on a dedicated child GameObject (`AB_BackpackProxy`) parented directly to that player's transform.
+  * Added `IsDedicatedOrHeadless()` runtime check (`ZNet.instance?.IsDedicated() == true` or `SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null`) and `player != Player.m_localPlayer` checks ensuring container proxies are never instantiated on dedicated servers or remote multiplayer clients.
+  * Introduced `createIfMissing` parameter (default `false`) across `GetBackpackContainerProxy()`. Equipment handling (`Humanoid.EquipItem`), inventory modification listeners (`Inventory.Changed`), and container resizing checks no longer eagerly spawn proxy containers. Proxies are only created when `PlayerExtensions.OpenBackpack()` explicitly requests one for the local player's `InventoryGui`.
+  * Fully resolves Sentry crash [ADVENTUREBACKPACKS-Z](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-Z).
+* **Early Awake Intercept for Third-Party Container Mods (`Patches/Container.cs`)**:
+  * Added `[HarmonyPriority(Priority.First)]` to `ContainerAwakePatch` on `Container.Awake()`. Ensures Adventure Backpacks suppresses vanilla `Container.Awake()` on proxy containers before any third-party mods (such as `AzuAutoStore`) execute their awake patches on the proxy.
+* **Defensive Null Safety & Deserialization Hardening (`Components/BackpackComponent.cs`)**:
+  * Fixed `NullReferenceException` in `BackpackComponent.Deserialize` ([ADVENTUREBACKPACKS-13](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-13)) by enclosing debug logging inside the `try/catch` block and null-guarding `Item?.m_shared?.m_name` and inventory counts.
+  * Added defensive null checks to `CraftFromBackpack.ConsumeCraftingItem` ([ADVENTUREBACKPACKS-V](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-V)).
+* **Codebase Cleanliness & Ground Rules Enforcement**:
+  * Removed obsolete summary blocks (`/// <summary>`) and paragraph comments across `Features/CraftFromBackpack.cs`, `Features/StoreToBackpack.cs`, and `Extensions/InventoryExtensions.cs`.
+
 # 2.1.4 - Container Proxy Compatibility & Defensive Null Safety
 * **External Storage Mod Compatibility & Proxy Virtualization (`Patches/Container.cs`, `Components/BackpackComponent.cs`, `Extensions/PlayerExtensions.cs`)**:
   * Added `[HarmonyPriority(Priority.First)]` to `ContainerSetInUsePatch` on `Container.SetInUse(bool)`. Ensures Adventure Backpacks' intercept runs before third-party container management mods (specifically `AzuAutoStore.Patches.ContainerSetInUseClearWithoutOwnershipPatch`), suppressing the call chain and preventing `NullReferenceException` when closing or updating the backpack container.

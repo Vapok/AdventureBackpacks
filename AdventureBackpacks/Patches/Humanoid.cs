@@ -39,27 +39,20 @@ public class HumanoidPatches
                 yield return LogMessage(instrs[i]);
                 counter++;
 
-                //In Humanoid.UpdateEquipmentStatusEffects, Local Variable 0, or loc_0 is the target HashSet variable 
-                //listed as "other".  So, patching after Stloc_0 is called immediately after Newobj, which creates the object.
                 if (i > 0 && (instrs[i].opcode == OpCodes.Stloc_0 || instrs[i].opcode == OpCodes.Stloc_S || instrs[i].opcode == OpCodes.Stloc) && instrs[i - 1].opcode == OpCodes.Newobj)
                 {
-                    //Move Any Labels from the instruction position being patched to new instruction.
                     if (instrs[i].labels.Count > 0)
                         instrs[i].MoveLabelsTo(ldlocInstruction);
           
-                    //Patch the ldloc_0 which is the argument of my method using local variable 0.
                     yield return LogMessage(ldlocInstruction);
                     counter++;
 
-                    //Need to bring in the Humanoid Instance too to filter for players versus creatures.
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
           
-                    //Patch Calling Method
                     yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(EquipmentEffectCache), nameof(EquipmentEffectCache.AddActiveBackpackEffects))));
                     counter++;
 
-                    //Save output of calling method to local variable 0
                     yield return LogMessage(new CodeInstruction(OpCodes.Stloc_0));
                     counter++;
                     
@@ -92,7 +85,6 @@ public class HumanoidPatches
                 var player = Player.m_localPlayer;
                 var item = __0;
 
-                // Check if the item being unequipped is a backpack, and see if it is the same backpack the player is wearing
                 if (item.IsBackpack() && player.m_shoulderItem == item)
                 {
                     var backpackInventory = player.GetEquippedBackpack();
@@ -154,7 +146,7 @@ public class HumanoidPatches
                         }
                         else
                         {
-                            var backpackContainer = player.GetBackpackContainerProxy();
+                            var backpackContainer = player.GetBackpackContainerProxy(false);
                             if (backpackContainer != null)
                                 backpackItem.UpdateContainerSizing(ref backpackContainer);
                         }

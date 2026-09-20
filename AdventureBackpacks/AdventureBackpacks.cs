@@ -1,8 +1,7 @@
-/* Adventure Backpacks by Vapok */
-
 using System;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Compats;
@@ -40,7 +39,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.1.4";
+        private const string _version = "2.1.5";
 
         //Interface Properties
         public string PluginId => _pluginId;
@@ -65,36 +64,27 @@ namespace AdventureBackpacks
 
 
         [UsedImplicitly]
-        // This the main function of the mod. BepInEx will call this.
         private void Awake()
         {
-            //I'm awake!
             _instance = this;
 
             Patcher.Patch(new[] { "AdventureBackpacks.API" });
 
-            //Waiting For Startup
             Waiter = new Waiting();
 
-            //Jotunn Localization
             var localization = LocalizationManager.Instance.GetLocalization();
 
-            //Register Logger
             LogManager.Init(PluginId, out _log);
 
-            //Initialize Managers
             Initializer.LoadManagers(localization, true, true, true, true, false, false, true);
 
-            //Register Configuration Settings
             _config = new ConfigRegistry(_instance);
 
             PrefabManager.Initalized = true;
 
-            //Patch Harmony
             _harmony = new Harmony(Info.Metadata.GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-            //Compatibilities
             if (Chainloader.PluginInfos.ContainsKey("com.chebgonaz.ChebsNecromancy"))
             {
                 ChebsNecromancy.SetupNecromancyBackpackUsingApi();
@@ -105,7 +95,11 @@ namespace AdventureBackpacks
                 ContentsWithin.Awake(_harmony, "com.maxsch.valheim.contentswithin");
             }
 
-            //Register Mod Splash Screen
+            if (Chainloader.PluginInfos.ContainsKey("Azumatt.AzuCraftyBoxes"))
+            {
+                AzuCraftyBoxesCompat.Awake(_harmony, "Azumatt.AzuCraftyBoxes");
+            }
+
             ModSplashManager.Register(new ModSplashDossier(_instance)
             {
                 Tagline = "A feature-rich backpack progression system with custom models, effects, and inventory mechanics.",
@@ -113,16 +107,22 @@ namespace AdventureBackpacks
                 EnableTelemetry = ConfigRegistry.EnableTelemetry,
                 SendErrorReports = ConfigRegistry.SendErrorReports,
             });
-
-            //???
-
-            //Profit
         }
 
 
         private void Start()
         {
             Localizer.Waiter.StatusChanged += InitializeBackpacks;
+
+            if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null)
+            {
+                Waiter.ValheimIsAwake(true);
+            }
+
+            if (Chainloader.PluginInfos.ContainsKey("Azumatt.AzuCraftyBoxes"))
+            {
+                AzuCraftyBoxesCompat.Awake(_harmony, "Azumatt.AzuCraftyBoxes");
+            }
 
             //Initialized Features
             QuickTransfer.FeatureInitialized = true;

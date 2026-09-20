@@ -54,11 +54,9 @@ public static class QuickTransfer
                 return;
             }
 
-            //If item is equipped, let's skip the move, because this is most likely an unequip action.
             if (item.m_equipped)
                 return;
 
-            //If I have a backpack open, and I currently have nothing in the equipped slot, I want to prioritize equipping it over storing it.
             if (item.IsEquipable() && grid.m_inventory == Player.m_localPlayer.GetInventory())
             {
                 switch (item.m_shared.m_itemType)

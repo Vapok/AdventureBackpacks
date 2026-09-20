@@ -100,14 +100,21 @@ internal static class InventoryGuiPatches
         }
     }
 
+    private static bool _hasLoggedTextInputError;
+
     public static bool CheckForTextInput()
     {
         try
         {
             return TextInput.IsVisible();
         }
-        catch
+        catch (Exception ex)
         {
+            if (!_hasLoggedTextInputError)
+            {
+                _hasLoggedTextInputError = true;
+                AdventureBackpacks.Log.Error($"Exception in CheckForTextInput: {ex}");
+            }
             return false;
         }
     }
@@ -381,10 +388,6 @@ internal static class InventoryGuiPatches
                            instrs[i - 1].opcode == OpCodes.Ldc_I4_1 && instrs[i - 2].opcode == OpCodes.Ldnull &&
                            instrs[i - 3].opcode == OpCodes.Ldarg_0 || instrs[i - 4].opcode == OpCodes.Callvirt && instrs[i - 4].operand.Equals(tutorialMethod)))
                 {
-                    // instrs[i - 4].opcode == OpCodes.Callvirt && instrs[i - 4].operand.Equals(tutorialMethod)
-                    // ZenUI mod is removing the vanilla showMethod.  Making an update th at if i can't find showMethod, try to find another method further up, but at a distance.
-                    // Not ideal, but does work.
-                    
                     //Call to Show Backpack
                     //Get localPlayer at ldloc.1
                     var localPlayerInstruction = new CodeInstruction(OpCodes.Ldloc_1);
@@ -552,10 +555,6 @@ internal static class InventoryGuiPatches
                 if (instrs[i].opcode == OpCodes.Callvirt && 
                     (instrs[i].operand.Equals(countItemsMethod) || (instrs[i].operand is MethodInfo m && m.Name == nameof(Inventory.CountItems))))
                 {
-                    // CountItems left [int itemCount] on top of the stack.
-                    // In SetupRequirement(Transform, Piece.Requirement req, Player player, bool discover, int quality, int craftMultiplier):
-                    // Arg 2 is Player, Arg 1 is Piece.Requirement.
-                    // We push Player (ldarg.2) and Requirement (ldarg.1) and call AdjustCountIfEquipped(itemCount, player, resource) -> returns adjusted int.
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_2));
                     counter++;
 

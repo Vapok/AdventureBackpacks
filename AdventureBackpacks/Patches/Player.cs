@@ -24,7 +24,6 @@ public class PlayerPatches
         if (string.IsNullOrEmpty(itemName))
             return num;
 
-        // Deduct 1 if the player is actively equipping this item
         if (num > 0 && resource.m_resItem.m_itemData.IsEquipable())
         {
             var inventory = player?.GetInventory();
@@ -35,7 +34,6 @@ public class PlayerPatches
             }
         }
 
-        // Add backpack materials if CraftFromBackpack is active
         if (CraftFromBackpack.CanCraftFromBackpack(player, out _))
         {
             num += CraftFromBackpack.GetBackpackItemCount(player, itemName, quality);
@@ -63,7 +61,6 @@ public class PlayerPatches
         if (string.IsNullOrEmpty(itemName))
             return amount;
 
-        // If Craft From Backpack is enabled and active, consume from player inventory first, then backpack
         if (CraftFromBackpack.CanCraftFromBackpack(player, out _))
         {
             return CraftFromBackpack.ConsumeCraftingItem(player, itemName, amount);
@@ -107,7 +104,6 @@ public class PlayerPatches
     {
         static void Postfix(Player __instance, Piece piece, Player.RequirementMode mode, ref bool __result)
         {
-            // If already satisfied (by vanilla inventory or container mods like ValheimPlus/ItemDrawers), do nothing!
             if (__result)
                 return;
 
@@ -179,7 +175,6 @@ public class PlayerPatches
         [HarmonyPostfix]
         static void Postfix(Player __instance, Recipe piece, bool discover, int qualityLevel, int amount, ref bool __result)
         {
-            // If already satisfied (by vanilla inventory or container mods like ValheimPlus/ItemDrawers), do nothing!
             if (__result)
                 return;
 
@@ -278,8 +273,6 @@ public class PlayerPatches
                         ldLocReq = new CodeInstruction(OpCodes.Ldloc_3);
                     }
 
-                    // CountItems left [int itemCount] on top of the stack.
-                    // We push Player (ldarg.0) and Requirement (ldLocReq) and call AdjustCountIfEquipped(itemCount, player, resource) -> returns adjusted int.
                     yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                     counter++;
 
@@ -355,8 +348,6 @@ public class PlayerPatches
                             ldLocReq = new CodeInstruction(OpCodes.Ldloc_3);
                         }
 
-                        // Mul left [int amount] on top of the stack.
-                        // We push Player (ldarg.0) and Requirement (ldLocReq) and call ConsumeUnEquippedItems(amount, player, resource) -> returns adjusted amount.
                         yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
                         counter++;
 
@@ -385,7 +376,6 @@ public class PlayerPatches
         [HarmonyPostfix]
         static void Postfix(Player __instance, Inventory inventory, Recipe recipe, int qualityLevel, ref int amount, ref int extraAmount, int craftMultiplier, ref ItemDrop.ItemData __result)
         {
-            // If vanilla or an external mod already found a valid item, do not interfere!
             if (__result != null)
                 return;
 
