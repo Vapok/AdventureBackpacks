@@ -132,6 +132,9 @@
         <Reference Include="UnityEngine.UI">
             <HintPath>$(ReferencesRoot)\Valheim\1.0.15\Managed\UnityEngine.UI.dll</HintPath>
         </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(ReferencesRoot)\Valheim\1.0.15\Managed\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
         <!-- Local config: use DLL built from Vapok.Common project (build Common first, then build this) -->
         <!-- NuGet package: used for Debug, Release, API -->
         <Reference Include="Vapok.Valheim.Common" Condition=" '$(Configuration)' == 'Local' ">

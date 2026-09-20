@@ -10,8 +10,10 @@ using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using Vapok.Common.Managers;
+using AdventureBackpacks.Features;
 
 namespace AdventureBackpacks.Patches;
 
@@ -571,6 +573,46 @@ internal static class InventoryGuiPatches
             {
                 AdventureBackpacks.Log.Error($"InventoryGui.SetupRequirement Transpiler Failed To Patch");
                 Thread.Sleep(5000);
+            }
+        }
+
+        [UsedImplicitly]
+        static void Postfix(Transform elementRoot, Piece.Requirement req, Player player, bool craft, int quality, int craftMultiplier, ref bool __result)
+        {
+            if (!__result || elementRoot == null || req == null || req.m_resItem == null || req.m_resItem.m_itemData == null || player == null)
+                return;
+
+            if (!CraftFromBackpack.CanCraftFromBackpack(player, out _))
+                return;
+
+            var itemName = req.m_resItem.m_itemData.m_shared?.m_name;
+            if (string.IsNullOrEmpty(itemName))
+                return;
+
+            var bpCount = CraftFromBackpack.GetBackpackItemCount(player, itemName);
+            if (bpCount <= 0)
+                return;
+
+            var resAmountObj = elementRoot.Find("res_amount");
+            if (resAmountObj == null)
+                return;
+
+            var textComponent = resAmountObj.GetComponent<TMP_Text>();
+            if (textComponent == null || string.IsNullOrEmpty(textComponent.text))
+                return;
+
+            if (textComponent.text.Contains("/"))
+            {
+                var parts = textComponent.text.Split('/');
+                if (parts.Length == 2 && int.TryParse(parts[0], out var currentCount) && int.TryParse(parts[1], out var reqCount))
+                {
+                    var newCount = currentCount + bpCount;
+                    textComponent.text = $"{newCount}/{reqCount}";
+                    if (newCount >= reqCount)
+                    {
+                        textComponent.color = Color.white;
+                    }
+                }
             }
         }
     }
