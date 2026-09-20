@@ -36,36 +36,58 @@ public static class CraftFromBackpack
     {
         backpackInventory = null;
 
-        if (!FeatureInitialized || EnableCraftFromBackpack == null || !EnableCraftFromBackpack.Value)
-            return false;
+        try
+        {
+            if (PlayerExtensions.IsDedicatedOrHeadless())
+                return false;
 
-        if (player == null || !player.IsBackpackEquipped())
-            return false;
+            if (!FeatureInitialized || EnableCraftFromBackpack == null || !EnableCraftFromBackpack.Value)
+                return false;
 
-        var backpack = player.GetEquippedBackpack();
-        if (backpack == null)
-            return false;
+            if (player == null || !player.IsBackpackEquipped())
+                return false;
 
-        backpackInventory = backpack.GetInventory();
-        return backpackInventory != null;
+            var backpack = player.GetEquippedBackpack();
+            if (backpack == null)
+                return false;
+
+            backpackInventory = backpack.GetInventory();
+            return backpackInventory != null;
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error in CanCraftFromBackpack: {ex.Message}");
+            return false;
+        }
     }
 
     public static bool CanCraftOutputToBackpack(Player player, out Inventory backpackInventory)
     {
         backpackInventory = null;
 
-        if (!FeatureInitialized || EnableCraftOutputToBackpack == null || !EnableCraftOutputToBackpack.Value)
-            return false;
+        try
+        {
+            if (PlayerExtensions.IsDedicatedOrHeadless())
+                return false;
 
-        if (player == null || !player.IsBackpackEquipped())
-            return false;
+            if (!FeatureInitialized || EnableCraftOutputToBackpack == null || !EnableCraftOutputToBackpack.Value)
+                return false;
 
-        var backpack = player.GetEquippedBackpack();
-        if (backpack == null)
-            return false;
+            if (player == null || !player.IsBackpackEquipped())
+                return false;
 
-        backpackInventory = backpack.GetInventory();
-        return backpackInventory != null;
+            var backpack = player.GetEquippedBackpack();
+            if (backpack == null)
+                return false;
+
+            backpackInventory = backpack.GetInventory();
+            return backpackInventory != null;
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error in CanCraftOutputToBackpack: {ex.Message}");
+            return false;
+        }
     }
 
     public static int GetBackpackItemCount(Player player, string itemName, int quality = -1)

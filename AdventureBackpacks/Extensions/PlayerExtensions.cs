@@ -172,60 +172,69 @@ public static class PlayerExtensions
         if (player == null)
             return;
         
-        var backpack = GetEquippedBackpack(player);
-
-        if (backpack == null)
-            return;
-
-        ItemDrop.ItemData tempItemRemoval = null;
-        var swapItemActivated = false;
-        var playerInventory = player.GetInventory();
-        
-        if (!playerInventory.ContainsBackpack(backpack.Item) && !playerInventory.HasEmptySlot())
+        try
         {
-            tempItemRemoval = playerInventory.FindNonBackpackItem();
+            var backpack = GetEquippedBackpack(player);
+
+            if (backpack == null)
+                return;
+
+            ItemDrop.ItemData tempItemRemoval = null;
+            var swapItemActivated = false;
+            var playerInventory = player.GetInventory();
             
-            if (tempItemRemoval != null && playerInventory.RemoveItem(tempItemRemoval))
-                    swapItemActivated = true;
-            else
+            if (!playerInventory.ContainsBackpack(backpack.Item) && !playerInventory.HasEmptySlot())
             {
+                tempItemRemoval = playerInventory.FindNonBackpackItem();
+                
+                if (tempItemRemoval != null && playerInventory.RemoveItem(tempItemRemoval))
+                    swapItemActivated = true;
+                else
+                {
+                    player.Message(MessageHud.MessageType.Center, "$vapok_mod_quick_drop_unavailable");
+                    return;
+                }
+            }
+
+            AdventureBackpacks.QuickDropping = true;
+            AdventureBackpacks.Log.Message("Quick dropping backpack.");        
+            player.RemoveEquipAction(backpack.Item);
+            player.UnequipItem(backpack.Item, true);
+
+            if (!player.m_inventory.RemoveItem(backpack.Item))
+            {
+                if (swapItemActivated)
+                    playerInventory.AddItem(tempItemRemoval);
                 player.Message(MessageHud.MessageType.Center, "$vapok_mod_quick_drop_unavailable");
                 return;
             }
-        }
 
-        AdventureBackpacks.QuickDropping = true;
-        AdventureBackpacks.Log.Message("Quick dropping backpack.");        
-        // Unequip before dropping
-        player.RemoveEquipAction(backpack.Item);
-        player.UnequipItem(backpack.Item, true);
+            if (backpack.Item != null)
+                backpack.Item.m_customData ??= new System.Collections.Generic.Dictionary<string, string>();
 
-        if (!player.m_inventory.RemoveItem(backpack.Item))
-        {
-            // Removal failed (e.g. another mod blocked it). Do not drop — would duplicate the backpack.
+            var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
+            if (itemDrop != null)
+            {
+                var rb = itemDrop.GetComponent<Rigidbody>();
+                if (rb != null)
+                    rb.linearVelocity = (Vector3.up - player.transform.forward) * 5f;
+                itemDrop.Save();
+            }
+
+            player.m_dropEffects.Create(player.transform.position, Quaternion.identity);
+
             if (swapItemActivated)
                 playerInventory.AddItem(tempItemRemoval);
-            AdventureBackpacks.QuickDropping = false;
-            player.Message(MessageHud.MessageType.Center, "$vapok_mod_quick_drop_unavailable");
-            return;
+            
+            InventoryGuiPatches.BackpackIsOpen = false;
         }
-
-        // This drops a copy of the backpack itemDrop.itemData
-        var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
-        if (itemDrop != null)
+        catch (System.Exception ex)
         {
-            var rb = itemDrop.GetComponent<Rigidbody>();
-            if (rb != null)
-                rb.linearVelocity = (Vector3.up - player.transform.forward) * 5f;
-            itemDrop.Save();
+            AdventureBackpacks.Log?.Warning($"Error during QuickDropBackpack: {ex.Message}");
         }
-
-        player.m_dropEffects.Create(player.transform.position, Quaternion.identity);
-
-        if (swapItemActivated)
-            playerInventory.AddItem(tempItemRemoval);
-        
-        InventoryGuiPatches.BackpackIsOpen = false;
-        AdventureBackpacks.QuickDropping = false;
+        finally
+        {
+            AdventureBackpacks.QuickDropping = false;
+        }
     }
 }

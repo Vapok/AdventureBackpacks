@@ -72,21 +72,39 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     
     protected BackpackItem(string assetName, string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(assetName, prefabName,itemName)
     {
-        _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
-        _englishSection = SafeGetTranslation("English", _configSection);
+        try
+        {
+            _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
+            _englishSection = SafeGetTranslation("English", _configSection);
 
-        if (externalLocalize)
-            _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
-        else
-            _localizedCategory = Localization.instance?.Localize(_configSection) ?? Localization.m_instance?.Localize(_configSection) ?? _configSection;
-        
-        SetupBackpackDef();
+            if (externalLocalize)
+                _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
+            else
+                _localizedCategory = Localization.instance?.Localize(_configSection) ?? Localization.m_instance?.Localize(_configSection) ?? _configSection;
+            
+            SetupBackpackDef();
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error initializing BackpackItem '{itemName}': {ex.Message}");
+            _englishSection = _configSection;
+            _localizedCategory = _configSection;
+        }
     }
 
     internal void SetupLocalization()
     {
-        _englishSection = SafeGetTranslation("English", _configSection);
-        _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
+        try
+        {
+            _englishSection = SafeGetTranslation("English", _configSection);
+            _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Failed to localize section '{_configSection}': {ex.Message}");
+            _englishSection = _configSection;
+            _localizedCategory = _configSection;
+        }
     }
 
     private static string SafeGetTranslation(string language, string text)

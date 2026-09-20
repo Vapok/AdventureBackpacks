@@ -116,37 +116,46 @@ public static class StoreToBackpack
         if (player == null || item == null || backpackInventory == null || item.m_shared == null || string.IsNullOrEmpty(item.m_shared.m_name))
             return false;
 
-        if (item.IsBackpack() || item.TryGetBackpackItem(out _) || !Backpacks.CheckForInception(backpackInventory, item))
-            return false;
-
-        if (CanInventoryAccept(backpackInventory, item, item.m_stack))
+        try
         {
-            var added = backpackInventory.AddItem(item);
-            if (added)
-                return true;
-        }
+            if (item.IsBackpack() || item.TryGetBackpackItem(out _) || !Backpacks.CheckForInception(backpackInventory, item))
+                return false;
 
-        if (item.m_shared.m_maxStackSize > 1 && item.m_stack > 1)
-        {
-            var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
-            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
-            var availableSpace = freeStack + (emptySlots * item.m_shared.m_maxStackSize);
-
-            if (availableSpace > 0)
+            if (CanInventoryAccept(backpackInventory, item, item.m_stack))
             {
-                var transferAmount = Mathf.Min(item.m_stack, availableSpace);
-                var partialItem = item.Clone();
-                partialItem.m_stack = transferAmount;
+                var added = backpackInventory.AddItem(item);
+                if (added)
+                    return true;
+            }
 
-                if (backpackInventory.AddItem(partialItem))
+            if (item.m_shared.m_maxStackSize > 1 && item.m_stack > 1)
+            {
+                var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+                var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
+                var availableSpace = freeStack + (emptySlots * item.m_shared.m_maxStackSize);
+
+                if (availableSpace > 0)
                 {
-                    item.m_stack -= transferAmount;
-                    if (item.m_stack <= 0)
-                        return true;
+                    var transferAmount = Mathf.Min(item.m_stack, availableSpace);
+                    item.m_customData ??= new System.Collections.Generic.Dictionary<string, string>();
+                    var partialItem = item.Clone();
+                    partialItem.m_stack = transferAmount;
+
+                    if (backpackInventory.AddItem(partialItem))
+                    {
+                        item.m_stack -= transferAmount;
+                        if (item.m_stack <= 0)
+                            return true;
+                    }
                 }
             }
-        }
 
-        return false;
+            return false;
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error in TryStoreItem for {item.m_shared?.m_name}: {ex.Message}");
+            return false;
+        }
     }
 }
