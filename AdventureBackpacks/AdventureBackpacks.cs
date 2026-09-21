@@ -170,14 +170,53 @@ namespace AdventureBackpacks
             //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
 
-            if (!Chainloader.PluginInfos.ContainsKey("Azumatt.AzuExtendedPlayerInventory"))
+            if (!PlayerExtensions.IsDedicatedOrHeadless() && !BoneReorderAlreadyApplied())
             {
-                BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+                try
+                {
+                    BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+                }
+                catch (Exception ex)
+                {
+                    Log?.Warning($"Could not apply bone reordering: {ex.Message}");
+                }
             }
 
             ConfigRegistry.Waiter.ConfigurationComplete(true);
 
             ValheimAwake = true;
+        }
+
+        private static bool BoneReorderAlreadyApplied()
+        {
+            try
+            {
+                MethodInfo shoulderVisuals = AccessTools.Method(typeof(VisEquipment), nameof(VisEquipment.SetShoulderEquipped));
+
+                if (shoulderVisuals == null)
+                    return false;
+
+                HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(shoulderVisuals);
+
+                if (patchInfo?.Postfixes == null)
+                    return false;
+
+                foreach (Patch postfix in patchInfo.Postfixes)
+                {
+                    if (postfix.PatchMethod?.DeclaringType?.Name != nameof(BoneReorder))
+                        continue;
+
+                    Log?.Info($"Bone reordering already installed by '{postfix.owner}'. Skipping ours.");
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log?.Warning($"Could not inspect shoulder visual patches, applying bone reordering anyway: {ex.Message}");
+                return false;
+            }
         }
 
         private void OnDestroy()
