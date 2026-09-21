@@ -102,6 +102,10 @@ public abstract class EffectsBase
         
     }
 
+    public virtual void OnUpdateEnvStatusEffects(Player player)
+    {
+    }
+
 
     // When true, AdventureBackpacks.Assets.Factories.EffectsFactory.ToggleEffects includes this instance each frame.
     // Override and return true only if ToggleEffect does meaningful per-frame work (input, biome edges, etc.).

@@ -1,4 +1,19 @@
-# 2.1.8 - Ecosystem Compatibility & Documentation Update
+# 2.1.9 - Umbrella Water Resistance & Weather Fixes
+* **Water Resistance & Umbrella Mechanic**:
+  * Reworked water resistance so standing in the rain keeps you dry and prevents the Wet effect from reappearing or resetting.
+  * Swimming or wading in deep water will still make you wet.
+  * When leaving the water into the rain, your existing Wet timer will now continue to count down naturally rather than being reset by the rain.
+* **Cold Resistance & Weather Mod Compatibility**:
+  * Improved Cold Resistance to prevent cold effects when playing with weather mods like Seasonality during winter conditions.
+* **Weather & Fireplace Warmth**:
+  * Restored natural game behavior around campfires and sheltered buildings in rainy conditions.
+* **Stability & Server Protections**:
+  * Added safety checks during game startup and server loading to prevent errors when loading swamp backpacks and water resistance effects.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.8 - Ecosystem Compatibility & Documentation Update
 * **Mod Ecosystem Documentation & Verification**:
   * Updated and expanded the verified mod compatibility guide to reflect community standards.
   * Added explicit compatibility entries for AzuExtendedPlayerInventory, Extra Slots, and Equipment and Quick Slots (EAQS).
@@ -11,9 +26,6 @@
   * Added startup safeguards to ensure client-only features (such as menus, quick item transfers, and local interactions) are completely skipped on dedicated servers.
 * **Dependency Updates**:
   * Updated shared libraries and Jotunn dependencies to their latest stable releases.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.1.7 - Storage & Inventory Mod Compatibility
 * **Storage & Chest Mod Compatibility**:

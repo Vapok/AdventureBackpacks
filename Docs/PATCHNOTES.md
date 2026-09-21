@@ -1,3 +1,23 @@
+# 2.1.9 - Umbrella Water Resistance & Weather Fixes
+* **Environmental Status Effect Lifecycle Hooking (`Patches/Player.cs`)**:
+  * Implemented `PlayerUpdateEnvStatusEffectsPatch` with `[HarmonyPrepare]` dedicated server isolation.
+  * Added `Prefix`, `Postfix`, and `Finalizer` around `Player.UpdateEnvStatusEffects` managing `IsUpdatingEnvStatusEffects` state flag.
+  * Executes virtual `EffectsBase.OnUpdateEnvStatusEffects(Player player)` on active backpack effects during the environmental cycle.
+* **Umbrella Rain Prevention & Immersion Decoupling (`Patches/SEMan.cs`)**:
+  * Added `AddStatusEffectPatch` targeting `SEMan.AddStatusEffect(int, bool, int, float, short)`.
+  * When `IsUpdatingEnvStatusEffects` is active and the status effect hash matches `SEMan.s_statusEffectWet`, verifies if the character possesses an active `WaterResistance` backpack effect.
+  * If water resistant, blocks rain-applied wetness (`__runOriginal = false`, `__result = null`).
+  * Decouples rain application from water submersion (`Character.UpdateWater`), preserving natural swimming wetness while allowing prior wet status timers to tick down cleanly without rain resets.
+* **Winter Cold Resistance & Weather Mod Overwrites (`Assets/Effects/ColdResistance.cs`)**:
+  * Implemented `OnUpdateEnvStatusEffects(Player player)` in `ColdResistance` to invoke `player.GetSEMan().RemoveStatusEffect(SEMan.s_statusEffectCold, true)`.
+  * Neutralizes winter weather overrides from external mods (such as Seasonality's `EnvMan.IsCold` Postfix) while maintaining engine-native cold handling.
+* **Retirement of Destructive Environment Overrides (`Patches/EnvMan.cs`)**:
+  * Emptied legacy `EnvManIsCold` and `EnvManIsWet` patches.
+  * Restores authentic vanilla physics for campfires, structural cover, and ambient drying calculations.
+* **Defensive Null-Safety & Headless Server Hardening (`Assets/Items/BackpackItems/BackpackSwamp.cs`, `Assets/Effects/Waterproof.cs`)**:
+  * Added defensive null checks around `ObjectDB.instance` and `wet.m_icon` in `Waterproof.LoadExternalStatusEffect`.
+  * Added null guards on `Item`, `Item.DropsFrom`, and `BackpackBiome` in `BackpackSwamp`, resolving startup exception [ADVENTUREBACKPACKS-1G](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1G).
+
 # 2.1.8 - Ecosystem Compatibility & Documentation Update
 * **ContentsWithin Container Proxy Hook Update (`Compats/ContentsWithin.cs`)**:
   * Updated `ContainerAccessPrefix` to validate container targets using `ContainerPatches.IsBackpackProxy()` instead of obsolete `container.name.Equals("Player(Clone)")`.

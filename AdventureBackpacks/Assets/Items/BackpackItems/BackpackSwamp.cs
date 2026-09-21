@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
@@ -12,23 +12,29 @@ internal class BackpackSwamp : BackpackItem
     {
         RegisterConfigSettings();
         
-        Item.Configurable = Configurability.Recipe | Configurability.Drop;
-        AssignCraftingTable(CraftingTable.Workbench,2);
-        
-        Item.MaximumRequiredStationLevel = 5;
-        
-        AddRecipeIngredient("Bloodbag",10);
-        AddRecipeIngredient("Root",4);
-        AddRecipeIngredient("Guck",4);
-        
-        AddUpgradeIngredient("Bloodbag", 2);
-        AddUpgradeIngredient("Iron", 5);
-        
-        Item.DropsFrom.Add("Draugr", 0.002f, 1,dontScale:true);
-        Item.DropsFrom.Add("Draugr_Ranged", 0.004f, 1,dontScale:true);
-        Item.DropsFrom.Add("Draugr_Elite", 0.004f, 1,dontScale:true);
-        Item.DropsFrom.Add("Abomination", 0.008f, 1,dontScale:true);
-        Item.DropsFrom.Add("Bonemass", 0.04f, 1,dontScale:true);
+        if (Item != null)
+        {
+            Item.Configurable = Configurability.Recipe | Configurability.Drop;
+            AssignCraftingTable(CraftingTable.Workbench,2);
+            
+            Item.MaximumRequiredStationLevel = 5;
+            
+            AddRecipeIngredient("Bloodbag",10);
+            AddRecipeIngredient("Root",4);
+            AddRecipeIngredient("Guck",4);
+            
+            AddUpgradeIngredient("Bloodbag", 2);
+            AddUpgradeIngredient("Iron", 5);
+            
+            if (Item.DropsFrom != null)
+            {
+                Item.DropsFrom.Add("Draugr", 0.002f, 1,dontScale:true);
+                Item.DropsFrom.Add("Draugr_Ranged", 0.004f, 1,dontScale:true);
+                Item.DropsFrom.Add("Draugr_Elite", 0.004f, 1,dontScale:true);
+                Item.DropsFrom.Add("Abomination", 0.008f, 1,dontScale:true);
+                Item.DropsFrom.Add("Bonemass", 0.04f, 1,dontScale:true);
+            }
+        }
     }
 
     internal sealed override void RegisterConfigSettings()
@@ -42,10 +48,12 @@ internal class BackpackSwamp : BackpackItem
         RegisterWeightMultiplier();
         RegisterCarryBonus(15);
         RegisterSpeedMod();
-        if ((BackpackBiome.Value & BackpackBiomes.Swamp) != 0)
+        if (BackpackBiome != null && (BackpackBiome.Value & BackpackBiomes.Swamp) != 0)
         {
-            EffectsFactory.EffectList[BackpackEffect.WaterResistance].RegisterEffectBiomeQuality(BackpackBiomes.Swamp, 2);
-            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Swamp, 1);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.WaterResistance))
+                EffectsFactory.EffectList[BackpackEffect.WaterResistance].RegisterEffectBiomeQuality(BackpackBiomes.Swamp, 2);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.ColdResistance))
+                EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Swamp, 1);
         }
     }
 

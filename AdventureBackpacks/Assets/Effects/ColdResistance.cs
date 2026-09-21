@@ -1,4 +1,4 @@
-﻿using Vapok.Common.Managers.StatusEffects;
+using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Assets.Effects;
@@ -14,8 +14,8 @@ public class ColdResistance : EffectsBase
     {
         if (_externalStatusEffect == null)
         {
-            var cold = ObjectDB.instance.GetStatusEffect("Cold".GetStableHashCode());
-            var se = new CustomSE(Enums.StatusEffects.Stats, "SE_vapok_ab_cold_immunity");
+            StatusEffect cold = ObjectDB.instance.GetStatusEffect("Cold".GetStableHashCode());
+            CustomSE se = new(Enums.StatusEffects.Stats, "SE_vapok_ab_cold_immunity");
             se.Effect.m_name = "$vapok_mod_se_cold_immunity";
             se.Effect.m_icon = cold.m_icon;
             _externalStatusEffect = se.Effect;
@@ -40,5 +40,17 @@ public class ColdResistance : EffectsBase
         LoadExternalStatusEffect();
         SetStatusEffect(_externalStatusEffect);
         return base.HasActiveStatusEffect(item, out statusEffect);
+    }
+
+    public override void OnUpdateEnvStatusEffects(Player player)
+    {
+        if (player == null || !IsEffectActive(player))
+            return;
+
+        SEMan seMan = player.GetSEMan();
+        if (seMan == null)
+            return;
+
+        seMan.RemoveStatusEffect(SEMan.s_statusEffectCold);
     }
 }

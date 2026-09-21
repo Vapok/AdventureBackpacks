@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
@@ -438,4 +439,38 @@ public class PlayerPatches
             }
         }
     }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.UpdateEnvStatusEffects))]
+    internal static class PlayerUpdateEnvStatusEffectsPatch
+    {
+        public static bool IsUpdatingEnvStatusEffects { get; private set; }
+
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        private static void Prefix(Player __instance)
+        {
+            if (__instance == Player.m_localPlayer)
+                IsUpdatingEnvStatusEffects = true;
+        }
+
+        private static void Postfix(Player __instance)
+        {
+            if (__instance == Player.m_localPlayer)
+            {
+                IsUpdatingEnvStatusEffects = false;
+
+                foreach (KeyValuePair<BackpackEffect, Assets.Effects.EffectsBase> kvp in EffectsFactory.EffectList)
+                {
+                    kvp.Value.OnUpdateEnvStatusEffects(__instance);
+                }
+            }
+        }
+
+        private static void Finalizer()
+        {
+            IsUpdatingEnvStatusEffects = false;
+        }
+    }
 }
+

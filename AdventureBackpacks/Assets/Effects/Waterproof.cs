@@ -1,4 +1,4 @@
-﻿using Vapok.Common.Managers.StatusEffects;
+using Vapok.Common.Managers.StatusEffects;
 using Vapok.Common.Shared;
 
 namespace AdventureBackpacks.Assets.Effects;
@@ -14,10 +14,10 @@ public class Waterproof: EffectsBase
     {
         if (_externalStatusEffect == null)
         {
-            var wet = ObjectDB.instance.GetStatusEffect("Wet".GetStableHashCode());
-            var se = new CustomSE(Enums.StatusEffects.Stats, "SE_vapok_ab_wet_resistance");
+            StatusEffect wet = ObjectDB.instance == null ? null : ObjectDB.instance.GetStatusEffect("Wet".GetStableHashCode());
+            CustomSE se = new(Enums.StatusEffects.Stats, "SE_vapok_ab_wet_resistance");
             se.Effect.m_name = "$vapok_mod_se_wet_resistance";
-            se.Effect.m_icon = wet.m_icon;
+            se.Effect.m_icon = wet != null ? wet.m_icon : null;
             _externalStatusEffect = se.Effect;
             SetStatusEffect(_externalStatusEffect);
         }
@@ -41,5 +41,5 @@ public class Waterproof: EffectsBase
         SetStatusEffect(_externalStatusEffect);
         return base.HasActiveStatusEffect(item, out statusEffect);
     }
-
 }
+
