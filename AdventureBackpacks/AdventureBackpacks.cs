@@ -170,7 +170,8 @@ namespace AdventureBackpacks
             //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
 
-            if (!Chainloader.PluginInfos.ContainsKey("Azumatt.AzuExtendedPlayerInventory"))
+            //Enable BoneReorder, unless another mod already covers the same ground
+            if (!BoneReorderAlreadyApplied())
             {
                 BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
             }
@@ -178,6 +179,40 @@ namespace AdventureBackpacks
             ConfigRegistry.Waiter.ConfigurationComplete(true);
 
             ValheimAwake = true;
+        }
+
+        //True if another mod already put a BoneReorder postfix on SetShoulderEquipped.
+        //AzuEPI ships one but never patches it in, so 2.1.7 checking for the plugin left capes invisible.
+        private static bool BoneReorderAlreadyApplied()
+        {
+            try
+            {
+                var shoulderVisuals = AccessTools.Method(typeof(VisEquipment), nameof(VisEquipment.SetShoulderEquipped));
+
+                if (shoulderVisuals == null)
+                    return false;
+
+                var postfixes = Harmony.GetPatchInfo(shoulderVisuals)?.Postfixes;
+
+                if (postfixes == null)
+                    return false;
+
+                foreach (var postfix in postfixes)
+                {
+                    if (postfix.PatchMethod?.DeclaringType?.Name != nameof(BoneReorder))
+                        continue;
+
+                    Log?.Info($"Bone reordering already installed by '{postfix.owner}'. Skipping ours.");
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Log?.Warning($"Could not inspect shoulder visual patches, applying bone reordering anyway: {ex.Message}");
+                return false;
+            }
         }
 
         private void OnDestroy()
