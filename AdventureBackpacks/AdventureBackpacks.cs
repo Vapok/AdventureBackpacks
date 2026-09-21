@@ -170,10 +170,16 @@ namespace AdventureBackpacks
             //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
 
-            //Enable BoneReorder, unless another mod already covers the same ground
-            if (!BoneReorderAlreadyApplied())
+            if (!PlayerExtensions.IsDedicatedOrHeadless() && !BoneReorderAlreadyApplied())
             {
-                BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+                try
+                {
+                    BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+                }
+                catch (Exception ex)
+                {
+                    Log?.Warning($"Could not apply bone reordering: {ex.Message}");
+                }
             }
 
             ConfigRegistry.Waiter.ConfigurationComplete(true);
@@ -181,23 +187,21 @@ namespace AdventureBackpacks
             ValheimAwake = true;
         }
 
-        //True if another mod already put a BoneReorder postfix on SetShoulderEquipped.
-        //AzuEPI ships one but never patches it in, so 2.1.7 checking for the plugin left capes invisible.
         private static bool BoneReorderAlreadyApplied()
         {
             try
             {
-                var shoulderVisuals = AccessTools.Method(typeof(VisEquipment), nameof(VisEquipment.SetShoulderEquipped));
+                MethodInfo shoulderVisuals = AccessTools.Method(typeof(VisEquipment), nameof(VisEquipment.SetShoulderEquipped));
 
                 if (shoulderVisuals == null)
                     return false;
 
-                var postfixes = Harmony.GetPatchInfo(shoulderVisuals)?.Postfixes;
+                HarmonyLib.Patches patchInfo = Harmony.GetPatchInfo(shoulderVisuals);
 
-                if (postfixes == null)
+                if (patchInfo?.Postfixes == null)
                     return false;
 
-                foreach (var postfix in postfixes)
+                foreach (Patch postfix in patchInfo.Postfixes)
                 {
                     if (postfix.PatchMethod?.DeclaringType?.Name != nameof(BoneReorder))
                         continue;
