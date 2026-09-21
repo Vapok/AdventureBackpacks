@@ -5,6 +5,8 @@
   * Removed references to outdated legacy mods.
 * **ContentsWithin Integration**:
   * Fixed an issue where hovering over a player's equipped backpack could display container contents when using the ContentsWithin mod.
+* **Cape Appearance with Extended Inventory**:
+  * Fixed an issue where wearing a cape alongside a backpack caused the cape to turn invisible when using the AzuExtendedPlayerInventory mod (thanks @BaalEvan!).
 * **Dedicated Server Hardening & Stability**:
   * Added startup safeguards to ensure client-only features (such as menus, quick item transfers, and local interactions) are completely skipped on dedicated servers.
 * **Dependency Updates**:

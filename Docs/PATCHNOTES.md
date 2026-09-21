@@ -2,6 +2,11 @@
 * **ContentsWithin Container Proxy Hook Update (`Compats/ContentsWithin.cs`)**:
   * Updated `ContainerAccessPrefix` to validate container targets using `ContainerPatches.IsBackpackProxy()` instead of obsolete `container.name.Equals("Player(Clone)")`.
   * Guarantees that hover contents inspection from MSchmoecker's `ContentsWithin` correctly identifies and ignores modern `AB_BackpackProxy` child containers attached to players.
+* **AzuExtendedPlayerInventory Cape Rendering Fix (`AdventureBackpacks.cs`)**:
+  * Replaced static plugin detection with dynamic patch inspection via `BoneReorderAlreadyApplied()`.
+  * Checks whether `VisEquipment.SetShoulderEquipped` has already been patched by an external `BoneReorder` postfix before applying ours.
+  * Resolves an issue where capes became invisible when worn alongside a backpack with `AzuExtendedPlayerInventory` installed (PR #189, credit @BaalEvan).
+  * Enclosed `BoneReorder.ApplyOnEquipmentChanged` in defensive exception handling to prevent unexpected startup aborts.
 * **Documentation & Compatibility Catalogue (`README.md`)**:
   * Updated and verified compatibility entries across modern Valheim mod ecosystem.
   * Separated and clarified entries for `AzuCraftyBoxes`, `AzuAutoStore`, `AzuExtendedPlayerInventory`, `EquipmentAndQuickSlots` (EAQS), and `ExtraSlots`.
