@@ -36,6 +36,12 @@ public static class QuickTransfer
     [HarmonyPriority(Priority.First)]
     static class OnRightClickItemPatch
     {
+        [HarmonyPrepare]
+        static bool Prepare()
+        {
+            return !PlayerExtensions.IsDedicatedOrHeadless();
+        }
+
         static void Prefix(InventoryGui __instance, InventoryGrid grid, ItemDrop.ItemData item)
         {
             if (!FeatureInitialized)
@@ -94,12 +100,12 @@ public static class QuickTransfer
                 }
             }
 
-            var containerInventory = __instance.m_currentContainer.GetInventory();
+            Inventory containerInventory = __instance.m_currentContainer.GetInventory();
             
             if (item.IsBackpack() && containerInventory.IsBackPackInventory())
                 return;
             
-            var playerInventory = Player.m_localPlayer.GetInventory();
+            Inventory playerInventory = Player.m_localPlayer.GetInventory();
 
             if (playerInventory == null || containerInventory == null || grid == null)
                 return;
@@ -133,9 +139,15 @@ public static class QuickTransfer
     [HarmonyPriority(Priority.First)]
     static class UseItemPatch
     {
+        [HarmonyPrepare]
+        static bool Prepare()
+        {
+            return !PlayerExtensions.IsDedicatedOrHeadless();
+        }
+
         static bool Prefix(ItemDrop.ItemData item)
         {
-            if (!_processingRightClick)
+            if (PlayerExtensions.IsDedicatedOrHeadless() || !_processingRightClick)
                 return true;
 
             if (_toInventory == null || _fromInventory == null || _inventoryGuiInstance == null || item == null)

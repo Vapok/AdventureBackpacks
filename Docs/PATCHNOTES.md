@@ -6,8 +6,12 @@
   * Updated and verified compatibility entries across modern Valheim mod ecosystem.
   * Separated and clarified entries for `AzuCraftyBoxes`, `AzuAutoStore`, `AzuExtendedPlayerInventory`, `EquipmentAndQuickSlots` (EAQS), and `ExtraSlots`.
   * Deprecated outdated reference to `AutoSplitStack`.
+* **Dedicated Server QuickTransfer Isolation (`Features/QuickTransfer.cs`)**:
+  * Added `[HarmonyPrepare]` returning `!PlayerExtensions.IsDedicatedOrHeadless()` on `OnRightClickItemPatch` and `UseItemPatch`.
+  * Added runtime guard `if (PlayerExtensions.IsDedicatedOrHeadless() || !_processingRightClick) return true;` in `UseItemPatch.Prefix`.
+  * Prevents `Humanoid.UseItem` and `InventoryGui.OnRightClickItem` from hooking on dedicated or headless servers, eliminating `MissingMethodException` during character item interactions ([ADVENTUREBACKPACKS-14](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-14)).
 * **Dependency & Reference Synchronization**:
-  * Updated `Vapok.Valheim.Common` SDK reference to `v3.15.1015`.
+  * Updated `Vapok.Valheim.Common` SDK reference to `v3.16.1015`.
   * Updated `JotunnLib` reference to `v2.30.2`.
 
 # 2.1.7 - Storage & Inventory Mod Compatibility

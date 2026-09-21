@@ -5,6 +5,8 @@
   * Removed references to outdated legacy mods.
 * **ContentsWithin Integration**:
   * Fixed an issue where hovering over a player's equipped backpack could display container contents when using the ContentsWithin mod.
+* **Dedicated Server Stability**:
+  * Added safeguards to prevent quick item transfer features from attempting to run on dedicated servers.
 * **Dependency Updates**:
   * Updated shared libraries and Jotunn dependencies to their latest stable releases.
 
