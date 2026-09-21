@@ -132,19 +132,22 @@ Mod developers can easily build custom backpacks and register effects using our 
 
 <div align="center">
 
-| Mod | Compatibility Status |
-| :--- | :--- |
-| **AzuCraftyBoxes & AzuAutoStore** | 🟢 Fully Supported (External chest crafting & auto-storing; AdventureBackpacks also includes native Craft From Backpack and Store To Backpack) |
-| **Valheim Plus (CraftFromChest)** | 🟢 Fully Supported (Crafting calculation stack-interception) |
-| **Epic Loot** | 🟢 Fully Supported (Loot tables, enchanting, and weightless modifiers) |
-| **Cheb's Necromancy** | 🟢 Fully Supported (Includes *Spectral Shroud of Holding*) |
-| **ContentsWithin** | 🟢 Fully Supported (Backpack contents obfuscation) |
-| **ZenUI / ZenDragon ModLib** | 🟢 Fully Supported (Defensive UI transpiler hooks) |
-| **Quick Stack Store / Auto Split Stack** | 🟢 Fully Supported |
-| **Multi-User-Chests (MUC)** | 🟢 Fully Supported |
-| **Extra Slots / Equipment & Quick Slots** | 🟢 Fully Supported |
-| **Jewelcrafting** | 🟢 Fully Supported |
-| **Smoothbrain's Mods (Blacksmithing, etc.)** | 🟢 Fully Supported |
+| Mod | Author | Compatibility Status | Notes |
+| :--- | :--- | :--- | :--- |
+| **AzuCraftyBoxes** | Azumatt | 🟢 Fully Supported | Dynamic proxy bridge; draws crafting materials from equipped backpacks |
+| **AzuAutoStore** | Azumatt | 🟢 Fully Supported | External container auto-storing routes seamlessly into equipped packs |
+| **AzuExtendedPlayerInventory** | Azumatt | 🟢 Fully Supported | Custom equipment slots with automated bone reordering guard |
+| **Equipment & Quick Slots (EAQS)** | RandyKnapp | 🟢 Fully Supported | Dedicated UI durability bar alignment & hotkey integration |
+| **Extra Slots** | Shudnal | 🟢 Fully Supported | Native compatibility with expanded hotbar and utility slots |
+| **Epic Loot** | RandyKnapp | 🟢 Fully Supported | Seamless integration with enchanted gear, loot tables, and weight modifiers |
+| **Cheb's Necromancy** | ChebGonaz | 🟢 Fully Supported | Native API integration (*Spectral Shroud of Holding* custom pack & effect) |
+| **ContentsWithin** | MSchmoecker | 🟢 Fully Supported | Safe coexistence with world container hover inspection |
+| **Multi-User-Chests (MUC)** | MSchmoecker | 🟢 Fully Supported | Concurrent multi-player chest interaction support |
+| **Quick Stack, Store, Sort, Trash** | Goldenrevolver | 🟢 Fully Supported | Safe quick-stacking and inventory sorting |
+| **ZenUI / ZenDragon ModLib** | ZenDragon | 🟢 Fully Supported | Defensive UI transpiler hooks prevent layout conflicts |
+| **Jewelcrafting** | Smoothbrain | 🟢 Fully Supported | Socketing, gems, and dynamic runtime font isolation |
+| **Smoothbrain's Skill Mods** | Smoothbrain | 🟢 Fully Supported | Blacksmithing, Building, and crafting progression skills |
+| **Valheim Plus (Community Fork)** | Grantapher | 🟢 Supported | Non-destructive crafting transpiler interception |
 
 </div>
 

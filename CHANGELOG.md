@@ -1,4 +1,17 @@
-# 2.1.7 - Storage & Inventory Mod Compatibility
+# 2.1.8 - Ecosystem Compatibility & Documentation Update
+* **Mod Ecosystem Documentation & Verification**:
+  * Updated and expanded the verified mod compatibility guide to reflect modern Valheim standards.
+  * Added explicit compatibility entries for AzuExtendedPlayerInventory, Extra Slots, and Equipment and Quick Slots (EAQS).
+  * Removed references to outdated legacy mods.
+* **ContentsWithin Integration**:
+  * Fixed an issue where hovering over a player's equipped backpack could display container contents when using the ContentsWithin mod.
+* **Dependency Updates**:
+  * Updated shared libraries and Jotunn dependencies to their latest stable releases.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.7 - Storage & Inventory Mod Compatibility
 * **Storage & Chest Mod Compatibility**:
   * Fixed an issue where opening a backpack while using certain storage mods (such as MidgardPlus) could cause an error and stop the container from working properly.
   * Isolated the backpack window system so external chest and sorting mods no longer conflict with player network data.
@@ -8,9 +21,6 @@
   * Improved crafting from backpacks to prevent errors when rapidly crafting items or consuming materials from nearly empty item stacks.
 * **General Stability**:
   * Added safeguards when reading backpack settings and biome powers to prevent unexpected errors.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.1.6 - Bug Fixes & Slot Mod Compatibility
 > **Author's Note**:

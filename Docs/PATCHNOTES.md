@@ -1,3 +1,15 @@
+# 2.1.8 - Ecosystem Compatibility & Documentation Update
+* **ContentsWithin Container Proxy Hook Update (`Compats/ContentsWithin.cs`)**:
+  * Updated `ContainerAccessPrefix` to validate container targets using `ContainerPatches.IsBackpackProxy()` instead of obsolete `container.name.Equals("Player(Clone)")`.
+  * Guarantees that hover contents inspection from MSchmoecker's `ContentsWithin` correctly identifies and ignores modern `AB_BackpackProxy` child containers attached to players.
+* **Documentation & Compatibility Catalogue (`README.md`)**:
+  * Updated and verified compatibility entries across modern Valheim mod ecosystem.
+  * Separated and clarified entries for `AzuCraftyBoxes`, `AzuAutoStore`, `AzuExtendedPlayerInventory`, `EquipmentAndQuickSlots` (EAQS), and `ExtraSlots`.
+  * Deprecated outdated reference to `AutoSplitStack`.
+* **Dependency & Reference Synchronization**:
+  * Updated `Vapok.Valheim.Common` SDK reference to `v3.15.1015`.
+  * Updated `JotunnLib` reference to `v2.30.2`.
+
 # 2.1.7 - Storage & Inventory Mod Compatibility
 * **Proxy Container Network View Isolation (`Patches/Container.cs`, `Extensions/PlayerExtensions.cs`)**:
   * Added a dedicated `ZNetView` component to `AB_BackpackProxy` with `ZNetViewAwakePatch` prefix suppressing `Awake()`.

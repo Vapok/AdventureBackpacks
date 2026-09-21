@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using AdventureBackpacks.Patches;
 using BepInEx;
 using BepInEx.Bootstrap;
 using HarmonyLib;
@@ -32,8 +33,7 @@ public static class ContentsWithin
 
     private static bool ContainerAccessPrefix(Container container, ref bool __result)
     {
-        if (container == null) return true;
-        if (!container.name.Equals("Player(Clone)")) return true;
+        if (container == null || !container.IsBackpackProxy()) return true;
         
         __result = false;
         return false;
