@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AdventureBackpacks.API;
+using AdventureBackpacks.Assets.Items;
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using BepInEx.Configuration;
@@ -63,23 +65,26 @@ public abstract class EffectsBase
     {
         if (human is Player player)
         {
-            var equippedBackpack = player.GetEquippedBackpack();
+            BackpackComponent equippedBackpack = player.GetEquippedBackpack();
             
-            if (equippedBackpack == null || !EnabledEffect.Value)
+            if (equippedBackpack == null || EnabledEffect == null || !EnabledEffect.Value)
                 return false;
             
-            var itemData = equippedBackpack.Item;
-            
-            itemData.TryGetBackpackItem(out var backpack);
+            ItemDrop.ItemData itemData = equippedBackpack.Item;
+            if (itemData == null || !itemData.TryGetBackpackItem(out BackpackItem backpack) || backpack == null || backpack.BackpackBiome == null)
+                return false;
 
-            var backpackBiome = backpack.BackpackBiome.Value;
+            BackpackBiomes backpackBiome = backpack.BackpackBiome.Value;
 
-            var configQualityForBiome = 0;
-            foreach (var enumKeyBit in BiomeQualityLevels.Keys)
+            int configQualityForBiome = 0;
+            if (BiomeQualityLevels != null)
             {
-                if ((backpackBiome & enumKeyBit) != 0)
+                foreach (BackpackBiomes enumKeyBit in BiomeQualityLevels.Keys)
                 {
-                    configQualityForBiome = BiomeQualityLevels[enumKeyBit].Value > configQualityForBiome ? BiomeQualityLevels[enumKeyBit].Value : configQualityForBiome;
+                    if ((backpackBiome & enumKeyBit) != 0 && BiomeQualityLevels.TryGetValue(enumKeyBit, out BepInEx.Configuration.ConfigEntry<int> qualityEntry) && qualityEntry != null)
+                    {
+                        configQualityForBiome = qualityEntry.Value > configQualityForBiome ? qualityEntry.Value : configQualityForBiome;
+                    }
                 }
             }
             

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
@@ -105,54 +106,60 @@ public static class CraftFromBackpack
 
     public static int ConsumeCraftingItem(Player player, string itemName, int amount, int itemQuality = -1)
     {
-        var remaining = amount;
+        int remaining = amount;
         if (remaining <= 0 || player == null || string.IsNullOrEmpty(itemName))
             return remaining;
 
         try
         {
-            var playerInventory = player.GetInventory();
+            Inventory playerInventory = player.GetInventory();
             if (playerInventory != null)
             {
-                var allItems = playerInventory.GetAllItems();
+                List<ItemDrop.ItemData> allItems = playerInventory.GetAllItems();
                 if (allItems != null)
                 {
-                    var matchingItems = allItems.Where(x => 
+                    List<ItemDrop.ItemData> matchingItems = allItems.Where(x => 
                         x != null &&
                         !x.m_equipped && 
                         x.m_shared != null && 
                         string.Equals(x.m_shared.m_name, itemName) &&
                         (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
 
-                    foreach (var item in matchingItems)
+                    foreach (ItemDrop.ItemData item in matchingItems)
                     {
                         if (remaining <= 0)
                             break;
 
-                        var toRemove = Mathf.Min(item.m_stack, remaining);
+                        if (item == null || item.m_stack <= 0)
+                            continue;
+
+                        int toRemove = Mathf.Min(item.m_stack, remaining);
                         playerInventory.RemoveItem(item, toRemove);
                         remaining -= toRemove;
                     }
                 }
             }
 
-            if (remaining > 0 && CanCraftFromBackpack(player, out var backpackInventory) && backpackInventory != null)
+            if (remaining > 0 && CanCraftFromBackpack(player, out Inventory backpackInventory) && backpackInventory != null)
             {
-                var allBpItems = backpackInventory.GetAllItems();
+                List<ItemDrop.ItemData> allBpItems = backpackInventory.GetAllItems();
                 if (allBpItems != null)
                 {
-                    var matchingBpItems = allBpItems.Where(x => 
+                    List<ItemDrop.ItemData> matchingBpItems = allBpItems.Where(x => 
                         x != null &&
                         x.m_shared != null && 
                         string.Equals(x.m_shared.m_name, itemName) &&
                         (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
 
-                    foreach (var item in matchingBpItems)
+                    foreach (ItemDrop.ItemData item in matchingBpItems)
                     {
                         if (remaining <= 0)
                             break;
 
-                        var toRemove = Mathf.Min(item.m_stack, remaining);
+                        if (item == null || item.m_stack <= 0)
+                            continue;
+
+                        int toRemove = Mathf.Min(item.m_stack, remaining);
                         backpackInventory.RemoveItem(item, toRemove);
                         remaining -= toRemove;
                     }

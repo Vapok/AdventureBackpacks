@@ -1,3 +1,18 @@
+# 2.1.7 - Storage & Inventory Mod Compatibility
+* **Proxy Container Network View Isolation (`Patches/Container.cs`, `Extensions/PlayerExtensions.cs`)**:
+  * Added a dedicated `ZNetView` component to `AB_BackpackProxy` with `ZNetViewAwakePatch` prefix suppressing `Awake()`.
+  * Prevents ZDO registration in `ZDOMan` and isolates `container.m_nview` from `Player.m_localPlayer.m_nview`.
+  * Resolves Sentry key collision [ADVENTUREBACKPACKS-18](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-18) where external container mods (such as MidgardPlus registering `"MP_SharedOpen2"`, hash `-1559719815`) collided when registering RPCs on proxy container awakes.
+* **AzuExtendedPlayerInventory BoneReorder Compatibility (`AdventureBackpacks.cs`)**:
+  * Guarded `BoneReorder.ApplyOnEquipmentChanged` against active `Azumatt.AzuExtendedPlayerInventory` installations via `Chainloader.PluginInfos`.
+  * Eliminates dual-patching of `VisEquipment.SetHelmetEquipped` that triggered `InvalidProgramException` ([ADVENTUREBACKPACKS-1B](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1B)).
+* **Crafting Item Consumption Bounds & Stack Safety (`Features/CraftFromBackpack.cs`, `Patches/Player.cs`)**:
+  * Hardened `ConsumeCraftingItem` and `PlayerPatches.ConsumeUnEquippedItems` with explicit typing and null/empty stack guards (`item == null || item.m_stack <= 0`).
+  * Resolves `NullReferenceException` and `ArgumentOutOfRangeException` during rapid-click crafting ([ADVENTUREBACKPACKS-V](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-V) and [ADVENTUREBACKPACKS-1A](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1A)).
+* **Defensive Config & Effect Null Guards (`Assets/Items/BackpackItem.cs`, `Assets/Effects/EffectsBase.cs`)**:
+  * Guarded all `SettingChanged` event subscriptions against null `ConfigEntry` objects in `BackpackItem` ([ADVENTUREBACKPACKS-19](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-19)).
+  * Guarded against null `backpack.BackpackBiome` in `EffectsBase.IsEffectActive` ([ADVENTUREBACKPACKS-1C](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1C)).
+
 # 2.1.6 - Bug Fixes & Slot Mod Compatibility
 * **Downstream Reflection Signature Restoration (`Patches/Humanoid.cs`)**:
   * Restored the 1-argument `Prefix(ItemDrop.ItemData __0)` signature on `HumanoidUnequipItemPatch.Prefix`.

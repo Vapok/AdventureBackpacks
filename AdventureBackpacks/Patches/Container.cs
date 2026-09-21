@@ -24,7 +24,11 @@ public static class ContainerPatches
             AdventureBackpacks.BypassMoveProtection = true;
             if (__instance.IsBackpackProxy())
             {
-                var player = character as Player ?? Player.m_localPlayer;
+                Player player = character as Player;
+                if (player == null)
+                {
+                    player = Player.m_localPlayer;
+                }
                 if (player != null && __instance.GetInventory() != null)
                 {
                     player.GetInventory().MoveAll(__instance.GetInventory());
@@ -85,6 +89,19 @@ public static class ContainerPatches
         }
     }
 
+    [HarmonyPatch(typeof(ZNetView), nameof(ZNetView.Awake))]
+    static class ZNetViewAwakePatch
+    {
+        static bool Prefix(ZNetView __instance)
+        {
+            if (__instance != null && __instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+
     [HarmonyPatch(typeof(Container), nameof(Container.Awake))]
     static class ContainerAwakePatch
     {
@@ -93,8 +110,8 @@ public static class ContainerPatches
         {
             if (__instance != null && __instance.IsBackpackProxy())
             {
-                if (__instance.m_nview == null && Player.m_localPlayer != null)
-                    __instance.m_nview = Player.m_localPlayer.m_nview;
+                if (__instance.m_nview == null)
+                    __instance.m_nview = __instance.GetComponent<ZNetView>();
 
                 if (__instance.m_inventory == null)
                     __instance.m_inventory = new Inventory("Backpack", null, 1, 1);

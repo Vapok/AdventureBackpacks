@@ -182,7 +182,10 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 3 }), ref newSize);
         BackpackSize.Add(quality, newSize);
         
-        BackpackSize[quality]!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (newSize != null)
+        {
+            newSize.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
     }
 
     internal virtual void RegisterWeightMultiplier(float defaultValue = 0.5f)
@@ -192,7 +195,10 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
                 new AcceptableValueRange<float>(0f, 1f), // range between 0f and 1f will make it display as a percentage slider
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 4 }),ref WeightMultiplier);
         
-        WeightMultiplier!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (WeightMultiplier != null)
+        {
+            WeightMultiplier.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
     }
 
     internal virtual void RegisterBackpackBiome(BackpackBiomes defaultValue = BackpackBiomes.None)
@@ -201,7 +207,10 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
             new ConfigDescription("The Biome this bag will draw it's effects from.",
                 null, 
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 5 }), ref BackpackBiome);
-        BackpackBiome.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (BackpackBiome != null)
+        {
+            BackpackBiome.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
     }
 
     internal virtual void RegisterCarryBonus(int defaultValue = 0)
@@ -211,7 +220,10 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
                 new AcceptableValueRange<int>(0, 300),
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 6 }), ref CarryBonus);
         
-        CarryBonus!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (CarryBonus != null)
+        {
+            CarryBonus.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
     }
 
     internal virtual void RegisterStatusEffectInfo(bool defaultShowStatus = true, string defaultEffectName = "")
@@ -221,14 +233,20 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
                 null,
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 1 }), ref ShowBackpackStatusEffect);
         
-        ShowBackpackStatusEffect!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (ShowBackpackStatusEffect != null)
+        {
+            ShowBackpackStatusEffect.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
 
         ConfigSyncBase.SyncedConfig(_englishSection, "Custom Effect Name", defaultEffectName,
             new ConfigDescription("Set your own effect name. Leave Empty to use Default Effect name",
                 null,
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 2 }),ref CustomStatusEffectName);
         
-        CustomStatusEffectName!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (CustomStatusEffectName != null)
+        {
+            CustomStatusEffectName.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
     }
 
     internal virtual void RegisterSpeedMod(float defaultValue = -0.15f)
@@ -238,7 +256,10 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
                 new AcceptableValueRange<float>(-1f, -0f),
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 7 }), ref SpeedMod);
         
-        SpeedMod!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (SpeedMod != null)
+        {
+            SpeedMod.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
     }
 
     internal virtual void RegisterEnableFreezing(bool defaultValue = true)
@@ -248,6 +269,9 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
                 null,
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 8 }),ref EnableFreezing);
         
-        EnableFreezing!.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        if (EnableFreezing != null)
+        {
+            EnableFreezing.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
     }
 }

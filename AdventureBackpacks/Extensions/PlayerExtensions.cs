@@ -74,31 +74,37 @@ public static class PlayerExtensions
             if (IsDedicatedOrHeadless() || player != Player.m_localPlayer)
                 return null;
 
-            var existingTransform = player.transform.Find(BackpackProxyName);
+            Transform existingTransform = player.transform.Find(BackpackProxyName);
             if (existingTransform != null && existingTransform.gameObject != null)
             {
-                var existingContainer = existingTransform.GetComponent<Container>();
+                Container existingContainer = existingTransform.GetComponent<Container>();
                 if (existingContainer != null)
                     return existingContainer;
 
                 if (!createIfMissing)
                     return null;
 
+                ZNetView existingNview = existingTransform.GetComponent<ZNetView>();
+                if (existingNview == null)
+                    existingNview = existingTransform.gameObject.AddComponent<ZNetView>();
+
                 existingContainer = existingTransform.gameObject.AddComponent<Container>();
                 existingContainer.m_name = "Backpack";
-                existingContainer.m_nview = player.m_nview;
+                existingContainer.m_nview = existingNview;
                 return existingContainer;
             }
 
             if (!createIfMissing)
                 return null;
 
-            var proxyObj = new GameObject(BackpackProxyName);
+            GameObject proxyObj = new GameObject(BackpackProxyName);
             proxyObj.transform.SetParent(player.transform, false);
 
-            var newContainer = proxyObj.AddComponent<Container>();
+            ZNetView proxyNview = proxyObj.AddComponent<ZNetView>();
+
+            Container newContainer = proxyObj.AddComponent<Container>();
             newContainer.m_name = "Backpack";
-            newContainer.m_nview = player.m_nview;
+            newContainer.m_nview = proxyNview;
 
             return newContainer;
         }

@@ -15,19 +15,19 @@ public class PlayerPatches
 
     public static int AdjustCountIfEquipped(int itemCount, Player player, Piece.Requirement resource, int quality = -1)
     {
-        var num = itemCount;
+        int num = itemCount;
 
-        if (resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null)
+        if (player == null || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null)
             return num;
 
-        var itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
+        string itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
         if (string.IsNullOrEmpty(itemName))
             return num;
 
         if (num > 0 && resource.m_resItem.m_itemData.IsEquipable())
         {
-            var inventory = player?.GetInventory();
-            var equippedItems = inventory?.GetEquippedItems();
+            Inventory inventory = player.GetInventory();
+            List<ItemDrop.ItemData> equippedItems = inventory?.GetEquippedItems();
             if (equippedItems != null && equippedItems.Any(x => x != null && x.m_shared != null && string.Equals(x.m_shared.m_name, itemName)))
             {
                 num -= 1;
@@ -57,7 +57,7 @@ public class PlayerPatches
         if (amount < 1 || player == null || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null)
             return amount;
             
-        var itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
+        string itemName = resource.m_resItem.m_itemData.m_shared?.m_name;
         if (string.IsNullOrEmpty(itemName))
             return amount;
 
@@ -69,26 +69,26 @@ public class PlayerPatches
         if (!resource.m_resItem.m_itemData.IsEquipable())
             return amount;
 
-        var allItems = player?.m_inventory?.GetAllItems();
+        List<ItemDrop.ItemData> allItems = player.m_inventory?.GetAllItems();
         if (allItems == null)
             return amount;
 
-        var resourceItems = allItems.Where(x => x != null && x.m_shared != null && string.Equals(x.m_shared.m_name, itemName)).ToList();
+        List<ItemDrop.ItemData> resourceItems = allItems.Where(x => x != null && x.m_shared != null && string.Equals(x.m_shared.m_name, itemName)).ToList();
 
-        var removedCounter = 0;
-        for (int i = 0; i < amount; i++)
+        int removedCounter = 0;
+        foreach (ItemDrop.ItemData item in resourceItems)
         {
-            foreach (var item in resourceItems)
-            {
-                if (item.m_equipped)
-                    continue;
+            if (item == null || item.m_equipped)
+                continue;
 
-                if (removedCounter < amount)
-                {
-                    player.m_inventory.RemoveItem(item, 1);
-                    removedCounter++;
-                }
+            while (removedCounter < amount && item.m_stack > 0)
+            {
+                player.m_inventory.RemoveItem(item, 1);
+                removedCounter++;
             }
+
+            if (removedCounter >= amount)
+                break;
         }
 
         return amount - removedCounter;

@@ -1,4 +1,18 @@
-# 2.1.6 - Bug Fixes & Slot Mod Compatibility
+# 2.1.7 - Storage & Inventory Mod Compatibility
+* **Storage & Chest Mod Compatibility**:
+  * Fixed an issue where opening a backpack while using certain storage mods (such as MidgardPlus) could cause an error and stop the container from working properly.
+  * Isolated the backpack window system so external chest and sorting mods no longer conflict with player network data.
+* **AzuExtendedPlayerInventory Compatibility**:
+  * Fixed a startup conflict that caused game errors when Adventure Backpacks and AzuExtendedPlayerInventory were installed together.
+* **Crafting & Resource Safety**:
+  * Improved crafting from backpacks to prevent errors when rapidly crafting items or consuming materials from nearly empty item stacks.
+* **General Stability**:
+  * Added safeguards when reading backpack settings and biome powers to prevent unexpected errors.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.6 - Bug Fixes & Slot Mod Compatibility
 > **Author's Note**:
 > A huge thank you to **shudnal** for the wonderful support and integration work provided for Adventure Backpacks! I apologize for inadvertently changing method signatures on you in recent updates. Moving forward, backwards compatibility for mods interfacing with Adventure Backpacks is a top priority.
 
@@ -7,9 +21,6 @@
   * Restored full compatibility with equipment and slot extension mods when unequipping backpacks.
 * **Storage & Crafting Mod Safeguards**:
   * Added safeguards when opening and closing backpacks alongside chest and crafting mods to prevent crashes and errors in the background.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.1.5 - Multi-Player Isolation & Crafting Mod Compatibility
 > **Author's Note**:

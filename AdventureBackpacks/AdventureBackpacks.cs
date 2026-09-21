@@ -39,7 +39,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.1.6";
+        private const string _version = "2.1.7";
 
         //Interface Properties
         public string PluginId => _pluginId;
@@ -170,8 +170,10 @@ namespace AdventureBackpacks
             //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
 
-            //Enable BoneReorder
-            BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+            if (!Chainloader.PluginInfos.ContainsKey("Azumatt.AzuExtendedPlayerInventory"))
+            {
+                BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
+            }
 
             ConfigRegistry.Waiter.ConfigurationComplete(true);
 
