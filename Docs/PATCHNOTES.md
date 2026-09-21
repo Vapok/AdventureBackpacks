@@ -14,9 +14,12 @@
 * **Retirement of Destructive Environment Overrides (`Patches/EnvMan.cs`)**:
   * Emptied legacy `EnvManIsCold` and `EnvManIsWet` patches.
   * Restores authentic vanilla physics for campfires, structural cover, and ambient drying calculations.
-* **Defensive Null-Safety & Headless Server Hardening (`Assets/Items/BackpackItems/BackpackSwamp.cs`, `Assets/Effects/Waterproof.cs`)**:
+* **Defensive Null-Safety & Headless Server Hardening (`Assets/Items/BackpackItems/BackpackSwamp.cs`, `Assets/Effects/Waterproof.cs`, `AdventureBackpacks.cs`)**:
   * Added defensive null checks around `ObjectDB.instance` and `wet.m_icon` in `Waterproof.LoadExternalStatusEffect`.
   * Added null guards on `Item`, `Item.DropsFrom`, and `BackpackBiome` in `BackpackSwamp`, resolving startup exception [ADVENTUREBACKPACKS-1G](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1G).
+  * Updated `AdventureBackpacks.Awake()` to invoke `InitializeBackpacks` immediately when `PlayerExtensions.IsDedicatedOrHeadless()`, resolving headless server initialization stalls caused by missing FejdStartup / UI events.
+* **Shared Library Upgrade (`Vapok.Valheim.Common v3.17.1015`)**:
+  * Updated `Vapok.Valheim.Common` to `v3.17.1015`, resolving premature `ReadOnly` setting attribute assignments and restoring synchronization hooks with Jotunn config sync and admin status handlers.
 
 # 2.1.8 - Ecosystem Compatibility & Documentation Update
 * **ContentsWithin Container Proxy Hook Update (`Compats/ContentsWithin.cs`)**:

@@ -9,6 +9,8 @@
   * Restored natural game behavior around campfires and sheltered buildings in rainy conditions.
 * **Stability & Server Protections**:
   * Added safety checks during game startup and server loading to prevent errors when loading swamp backpacks and water resistance effects.
+  * Fixed an issue where dedicated servers could fail to load backpacks due to waiting on user interface events.
+  * Updated shared libraries to fix locked settings and improve server configuration synchronization.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>

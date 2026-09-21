@@ -141,7 +141,7 @@
           <HintPath>/home/vapok/Modding/Valheim/Vapok.Common/Vapok.Valheim.Common/bin/Debug/net48/Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="Vapok.Valheim.Common, Version=2.11.2214.0, Culture=neutral, processorArchitecture=MSIL" Condition=" '$(Configuration)' != 'Local' ">
-          <HintPath>..\packages\Vapok.Valheim.Common.3.16.1015\lib\net48\Vapok.Valheim.Common.dll</HintPath>
+          <HintPath>..\packages\Vapok.Valheim.Common.3.17.1015\lib\net48\Vapok.Valheim.Common.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=16.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\YamlDotNet.16.3.0\lib\net47\YamlDotNet.dll</HintPath>

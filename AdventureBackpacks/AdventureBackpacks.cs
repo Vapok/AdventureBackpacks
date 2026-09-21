@@ -114,9 +114,9 @@ namespace AdventureBackpacks
         {
             Localizer.Waiter.StatusChanged += InitializeBackpacks;
 
-            if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null)
+            if (PlayerExtensions.IsDedicatedOrHeadless())
             {
-                Waiter.ValheimIsAwake(true);
+                InitializeBackpacks(null, EventArgs.Empty);
             }
 
             if (Chainloader.PluginInfos.ContainsKey("Azumatt.AzuCraftyBoxes"))

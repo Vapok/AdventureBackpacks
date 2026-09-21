@@ -147,6 +147,8 @@ Mod developers can easily build custom backpacks and register effects using our 
 | **ZenUI / ZenDragon ModLib** | ZenDragon | 🟢 Fully Supported | Defensive UI transpiler hooks prevent layout conflicts |
 | **Jewelcrafting** | Smoothbrain | 🟢 Fully Supported | Socketing, gems, and dynamic runtime font isolation |
 | **Smoothbrain's Skill Mods** | Smoothbrain | 🟢 Fully Supported | Blacksmithing, Building, and crafting progression skills |
+| **Seasonality** | RustyMods | 🟢 Fully Supported | Cold resistance protects against winter seasonal freezing and cold debuffs |
+| **Seasons** | Shudnal | 🟢 Fully Supported | Seasonal biome temperature shifts and weather effects respect backpack protections |
 | **Valheim Plus (Community Fork)** | Grantapher | 🟢 Supported | Non-destructive crafting transpiler interception |
 
 </div>
