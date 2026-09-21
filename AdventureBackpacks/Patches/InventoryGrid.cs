@@ -1,3 +1,4 @@
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using JetBrains.Annotations;
 
@@ -8,6 +9,9 @@ public class InventoryGridPatches
     [HarmonyPatch(typeof(InventoryGrid), nameof(InventoryGrid.UpdateGui))]
     public static class UpdateGuiPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
         public static bool Prefix(InventoryGrid __instance)

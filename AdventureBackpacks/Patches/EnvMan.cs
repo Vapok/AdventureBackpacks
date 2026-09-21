@@ -1,4 +1,5 @@
 using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using JetBrains.Annotations;
 
@@ -9,6 +10,9 @@ public class EnvManPatches
     [HarmonyPatch(typeof(EnvMan), nameof(EnvMan.IsCold))]
     public static class EnvManIsCold
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
         public static bool Prefix(EnvMan __instance, ref bool __result)
@@ -31,6 +35,9 @@ public class EnvManPatches
     [HarmonyPatch(typeof(EnvMan), nameof(EnvMan.IsWet))]
     public static class EnvManIsWet
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
         public static bool Prefix(EnvMan __instance, ref bool __result)

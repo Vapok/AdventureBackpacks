@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+using AdventureBackpacks.Extensions;
+using HarmonyLib;
 
 namespace AdventureBackpacks.Patches;
 
@@ -9,6 +10,9 @@ public class FejdStartupPatches
     [HarmonyBefore("org.bepinex.helpers.ItemManager")]
     public static class FejdStartupAwakePatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Postfix()
         {
             AdventureBackpacks.Waiter.ValheimIsAwake(true);

@@ -1,12 +1,12 @@
 # 2.1.8 - Ecosystem Compatibility & Documentation Update
 * **Mod Ecosystem Documentation & Verification**:
-  * Updated and expanded the verified mod compatibility guide to reflect modern Valheim standards.
+  * Updated and expanded the verified mod compatibility guide to reflect community standards.
   * Added explicit compatibility entries for AzuExtendedPlayerInventory, Extra Slots, and Equipment and Quick Slots (EAQS).
   * Removed references to outdated legacy mods.
 * **ContentsWithin Integration**:
   * Fixed an issue where hovering over a player's equipped backpack could display container contents when using the ContentsWithin mod.
-* **Dedicated Server Stability**:
-  * Added safeguards to prevent quick item transfer features from attempting to run on dedicated servers.
+* **Dedicated Server Hardening & Stability**:
+  * Added startup safeguards to ensure client-only features (such as menus, quick item transfers, and local interactions) are completely skipped on dedicated servers.
 * **Dependency Updates**:
   * Updated shared libraries and Jotunn dependencies to their latest stable releases.
 

@@ -1,3 +1,4 @@
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using UnityEngine;
 
@@ -8,6 +9,9 @@ public static class RecipePatches
     [HarmonyPatch(typeof(Recipe), nameof(Recipe.GetAmount))]
     static class RecipeGetAmountPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         [HarmonyPrefix]
         static bool Prefix(Recipe __instance, int quality, out int need, out ItemDrop.ItemData singleReqItem, int craftMultiplier, ref int __result)
         {

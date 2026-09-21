@@ -1,4 +1,5 @@
 using System.Linq;
+using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
 using JetBrains.Annotations;
@@ -10,6 +11,9 @@ public static class SEManPatches
     [HarmonyPatch(typeof(SEMan), nameof(SEMan.RemoveStatusEffect), new[] { typeof(int), typeof(bool) })]
     public static class RemoveStatusEffects
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         [UsedImplicitly]
         [HarmonyPriority(Priority.First)]
         public static bool Prefix(int nameHash, ref bool __result)

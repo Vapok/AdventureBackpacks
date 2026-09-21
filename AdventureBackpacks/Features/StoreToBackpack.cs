@@ -39,7 +39,7 @@ public static class StoreToBackpack
     {
         backpackInventory = null;
 
-        if (!FeatureInitialized || EnableStoreToBackpack == null || EnableInventoryOverflowToBackpack == null)
+        if (PlayerExtensions.IsDedicatedOrHeadless() || !FeatureInitialized || EnableStoreToBackpack == null || EnableInventoryOverflowToBackpack == null)
             return false;
 
         if (player == null || item == null || item.m_shared == null)
@@ -113,7 +113,7 @@ public static class StoreToBackpack
 
     public static bool TryStoreItem(Player player, ItemDrop.ItemData item, Inventory backpackInventory)
     {
-        if (player == null || item == null || backpackInventory == null || item.m_shared == null || string.IsNullOrEmpty(item.m_shared.m_name))
+        if (PlayerExtensions.IsDedicatedOrHeadless() || player == null || item == null || backpackInventory == null || item.m_shared == null || string.IsNullOrEmpty(item.m_shared.m_name))
             return false;
 
         try

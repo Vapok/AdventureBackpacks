@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Patches;
 using BepInEx;
 using BepInEx.Bootstrap;
@@ -15,6 +16,9 @@ public static class ContentsWithin
     public static Type InventoryGuiPatch;
     public static void Awake(Harmony harmony, string guidID)
     {
+        if (PlayerExtensions.IsDedicatedOrHeadless())
+            return;
+
         var pluginLoaded = Chainloader.PluginInfos.TryGetValue(guidID, out _plugin);
         
         if (!pluginLoaded) return;

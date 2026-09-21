@@ -170,7 +170,7 @@ namespace AdventureBackpacks
             //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
 
-            if (!Chainloader.PluginInfos.ContainsKey("Azumatt.AzuExtendedPlayerInventory"))
+            if (!PlayerExtensions.IsDedicatedOrHeadless() && !Chainloader.PluginInfos.ContainsKey("Azumatt.AzuExtendedPlayerInventory"))
             {
                 BoneReorder.ApplyOnEquipmentChanged(Info.Metadata.GUID);
             }

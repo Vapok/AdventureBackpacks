@@ -1,3 +1,4 @@
+using AdventureBackpacks.Extensions;
 using BepInEx.Bootstrap;
 using HarmonyLib;
 using UnityEngine;
@@ -10,6 +11,9 @@ public class GuiBarPatches
     public static class GuiBarAwakePatch
     {
         public const string eaqsGUID = "randyknapp.mods.equipmentandquickslots";
+
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
         
         private static bool Prefix(GuiBar __instance)
         {

@@ -6,10 +6,21 @@
   * Updated and verified compatibility entries across modern Valheim mod ecosystem.
   * Separated and clarified entries for `AzuCraftyBoxes`, `AzuAutoStore`, `AzuExtendedPlayerInventory`, `EquipmentAndQuickSlots` (EAQS), and `ExtraSlots`.
   * Deprecated outdated reference to `AutoSplitStack`.
-* **Dedicated Server QuickTransfer Isolation (`Features/QuickTransfer.cs`)**:
-  * Added `[HarmonyPrepare]` returning `!PlayerExtensions.IsDedicatedOrHeadless()` on `OnRightClickItemPatch` and `UseItemPatch`.
-  * Added runtime guard `if (PlayerExtensions.IsDedicatedOrHeadless() || !_processingRightClick) return true;` in `UseItemPatch.Prefix`.
-  * Prevents `Humanoid.UseItem` and `InventoryGui.OnRightClickItem` from hooking on dedicated or headless servers, eliminating `MissingMethodException` during character item interactions ([ADVENTUREBACKPACKS-14](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-14)).
+* **Dedicated Server Hardening & Isolation**:
+  * Implemented fail-before-patching via `[HarmonyPrepare]` returning `!PlayerExtensions.IsDedicatedOrHeadless()` across all client-only patch classes:
+    * `Features/QuickTransfer.cs` (`OnRightClickItemPatch`, `UseItemPatch`).
+    * `Patches/InventoryGui.cs` (`InventoryGuiDoCraftingPrefix`, `InventoryGuiOnSelectedItem`, `InventoryGuiUpdateTranspiler`, `InventoryGuiSetupRequirementPatch`).
+    * `Patches/GuiBar.cs` (`GuiBarAwakePatch`).
+    * `Patches/InventoryGrid.cs` (`UpdateGuiPatch`).
+    * `Patches/Inventory.cs` (`OnDropOutsideItemPatch`, `InventoryGridDropItemPatch`, `HumanoidDropItemPatch`, `UpdateTotalWeightPatch`, `IsTeleportablePatch`).
+    * `Patches/Humanoid.cs` (`HumanoidUpdateEquipmentStatusEffectsPatch`, `HumanoidUnequipItemPatch`, `HumanoidEquipItemPatch`).
+    * `Patches/EnvMan.cs` (`EnvManIsCold`, `EnvManIsWet`).
+    * `Patches/Door.cs` (`HaveDoorKeyPatch`).
+    * `Patches/Recipe.cs` (`RecipeGetAmountPatch`).
+    * `Patches/SEMan.cs` (`RemoveStatusEffects`).
+    * `Patches/FejdStartup.cs` (`FejdStartupAwakePatch`).
+  * Prevents Harmony from generating dynamic detours or hooking engine methods on headless/dedicated server instances, completely eliminating detour overhead, client HUD/GUI references, and `MissingMethodException` during character interactions ([ADVENTUREBACKPACKS-14](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-14)).
+  * Added dedicated server short-circuit guards to `Compats/AzuCraftyBoxesCompat.cs`, `Compats/ContentsWithin.cs`, `BoneReorder.ApplyOnEquipmentChanged` in `AdventureBackpacks.cs`, and `Features/StoreToBackpack.cs`.
 * **Dependency & Reference Synchronization**:
   * Updated `Vapok.Valheim.Common` SDK reference to `v3.16.1015`.
   * Updated `JotunnLib` reference to `v2.30.2`.

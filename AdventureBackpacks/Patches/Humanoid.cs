@@ -17,6 +17,9 @@ public class HumanoidPatches
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UpdateEquipmentStatusEffects))]
     static class HumanoidUpdateEquipmentStatusEffectsPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var patchedSuccess = false;
@@ -71,6 +74,9 @@ public class HumanoidPatches
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.UnequipItem))]
     static class HumanoidUnequipItemPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Prefix(ItemDrop.ItemData __0)
         {
             try
@@ -116,6 +122,9 @@ public class HumanoidPatches
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.EquipItem))]
     static class HumanoidEquipItemPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Postfix(Humanoid __instance, ItemDrop.ItemData __0, bool __result)
         {
             try

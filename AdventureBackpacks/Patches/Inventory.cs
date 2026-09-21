@@ -112,6 +112,9 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class OnDropOutsideItemPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Prefix(InventoryGui __instance)
         {
             if (__instance == null || __instance.m_dragItem == null)
@@ -133,6 +136,9 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class HumanoidDropItemPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Prefix(ItemDrop.ItemData item)
         {
             _droppingOutside = true;
@@ -371,6 +377,9 @@ public static class InventoryPatches
     [HarmonyPriority(Priority.First)]
     static class InventoryGridDropItemPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static bool Prefix(InventoryGrid __instance, Inventory fromInventory, ItemDrop.ItemData item, int amount, Vector2i pos)
         {
             var itemAt = __instance.m_inventory.GetItemAt(pos.x, pos.y);
@@ -478,6 +487,9 @@ public static class InventoryPatches
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.UpdateTotalWeight))]
     static class UpdateTotalWeightPatch
     { 
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Postfix(Inventory __instance)
         {
             if (__instance == null || Player.m_localPlayer == null)
@@ -502,6 +514,9 @@ public static class InventoryPatches
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.IsTeleportable))]
     static class IsTeleportablePatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Postfix(Inventory __instance, ref bool __result)
         {
             if (__instance == null || Player.m_localPlayer == null)

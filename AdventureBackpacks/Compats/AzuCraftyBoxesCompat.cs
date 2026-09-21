@@ -22,7 +22,7 @@ public static class AzuCraftyBoxesCompat
 
     public static void Awake(Harmony harmony, string guidID)
     {
-        if (_isInitialized)
+        if (PlayerExtensions.IsDedicatedOrHeadless() || _isInitialized)
             return;
 
         if (harmony == null || string.IsNullOrEmpty(guidID))

@@ -8,6 +8,9 @@ public static class DoorPatches
     [HarmonyPatch(typeof(Door), nameof(Door.HaveKey))]
     static class HaveDoorKeyPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static void Postfix(Door __instance, ref bool __result)
         {
             if (__instance == null || Player.m_localPlayer == null)
