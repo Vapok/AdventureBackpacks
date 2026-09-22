@@ -352,3 +352,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+# Unity cache and temporary directories
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/PackageCache/
