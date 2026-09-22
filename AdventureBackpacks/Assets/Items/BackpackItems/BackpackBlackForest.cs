@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
@@ -8,7 +8,7 @@ namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
 internal class BackpackBlackForest : BackpackItem
 {
-    public BackpackBlackForest(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
+    public BackpackBlackForest(string assetName, string prefabName, string itemName, string registerAs = null) : base(assetName, prefabName, itemName, registerAs: registerAs)
     {
         RegisterConfigSettings();
         

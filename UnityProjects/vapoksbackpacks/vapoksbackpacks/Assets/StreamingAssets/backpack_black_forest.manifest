@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
-UnityVersion: 6000.0.58f2
-CRC: 2341721056
+UnityVersion: 6000.0.75f1
+CRC: 2272787363
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6a06abf64f1d669aea087010f2327313
+    Hash: 11af8dc0cb4e3a334985a1b3c7d09f7a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b8eea3fb8f07123fe79b23d13e57ca0e
+    Hash: 48adf60fc389277a9464c13fb348f9bb
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1e38d06678e2a96c75e4207db10241f1
+    Hash: ea56769cee3df4d76f71f8e3146ede90
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -51,8 +51,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 199
   Script: {instanceID: 0}
-- Class: 213
-  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: assembly_valheim
   ClassName: Attack
@@ -65,7 +63,5 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: assembly_valheim
   ClassName: ItemDrop/ItemData/SharedData
 Assets:
-- Assets/vapok/Sprites/IronBackpack_Icon.asset
 - Assets/vapok/Prefabs/BackpackBlackForest.prefab
-Dependencies:
-- M:/Code/VapokModBase/AdventureBackpacks/UnityProjects/vapoksbackpacks/vapoksbackpacks/Assets/StreamingAssets/vapokbackpacks
+Dependencies: []

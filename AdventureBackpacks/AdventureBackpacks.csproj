@@ -165,6 +165,9 @@
         <Compile Include="Assets\Items\BackpackItems\BackpackBlackForest.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMeadows.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMistlands.cs" />
+        <Compile Include="Assets\Items\BackpackItems\BackpackAshlands.cs" />
+        <Compile Include="Assets\Items\BackpackItems\BackpackDeepNorth.cs" />
+        <Compile Include="Features\DevDump.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMountains.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackPlains.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackSwamp.cs" />
@@ -196,6 +199,7 @@
         <Compile Include="Assets\Effects\ExternalEffect.cs" />
         <Compile Include="Assets\Items\BackpackItems\ExternalBackpack.cs" />
         <Compile Include="Compats\AzuCraftyBoxesCompat.cs" />
+        <Compile Include="Compats\AzuEPICompat.cs" />
         <Compile Include="Compats\BackpackContainerRealProxy.cs" />
         <Compile Include="Compats\ChebsNecromancy.cs" />
         <Compile Include="Compats\ContentsWithin.cs" />
@@ -205,12 +209,15 @@
         <EmbeddedResource Include="Assets\Bundles\backpack_black_forest" />
         <EmbeddedResource Include="Assets\Bundles\backpack_meadows" />
         <EmbeddedResource Include="Assets\Bundles\backpack_mistlands" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_ashlands" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_deepnorth" />
         <EmbeddedResource Include="Assets\Bundles\backpack_mountains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_plains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_swamp" />
         <EmbeddedResource Include="Assets\Bundles\chebsbackpack" />
         <EmbeddedResource Include="Assets\Bundles\vapokbackpacks" />
         <EmbeddedResource Include="Translations\English.json" />
+        <EmbeddedResource Include="Assets\Icons\*.png" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\ABAPI.cs" />

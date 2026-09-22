@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Items;
@@ -36,12 +36,16 @@ internal class BackpackFactory : AssetFactory
 
     internal override void CreateAssets()
     {
-        _backpackItems.Add(new BackpackMeadows("backpack_meadows","BackpackMeadows","$vapok_mod_item_backpack_meadows"));
-        _backpackItems.Add(new BackpackBlackForest("backpack_black_forest","BackpackBlackForest","$vapok_mod_item_backpack_blackforest"));
-        _backpackItems.Add(new BackpackSwamp("backpack_swamp","BackpackSwamp","$vapok_mod_item_backpack_swamp"));
-        _backpackItems.Add(new BackpackMountains("backpack_mountains","BackpackMountains","$vapok_mod_item_backpack_mountains"));
-        _backpackItems.Add(new BackpackPlains("backpack_plains","BackpackPlains","$vapok_mod_item_backpack_plains"));
-        _backpackItems.Add(new BackpackMistlands("backpack_mistlands","BackpackMistlands","$vapok_mod_item_backpack_mistlands"));
+        //v2 bundles use new prefab names, keep the old ones registered for saves and AzuEPI
+        _backpackItems.Add(new BackpackMeadows("backpack_meadows","BackpackSatchel","$vapok_mod_item_backpack_meadows", registerAs: "BackpackMeadows"));
+        _backpackItems.Add(new BackpackBlackForest("backpack_black_forest","BackpackRugged","$vapok_mod_item_backpack_blackforest", registerAs: "BackpackBlackForest"));
+        _backpackItems.Add(new BackpackSwamp("backpack_swamp","BackpackWetpack","$vapok_mod_item_backpack_swamp", registerAs: "BackpackSwamp"));
+        _backpackItems.Add(new BackpackMountains("backpack_mountains","BackpackSherpa","$vapok_mod_item_backpack_mountains", registerAs: "BackpackMountains"));
+        _backpackItems.Add(new BackpackPlains("backpack_plains","BackpackLox","$vapok_mod_item_backpack_plains", registerAs: "BackpackPlains"));
+        _backpackItems.Add(new BackpackMistlands("backpack_mistlands","BackpackWisppack","$vapok_mod_item_backpack_mistlands", registerAs: "BackpackMistlands"));
+        _backpackItems.Add(new BackpackAshlands("backpack_ashlands","BackpackCinderward","$vapok_mod_item_backpack_ashlands", registerAs: BackpackAshlands.Prefab));
+        _backpackItems.Add(new BackpackDeepNorth("backpack_deepnorth","BackpackFrostbound","$vapok_mod_item_backpack_deepnorth", registerAs: BackpackDeepNorth.Prefab));
+
         _backpackItems.Add(new LegacyIronBackpack("vapokbackpacks","CapeIronBackpack","$vapok_mod_item_rugged_backpack"));
         _backpackItems.Add(new LegacySilverBackpack("vapokbackpacks","CapeSilverBackpack","$vapok_mod_item_arctic_backpack"));
 
