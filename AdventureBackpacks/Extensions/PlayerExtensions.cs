@@ -218,13 +218,12 @@ public static class PlayerExtensions
             if (backpack.Item != null)
                 backpack.Item.m_customData ??= new System.Collections.Generic.Dictionary<string, string>();
 
-            var itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
+            ItemDrop itemDrop = ItemDrop.DropItem(backpack.Item, 1, player.transform.position - player.transform.forward + player.transform.up, player.transform.rotation);
             if (itemDrop != null)
             {
-                var rb = itemDrop.GetComponent<Rigidbody>();
+                Rigidbody rb = itemDrop.GetComponent<Rigidbody>();
                 if (rb != null)
                     rb.linearVelocity = (Vector3.up - player.transform.forward) * 5f;
-                itemDrop.Save();
             }
 
             player.m_dropEffects.Create(player.transform.position, Quaternion.identity);

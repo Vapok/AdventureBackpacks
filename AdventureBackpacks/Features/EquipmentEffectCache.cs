@@ -19,9 +19,9 @@ public static class EquipmentEffectCache
         {
             ActiveEffects = new HashSet<StatusEffect>();
 
-            foreach (var effectKeyValuePair in EffectsFactory.EffectList)
+            foreach (KeyValuePair<BackpackEffect, Assets.Effects.EffectsBase> effectKeyValuePair in EffectsFactory.EffectList)
             {
-                if (effectKeyValuePair.Value.HasActiveStatusEffect(player, out var statusEffect))
+                if (effectKeyValuePair.Value.HasActiveStatusEffect(player, out StatusEffect statusEffect))
                     ActiveEffects.Add(statusEffect);  
             }
           

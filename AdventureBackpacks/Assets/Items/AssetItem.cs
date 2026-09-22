@@ -148,11 +148,11 @@ internal abstract class AssetItem : IAssetItem
 
     internal void ResetPrefabArmor()
     {
-        var itemDrop = GetItemDrop();
+        ItemDrop itemDrop = GetItemDrop();
         if (itemDrop == null)
             return;
 
-        var itemData = itemDrop.m_itemData;
+        ItemDrop.ItemData itemData = itemDrop.m_itemData;
         if (itemData != null)
         {
             itemDrop.m_autoPickup = true;
@@ -160,7 +160,6 @@ internal abstract class AssetItem : IAssetItem
             {
                 itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel;
             }
-            itemDrop.Save();
         }
     }
 }

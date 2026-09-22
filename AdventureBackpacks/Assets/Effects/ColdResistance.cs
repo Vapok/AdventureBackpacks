@@ -51,6 +51,7 @@ public class ColdResistance : EffectsBase
         if (seMan == null)
             return;
 
-        seMan.RemoveStatusEffect(SEMan.s_statusEffectCold);
+        if (seMan.HaveStatusEffect(SEMan.s_statusEffectCold))
+            seMan.RemoveStatusEffect(SEMan.s_statusEffectCold, true);
     }
 }

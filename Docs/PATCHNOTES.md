@@ -1,3 +1,21 @@
+# 2.1.10 - Extended Inventory & Status Effect Fixes
+* **Retirement of Destructive Status Removal Interception (`Patches/SEMan.cs`)**:
+  * Completely removed `SEManPatches.RemoveStatusEffects` (`SEMan.RemoveStatusEffect` prefix returning `false`).
+  * Eliminates aggressive status effect ownership that prevented vanilla Valheim and third-party inventory mods (such as `AzuExtendedPlayerInventory`) from stripping status effects when capes/cloaks (e.g. Feather Cape `SlowFall`) or armor set pieces were unequipped or swapped.
+* **Non-Owning Status Effect Monitor (`Patches/Humanoid.cs`)**:
+  * Implemented a `[HarmonyPostfix]` monitor on `Humanoid.UpdateEquipmentStatusEffects` restricted strictly to `Player.m_localPlayer`.
+  * When a backpack is equipped, validates that all active backpack effects in `EquipmentEffectCache.ActiveEffects` are present in `m_equipmentStatusEffects` and `m_seman`. If missing due to an external mod bypassing or altering the transpiler set, safely applies them without touching or modifying any other equipment status effects.
+  * When no backpack is equipped, clears `EquipmentEffectCache.ActiveEffects` and cleans up only internal custom effects (`SE_vapok_ab_*`), leaving vanilla gear status effects completely untouched.
+* **Cold Resistance Environmental Interception & Message Loop Fix (`Patches/SEMan.cs`, `Assets/Effects/ColdResistance.cs`)**:
+  * Extended `SEManPatches.AddStatusEffectPatch` to intercept `SEMan.s_statusEffectCold` when `ColdResistance` is active during `PlayerUpdateEnvStatusEffectsPatch.IsUpdatingEnvStatusEffects`.
+  * Blocks vanilla from adding the `Cold` status effect during environmental ticks (`__result = null; return false;`), preventing the 60 Hz add/remove oscillation loop.
+  * Updated `ColdResistance.OnUpdateEnvStatusEffects` to check `seMan.HaveStatusEffect(SEMan.s_statusEffectCold)` before removing existing cold status and passed `quiet: true` to suppress the "You are getting warmer" message. Eliminates HUD message queue flooding and permanently frozen status messages.
+* **Code Modernization & Type Discipline (`Features/EquipmentEffectCache.cs`, `Patches/Humanoid.cs`)**:
+  * Enforced explicit typing across `EquipmentEffectCache.cs` and `HumanoidPatches`, removing lazy `var` declarations in compliance with workspace engineering rules.
+* **Runtime Access & Assembly Compatibility Hardening (`Assets/Items/BackpackItem.cs`, `Assets/Items/AssetItem.cs`, `Extensions/PlayerExtensions.cs`)**:
+  * Replaced direct access to private `Localization.m_instance` with the engine-public `Localization.instance` property in `BackpackItem.cs`, resolving `FieldAccessException` reported in Sentry on unpublicized game runtimes.
+  * Removed direct calls to the private `ItemDrop.Save()` method from `AssetItem.ResetPrefabArmor()` and `PlayerExtensions.EjectBackpack()`, resolving `MethodAccessException` on unpublicized game runtimes.
+
 # 2.1.9 - Umbrella Water Resistance & Weather Fixes
 * **Environmental Status Effect Lifecycle Hooking (`Patches/Player.cs`)**:
   * Implemented `PlayerUpdateEnvStatusEffectsPatch` with `[HarmonyPrepare]` dedicated server isolation.

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
@@ -22,11 +23,11 @@ public class HumanoidPatches
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var patchedSuccess = false;
+            bool patchedSuccess = false;
             
-            var instrs = instructions.ToList();
+            List<CodeInstruction> instrs = instructions.ToList();
 
-            var counter = 0;
+            int counter = 0;
 
             CodeInstruction LogMessage(CodeInstruction instruction)
             {
@@ -34,7 +35,7 @@ public class HumanoidPatches
                 return instruction;
             }
 
-            var ldlocInstruction = new CodeInstruction(OpCodes.Ldloc_0); 
+            CodeInstruction ldlocInstruction = new(OpCodes.Ldloc_0); 
 
             for (int i = 0; i < instrs.Count; ++i)
             {
@@ -67,6 +68,62 @@ public class HumanoidPatches
             {
                 AdventureBackpacks.Log.Error($"{nameof(Humanoid.UpdateEquipmentStatusEffects)} Transpiler Failed To Patch");
                 Thread.Sleep(5000);
+            }
+        }
+
+        [HarmonyPostfix]
+        private static void Postfix(Humanoid __instance)
+        {
+            if (__instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                return;
+
+            if (__instance is not Player player)
+                return;
+
+            SEMan seMan = player.GetSEMan();
+            if (seMan == null)
+                return;
+
+            if (player.IsBackpackEquipped())
+            {
+                if (EquipmentEffectCache.ActiveEffects == null || EquipmentEffectCache.ActiveEffects.Count == 0)
+                    EquipmentEffectCache.AddActiveBackpackEffects(__instance.m_equipmentStatusEffects, __instance);
+
+                if (EquipmentEffectCache.ActiveEffects != null)
+                {
+                    foreach (StatusEffect statusEffect in EquipmentEffectCache.ActiveEffects)
+                    {
+                        if (statusEffect == null)
+                            continue;
+
+                        if (!__instance.m_equipmentStatusEffects.Contains(statusEffect))
+                            __instance.m_equipmentStatusEffects.Add(statusEffect);
+
+                        if (!seMan.HaveStatusEffect(statusEffect.NameHash()))
+                            seMan.AddStatusEffect(statusEffect, false, 0, 0f, -1);
+                    }
+                }
+            }
+            else
+            {
+                if (EquipmentEffectCache.ActiveEffects != null && EquipmentEffectCache.ActiveEffects.Count > 0)
+                    EquipmentEffectCache.ActiveEffects.Clear();
+
+                HashSet<StatusEffect> registered = EffectsFactory.GetRegisteredEffects();
+                if (registered != null)
+                {
+                    foreach (StatusEffect statusEffect in registered)
+                    {
+                        if (statusEffect == null)
+                            continue;
+
+                        if (statusEffect.name.StartsWith("SE_vapok_ab_") && seMan.HaveStatusEffect(statusEffect.NameHash()))
+                        {
+                            seMan.RemoveStatusEffect(statusEffect.NameHash());
+                            __instance.m_equipmentStatusEffects.Remove(statusEffect);
+                        }
+                    }
+                }
             }
         }
     }

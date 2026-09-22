@@ -77,10 +77,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
             _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
             _englishSection = SafeGetTranslation("English", _configSection);
 
-            if (externalLocalize)
-                _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
-            else
-                _localizedCategory = Localization.instance?.Localize(_configSection) ?? Localization.m_instance?.Localize(_configSection) ?? _configSection;
+            _localizedCategory = Localization.instance?.Localize(_configSection) ?? _configSection;
             
             SetupBackpackDef();
         }
@@ -97,7 +94,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         try
         {
             _englishSection = SafeGetTranslation("English", _configSection);
-            _localizedCategory = Localization.m_instance?.Localize(_configSection) ?? Localization.instance?.Localize(_configSection) ?? _configSection;
+            _localizedCategory = Localization.instance?.Localize(_configSection) ?? _configSection;
         }
         catch (System.Exception ex)
         {

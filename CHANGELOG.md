@@ -1,4 +1,17 @@
-# 2.1.9 - Umbrella Water Resistance & Weather Fixes
+# 2.1.10 - Azu Extended Player Inventory & Status Effect Fixes
+* **Azu Extended Player Inventory & Cape Status Fix**:
+  * Fixed an issue when using extended inventory mods (such as AzuExtendedPlayerInventory) where swapping or unequipping cloaks and capes (like the Feather Cape) caused their effects to get stuck on your character.
+  * Cloak and gear effects now clear properly when taking off or changing equipment while wearing a backpack.
+* **Cold & Warmth Message Loop Fix**:
+  * Fixed an issue where "You feel cold" and "You are getting warmer" messages could loop rapidly and freeze permanently on the screen.
+  * Cold immunity now prevents cold status messages from repeating when moving through chilly weather or entering shelters.
+* **Status Effect Monitoring**:
+  * Improved how backpack powers are tracked so they work cleanly alongside other equipment and third-party mods without interfering with your gear.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.9 - Umbrella Water Resistance & Weather Fixes
 * **Water Resistance & Umbrella Mechanic**:
   * Reworked water resistance so standing in the rain keeps you dry and prevents the Wet effect from reappearing or resetting.
   * Swimming or wading in deep water will still make you wet.
@@ -11,9 +24,6 @@
   * Added safety checks during game startup and server loading to prevent errors when loading swamp backpacks and water resistance effects.
   * Fixed an issue where dedicated servers could fail to load backpacks due to waiting on user interface events.
   * Updated shared libraries to fix locked settings and improve server configuration synchronization.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.1.8 - Ecosystem Compatibility & Documentation Update
 * **Mod Ecosystem Documentation & Verification**:
