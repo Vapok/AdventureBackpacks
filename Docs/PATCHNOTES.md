@@ -1,3 +1,11 @@
+# 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
+* **Craft From Backpack Null Safety (`Features/CraftFromBackpack.cs`)**:
+  * Added validation in `ConsumeCraftingItem` checking `item == null || item.m_stack <= 0` across both player and backpack inventory matching enumerations.
+  * Resolves `NullReferenceException` in `ADVENTUREBACKPACKS-V` when crafting items concurrently with empty or invalidated inventory elements.
+* **Dependency Updates**:
+  * Updated internalized `Vapok.Valheim.Common` to 3.17.1015.
+  * Updated `JotunnLib` dependency to 2.30.2.
+
 # 2.1.10 - Extended Inventory & Status Effect Fixes
 * **Retirement of Destructive Status Removal Interception (`Patches/SEMan.cs`)**:
   * Completely removed `SEManPatches.RemoveStatusEffects` (`SEMan.RemoveStatusEffect` prefix returning `false`).
