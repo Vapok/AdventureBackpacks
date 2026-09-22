@@ -1,6 +1,6 @@
 # 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
 * **Craft From Backpack Null Safety**: Fixed an issue where crafting with empty or missing item slots could cause errors when pulling materials from your backpack.
-* **Dependency Updates**: Updated internalized `Vapok.Valheim.Common` to 3.17.1015 and `Jotunn` to 2.30.2.
+* **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
