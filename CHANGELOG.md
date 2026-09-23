@@ -6,6 +6,8 @@
 
 * **Server & Stability Protections**: Added safety checks to prevent errors on dedicated servers and resolved edge-case power activation issues.
 
+* **Full Localization Support**: Added translations for all 35 languages supported by Valheim so players around the world can enjoy the mod in their native language.
+
 * **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
 
 <details>

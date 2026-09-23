@@ -159,19 +159,23 @@ Mod developers can easily build custom backpacks and register effects using our 
 
 ---
 
-## 🌐 Available Translations
+## 🌐 Supported Languages
 
-Adventure Backpacks includes community translations for:
+Adventure Backpacks includes localization support for all 35 languages supported by Valheim:
 
 <div align="center">
 
-🇨🇳 **Chinese (Simplified & Traditional)** • 🇨🇿 **Czech** • 🇺🇸 **English** • 🇫🇷 **French** • 🇩🇪 **German**  
-🇯🇵 **Japanese** • 🇰🇷 **Korean** • 🇳🇴 **Norwegian** • 🇵🇱 **Polish** • 🇧🇷 **Portuguese (BR)**  
-🇷🇺 **Russian** • 🇪🇸 **Spanish** • 🇸🇪 **Swedish** • 🇹🇷 **Turkish** • 🇺🇦 **Ukrainian**
+🌲 **Abenaki** • 🇧🇬 **Bulgarian** • 🇨🇳 **Chinese (Simplified)** • 🇹🇼 **Chinese (Traditional)** • 🇭🇷 **Croatian**  
+🇨🇿 **Czech** • 🇩🇰 **Danish** • 🇳🇱 **Dutch** • 🇺🇸 **English** • 🇫🇮 **Finnish**  
+🇫🇷 **French** • 🇬🇪 **Georgian** • 🇩🇪 **German** • 🇬🇷 **Greek** • 🇮🇳 **Hindi**  
+🇭🇺 **Hungarian** • 🇮🇸 **Icelandic** • 🇮🇹 **Italian** • 🇯🇵 **Japanese** • 🇰🇷 **Korean**  
+🇱🇹 **Lithuanian** • 🇲🇰 **Macedonian** • 🇳🇴 **Norwegian** • 🇵🇱 **Polish** • 🇧🇷 **Portuguese (Brazilian)**  
+🇵🇹 **Portuguese (European)** • 🇷🇴 **Romanian** • 🇷🇺 **Russian** • 🇷🇸 **Serbian** • 🇸🇰 **Slovak**  
+🇪🇸 **Spanish** • 🇸🇪 **Swedish** • 🇹🇭 **Thai** • 🇹🇷 **Turkish** • 🇺🇦 **Ukrainian**
 
 </div>
 
-*Don't see your language? We welcome community translations! Please submit a PR on [GitHub](https://github.com/Vapok/AdventureBackpacks) or stop by our [Discord](https://discord.gg/5YAJkRFBXt).*
+*Translations can be customized or added in `BepInEx/plugins/Translations/`.*
 
 ---
 
