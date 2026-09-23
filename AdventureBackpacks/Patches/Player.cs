@@ -472,5 +472,35 @@ public class PlayerPatches
             IsUpdatingEnvStatusEffects = false;
         }
     }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.ApplyArmorDamageMods))]
+    internal static class PlayerApplyArmorDamageModsPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        private static void Postfix(Player __instance, ref HitData.DamageModifiers mods)
+        {
+            if (__instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                return;
+
+            if (__instance.m_shoulderItem == null || __instance.m_shoulderItem.IsBackpack())
+            {
+                Inventory inventory = __instance.GetInventory();
+                List<ItemDrop.ItemData> equippedItems = inventory?.GetEquippedItems();
+                if (equippedItems != null)
+                {
+                    for (int i = 0; i < equippedItems.Count; i++)
+                    {
+                        ItemDrop.ItemData item = equippedItems[i];
+                        if (item != null && item != __instance.m_shoulderItem && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Shoulder && !item.IsBackpack())
+                        {
+                            mods.Apply(item.m_shared.m_damageModifiers);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 

@@ -7,6 +7,7 @@ using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
+using BepInEx.Bootstrap;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
 using Vapok.Common.Managers;
@@ -174,6 +175,42 @@ public class HumanoidPatches
                 AdventureBackpacks.Log?.Warning($"Error during Humanoid.UnequipItem: {ex.Message}");
             }
         }
+
+        static void Postfix(Humanoid __instance, ItemDrop.ItemData __0)
+        {
+            try
+            {
+                if (__0 == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                    return;
+
+                if (!__0.IsBackpack())
+                    return;
+
+                Player player = Player.m_localPlayer;
+                if (player.m_shoulderItem == null)
+                {
+                    Inventory inventory = player.GetInventory();
+                    List<ItemDrop.ItemData> equippedItems = inventory?.GetEquippedItems();
+                    if (equippedItems != null)
+                    {
+                        for (int i = 0; i < equippedItems.Count; i++)
+                        {
+                            ItemDrop.ItemData item = equippedItems[i];
+                            if (item != null && item.m_equipped && item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Shoulder && !item.IsBackpack())
+                            {
+                                player.m_shoulderItem = item;
+                                player.SetupEquipment();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                AdventureBackpacks.Log?.Warning($"Error during Humanoid.UnequipItem Postfix: {ex.Message}");
+            }
+        }
     }
 
     [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.EquipItem))]
@@ -181,6 +218,31 @@ public class HumanoidPatches
     {
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPriority(850)]
+        static void Prefix(Humanoid __instance, ItemDrop.ItemData __0)
+        {
+            try
+            {
+                if (__0 == null || !__0.IsBackpack())
+                    return;
+
+                if (__instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                    return;
+
+                if (Chainloader.PluginInfos.ContainsKey("Azumatt.AzuExtendedPlayerInventory"))
+                {
+                    if (__0.m_equipped)
+                    {
+                        __0.m_equipped = false;
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                AdventureBackpacks.Log?.Warning($"Error during Humanoid.EquipItem Prefix: {ex.Message}");
+            }
+        }
 
         static void Postfix(Humanoid __instance, ItemDrop.ItemData __0, bool __result)
         {

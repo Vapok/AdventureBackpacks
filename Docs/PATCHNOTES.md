@@ -1,4 +1,8 @@
 # 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
+* **Extended Inventory Cape Desync & Armor Damage Protection (`Patches/Humanoid.cs`, `Patches/Player.cs`)**:
+  * Added high-priority prefix to `HumanoidEquipItemPatch` resetting `item.m_equipped = false` during character loading (`Player.Load` -> `EquipInventoryItems`) when `AzuExtendedPlayerInventory` is present, allowing AzuEPI's custom slot interceptor to capture the backpack cleanly without vanilla unequipping `m_shoulderItem`.
+  * Added `HumanoidUnequipItemPatch.Postfix` to automatically rebind `player.m_shoulderItem` to any equipped cape if `m_shoulderItem` becomes null after unequipping a backpack.
+  * Added `PlayerApplyArmorDamageModsPatch` with dedicated server isolation, ensuring any equipped cape's damage modifiers (e.g. Wolf Cape Frost Resistance) are evaluated if `m_shoulderItem` is null or occupied by a backpack.
 * **Craft From Backpack Null Safety (`Features/CraftFromBackpack.cs`)**:
   * Added validation in `ConsumeCraftingItem` checking `item == null || item.m_stack <= 0` across both player and backpack inventory matching enumerations.
   * Resolves `NullReferenceException` in `ADVENTUREBACKPACKS-V` when crafting items concurrently with empty or invalidated inventory elements.
