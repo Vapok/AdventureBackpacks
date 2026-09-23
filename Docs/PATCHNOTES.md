@@ -2,8 +2,13 @@
 * **Craft From Backpack Null Safety (`Features/CraftFromBackpack.cs`)**:
   * Added validation in `ConsumeCraftingItem` checking `item == null || item.m_stack <= 0` across both player and backpack inventory matching enumerations.
   * Resolves `NullReferenceException` in `ADVENTUREBACKPACKS-V` when crafting items concurrently with empty or invalidated inventory elements.
+* **Dedicated Server Update Bypass & Null Safety (`AdventureBackpacks.cs`, `Assets/Items/BackpackItem.cs`, `Assets/Factories/EffectsFactory.cs`, `Assets/Effects/EffectsBase.cs`)**:
+  * Added early return on headless dedicated servers in `AdventureBackpacks.Update()` and added null-safety to `EffectsFactory.Instance?.ToggleEffects()`, resolving `ADVENTUREBACKPACKS-1Q`.
+  * Initialized `BackpackSize = new();` by default and safeguarded dictionary indexer in `RegisterBackpackSize()`, resolving `ADVENTUREBACKPACKS-19`.
+  * Cleared `_effectList` and `_allEffects` before registering in `EffectsFactory.RegisterEffects()`, resolving `ADVENTUREBACKPACKS-1N`.
+  * Added Unity-safe null guards in `EffectsBase.IsEffectActive()`, resolving `ADVENTUREBACKPACKS-1C`.
 * **Dependency Updates**:
-  * Updated internalized `Vapok.Valheim.Common` to 3.17.1015.
+  * Updated internalized `Vapok.Valheim.Common` to 3.19.1015.
   * Updated `JotunnLib` dependency to 2.30.2.
 
 # 2.1.10 - Extended Inventory & Status Effect Fixes

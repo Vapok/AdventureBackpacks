@@ -1,5 +1,6 @@
 # 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
 * **Craft From Backpack Null Safety**: Fixed an issue where crafting with empty or missing item slots could cause errors when pulling materials from your backpack.
+* **Server & Stability Protections**: Added safety checks to prevent errors on dedicated servers and resolved edge-case power activation issues.
 * **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
 
 <details>

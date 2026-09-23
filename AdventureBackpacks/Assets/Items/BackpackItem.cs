@@ -41,7 +41,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     private int _inceptionCounter;
     
     //Config Settings
-    internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize;
+    internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize = new();
     internal ConfigEntry<float> WeightMultiplier;
     internal ConfigEntry<int> CarryBonus;
     internal ConfigEntry<float> SpeedMod;
@@ -177,7 +177,9 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
             new ConfigDescription("Backpack size (width, height).\nMax width is 8 unless you want to break things.",
                 null,
                 new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 3 }), ref newSize);
-        BackpackSize.Add(quality, newSize);
+        if (BackpackSize == null)
+            BackpackSize = new();
+        BackpackSize[quality] = newSize;
         
         if (newSize != null)
         {

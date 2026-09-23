@@ -63,9 +63,10 @@ public abstract class EffectsBase
     
     public virtual bool IsEffectActive(Humanoid human)
     {
-        if (human is Player player)
-        {
-            BackpackComponent equippedBackpack = player.GetEquippedBackpack();
+        if (human == null || !(human is Player player) || player == null)
+            return false;
+
+        BackpackComponent equippedBackpack = player.GetEquippedBackpack();
             
             if (equippedBackpack == null || EnabledEffect == null || !EnabledEffect.Value)
                 return false;
@@ -92,9 +93,6 @@ public abstract class EffectsBase
                 return false;
                 
             return itemData.m_quality >= configQualityForBiome;  
-
-        }
-        return false;
     }
 
     public virtual void ToggleEffect()

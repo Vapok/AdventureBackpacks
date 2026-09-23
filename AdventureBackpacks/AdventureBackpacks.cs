@@ -132,7 +132,10 @@ namespace AdventureBackpacks
 
         private void Update()
         {
-            if (!Player.m_localPlayer || !ZNetScene.instance)
+            if (PlayerExtensions.IsDedicatedOrHeadless())
+                return;
+
+            if (Player.m_localPlayer == null || ZNetScene.instance == null)
                 return;
 
             if (PerformYardSale)
@@ -149,7 +152,7 @@ namespace AdventureBackpacks
                 Player.m_localPlayer.QuickDropBackpack();
             }
 
-            EffectsFactory.Instance.ToggleEffects();
+            EffectsFactory.Instance?.ToggleEffects();
 
             InventoryPatches.ProcessItemsAddedQueue();
         }

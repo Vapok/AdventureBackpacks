@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.API;
@@ -74,6 +74,8 @@ public class EffectsFactory : FactoryBase
 
     public void RegisterEffects()
     {
+        _effectList.Clear();
+        _allEffects.Clear();
         _effectList.Add(BackpackEffect.FeatherFall, new FeatherFall("Feather Fall", "When activated allows you to slow fall gracefully and without damage from high elevations."));
         _effectList.Add(BackpackEffect.ColdResistance, new ColdResistance("Cold Immunity", "When activated keeps you from feeling cold. Does not prevent freezing."));
         _effectList.Add(BackpackEffect.Demister, new Effects.Demister("Demister", "When activated provides you with the Wisplight Effect, which clears mist from a small area around you while in the Mistlands."));
@@ -122,7 +124,10 @@ public class EffectsFactory : FactoryBase
 
     public void ToggleEffects()
     {
-        for (var i = 0; i < PerFrameToggleEffects.Count; i++)
-            PerFrameToggleEffects[i].ToggleEffect();
+        for (int i = 0; i < PerFrameToggleEffects.Count; i++)
+        {
+            if (PerFrameToggleEffects[i] != null)
+                PerFrameToggleEffects[i].ToggleEffect();
+        }
     }
 }
