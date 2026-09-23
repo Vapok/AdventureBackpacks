@@ -1,7 +1,11 @@
 # 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
-* **Extended Inventory & Cape Resistance Fix**: Fixed an issue where loading into a world or server while using extended inventory mods (such as AzuExtendedPlayerInventory) could cause your cape to stop protecting you from mountain freezing until it was re-equipped.
+
+* **Additional AzuEPI Compatibility**: Fixed an issue where loading into a world or server while using AzuEPI could cause your cape to stop protecting you from mountain freezing under certain circumstances.
+
 * **Craft From Backpack Null Safety**: Fixed an issue where crafting with empty or missing item slots could cause errors when pulling materials from your backpack.
+
 * **Server & Stability Protections**: Added safety checks to prevent errors on dedicated servers and resolved edge-case power activation issues.
+
 * **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
 
 <details>
