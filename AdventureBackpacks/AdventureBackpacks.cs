@@ -173,6 +173,8 @@ namespace AdventureBackpacks
             //Setup Backpack Types
             Backpacks.LoadBackpackTypes(BackpackFactory.BackpackTypes());
 
+            AzuEPICompat.RegisterBackpackSlot();
+
             if (!PlayerExtensions.IsDedicatedOrHeadless() && !BoneReorderAlreadyApplied())
             {
                 try

@@ -44,6 +44,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize = new();
     internal ConfigEntry<float> WeightMultiplier;
     internal ConfigEntry<int> CarryBonus;
+    internal ConfigEntry<float> HeatResistance;
     internal ConfigEntry<float> SpeedMod;
     internal ConfigEntry<bool> EnableFreezing;
     internal ConfigEntry<bool> ShowBackpackStatusEffect;
@@ -51,6 +52,8 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ConfigEntry<BackpackBiomes> BackpackBiome;
     
     internal ConfigSyncBase Config => _config;
+    protected string EnglishSection => _englishSection;
+    protected string LocalizedCategory => _localizedCategory;
     internal ILogIt Log => _logger;
 
 
@@ -70,7 +73,24 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         SetupBackpackDef();
     }
     
-    protected BackpackItem(string assetName, string prefabName, string itemName, string configSection = "", bool externalLocalize = false) : base(assetName, prefabName,itemName)
+    protected BackpackItem(GameObject goItem, string itemName, string configSection = "") : base(goItem, itemName)
+    {
+        try
+        {
+            _configSection = string.IsNullOrEmpty(configSection) ? $"Backpack: {itemName}" : configSection;
+            _englishSection = SafeGetTranslation("English", _configSection);
+            _localizedCategory = Localization.instance?.Localize(_configSection) ?? Localization.m_instance?.Localize(_configSection) ?? _configSection;
+            SetupBackpackDef();
+        }
+        catch (System.Exception ex)
+        {
+            AdventureBackpacks.Log?.Warning($"Error initializing BackpackItem '{itemName}': {ex.Message}");
+            _englishSection = _configSection;
+            _localizedCategory = _configSection;
+        }
+    }
+
+    protected BackpackItem(string assetName, string prefabName, string itemName, string configSection = "", bool externalLocalize = false, string registerAs = null) : base(assetName, prefabName,itemName, registerAs)
     {
         try
         {
@@ -209,6 +229,19 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         if (BackpackBiome != null)
         {
             BackpackBiome.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
+    }
+
+    internal virtual void RegisterHeatResistance(float defaultValue = 0.1f)
+    {
+        ConfigSyncBase.SyncedConfig(_englishSection, "Heat Resistance", defaultValue,
+            new ConfigDescription("Heat resistance per item level. Reduces lava damage and delays boiling water damage. Does nothing against burning.",
+                new AcceptableValueRange<float>(0f, 0.25f),
+                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 9 }), ref HeatResistance);
+
+        if (HeatResistance != null)
+        {
+            HeatResistance.SettingChanged += Backpacks.UpdateItemDataConfigValues;
         }
     }
 

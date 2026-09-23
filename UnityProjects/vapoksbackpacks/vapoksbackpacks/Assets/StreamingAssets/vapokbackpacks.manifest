@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
-UnityVersion: 6000.0.58f2
-CRC: 4000079070
+UnityVersion: 6000.0.75f1
+CRC: 665608779
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 08af76719f15fd22030f7a7aa39fb356
+    Hash: 0c7aff6dd0e1ba680cb570de68fd5fd9
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b8eea3fb8f07123fe79b23d13e57ca0e
+    Hash: 9e16c491dcfa86d786c2ce3687ca8b77
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 438808cf666b44a1a6794e02d5364b9d
+    Hash: b03c1b022043e3d123cbb50eabfeb24f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -67,7 +67,6 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Texture2D/IronBackpack_Icon.png
 - Assets/Sprite/SilverBackpack_Icon.asset
-- Assets/Texture2D/NecromancyBackpack_Icon.png
 - Assets/Texture2D/SilverBackpack_Icon.png
 - Assets/vapok/Prefabs/CapeSilverBackpack.prefab
 - Assets/Sprite/IronBackpack_Icon.asset

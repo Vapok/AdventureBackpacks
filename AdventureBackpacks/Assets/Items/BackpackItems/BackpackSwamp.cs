@@ -8,7 +8,7 @@ namespace AdventureBackpacks.Assets.Items.BackpackItems;
 
 internal class BackpackSwamp : BackpackItem
 {
-    public BackpackSwamp(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
+    public BackpackSwamp(string assetName, string prefabName, string itemName, string registerAs = null) : base(assetName, prefabName, itemName, registerAs: registerAs)
     {
         RegisterConfigSettings();
         

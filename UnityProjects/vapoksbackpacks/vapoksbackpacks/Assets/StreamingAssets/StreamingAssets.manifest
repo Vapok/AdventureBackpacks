@@ -1,33 +1,54 @@
 ManifestFileVersion: 0
-UnityVersion: 6000.0.58f2
-CRC: 3647392035
+UnityVersion: 6000.0.75f1
+CRC: 2277969591
 HashAppended: 0
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: vapokbackpacks
-      Dependencies: {}
-    Info_1:
-      Name: chebsbackpack
-      Dependencies:
-        Dependency_0: vapokbackpacks
-    Info_2:
-      Name: backpack_black_forest
-      Dependencies:
-        Dependency_0: vapokbackpacks
-    Info_3:
-      Name: backpack_mistlands
-      Dependencies: {}
-    Info_4:
-      Name: backpack_meadows
-      Dependencies: {}
-    Info_5:
-      Name: backpack_mountains
-      Dependencies:
-        Dependency_0: vapokbackpacks
-    Info_6:
       Name: backpack_plains
       Dependencies: {}
-    Info_7:
+    Info_1:
+      Name: backpack_meadows
+      Dependencies: {}
+    Info_2:
+      Name: vapokbackpacks
+      Dependencies: {}
+    Info_3:
       Name: backpack_swamp
+      Dependencies: {}
+    Info_4:
+      Name: backpack_mistlands
+      Dependencies: {}
+    Info_5:
+      Name: backpack_black_forest
+      Dependencies: {}
+    Info_6:
+      Name: backpack_mountains
+      Dependencies: {}
+    Info_7:
+      Name: backpack_black_forest_v2
+      Dependencies:
+        Dependency_0: backpack_mistlands
+    Info_8:
+      Name: backpack_meadows_v2
+      Dependencies:
+        Dependency_0: backpack_meadows
+    Info_9:
+      Name: backpack_swamp_v2
+      Dependencies:
+        Dependency_0: backpack_swamp
+    Info_10:
+      Name: backpack_mountains_v2
+      Dependencies: {}
+    Info_11:
+      Name: backpack_plains_v2
+      Dependencies: {}
+    Info_12:
+      Name: backpack_mistlands_v2
+      Dependencies: {}
+    Info_13:
+      Name: backpack_ashlands_v2
+      Dependencies: {}
+    Info_14:
+      Name: backpack_deepnorth_v2
       Dependencies: {}
