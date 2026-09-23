@@ -15,7 +15,7 @@
   * Standardized `PlayerExtensions.IsDedicatedOrHeadless()` to use `Jotunn.Managers.GUIManager.IsHeadless()`, removing reliance on `SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null` which failed to detect WindowsPlayer dedicated server environments at plugin startup.
   * Added defensive checks in `InventoryGuiPatches.DetectInputToHide` and `DetectInputToShow` returning `false` when running in dedicated/headless mode or when `ZInput.instance == null`, resolving `ADVENTUREBACKPACKS-11`.
 * **Dependency Updates**:
-  * Updated internalized `Vapok.Valheim.Common` to 3.19.1015.
+  * Updated internalized `Vapok.Valheim.Common` to 3.20.1015.
   * Updated `JotunnLib` dependency to 2.30.2.
 
 # 2.1.10 - Extended Inventory & Status Effect Fixes
