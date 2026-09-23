@@ -1,5 +1,6 @@
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Patches;
+using Jotunn.Managers;
 using UnityEngine;
 using Vapok.Common.Managers;
 
@@ -57,9 +58,9 @@ public static class PlayerExtensions
 
     public static bool IsDedicatedOrHeadless()
     {
-        if (ZNet.instance != null && ZNet.instance.IsDedicated())
+        if (GUIManager.IsHeadless())
             return true;
-        if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null)
+        if (ZNet.instance != null && ZNet.instance.IsDedicated())
             return true;
         return false;
     }

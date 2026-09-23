@@ -179,7 +179,7 @@ internal static class InventoryGuiPatches
 
     public static bool DetectInputToHide(Player player, InventoryGui instance)
     {
-        if (player == null || instance == null)
+        if (player == null || instance == null || PlayerExtensions.IsDedicatedOrHeadless() || ZInput.instance == null)
             return false;
 
         var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
@@ -292,7 +292,7 @@ internal static class InventoryGuiPatches
     
     public static bool DetectInputToShow(Player player, InventoryGui instance)
     {
-        if (player == null || instance == null)
+        if (player == null || instance == null || PlayerExtensions.IsDedicatedOrHeadless() || ZInput.instance == null)
             return false;
 
         var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
