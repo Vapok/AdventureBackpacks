@@ -175,7 +175,7 @@ Adventure Backpacks includes localization support for all 35 languages supported
 
 </div>
 
-*Translations can be customized or added in `BepInEx/plugins/Translations/`.*
+*Translations can be customized or added in the `Translations/` folder inside your AdventureBackpacks mod directory (`BepInEx/plugins/AdventureBackpacks/Translations/` or `BepInEx/plugins/Vapok-AdventureBackpacks/Translations/`).*
 
 ---
 

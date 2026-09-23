@@ -233,7 +233,11 @@
         <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(ReferencesRoot)\ABAPI" SkipUnchangedFiles="true" />
     </Target>
     <Target Name="CopyToDev" AfterTargets="ILRepack" Condition="('$(Configuration)' == 'Debug' or '$(Configuration)' == 'Local' or '$(Configuration)' == 'Release') and Exists('$(DevPluginsFolder)')">
+        <ItemGroup>
+            <DevTranslationFiles Include="$(ModRoot)/$(ProjectName)/Translations/*.json" />
+        </ItemGroup>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DevPluginsFolder)/Vapok-$(ProjectName)" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(DevTranslationFiles)" DestinationFolder="$(DevPluginsFolder)/Vapok-$(ProjectName)/Translations" SkipUnchangedFiles="true" />
     </Target>
     <Target Name="Copy" AfterTargets="ILRepack" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <ItemGroup>
