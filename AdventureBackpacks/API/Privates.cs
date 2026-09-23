@@ -49,7 +49,7 @@ public partial class ABAPI
         if (component == null || component.Item == null)
             return null;
 
-        var isBackpack = component.Item.TryGetBackpackItem(out var backpack);
+        bool isBackpack = component.Item.TryGetBackpackItem(out BackpackItem backpack);
         if (!isBackpack || backpack == null)
             return null;
         
@@ -58,16 +58,19 @@ public partial class ABAPI
 
     private static BackpackDefinition GetBackPackDefinition(BackpackItem backpack)
     {
-        var definition = new BackpackDefinition
+        if (backpack == null)
+            return null;
+
+        BackpackDefinition definition = new BackpackDefinition
         {
             ItemName = backpack.ItemName,
             PrefabName = backpack.PrefabName,
             BackpackSizeByQuality = GetBackpackSizing(backpack),
-            WeightMultiplier = backpack.WeightMultiplier.Value,
-            CarryBonus = backpack.CarryBonus.Value,
-            SpeedMod = backpack.SpeedMod.Value,
-            EnableFreezing = backpack.EnableFreezing.Value,
-            BackpackBiome = backpack.BackpackBiome.Value
+            WeightMultiplier = backpack.WeightMultiplier != null ? backpack.WeightMultiplier.Value : 0.5f,
+            CarryBonus = backpack.CarryBonus != null ? backpack.CarryBonus.Value : 0,
+            SpeedMod = backpack.SpeedMod != null ? backpack.SpeedMod.Value : 0f,
+            EnableFreezing = backpack.EnableFreezing != null ? backpack.EnableFreezing.Value : false,
+            BackpackBiome = backpack.BackpackBiome != null ? backpack.BackpackBiome.Value : BackpackBiomes.None
         };
         return definition;
     }

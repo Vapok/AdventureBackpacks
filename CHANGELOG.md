@@ -1,17 +1,16 @@
-# 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
+# 2.1.12 - Configuration Sync Update
 
-* **Additional AzuEPI Compatibility**: Fixed an issue where loading into a world or server while using AzuEPI could cause your cape to stop protecting you from mountain freezing under certain circumstances.
-
-* **Craft From Backpack Null Safety**: Fixed an issue where crafting with empty or missing item slots could cause errors when pulling materials from your backpack.
-
-* **Server & Stability Protections**: Added safety checks to prevent errors on dedicated servers and resolved edge-case power activation issues.
-
-* **Localization Support Completed**: Added 19 additional translations to support all languages supported by Valheim.
-
-* **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
+* **Configuration Sync**: Resolved a library configuration synchronization issue.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
+* **Additional AzuEPI Compatibility**: Fixed an issue where loading into a world or server while using AzuEPI could cause your cape to stop protecting you from mountain freezing under certain circumstances.
+* **Craft From Backpack Null Safety**: Fixed an issue where crafting with empty or missing item slots could cause errors when pulling materials from your backpack.
+* **Server & Stability Protections**: Added safety checks to prevent errors on dedicated servers and resolved edge-case power activation issues.
+* **Localization Support Completed**: Added 19 additional translations to support all languages supported by Valheim.
+* **Dependency Updates**: Updated Jotunn to 2.30.2 and internal dependencies for stability.
 
 ### 2.1.10 - Azu Extended Player Inventory & Status Effect Fixes
 * **Azu Extended Player Inventory & Cape Status Fix**: Fixed an issue when using extended inventory mods where swapping or unequipping cloaks and capes caused their effects to get stuck on your character.

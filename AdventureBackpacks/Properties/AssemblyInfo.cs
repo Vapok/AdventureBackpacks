@@ -32,9 +32,9 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("2.0.8.0")]
 #if ! API
-[assembly: AssemblyVersion("2.1.11.0")]
-[assembly: AssemblyFileVersion("2.1.11.0")]
+[assembly: AssemblyVersion("2.1.12.0")]
+[assembly: AssemblyFileVersion("2.1.12.0")]
 #else
-[assembly: AssemblyVersion("2.1.11.0")]
-[assembly: AssemblyFileVersion("2.1.11.0")]
+[assembly: AssemblyVersion("2.1.12.0")]
+[assembly: AssemblyFileVersion("2.1.12.0")]
 #endif

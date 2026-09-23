@@ -1,3 +1,11 @@
+# 2.1.12 - Configuration Sync Update
+* **Library Configuration Synchronization (`Vapok.Valheim.Common`)**:
+  * Updated internalized `Vapok.Valheim.Common` to 3.21.1015.
+  * Resolves dedicated server issue where admin-only synchronized configurations were stuck in `ReadOnly = true` mode, preventing authorized server admins from editing mod settings in `ConfigDrawers`.
+  * Synchronizes admin status immediately upon receiving `ZNet.RPC_AdminList`.
+* **API Hardening (`API/Privates.cs`)**:
+  * Added null safety checks in `Privates.GetBackPackDefinition` when accessing backpack config properties (`WeightMultiplier`, `CarryBonus`, `SpeedMod`, `EnableFreezing`, `BackpackBiome`) and handling null backpack references, resolving `NullReferenceException` in `ADVENTUREBACKPACKS-1S`.
+
 # 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
 * **Extended Inventory Cape Desync & Armor Damage Protection (`Patches/Humanoid.cs`, `Patches/Player.cs`)**:
   * Added high-priority prefix to `HumanoidEquipItemPatch` resetting `item.m_equipped = false` during character loading (`Player.Load` -> `EquipInventoryItems`) when `AzuExtendedPlayerInventory` is present, allowing AzuEPI's custom slot interceptor to capture the backpack cleanly without vanilla unequipping `m_shoulderItem`.
