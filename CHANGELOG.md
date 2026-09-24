@@ -1,9 +1,14 @@
-# 2.1.12 - Configuration Sync Update
+# 2.1.13 - Stone Portal & Door Key Compatibility
 
-* **Configuration Sync**: Resolved a library configuration synchronization issue.
+* **Stone Portal Teleportation**: Fixed an issue where backpacks carrying ores or metals were blocked from teleporting through Stone Portals.
+* **Door Keys & World Levels**: Fixed key checks so doors correctly recognize key world levels when stored inside backpacks.
+* **Server Stability**: Added safety checks to prevent crafting and inventory errors on dedicated servers.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.1.12 - Configuration Sync Update
+* **Configuration Sync**: Resolved a library configuration synchronization issue.
 
 ### 2.1.11 - Craft From Backpack Null Safety & Dependency Updates
 * **Additional AzuEPI Compatibility**: Fixed an issue where loading into a world or server while using AzuEPI could cause your cape to stop protecting you from mountain freezing under certain circumstances.

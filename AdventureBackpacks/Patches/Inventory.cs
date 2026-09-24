@@ -517,7 +517,7 @@ public static class InventoryPatches
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
-        static void Postfix(Inventory __instance, ref bool __result)
+        static void Postfix(Inventory __instance, bool allowAllItems, ref bool __result)
         {
             if (__instance == null || Player.m_localPlayer == null)
                 return;
@@ -528,9 +528,9 @@ public static class InventoryPatches
             {
                 if (Player.m_localPlayer.IsBackpackEquipped())
                 {
-                    var backpack = Player.m_localPlayer.GetEquippedBackpack();
-                    var bpInventory = backpack?.GetInventory();
-                    if (bpInventory != null && !bpInventory.IsTeleportable(false))
+                    BackpackComponent backpack = Player.m_localPlayer.GetEquippedBackpack();
+                    Inventory bpInventory = backpack?.GetInventory();
+                    if (bpInventory != null && !bpInventory.IsTeleportable(allowAllItems))
                     {
                         __result = false;
                         return;
@@ -546,8 +546,8 @@ public static class InventoryPatches
                     
                         if (item.IsBackpack())
                         {
-                            var bpInventory = item.Data()?.GetOrCreate<BackpackComponent>()?.GetInventory();
-                            if (bpInventory != null && !bpInventory.IsTeleportable(false))
+                            Inventory bpInventory = item.Data()?.GetOrCreate<BackpackComponent>()?.GetInventory();
+                            if (bpInventory != null && !bpInventory.IsTeleportable(allowAllItems))
                             {
                                 __result = false;
                                 return;

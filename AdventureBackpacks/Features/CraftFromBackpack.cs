@@ -107,7 +107,7 @@ public static class CraftFromBackpack
     public static int ConsumeCraftingItem(Player player, string itemName, int amount, int itemQuality = -1)
     {
         int remaining = amount;
-        if (remaining <= 0 || player == null || string.IsNullOrEmpty(itemName))
+        if (remaining <= 0 || player == null || string.IsNullOrEmpty(itemName) || PlayerExtensions.IsDedicatedOrHeadless())
             return remaining;
 
         try

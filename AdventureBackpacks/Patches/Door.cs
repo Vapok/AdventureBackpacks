@@ -1,3 +1,4 @@
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using HarmonyLib;
 
@@ -11,16 +12,30 @@ public static class DoorPatches
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
-        static void Postfix(Door __instance, ref bool __result)
+        static void Postfix(Door __instance, Humanoid player, bool matchWorldLevel, ref bool __result)
         {
-            if (__instance == null || Player.m_localPlayer == null)
+            if (__instance == null || __result)
                 return;
 
-            if (Player.m_localPlayer.IsBackpackEquipped() && __result == false)
+            Player targetPlayer = (player as Player) ?? Player.m_localPlayer;
+            if (targetPlayer == null || !targetPlayer.IsBackpackEquipped())
+                return;
+
+            if (__instance.m_keyItem == null)
             {
-                var backpack = Player.m_localPlayer.GetEquippedBackpack();
-                var keyName = __instance.m_keyItem?.m_itemData?.m_shared?.m_name;
-                __result = (__instance.m_keyItem == null || (!string.IsNullOrEmpty(keyName) && (backpack?.GetInventory()?.SafeHaveItem(keyName) ?? false)));
+                __result = true;
+                return;
+            }
+
+            string keyName = __instance.m_keyItem.m_itemData?.m_shared?.m_name;
+            if (string.IsNullOrEmpty(keyName))
+                return;
+
+            BackpackComponent backpack = targetPlayer.GetEquippedBackpack();
+            Inventory bpInventory = backpack?.GetInventory();
+            if (bpInventory != null && bpInventory.HaveItem(keyName, matchWorldLevel))
+            {
+                __result = true;
             }
         }
     }

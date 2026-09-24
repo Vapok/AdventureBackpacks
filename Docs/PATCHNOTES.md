@@ -1,3 +1,13 @@
+# 2.1.13 - Stone Portal & Door Key Compatibility
+* **Stone Portal Teleportation (`Patches/Inventory.cs`)**:
+  * Updated `IsTeleportablePatch.Postfix` on `Inventory.IsTeleportable` to capture the `bool allowAllItems` parameter from the target method and forward it to `bpInventory.IsTeleportable(allowAllItems)` for both equipped and inventory backpacks.
+  * Corrected regression from 2.0.0 where `allowAllItems` was hardcoded to `false`, which improperly blocked players carrying ores/metals in backpacks from teleporting through Stone Portals (`teleport_world_stone`).
+* **Door Key Evaluation & World Level Gating (`Patches/Door.cs`)**:
+  * Updated `HaveDoorKeyPatch.Postfix` on `Door.HaveKey` to capture `Humanoid player` and `bool matchWorldLevel` parameters.
+  * Evaluated key presence against `bpInventory.HaveItem(keyName, matchWorldLevel)`, properly supporting New Game+ world level door key restrictions and evaluating character contexts accurately.
+* **Server & Crafting Null Safety (`Features/CraftFromBackpack.cs`, `Patches/Player.cs`)**:
+  * Added `PlayerExtensions.IsDedicatedOrHeadless()` early-return guards to `CraftFromBackpack.ConsumeCraftingItem` and `PlayerPatches.ConsumeUnEquippedItems` to prevent headless dedicated server null dereferencing, resolving `ADVENTUREBACKPACKS-V`.
+
 # 2.1.12 - Configuration Sync Update
 * **Library Configuration Synchronization (`Vapok.Valheim.Common`)**:
   * Updated internalized `Vapok.Valheim.Common` to 3.21.1015.
