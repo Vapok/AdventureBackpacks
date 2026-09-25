@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
+using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
@@ -14,6 +16,7 @@ namespace AdventureBackpacks.Patches;
 public class PlayerPatches
 {
 
+    [Obsolete("Legacy reflection shim maintained for backward compatibility. Use CraftingContext and CraftFromBackpack directly.")]
     public static int AdjustCountIfEquipped(int itemCount, Player player, Piece.Requirement resource, int quality = -1)
     {
         int num = itemCount;
@@ -35,7 +38,7 @@ public class PlayerPatches
             }
         }
 
-        if (CraftFromBackpack.CanCraftFromBackpack(player, out _))
+        if (CraftFromBackpack.CanCraftFromBackpack(player, out Inventory _))
         {
             num += CraftFromBackpack.GetBackpackItemCount(player, itemName, quality);
         }
@@ -43,16 +46,19 @@ public class PlayerPatches
         return num;
     }
 
+    [Obsolete("Legacy reflection shim maintained for backward compatibility. Use CraftingContext and CraftFromBackpack directly.")]
     public static int AdjustCountIfEquipped(int itemCount, Player player, Piece.Requirement resource)
     {
         return AdjustCountIfEquipped(itemCount, player, resource, -1);
     }
 
+    [Obsolete("Legacy reflection shim maintained for backward compatibility. Use CraftingContext and CraftFromBackpack directly.")]
     public static int AdjustCountIfEquipped(Player player, Piece.Requirement resource, int itemCount)
     {
         return AdjustCountIfEquipped(itemCount, player, resource, -1);
     }
 
+    [Obsolete("Legacy reflection shim maintained for backward compatibility. Use CraftingContext and CraftFromBackpack directly.")]
     public static int ConsumeUnEquippedItems(int amount, Player player, Piece.Requirement resource)
     {
         if (amount < 1 || player == null || resource == null || resource.m_resItem == null || resource.m_resItem.m_itemData == null || PlayerExtensions.IsDedicatedOrHeadless())
@@ -62,39 +68,15 @@ public class PlayerPatches
         if (string.IsNullOrEmpty(itemName))
             return amount;
 
-        if (CraftFromBackpack.CanCraftFromBackpack(player, out _))
+        if (CraftFromBackpack.CanCraftFromBackpack(player, out Inventory _))
         {
             return CraftFromBackpack.ConsumeCraftingItem(player, itemName, amount);
         }
 
-        if (!resource.m_resItem.m_itemData.IsEquipable())
-            return amount;
-
-        List<ItemDrop.ItemData> allItems = player.m_inventory?.GetAllItems();
-        if (allItems == null)
-            return amount;
-
-        List<ItemDrop.ItemData> resourceItems = allItems.Where(x => x != null && x.m_shared != null && string.Equals(x.m_shared.m_name, itemName)).ToList();
-
-        int removedCounter = 0;
-        foreach (ItemDrop.ItemData item in resourceItems)
-        {
-            if (item == null || item.m_equipped)
-                continue;
-
-            while (removedCounter < amount && item.m_stack > 0)
-            {
-                player.m_inventory.RemoveItem(item, 1);
-                removedCounter++;
-            }
-
-            if (removedCounter >= amount)
-                break;
-        }
-
-        return amount - removedCounter;
+        return amount;
     }
 
+    [Obsolete("Legacy reflection shim maintained for backward compatibility. Use CraftingContext and CraftFromBackpack directly.")]
     public static int ConsumeUnEquippedItems(Player player, Piece.Requirement resource, int amount)
     {
         return ConsumeUnEquippedItems(amount, player, resource);
@@ -103,270 +85,53 @@ public class PlayerPatches
     [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirements), new[] { typeof(Piece), typeof(Player.RequirementMode) })]
     static class PlayerHaveRequirementsPatch
     {
-        static void Postfix(Player __instance, Piece piece, Player.RequirementMode mode, ref bool __result)
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix(Player __instance)
         {
-            if (__result)
-                return;
-
-            if (piece == null || !CraftFromBackpack.CanCraftFromBackpack(__instance, out var bpInventory))
-                return;
-
-            if (mode == Player.RequirementMode.IsKnown)
-                return;
-
-            if (piece.m_craftingStation != null)
+            if (__instance != null && __instance == Player.m_localPlayer)
             {
-                if (mode == Player.RequirementMode.CanAlmostBuild)
-                {
-                    if (!__instance.m_knownStations.ContainsKey(piece.m_craftingStation.m_name))
-                        return;
-                }
-                else if (!CraftingStation.HaveBuildStationInRange(piece.m_craftingStation.m_name, __instance.transform.position) && !ZoneSystem.instance.GetGlobalKey(GlobalKeys.NoWorkbench))
-                {
-                    return;
-                }
+                CraftingContext.Enter();
             }
+        }
 
-            if (piece.m_dlc.Length > 0 && !DLCMan.instance.IsDLCInstalled(piece.m_dlc))
-                return;
-
-            var resources = piece.m_resources;
-            if (resources == null)
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
             {
-                __result = true;
-                return;
+                CraftingContext.Exit();
             }
-
-            foreach (var requirement in resources)
-            {
-                if (!requirement.m_resItem || requirement.m_amount <= 0)
-                    continue;
-
-                var itemName = requirement.m_resItem.m_itemData?.m_shared?.m_name;
-                if (string.IsNullOrEmpty(itemName))
-                    continue;
-
-                switch (mode)
-                {
-                    case Player.RequirementMode.CanAlmostBuild:
-                        if (!__instance.m_inventory.SafeHaveItem(itemName) && !bpInventory.SafeHaveItem(itemName))
-                        {
-                            return;
-                        }
-                        break;
-
-                    case Player.RequirementMode.CanBuild:
-                        var count = __instance.m_inventory.CountItems(itemName);
-                        count = AdjustCountIfEquipped(count, __instance, requirement);
-                        if (count < requirement.m_amount)
-                        {
-                            return;
-                        }
-                        break;
-                }
-            }
-
-            __result = true;
         }
     }
 
-    [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirementItems))]
-    static class PlayerHaveRequirementItemsPatch
+    [HarmonyPatch(typeof(Player), nameof(Player.UpdatePlacement))]
+    static class PlayerUpdatePlacementPatch
     {
-        [HarmonyPostfix]
-        static void Postfix(Player __instance, Recipe piece, bool discover, int qualityLevel, int amount, ref bool __result)
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix(Player __instance)
         {
-            if (__result)
-                return;
-
-            if (piece == null || !piece.m_requireOnlyOneIngredient)
-                return;
-
-            if (!CraftFromBackpack.CanCraftFromBackpack(__instance, out _))
-                return;
-
-            var currentCraftingStation = __instance.GetCurrentCraftingStation();
-            var resources = piece.m_resources;
-            if (resources == null)
-                return;
-
-            foreach (var requirement in resources)
+            if (__instance != null && __instance == Player.m_localPlayer)
             {
-                if ((!discover && currentCraftingStation != null && currentCraftingStation.m_upgrader != requirement.m_upgraderResource) ||
-                    (currentCraftingStation == null && requirement.m_upgraderResource) ||
-                    !requirement.m_resItem || requirement.m_resItem.m_itemData == null || requirement.m_resItem.m_itemData.m_shared == null)
-                {
-                    continue;
-                }
-
-                if (discover)
-                {
-                    if (requirement.m_amount <= 0)
-                        continue;
-
-                    if (__instance.IsMaterialKnown(requirement.m_resItem.m_itemData.m_shared.m_name))
-                    {
-                        __result = true;
-                        return;
-                    }
-                    continue;
-                }
-
-                int neededAmount = requirement.GetAmount(qualityLevel) * amount;
-                if (neededAmount <= 0)
-                {
-                    continue;
-                }
-
-                int maxInInventory = 0;
-                for (int q = 1; q <= requirement.m_resItem.m_itemData.m_shared.m_maxQuality; q++)
-                {
-                    int count = __instance.GetInventory().CountItems(requirement.m_resItem.m_itemData.m_shared.m_name, q);
-                    count = AdjustCountIfEquipped(count, __instance, requirement, q);
-                    if (count > maxInInventory)
-                    {
-                        maxInInventory = count;
-                    }
-                }
-
-                if (maxInInventory >= neededAmount)
-                {
-                    __result = true;
-                    return;
-                }
+                CraftingContext.Enter();
             }
         }
 
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer(Player __instance)
         {
-            var patchedSuccess = false;
-            var instrs = instructions.ToList();
-            var counter = 0;
-
-            CodeInstruction LogMessage(CodeInstruction instruction)
+            if (__instance != null && __instance == Player.m_localPlayer)
             {
-                AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
-                return instruction;
-            }
-
-            var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) });
-
-            for (int i = 0; i < instrs.Count; ++i)
-            {
-                yield return LogMessage(instrs[i]);
-                counter++;
-
-                if (instrs[i].opcode == OpCodes.Callvirt && 
-                    (instrs[i].operand.Equals(countItemsMethod) || (instrs[i].operand is MethodInfo m && m.Name == nameof(Inventory.CountItems))))
-                {
-                    CodeInstruction ldLocReq = null;
-                    for (int j = i - 1; j >= Math.Max(0, i - 15); j--)
-                    {
-                        if (instrs[j].opcode == OpCodes.Ldfld && instrs[j].operand is FieldInfo fi && fi.Name == nameof(Piece.Requirement.m_resItem))
-                        {
-                            ldLocReq = new CodeInstruction(instrs[j - 1].opcode, instrs[j - 1].operand);
-                            break;
-                        }
-                    }
-
-                    if (ldLocReq == null)
-                    {
-                        ldLocReq = new CodeInstruction(OpCodes.Ldloc_3);
-                    }
-
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
-                    counter++;
-
-                    yield return LogMessage(ldLocReq);
-                    counter++;
-
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(AdjustCountIfEquipped), new[] { typeof(int), typeof(Player), typeof(Piece.Requirement) })));
-                    counter++;
-
-                    patchedSuccess = true;
-                }
-            }
-            
-            if (!patchedSuccess)
-            {
-                AdventureBackpacks.Log.Error($"{nameof(Player.HaveRequirementItems)} Transpiler Failed To Patch");
-                Thread.Sleep(5000);
-            }
-        }
-    }
-    
-    [HarmonyPatch(typeof(Player), nameof(Player.ConsumeResources))]
-    static class PlayerConsumeResourcesPatch
-    {
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            var patchedSuccess = false;
-            var instrs = instructions.ToList();
-            var counter = 0;
-
-            CodeInstruction LogMessage(CodeInstruction instruction)
-            {
-                AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
-                return instruction;
-            }
-
-            var getAmountMethod = AccessTools.DeclaredMethod(typeof(Piece.Requirement), "GetAmount", new[] { typeof(int) }); 
-
-            for (int i = 0; i < instrs.Count; ++i)
-            {
-                yield return LogMessage(instrs[i]);
-                counter++;
-
-                if (instrs[i].opcode == OpCodes.Mul && i >= 2)
-                {
-                    int getAmountIndex = -1;
-                    for (int j = i - 1; j >= Math.Max(0, i - 5); j--)
-                    {
-                        if (instrs[j].opcode == OpCodes.Callvirt && 
-                            (instrs[j].operand.Equals(getAmountMethod) || (instrs[j].operand is MethodInfo m && m.Name == nameof(Piece.Requirement.GetAmount))))
-                        {
-                            getAmountIndex = j;
-                            break;
-                        }
-                    }
-
-                    if (getAmountIndex >= 0)
-                    {
-                        CodeInstruction ldLocReq = null;
-                        for (int k = getAmountIndex - 1; k >= Math.Max(0, getAmountIndex - 5); k--)
-                        {
-                            if (instrs[k].opcode == OpCodes.Ldloc_3 || instrs[k].opcode == OpCodes.Ldloc_S || 
-                                instrs[k].opcode == OpCodes.Ldloc || instrs[k].opcode == OpCodes.Ldloc_0 || 
-                                instrs[k].opcode == OpCodes.Ldloc_1 || instrs[k].opcode == OpCodes.Ldloc_2)
-                            {
-                                ldLocReq = new CodeInstruction(instrs[k].opcode, instrs[k].operand);
-                                break;
-                            }
-                        }
-
-                        if (ldLocReq == null)
-                        {
-                            ldLocReq = new CodeInstruction(OpCodes.Ldloc_3);
-                        }
-
-                        yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_0));
-                        counter++;
-
-                        yield return LogMessage(ldLocReq);
-                        counter++;
-
-                        yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(ConsumeUnEquippedItems), new[] { typeof(int), typeof(Player), typeof(Piece.Requirement) })));
-                        counter++;
-
-                        patchedSuccess = true;
-                    }
-                }
-            }
-            
-            if (!patchedSuccess)
-            {
-                AdventureBackpacks.Log.Error($"{nameof(Player.ConsumeResources)} Transpiler Failed To Patch");
-                Thread.Sleep(5000);
+                CraftingContext.Exit();
             }
         }
     }
@@ -374,6 +139,9 @@ public class PlayerPatches
     [HarmonyPatch(typeof(Player), nameof(Player.GetFirstRequiredItem))]
     static class PlayerGetFirstRequiredItemPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         [HarmonyPostfix]
         static void Postfix(Player __instance, Inventory inventory, Recipe recipe, int qualityLevel, ref int amount, ref int extraAmount, int craftMultiplier, ref ItemDrop.ItemData __result)
         {
@@ -383,13 +151,13 @@ public class PlayerPatches
             if (recipe == null || recipe.m_resources == null)
                 return;
 
-            if (!CraftFromBackpack.CanCraftFromBackpack(__instance, out var bpInventory))
+            if (!CraftFromBackpack.CanCraftFromBackpack(__instance, out Inventory bpInventory))
                 return;
 
-            var currentCraftingStation = __instance.GetCurrentCraftingStation();
-            var resources = recipe.m_resources;
+            CraftingStation currentCraftingStation = __instance.GetCurrentCraftingStation();
+            Piece.Requirement[] resources = recipe.m_resources;
 
-            foreach (var requirement in resources)
+            foreach (Piece.Requirement requirement in resources)
             {
                 if ((currentCraftingStation != null && currentCraftingStation.m_upgrader != requirement.m_upgraderResource) ||
                     (currentCraftingStation == null && requirement.m_upgraderResource) ||
@@ -404,17 +172,17 @@ public class PlayerPatches
                     continue;
                 }
 
+                string reqName = requirement.m_resItem.m_itemData.m_shared.m_name;
                 for (int q = 1; q <= requirement.m_resItem.m_itemData.m_shared.m_maxQuality; q++)
                 {
-                    int count = inventory.CountItems(requirement.m_resItem.m_itemData.m_shared.m_name, q);
-                    count = AdjustCountIfEquipped(count, __instance, requirement, q);
+                    int count = inventory.CountItems(reqName, q) + bpInventory.CountItems(reqName, q);
                     if (count >= neededAmount)
                     {
-                        var allBpItems = bpInventory.GetAllItems();
-                        var matchingItem = allBpItems?.FirstOrDefault(x => 
+                        List<ItemDrop.ItemData> allBpItems = bpInventory.GetAllItems();
+                        ItemDrop.ItemData matchingItem = allBpItems?.FirstOrDefault(x => 
                             x != null &&
                             x.m_shared != null && 
-                            string.Equals(x.m_shared.m_name, requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                            string.Equals(x.m_shared.m_name, reqName) && 
                             x.m_quality == q && 
                             x.m_stack >= neededAmount);
 
@@ -423,7 +191,7 @@ public class PlayerPatches
                             matchingItem = allBpItems?.FirstOrDefault(x => 
                                 x != null &&
                                 x.m_shared != null && 
-                                string.Equals(x.m_shared.m_name, requirement.m_resItem.m_itemData.m_shared.m_name) && 
+                                string.Equals(x.m_shared.m_name, reqName) && 
                                 x.m_quality == q);
                         }
 
@@ -436,6 +204,38 @@ public class PlayerPatches
                         }
                     }
                 }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.OnDestroy))]
+    static class PlayerOnDestroyPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPostfix]
+        static void Postfix(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                CraftingContext.Reset();
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.OnDeath))]
+    static class PlayerOnDeathPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPostfix]
+        static void Postfix(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                CraftingContext.Reset();
             }
         }
     }

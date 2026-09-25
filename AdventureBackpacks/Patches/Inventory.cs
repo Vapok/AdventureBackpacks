@@ -15,7 +15,6 @@ public static class InventoryPatches
 {
     private static bool _movingItemBetweenContainers;
     private static bool _droppingOutside;
-    public static bool IsDoingCrafting = false;
 
     private static readonly Queue<KeyValuePair<ItemDrop.ItemData,DateTime>> ItemsAddedQueue = new();
 
@@ -209,7 +208,7 @@ public static class InventoryPatches
         if (_movingItemBetweenContainers || _droppingOutside)
             return true;
 
-        if (IsDoingCrafting)
+        if (CraftingContext.IsActive)
         {
             return true;
         }
@@ -268,7 +267,7 @@ public static class InventoryPatches
                 if (StoreToBackpack.CanInventoryAccept(__instance, item, stack))
                     return true;
 
-                if (IsDoingCrafting && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out var craftBpInventory))
+                if (CraftingContext.IsActive && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out Inventory craftBpInventory))
                 {
                     if (StoreToBackpack.CanInventoryAccept(craftBpInventory, item, stack))
                     {
@@ -321,11 +320,11 @@ public static class InventoryPatches
 
             if (Player.m_localPlayer != null && __instance == Player.m_localPlayer.GetInventory() && !_movingItemBetweenContainers)
             {
-                if (IsDoingCrafting && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out var craftBpInventory))
+                if (CraftingContext.IsActive && !item.IsBackpack() && !item.TryGetBackpackItem(out _) && CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out Inventory craftBpInventory))
                 {
                     if (!StoreToBackpack.CanInventoryAccept(__instance, item, item.m_stack))
                     {
-                        var fullyStoredCraft = StoreToBackpack.TryStoreItem(Player.m_localPlayer, item, craftBpInventory);
+                        bool fullyStoredCraft = StoreToBackpack.TryStoreItem(Player.m_localPlayer, item, craftBpInventory);
                         if (fullyStoredCraft)
                         {
                             __result = true;
@@ -334,9 +333,9 @@ public static class InventoryPatches
                     }
                 }
 
-                if (StoreToBackpack.ShouldStoreToBackpack(Player.m_localPlayer, item, out var backpackInventory))
+                if (StoreToBackpack.ShouldStoreToBackpack(Player.m_localPlayer, item, out Inventory backpackInventory))
                 {
-                    var fullyStored = StoreToBackpack.TryStoreItem(Player.m_localPlayer, item, backpackInventory);
+                    bool fullyStored = StoreToBackpack.TryStoreItem(Player.m_localPlayer, item, backpackInventory);
                     if (fullyStored)
                     {
                         __result = true;
@@ -350,16 +349,20 @@ public static class InventoryPatches
     }
 
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(string), typeof(int), typeof(int), typeof(bool) })]
+    [HarmonyPriority(600)]
     static class RemoveItemByNamePatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static bool Prefix(Inventory __instance, string name, ref int amount, int itemQuality)
         {
-            if (!IsDoingCrafting || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+            if (!CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
                 return true;
 
-            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out _))
+            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory _))
             {
-                var remaining = CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
+                int remaining = CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
                 if (remaining <= 0)
                 {
                     return false;
@@ -370,6 +373,47 @@ public static class InventoryPatches
             }
 
             return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) })]
+    [HarmonyPriority(600)]
+    static class CountItemsPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        static void Postfix(Inventory __instance, string name, int quality, ref int __result)
+        {
+            if (!CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+                return;
+
+            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory bpInventory))
+            {
+                __result += (quality > 0 ? bpInventory.CountItems(name, quality) : bpInventory.CountItems(name));
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.HaveItem), new[] { typeof(string), typeof(bool) })]
+    [HarmonyPriority(600)]
+    static class HaveItemPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        static void Postfix(Inventory __instance, string name, ref bool __result)
+        {
+            if (__result || !CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+                return;
+
+            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory bpInventory))
+            {
+                if (bpInventory.HaveItem(name))
+                {
+                    __result = true;
+                }
+            }
         }
     }
 
@@ -495,13 +539,13 @@ public static class InventoryPatches
             if (__instance == null || Player.m_localPlayer == null)
                 return;
             
-            var player = Player.m_localPlayer;
+            Player player = Player.m_localPlayer;
             
             if (__instance.IsBackPackInventory())
             {
                 if (player.IsBackpackEquipped())
                 {
-                    var backpack = player.GetEquippedBackpack();
+                    BackpackComponent backpack = player.GetEquippedBackpack();
                     if (backpack != null && backpack.GetInventory() == __instance)
                     {
                         player.GetInventory()?.UpdateTotalWeight();

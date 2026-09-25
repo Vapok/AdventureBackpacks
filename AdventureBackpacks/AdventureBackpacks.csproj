@@ -175,6 +175,7 @@
         <Compile Include="Extensions\InventoryExtensions.cs" />
         <Compile Include="Extensions\ItemDataExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
+        <Compile Include="Features\CraftingContext.cs" />
         <Compile Include="Features\CraftFromBackpack.cs" />
         <Compile Include="Features\EquipmentEffectCache.cs" />
         <Compile Include="Features\QuickTransfer.cs" />
@@ -195,8 +196,6 @@
         <Compile Include="AdventureBackpacks.cs" />
         <Compile Include="Assets\Effects\ExternalEffect.cs" />
         <Compile Include="Assets\Items\BackpackItems\ExternalBackpack.cs" />
-        <Compile Include="Compats\AzuCraftyBoxesCompat.cs" />
-        <Compile Include="Compats\BackpackContainerRealProxy.cs" />
         <Compile Include="Compats\ChebsNecromancy.cs" />
         <Compile Include="Compats\ContentsWithin.cs" />
         <Compile Include="Features\Utilities.cs" />

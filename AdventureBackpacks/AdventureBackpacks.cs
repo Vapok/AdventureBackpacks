@@ -95,11 +95,6 @@ namespace AdventureBackpacks
                 ContentsWithin.Awake(_harmony, "com.maxsch.valheim.contentswithin");
             }
 
-            if (Chainloader.PluginInfos.ContainsKey("Azumatt.AzuCraftyBoxes"))
-            {
-                AzuCraftyBoxesCompat.Awake(_harmony, "Azumatt.AzuCraftyBoxes");
-            }
-
             ModSplashManager.Register(new ModSplashDossier(_instance)
             {
                 Tagline = "A feature-rich backpack progression system with custom models, effects, and inventory mechanics.",
@@ -117,11 +112,6 @@ namespace AdventureBackpacks
             if (PlayerExtensions.IsDedicatedOrHeadless())
             {
                 InitializeBackpacks(null, EventArgs.Empty);
-            }
-
-            if (Chainloader.PluginInfos.ContainsKey("Azumatt.AzuCraftyBoxes"))
-            {
-                AzuCraftyBoxesCompat.Awake(_harmony, "Azumatt.AzuCraftyBoxes");
             }
 
             //Initialized Features

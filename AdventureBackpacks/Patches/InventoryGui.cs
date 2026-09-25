@@ -24,48 +24,45 @@ internal static class InventoryGuiPatches
     private static bool _showBackpack ;
 
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.DoCrafting))]
-    static class InventoryGuiDoCraftingPrefix
+    static class InventoryGuiDoCraftingPatch
     {
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
-        [UsedImplicitly]
-        static void Prefix(InventoryGui __instance)
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix()
         {
-            AdventureBackpacks.Log.Debug($"########################################");
-            AdventureBackpacks.Log.Debug($"####       DoCrafting.Prefix       #####");
-            AdventureBackpacks.Log.Debug($"########################################");
-            InventoryPatches.IsDoingCrafting = true;
-            
+            CraftingContext.Enter();
         }
+
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer()
+        {
+            CraftingContext.Exit();
+        }
+
+        [HarmonyPostfix]
         static void Postfix(InventoryGui __instance)
         {
-            AdventureBackpacks.Log.Debug($"########################################");
-            AdventureBackpacks.Log.Debug($"####       DoCrafting.Postfix      #####");
-            AdventureBackpacks.Log.Debug($"########################################");
-
-            InventoryPatches.IsDoingCrafting = false;
-            if ( Player.m_localPlayer == null)
+            if (Player.m_localPlayer == null)
                 return;
-            var player = Player.m_localPlayer;
+            Player player = Player.m_localPlayer;
             
             if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
             {
-                AdventureBackpacks.Log.Debug($"Item: {__instance.m_craftUpgradeItem.m_shared.m_name} ");
-
-                var backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
-                AdventureBackpacks.Log.Debug($"Backpack: {__instance.m_craftUpgradeItem.m_shared.m_name} ");
+                BackpackComponent backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
                 if (backpack == null)
                     return;
 
-                backpack?.Load();
+                backpack.Load();
 
                 if (player.IsThisBackpackEquipped(backpack.Item))
                 {
-                    var backpackContainer = player.GetBackpackContainerProxy();
-                    backpack?.UpdateContainerSizing(ref backpackContainer);
+                    Container backpackContainer = player.GetBackpackContainerProxy();
+                    backpack.UpdateContainerSizing(ref backpackContainer);
                 }
-                    
                 
                 player.UpdateEquipmentStatusEffects();
             }
@@ -546,86 +543,37 @@ internal static class InventoryGuiPatches
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix(Player player)
         {
-            var patchedSuccess = false;
-            var instrs = instructions.ToList();
-
-            var counter = 0;
-
-            CodeInstruction LogMessage(CodeInstruction instruction)
+            if (player != null && player == Player.m_localPlayer)
             {
-                AdventureBackpacks.Log.Debug($"IL_{counter}: Opcode: {instruction.opcode} Operand: {instruction.operand}");
-                return instruction;
-            }
-
-            var countItemsMethod = AccessTools.DeclaredMethod(typeof(Inventory), nameof(Inventory.CountItems), new[] { typeof(string), typeof(int), typeof(bool) }); 
-
-            for (int i = 0; i < instrs.Count; ++i)
-            {
-                yield return LogMessage(instrs[i]);
-                counter++;
-
-                if (instrs[i].opcode == OpCodes.Callvirt && 
-                    (instrs[i].operand.Equals(countItemsMethod) || (instrs[i].operand is MethodInfo m && m.Name == nameof(Inventory.CountItems))))
-                {
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_2));
-                    counter++;
-
-                    yield return LogMessage(new CodeInstruction(OpCodes.Ldarg_1));
-                    counter++;
-
-                    yield return LogMessage(new CodeInstruction(OpCodes.Call, AccessTools.DeclaredMethod(typeof(PlayerPatches), nameof(PlayerPatches.AdjustCountIfEquipped), new[] { typeof(int), typeof(Player), typeof(Piece.Requirement) })));
-                    counter++;
-
-                    patchedSuccess = true;
-                }
-            }
-            if (!patchedSuccess)
-            {
-                AdventureBackpacks.Log.Error($"InventoryGui.SetupRequirement Transpiler Failed To Patch");
-                Thread.Sleep(5000);
+                CraftingContext.Enter();
             }
         }
 
-        [UsedImplicitly]
-        static void Postfix(Transform elementRoot, Piece.Requirement req, Player player, bool craft, int quality, int craftMultiplier, ref bool __result)
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer(Player player)
         {
-            if (!__result || elementRoot == null || req == null || req.m_resItem == null || req.m_resItem.m_itemData == null || player == null)
-                return;
-
-            if (!CraftFromBackpack.CanCraftFromBackpack(player, out _))
-                return;
-
-            var itemName = req.m_resItem.m_itemData.m_shared?.m_name;
-            if (string.IsNullOrEmpty(itemName))
-                return;
-
-            var bpCount = CraftFromBackpack.GetBackpackItemCount(player, itemName);
-            if (bpCount <= 0)
-                return;
-
-            var resAmountObj = elementRoot.Find("res_amount");
-            if (resAmountObj == null)
-                return;
-
-            var textComponent = resAmountObj.GetComponent<TMP_Text>();
-            if (textComponent == null || string.IsNullOrEmpty(textComponent.text))
-                return;
-
-            if (textComponent.text.Contains("/"))
+            if (player != null && player == Player.m_localPlayer)
             {
-                var parts = textComponent.text.Split('/');
-                if (parts.Length == 2 && int.TryParse(parts[0], out var currentCount) && int.TryParse(parts[1], out var reqCount))
-                {
-                    var newCount = currentCount + bpCount;
-                    textComponent.text = $"{newCount}/{reqCount}";
-                    if (newCount >= reqCount)
-                    {
-                        textComponent.color = Color.white;
-                    }
-                }
+                CraftingContext.Exit();
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Hide))]
+    static class InventoryGuiHidePatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPostfix]
+        static void Postfix()
+        {
+            CraftingContext.Reset();
         }
     }
 }

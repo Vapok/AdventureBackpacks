@@ -233,4 +233,31 @@ return null;
         BackpackFactory.RegisterExternalBackpack(definition);
 #endif
     }
+
+    public static bool IsCraftFromBackpackEnabled()
+    {
+#if ! API
+        return CraftFromBackpack.EnableCraftFromBackpack?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
+    public static bool IsCraftingContextActive()
+    {
+#if ! API
+        return CraftingContext.IsActive;
+#else
+        return false;
+#endif
+    }
+
+    public static string GetConsumptionPriority()
+    {
+#if ! API
+        return CraftFromBackpack.MaterialConsumptionPriority?.Value.ToString() ?? "PlayerInventoryFirst";
+#else
+        return "PlayerInventoryFirst";
+#endif
+    }
 }
