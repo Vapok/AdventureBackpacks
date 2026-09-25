@@ -7,6 +7,7 @@ using AdventureBackpacks.Components;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
 using HarmonyLib;
+using UnityEngine;
 using Vapok.Common.Managers;
 namespace AdventureBackpacks.Patches;
 
@@ -348,6 +349,53 @@ public static class InventoryPatches
         }
     }
 
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddItem), new[] { typeof(string), typeof(int), typeof(int), typeof(int), typeof(long), typeof(string), typeof(Vector2i), typeof(bool), typeof(bool), typeof(bool) })]
+    [HarmonyPriority(Priority.First)]
+    static class AddItemCraftPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        static bool Prefix(Inventory __instance, string name, int stack, int quality, int variant, long crafterID, string crafterName, Vector2i position, bool cheated, bool pickedUp, bool dropIfFullInv, ref ItemDrop.ItemData __result)
+        {
+            if (!CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+                return true;
+
+            if (_movingItemBetweenContainers)
+                return true;
+
+            GameObject prefab = ObjectDB.instance.GetItemPrefab(name);
+            if (prefab == null)
+                return true;
+
+            ItemDrop itemDrop = prefab.GetComponent<ItemDrop>();
+            if (itemDrop == null || itemDrop.m_itemData == null)
+                return true;
+
+            ItemDrop.ItemData itemData = itemDrop.m_itemData;
+            if (itemData.IsBackpack() || itemData.TryGetBackpackItem(out _))
+                return true;
+
+            if (StoreToBackpack.CanInventoryAccept(__instance, itemData, stack))
+                return true;
+
+            if (CraftFromBackpack.CanCraftOutputToBackpack(Player.m_localPlayer, out Inventory craftBpInventory))
+            {
+                if (StoreToBackpack.CanInventoryAccept(craftBpInventory, itemData, stack))
+                {
+                    ItemDrop.ItemData createdItem = craftBpInventory.AddItem(name, stack, quality, variant, crafterID, crafterName, new Vector2i(-1, -1), cheated, pickedUp, dropIfFullInv);
+                    if (createdItem != null)
+                    {
+                        __result = createdItem;
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveItem), new[] { typeof(string), typeof(int), typeof(int), typeof(bool) })]
     [HarmonyPriority(600)]
     static class RemoveItemByNamePatch
@@ -362,14 +410,8 @@ public static class InventoryPatches
 
             if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory _))
             {
-                int remaining = CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
-                if (remaining <= 0)
-                {
-                    return false;
-                }
-
-                amount = remaining;
-                return true;
+                CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
+                return false;
             }
 
             return true;
@@ -387,6 +429,24 @@ public static class InventoryPatches
         {
             if (!CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
                 return;
+
+            List<ItemDrop.ItemData> equipped = __instance.GetEquippedItems();
+            if (equipped != null)
+            {
+                int equippedCount = 0;
+                for (int i = 0; i < equipped.Count; i++)
+                {
+                    ItemDrop.ItemData eq = equipped[i];
+                    if (eq != null && eq.m_shared != null && string.Equals(eq.m_shared.m_name, name) && (quality <= 0 || eq.m_quality == quality))
+                    {
+                        equippedCount += eq.m_stack;
+                    }
+                }
+                if (equippedCount > 0)
+                {
+                    __result = Mathf.Max(0, __result - equippedCount);
+                }
+            }
 
             if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory bpInventory))
             {

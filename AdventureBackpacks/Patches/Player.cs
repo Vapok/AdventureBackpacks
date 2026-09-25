@@ -109,6 +109,60 @@ public class PlayerPatches
         }
     }
 
+    [HarmonyPatch(typeof(Player), nameof(Player.HaveRequirements), new[] { typeof(Recipe), typeof(bool), typeof(int), typeof(int) })]
+    static class PlayerHaveRequirementsRecipePatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                CraftingContext.Enter();
+            }
+        }
+
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                CraftingContext.Exit();
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Player), "HaveRequirementItems", new[] { typeof(Recipe), typeof(bool), typeof(int), typeof(int) })]
+    static class PlayerHaveRequirementItemsPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                CraftingContext.Enter();
+            }
+        }
+
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                CraftingContext.Exit();
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(Player), nameof(Player.UpdatePlacement))]
     static class PlayerUpdatePlacementPatch
     {

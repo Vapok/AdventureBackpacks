@@ -260,4 +260,18 @@ return null;
         return "PlayerInventoryFirst";
 #endif
     }
+
+    public static void SuppressNativeCrafting(string modIdentifier)
+    {
+#if ! API
+        CraftingContext.Suppress(modIdentifier);
+#endif
+    }
+
+    public static void UnsuppressNativeCrafting(string modIdentifier)
+    {
+#if ! API
+        CraftingContext.Unsuppress(modIdentifier);
+#endif
+    }
 }

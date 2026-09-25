@@ -564,6 +564,75 @@ internal static class InventoryGuiPatches
         }
     }
 
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.UpdateRecipeList))]
+    static class InventoryGuiUpdateRecipeListPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix()
+        {
+            CraftingContext.Enter();
+        }
+
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer()
+        {
+            CraftingContext.Exit();
+        }
+    }
+
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.UpdateRecipe))]
+    static class InventoryGuiUpdateRecipePatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix(Player player)
+        {
+            if (player != null && player == Player.m_localPlayer)
+            {
+                CraftingContext.Enter();
+            }
+        }
+
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer(Player player)
+        {
+            if (player != null && player == Player.m_localPlayer)
+            {
+                CraftingContext.Exit();
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnCraftPressed))]
+    static class InventoryGuiOnCraftPressedPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(900)]
+        static void Prefix()
+        {
+            CraftingContext.Enter();
+        }
+
+        [HarmonyFinalizer]
+        [HarmonyPriority(100)]
+        static void Finalizer()
+        {
+            CraftingContext.Exit();
+        }
+    }
+
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Hide))]
     static class InventoryGuiHidePatch
     {
