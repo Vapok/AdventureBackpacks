@@ -553,6 +553,41 @@ internal static class InventoryGuiPatches
             }
         }
 
+        [HarmonyPostfix]
+        [HarmonyPriority(Priority.Last)]
+        static void Postfix(Transform elementRoot, Piece.Requirement req, Player player, bool craft, int quality, int craftMultiplier, ref bool __result)
+        {
+            if (!__result || elementRoot == null || req == null || req.m_resItem == null || req.m_resItem.m_itemData == null || player == null || player != Player.m_localPlayer)
+                return;
+
+            if (!CraftFromBackpack.CanCraftFromBackpack(player, out _))
+                return;
+
+            Transform resAmountObj = elementRoot.Find("res_amount");
+            if (resAmountObj == null)
+                return;
+
+            TMP_Text textComponent = resAmountObj.GetComponent<TMP_Text>();
+            if (textComponent == null || string.IsNullOrEmpty(textComponent.text))
+                return;
+
+            if (!int.TryParse(textComponent.text.Trim(), out int requiredAmount))
+                return;
+
+            string itemName = req.m_resItem.m_itemData.m_shared.m_name;
+            int totalAvailable = player.GetInventory().CountItems(itemName);
+
+            textComponent.text = $"{totalAvailable}/{requiredAmount}";
+            if (totalAvailable >= requiredAmount)
+            {
+                textComponent.color = Color.white;
+            }
+            else
+            {
+                textComponent.color = ((Mathf.Sin(Time.time * 10f) > 0f) ? Color.red : Color.white);
+            }
+        }
+
         [HarmonyFinalizer]
         [HarmonyPriority(100)]
         static void Finalizer(Player player)
