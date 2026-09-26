@@ -24,15 +24,15 @@ public static class StoreToBackpack
 
     private static void RegisterConfigurationFile()
     {
-        ConfigSyncBase.SyncedConfig("Server Config", "Enable Auto Store to Backpack", true,
+        ConfigSyncBase.UnsyncedConfig("Automation (Local Only)", "Enable Auto Store to Backpack", true,
             new ConfigDescription("When enabled, picked up or looted items already present in the equipped backpack are automatically stored in the backpack.",
                 null,
-                new ConfigurationManagerAttributes { Order = 5 }), ref EnableStoreToBackpack);
+                new ConfigurationManagerAttributes { Order = 2 }), ref EnableStoreToBackpack);
 
-        ConfigSyncBase.SyncedConfig("Server Config", "Enable Inventory Overflow To Backpack", true,
+        ConfigSyncBase.UnsyncedConfig("Automation (Local Only)", "Enable Inventory Overflow To Backpack", true,
             new ConfigDescription("When enabled, if the player inventory is full, picked up or looted items will automatically overflow into the equipped backpack if space is available.",
                 null,
-                new ConfigurationManagerAttributes { Order = 4 }), ref EnableInventoryOverflowToBackpack);
+                new ConfigurationManagerAttributes { Order = 1 }), ref EnableInventoryOverflowToBackpack);
     }
 
     public static bool ShouldStoreToBackpack(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)
@@ -57,7 +57,7 @@ public static class StoreToBackpack
         if (!player.IsBackpackEquipped())
             return false;
 
-        var backpack = player.GetEquippedBackpack();
+        BackpackComponent backpack = player.GetEquippedBackpack();
         if (backpack == null)
             return false;
 
@@ -65,7 +65,7 @@ public static class StoreToBackpack
         if (backpackInventory == null)
             return false;
 
-        var playerInventory = player.GetInventory();
+        Inventory playerInventory = player.GetInventory();
         if (playerInventory == null)
             return false;
 
@@ -74,8 +74,8 @@ public static class StoreToBackpack
             if (CanInventoryAccept(backpackInventory, item, item.m_stack))
                 return true;
 
-            var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
-            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
+            int freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            int emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
                 return true;
         }
@@ -85,8 +85,8 @@ public static class StoreToBackpack
             if (CanInventoryAccept(backpackInventory, item, item.m_stack))
                 return true;
 
-            var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
-            var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
+            int freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+            int emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
             if (freeStack > 0 || (emptySlots > 0 && item.m_shared.m_maxStackSize > 1))
                 return true;
         }
@@ -123,22 +123,22 @@ public static class StoreToBackpack
 
             if (CanInventoryAccept(backpackInventory, item, item.m_stack))
             {
-                var added = backpackInventory.AddItem(item);
+                bool added = backpackInventory.AddItem(item);
                 if (added)
                     return true;
             }
 
             if (item.m_shared.m_maxStackSize > 1 && item.m_stack > 1)
             {
-                var freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
-                var emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
-                var availableSpace = freeStack + (emptySlots * item.m_shared.m_maxStackSize);
+                int freeStack = backpackInventory.SafeFindFreeStackSpace(item.m_shared.m_name, item.m_worldLevel);
+                int emptySlots = (backpackInventory.m_width * backpackInventory.m_height) - (backpackInventory.m_inventory?.Count ?? 0);
+                int availableSpace = freeStack + (emptySlots * item.m_shared.m_maxStackSize);
 
                 if (availableSpace > 0)
                 {
-                    var transferAmount = Mathf.Min(item.m_stack, availableSpace);
+                    int transferAmount = Mathf.Min(item.m_stack, availableSpace);
                     item.m_customData ??= new System.Collections.Generic.Dictionary<string, string>();
-                    var partialItem = item.Clone();
+                    ItemDrop.ItemData partialItem = item.Clone();
                     partialItem.m_stack = transferAmount;
 
                     if (backpackInventory.AddItem(partialItem))

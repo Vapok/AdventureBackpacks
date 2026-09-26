@@ -82,8 +82,8 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
   * **Auto Store Existing Items**: When picking up or looting items that already exist in your equipped backpack, they automatically route directly into the backpack if space is available.
   * **Inventory Overflow**: If your main player inventory is completely full, newly acquired items continue to enter your equipped backpack without triggering "Inventory Full" errors.
   * **Partial Stack Support**: If a backpack only has room for a partial stack, it absorbs what fits and routes the remainder to player inventory.
-* 🌐 **Server-Enforced Configuration (`Server Config`)**:
-  * Craft from backpack, consumption priority, leave one item safeguard, craft output overflow, auto-storing, and inventory overflow are server-authoritative. When playing on a dedicated server, the server dictates these settings globally for all connected clients.
+* ⚙️ **Personal Automation Settings (`Automation (Local Only)`)**:
+  * Craft from backpack, consumption priority, leave one item safeguard, craft output overflow, auto-storing, and inventory overflow are client-side personal preferences that can be tailored individually without server synchronization.
 * ⚡ **Thor's Inventory Guard (Inception Prevention)**:
   * Backpack-in-backpack nesting is strictly prevented across all crafting, auto-storing, and inventory interactions to safeguard against data corruption and infinite loops.
 * 🏷️ **Yard Sale Overflow Safeguard**:

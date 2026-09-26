@@ -31,25 +31,25 @@ public static class CraftFromBackpack
 
     private static void RegisterConfigurationFile()
     {
-        ConfigSyncBase.SyncedConfig("Server Config", "Enable Craft From Backpack", true,
+        ConfigSyncBase.UnsyncedConfig("Automation (Local Only)", "Enable Craft From Backpack", true,
             new ConfigDescription("When enabled, materials from the equipped backpack are considered when crafting or building.",
                 null,
-                new ConfigurationManagerAttributes { Order = 5 }), ref EnableCraftFromBackpack);
+                new ConfigurationManagerAttributes { Order = 6 }), ref EnableCraftFromBackpack);
 
-        ConfigSyncBase.SyncedConfig("Server Config", "Enable Craft Output To Backpack", true,
+        ConfigSyncBase.UnsyncedConfig("Automation (Local Only)", "Enable Craft Output To Backpack", true,
             new ConfigDescription("When enabled and player inventory is full, newly crafted items will be placed into the equipped backpack if space is available.",
                 null,
-                new ConfigurationManagerAttributes { Order = 4 }), ref EnableCraftOutputToBackpack);
+                new ConfigurationManagerAttributes { Order = 5 }), ref EnableCraftOutputToBackpack);
 
-        ConfigSyncBase.SyncedConfig("Server Config", "Material Consumption Priority", ConsumptionPriority.PlayerInventoryFirst,
+        ConfigSyncBase.UnsyncedConfig("Automation (Local Only)", "Material Consumption Priority", ConsumptionPriority.PlayerInventoryFirst,
             new ConfigDescription("Determines whether materials are drawn from the player inventory or the equipped backpack first during crafting and building.",
                 null,
-                new ConfigurationManagerAttributes { Order = 3 }), ref MaterialConsumptionPriority);
+                new ConfigurationManagerAttributes { Order = 4 }), ref MaterialConsumptionPriority);
 
-        ConfigSyncBase.SyncedConfig("Server Config", "Leave One Item In Backpack", true,
+        ConfigSyncBase.UnsyncedConfig("Automation (Local Only)", "Leave One Item In Backpack", true,
             new ConfigDescription("When enabled, at least one item of each resource type will remain in the backpack and will not be consumed or counted during crafting and building.",
                 null,
-                new ConfigurationManagerAttributes { Order = 2 }), ref LeaveOneItemInBackpack);
+                new ConfigurationManagerAttributes { Order = 3 }), ref LeaveOneItemInBackpack);
     }
 
     public static bool CanCraftFromBackpack(Player player, out Inventory backpackInventory)
