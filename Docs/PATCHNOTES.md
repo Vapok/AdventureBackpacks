@@ -1,3 +1,29 @@
+# 2.2.0 - Crafting & Container Automation Overhaul
+* **Crafting & Building Architecture Refactor (`Features/CraftingContext.cs`, `Features/CraftFromBackpack.cs`)**:
+  * Implemented `CraftingContext`: a thread-safe, reentrant scope using `Interlocked` active depth tracking and an `IDisposable` struct scope (`CraftingContext.Scope`).
+  * Added external mod suppression management (`CraftingContext.Suppress` / `Unsuppress`) allowing third-party mods to dynamically yield or re-enable backpack crafting injection.
+  * Encapsulated material consumption via `CraftFromBackpack.ConsumeCraftingItem` with configurable priority (`PlayerInventoryFirst` vs `BackpackFirst`), strict non-equipped item filtering (`!item.m_equipped`), and fail-safe exception handling.
+  * Added dedicated server early-return guards throughout `CraftFromBackpack` and `PlayerExtensions.IsDedicatedOrHeadless()`, completely resolving `ADVENTUREBACKPACKS-V`.
+* **Leave One Item In Backpack Safeguard (`Features/CraftFromBackpack.cs`, `Patches/Inventory.cs`, `Patches/Player.cs`)**:
+  * Added `Leave One Item In Backpack` setting under `Automation (Local Only)` (default: `true`).
+  * In `Inventory.CountItems` and `Inventory.HaveItem` within `CraftingContext`, dynamically reserves 1 unit per item type in the backpack so resource queries see `Mathf.Max(0, count - 1)`.
+  * In `CraftFromBackpack.ConsumeFromBackpack`, caps maximum consumable items across matching stacks to `Mathf.Max(0, total - 1)` to prevent consuming the last item.
+  * In `Player.GetFirstRequiredItem`, verifies backpack has `> 1` items before nominating backpack resources.
+* **Full Inventory Crafting Output Redirection (`Patches/Inventory.cs`)**:
+  * Implemented `AddItemCraftPatch` on `Inventory.AddItem(string, int, ...)` with `Priority(First)` active strictly during `CraftingContext`.
+  * When crafting an unstackable or space-constrained item while player inventory is full, redirects creation to `CraftFromBackpack.CanCraftOutputToBackpack` before vanilla drops it to the ground.
+* **Building HUD & Requirement Interoperability (`Patches/Hud.cs`, `Patches/InventoryGui.cs`, `Patches/Player.cs`)**:
+  * Added `HudSetupPieceInfoPatch` wrapping `Hud.SetupPieceInfo` in `CraftingContext` with `[HarmonyPrepare]` dedicated server exclusion, ensuring hammer build piece requirements reflect available backpack resources.
+  * Added `InventoryGuiSetupRequirementPatch` with `int.TryParse` fallback guard: formats requirement text as `totalAvailable/requiredAmount` when unformatted, and safely steps back when third-party container mods (e.g. `AzuCraftyBoxes`, `ValheimPlus`) format the string first.
+  * Wrapped `InventoryGui.UpdateRecipeList`, `InventoryGui.UpdateRecipe`, `InventoryGui.OnCraftPressed`, `InventoryGui.DoCrafting`, `Player.HaveRequirements`, `Player.HaveRequirementItems`, and `Player.UpdatePlacement` in `CraftingContext`.
+* **Personal Automation Settings Migration (`Features/CraftFromBackpack.cs`, `Features/StoreToBackpack.cs`)**:
+  * Converted all 6 backpack automation configurations (`Enable Craft From Backpack`, `Enable Craft Output To Backpack`, `Material Consumption Priority`, `Leave One Item In Backpack`, `Enable Auto Store to Backpack`, and `Enable Inventory Overflow To Backpack`) from synced `Server Config` to unsynced `Automation (Local Only)`.
+  * Preserved full player autonomy for automation preferences while eliminating unnecessary network sync overhead.
+  * Replaced lazy `var` keywords with explicit types across `StoreToBackpack.cs`.
+* **API Additions (`API/ABAPI.cs`, `Docs/AdventureBackpacksAPI.md`)**:
+  * Added public API methods: `IsCraftFromBackpackEnabled()`, `IsCraftingContextActive()`, `GetConsumptionPriority()`, `IsLeaveOneItemInBackpackEnabled()`, `SuppressNativeCrafting(string)`, and `UnsuppressNativeCrafting(string)`.
+  * Updated companion API assembly versioning in `AssemblyInfo.cs` to 2.2.0.0.
+
 # 2.1.13 - Stone Portal & Door Key Compatibility
 * **Stone Portal Teleportation (`Patches/Inventory.cs`)**:
   * Updated `IsTeleportablePatch.Postfix` on `Inventory.IsTeleportable` to capture the `bool allowAllItems` parameter from the target method and forward it to `bpInventory.IsTeleportable(allowAllItems)` for both equipped and inventory backpacks.

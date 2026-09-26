@@ -39,7 +39,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.1.13";
+        private const string _version = "2.2.0";
 
         //Interface Properties
         public string PluginId => _pluginId;
