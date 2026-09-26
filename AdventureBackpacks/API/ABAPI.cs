@@ -261,6 +261,15 @@ return null;
 #endif
     }
 
+    public static bool IsLeaveOneItemInBackpackEnabled()
+    {
+#if ! API
+        return CraftFromBackpack.LeaveOneItemInBackpack?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
     public static void SuppressNativeCrafting(string modIdentifier)
     {
 #if ! API

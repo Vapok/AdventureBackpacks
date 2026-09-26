@@ -450,7 +450,12 @@ public static class InventoryPatches
 
             if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory bpInventory))
             {
-                __result += (quality > 0 ? bpInventory.CountItems(name, quality) : bpInventory.CountItems(name));
+                int bpCount = quality > 0 ? bpInventory.CountItems(name, quality) : bpInventory.CountItems(name);
+                if (CraftFromBackpack.LeaveOneItemInBackpack != null && CraftFromBackpack.LeaveOneItemInBackpack.Value && bpCount > 0)
+                {
+                    bpCount = Mathf.Max(0, bpCount - 1);
+                }
+                __result += bpCount;
             }
         }
     }
@@ -469,7 +474,15 @@ public static class InventoryPatches
 
             if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory bpInventory))
             {
-                if (bpInventory.HaveItem(name))
+                int bpCount = bpInventory.CountItems(name);
+                if (CraftFromBackpack.LeaveOneItemInBackpack != null && CraftFromBackpack.LeaveOneItemInBackpack.Value)
+                {
+                    if (bpCount > 1)
+                    {
+                        __result = true;
+                    }
+                }
+                else if (bpCount > 0)
                 {
                     __result = true;
                 }

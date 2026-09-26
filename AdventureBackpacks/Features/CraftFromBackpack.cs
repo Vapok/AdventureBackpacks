@@ -22,6 +22,7 @@ public static class CraftFromBackpack
     public static ConfigEntry<bool> EnableCraftFromBackpack;
     public static ConfigEntry<bool> EnableCraftOutputToBackpack;
     public static ConfigEntry<ConsumptionPriority> MaterialConsumptionPriority;
+    public static ConfigEntry<bool> LeaveOneItemInBackpack;
 
     static CraftFromBackpack()
     {
@@ -44,6 +45,11 @@ public static class CraftFromBackpack
             new ConfigDescription("Determines whether materials are drawn from the player inventory or the equipped backpack first during crafting and building.",
                 null,
                 new ConfigurationManagerAttributes { Order = 3 }), ref MaterialConsumptionPriority);
+
+        ConfigSyncBase.SyncedConfig("Server Config", "Leave One Item In Backpack", true,
+            new ConfigDescription("When enabled, at least one item of each resource type will remain in the backpack and will not be consumed or counted during crafting and building.",
+                null,
+                new ConfigurationManagerAttributes { Order = 2 }), ref LeaveOneItemInBackpack);
     }
 
     public static bool CanCraftFromBackpack(Player player, out Inventory backpackInventory)
@@ -112,9 +118,16 @@ public static class CraftFromBackpack
         if (string.IsNullOrEmpty(itemName))
             return 0;
 
-        return quality > 0 
+        int count = quality > 0 
             ? backpackInventory.CountItems(itemName, quality) 
             : backpackInventory.CountItems(itemName);
+
+        if (LeaveOneItemInBackpack != null && LeaveOneItemInBackpack.Value && count > 0)
+        {
+            count = Mathf.Max(0, count - 1);
+        }
+
+        return count;
     }
 
     private static void ConsumeFromPlayer(Player player, string itemName, ref int remaining, int itemQuality)
@@ -166,18 +179,29 @@ public static class CraftFromBackpack
             string.Equals(x.m_shared.m_name, itemName) &&
             (itemQuality < 0 || x.m_quality == itemQuality)).ToList();
 
+        int maxConsumable = matchingBpItems.Sum(x => x.m_stack);
+        if (LeaveOneItemInBackpack != null && LeaveOneItemInBackpack.Value && maxConsumable > 0)
+        {
+            maxConsumable = Mathf.Max(0, maxConsumable - 1);
+        }
+
+        int toConsumeTotal = Mathf.Min(remaining, maxConsumable);
+        int stillToConsume = toConsumeTotal;
+
         foreach (ItemDrop.ItemData item in matchingBpItems)
         {
-            if (remaining <= 0)
+            if (stillToConsume <= 0)
                 break;
 
             if (item == null || item.m_stack <= 0)
                 continue;
 
-            int toRemove = Mathf.Min(item.m_stack, remaining);
+            int toRemove = Mathf.Min(item.m_stack, stillToConsume);
             backpackInventory.RemoveItem(item, toRemove);
-            remaining -= toRemove;
+            stillToConsume -= toRemove;
         }
+
+        remaining -= (toConsumeTotal - stillToConsume);
     }
 
     public static int ConsumeCraftingItem(Player player, string itemName, int amount, int itemQuality = -1)

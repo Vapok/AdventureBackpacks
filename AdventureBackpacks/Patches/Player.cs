@@ -229,7 +229,13 @@ public class PlayerPatches
                 string reqName = requirement.m_resItem.m_itemData.m_shared.m_name;
                 for (int q = 1; q <= requirement.m_resItem.m_itemData.m_shared.m_maxQuality; q++)
                 {
-                    int count = inventory.CountItems(reqName, q) + bpInventory.CountItems(reqName, q);
+                    int bpCount = bpInventory.CountItems(reqName, q);
+                    if (CraftFromBackpack.LeaveOneItemInBackpack != null && CraftFromBackpack.LeaveOneItemInBackpack.Value && bpCount > 0)
+                    {
+                        bpCount = Math.Max(0, bpCount - 1);
+                    }
+
+                    int count = inventory.CountItems(reqName, q) + bpCount;
                     if (count >= neededAmount)
                     {
                         List<ItemDrop.ItemData> allBpItems = bpInventory.GetAllItems();
