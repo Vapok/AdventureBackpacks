@@ -186,6 +186,7 @@
         <Compile Include="Patches\EnvMan.cs" />
         <Compile Include="Patches\FejdStartup.cs" />
         <Compile Include="Patches\GuiBar.cs" />
+        <Compile Include="Patches\Hud.cs" />
         <Compile Include="Patches\Humanoid.cs" />
         <Compile Include="Patches\Inventory.cs" />
         <Compile Include="Patches\InventoryGui.cs" />
