@@ -408,10 +408,21 @@ public static class InventoryPatches
             if (!CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
                 return true;
 
-            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory _))
+            if (amount <= 0 || string.IsNullOrEmpty(name))
+                return true;
+
+            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory backpackInventory))
             {
-                CraftFromBackpack.ConsumeCraftingItem(Player.m_localPlayer, name, amount, itemQuality);
-                return false;
+                CraftFromBackpack.ProtectEquippedItems(__instance, name);
+
+                int remainingForPlayer = CraftFromBackpack.DeductBackpackCraftingItem(Player.m_localPlayer, backpackInventory, name, amount, itemQuality);
+                if (remainingForPlayer <= 0)
+                {
+                    return false;
+                }
+
+                amount = remainingForPlayer;
+                return true;
             }
 
             return true;

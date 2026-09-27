@@ -270,6 +270,19 @@ return null;
 #endif
     }
 
+    /// <summary>
+    /// Indicates whether requirement counts in the crafting panel display as 'Available/Required'.
+    /// </summary>
+    /// <returns>True if enabled, false otherwise.</returns>
+    public static bool IsDisplayTotalIngredientCountEnabled()
+    {
+#if ! API
+        return CraftFromBackpack.DisplayTotalIngredientCount?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
     public static void SuppressNativeCrafting(string modIdentifier)
     {
 #if ! API

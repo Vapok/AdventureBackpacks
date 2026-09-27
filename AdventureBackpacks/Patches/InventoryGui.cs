@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text.RegularExpressions;
 using System.Threading;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
@@ -560,6 +561,9 @@ internal static class InventoryGuiPatches
             if (!__result || elementRoot == null || req == null || req.m_resItem == null || req.m_resItem.m_itemData == null || player == null || player != Player.m_localPlayer)
                 return;
 
+            if (CraftFromBackpack.DisplayTotalIngredientCount != null && !CraftFromBackpack.DisplayTotalIngredientCount.Value)
+                return;
+
             if (!CraftFromBackpack.CanCraftFromBackpack(player, out _))
                 return;
 
@@ -571,13 +575,32 @@ internal static class InventoryGuiPatches
             if (textComponent == null || string.IsNullOrEmpty(textComponent.text))
                 return;
 
-            if (!int.TryParse(textComponent.text.Trim(), out int requiredAmount))
+            string currentText = textComponent.text.Trim();
+
+            string pattern = CraftFromBackpack.IngredientCountMatchPattern?.Value;
+            if (!string.IsNullOrEmpty(pattern))
+            {
+                try
+                {
+                    if (Regex.IsMatch(currentText, pattern))
+                        return;
+                }
+                catch (ArgumentException)
+                {
+                }
+            }
+
+            if (!int.TryParse(currentText, out int requiredAmount))
                 return;
 
             string itemName = req.m_resItem.m_itemData.m_shared.m_name;
             int totalAvailable = player.GetInventory().CountItems(itemName);
 
             textComponent.text = $"{totalAvailable}/{requiredAmount}";
+
+            if (textComponent.color == Color.white)
+                return;
+
             if (totalAvailable >= requiredAmount)
             {
                 textComponent.color = Color.white;

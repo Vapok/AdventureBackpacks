@@ -1,3 +1,15 @@
+# 2.2.1 - Crafting Interoperability & Enchantment Transfer Fix
+* **Crafting Resource Consumption Coordination (`Patches/Inventory.cs`, `Features/CraftFromBackpack.cs`)**:
+  * Refactored `RemoveItemByNamePatch` on `Inventory.RemoveItem(string, int, int, bool)` to run at `[HarmonyPriority(600)]` while returning `true` with the adjusted remaining player shortage when player inventory contributes to the craft.
+  * Added `ProtectEquippedItems`: ensures unequipped items precede equipped items in `playerInventory.m_inventory` without altering grid coordinates (`m_gridPos`), guaranteeing that both downstream observer mods (such as EpicLoot's prefix at Priority 400) and vanilla Valheim consume unequipped materials instead of worn gear.
+  * Added `DeductBackpackCraftingItem`: calculates and deducts only the exact shortage needed from the equipped backpack via `backpackInventory.RemoveItem(itemName, toConsumeFromBp, itemQuality)`, triggering external mod hooks on backpack items while delegating player inventory deduction entirely to native vanilla and container-pulling mods.
+  * Completely eliminates double-consumption desyncs with `ValheimPlus` and `AzuCraftyBoxes` while ensuring enchantment and socket data cleanly transfer from sacrificed capes to crafted backpacks.
+* **Crafting Requirement Display Interoperability (`Patches/InventoryGui.cs`, `Features/CraftFromBackpack.cs`)**:
+  * Added `Display Total Ingredient Count` setting (`bool`, default: `true` under `Automation (Local Only)`) to allow toggling the `Available/Required` requirement count display.
+  * Added `Ingredient Count Match Pattern` setting (`string`, default: `\d+[/(]\d+` under `Automation (Local Only)`) regex pattern detecting if a third-party mod has already embellished the requirement amount text (e.g. `123/10` or `10(123)`), cleanly yielding label formatting to other mods.
+  * Added color non-interference guard: if a third-party mod (such as `NearbyCrafting` / `NearbyContainers`) has already marked a requirement valid (`Color.white`), AdventureBackpacks preserves the white indicator and will not revert it to flashing red.
+  * Added companion API accessor `ABAPI.IsDisplayTotalIngredientCountEnabled()`.
+
 # 2.2.0 - Crafting & Container Automation Overhaul
 * **Crafting & Building Architecture Refactor (`Features/CraftingContext.cs`, `Features/CraftFromBackpack.cs`)**:
   * Implemented `CraftingContext`: a thread-safe, reentrant scope using `Interlocked` active depth tracking and an `IDisposable` struct scope (`CraftingContext.Scope`).
