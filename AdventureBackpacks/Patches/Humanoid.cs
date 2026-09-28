@@ -219,30 +219,6 @@ public class HumanoidPatches
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
-        [HarmonyPriority(850)]
-        static void Prefix(Humanoid __instance, ItemDrop.ItemData __0)
-        {
-            try
-            {
-                if (__0 == null || !__0.IsBackpack())
-                    return;
-
-                if (__instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
-                    return;
-
-                if (Chainloader.PluginInfos.ContainsKey("Azumatt.AzuExtendedPlayerInventory"))
-                {
-                    if (__0.m_equipped)
-                    {
-                        __0.m_equipped = false;
-                    }
-                }
-            }
-            catch (System.Exception ex)
-            {
-                AdventureBackpacks.Log?.Warning($"Error during Humanoid.EquipItem Prefix: {ex.Message}");
-            }
-        }
 
         static void Postfix(Humanoid __instance, ItemDrop.ItemData __0, bool __result)
         {
