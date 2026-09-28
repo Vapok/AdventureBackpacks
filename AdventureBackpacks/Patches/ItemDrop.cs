@@ -29,7 +29,10 @@ public class ItemDropPatches
                     AdventureBackpacks.Log.Debug($"[GetWeight() - Item Name: {item.m_shared.m_name}");
                     AdventureBackpacks.Log.Debug($"[GetWeight() - Backpack Item: {backpackItem.Item.m_shared.m_name}");
                     AdventureBackpacks.Log.Debug($"[GetWeight() - Backpack: {backpack.ItemName}");
-                    Backpacks.ValidateBackpackInventorySizing(Player.m_localPlayer, backpackItem.Item);
+                    if (Player.m_localPlayer != null)
+                    {
+                        Backpacks.ValidateBackpackInventorySizing(Player.m_localPlayer, backpackItem.Item);
+                    }
                 }
                 
                 var inventoryWeight = backpackItem.GetInventory()?.GetTotalWeight() ?? 0;

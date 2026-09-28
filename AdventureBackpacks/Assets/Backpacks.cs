@@ -273,7 +273,7 @@ namespace AdventureBackpacks.Assets
         }
         public static bool PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false, int numberItems = 0)
         {
-            if (!itemData.IsBackpack())
+            if (mLocalPlayer == null || itemData == null || !itemData.IsBackpack())
                 return true;
 
             var backpack = itemData.Data().Get<BackpackComponent>();

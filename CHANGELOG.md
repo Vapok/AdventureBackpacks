@@ -1,5 +1,11 @@
-# 2.2.1 - Crafting Interoperability & Enchantment Transfer Fix
+# 2.2.2 - Dedicated Server Hardening & Stability
+* **Dedicated Server Safety**: Hardened yard sale routines and backpack weight calculations when running on dedicated servers without local players.
+* **Dependency Updates**: Updated internal dependencies for stability.
 
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.1 - Crafting Interoperability & Enchantment Transfer Fix
 * **Crafting & Enchantment Transfer Compatibility**:
   * Fixed an issue where crafting a backpack from an enchanted cape while having a backpack equipped could prevent third-party mod enchantments and socketed gems from transferring over to the newly crafted backpack.
   * Improved how crafting materials are consumed so third-party mods that track, monitor, or enhance crafting can cleanly observe items being used from both your inventory and your equipped backpack.
@@ -7,9 +13,6 @@
   * Added a setting to toggle the total ingredient count display (`Available/Required`) in the crafting panel.
   * Added a configurable pattern to detect when another mod has already formatted requirement amounts, preventing conflicts with other crafting and container mods.
   * Improved color compatibility with mods like Nearby Crafting so requirement indicators remain clear when items are stored in nearby chests.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.2.0 - Crafting & Container Automation Overhaul
 * **Crafting & Building Overhaul**:

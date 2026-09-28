@@ -1,3 +1,8 @@
+# 2.2.2 - Dedicated Server Hardening & Stability
+* **Dedicated Server Null Guards (`Assets/Backpacks.cs`, `Patches/ItemDrop.cs`)**:
+  * In `Backpacks.PerformYardSale`, added explicit null check for `mLocalPlayer == null` before querying active equipment or inventory, preventing `NullReferenceException` on headless dedicated servers during server item drops (resolves Sentry issue [ADVENTUREBACKPACKS-1Z](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1Z)).
+  * In `ItemDrop.cs` (`OverrideBackpackWeight`), verified `Player.m_localPlayer != null` before evaluating local player weight modifications on server-spawned items.
+
 # 2.2.1 - Crafting Interoperability & Enchantment Transfer Fix
 * **Crafting Resource Consumption Coordination (`Patches/Inventory.cs`, `Features/CraftFromBackpack.cs`)**:
   * Refactored `RemoveItemByNamePatch` on `Inventory.RemoveItem(string, int, int, bool)` to run at `[HarmonyPriority(600)]` while returning `true` with the adjusted remaining player shortage when player inventory contributes to the craft.
