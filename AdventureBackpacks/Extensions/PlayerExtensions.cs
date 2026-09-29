@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Patches;
 using Jotunn.Managers;
@@ -13,24 +14,41 @@ public static class PlayerExtensions
         if (player == null || player.GetInventory() == null)
             return false;
             
-        if (player.m_shoulderItem == null)
-            return false;
+        if (player.m_shoulderItem != null && player.m_shoulderItem.IsBackpack())
+            return true;
 
-        return player.m_shoulderItem.IsBackpack();
+        List<ItemDrop.ItemData> equippedItems = player.GetInventory().GetEquippedItems();
+        if (equippedItems != null)
+        {
+            foreach (ItemDrop.ItemData item in equippedItems)
+            {
+                if (item != null && item.IsBackpack())
+                    return true;
+            }
+        }
+
+        return false;
     }
 
-    public static bool IsThisBackpackEquipped(this Player player, ItemDrop.ItemData itemData )
+    public static bool IsThisBackpackEquipped(this Player player, ItemDrop.ItemData itemData)
     {
-        if (player == null || player.GetInventory() == null)
+        if (player == null || player.GetInventory() == null || itemData == null)
             return false;
             
-        if (player.m_shoulderItem == null)
-            return false;
+        if (player.m_shoulderItem != null && player.m_shoulderItem.IsBackpack() && player.m_shoulderItem.Equals(itemData))
+            return true;
 
-        if (!player.m_shoulderItem.IsBackpack())
-            return false;
+        List<ItemDrop.ItemData> equippedItems = player.GetInventory().GetEquippedItems();
+        if (equippedItems != null)
+        {
+            foreach (ItemDrop.ItemData item in equippedItems)
+            {
+                if (item != null && item.IsBackpack() && item.Equals(itemData))
+                    return true;
+            }
+        }
         
-        return player.m_shoulderItem.Equals(itemData);
+        return false;
     }
 
     public static BackpackComponent GetEquippedBackpack(this Player player)
@@ -38,14 +56,23 @@ public static class PlayerExtensions
         if (player == null || player.GetInventory() == null)
             return null;
             
-        if (player.m_shoulderItem == null)
-            return null;
-
-        if (player.m_shoulderItem.IsBackpack())
+        if (player.m_shoulderItem != null && player.m_shoulderItem.IsBackpack())
         {
             return player.m_shoulderItem.Data().GetOrCreate<BackpackComponent>();
         }
-        // Return null if no backpacks are found.
+
+        List<ItemDrop.ItemData> equippedItems = player.GetInventory().GetEquippedItems();
+        if (equippedItems != null)
+        {
+            foreach (ItemDrop.ItemData item in equippedItems)
+            {
+                if (item != null && item.IsBackpack())
+                {
+                    return item.Data().GetOrCreate<BackpackComponent>();
+                }
+            }
+        }
+
         return null;
     }
 

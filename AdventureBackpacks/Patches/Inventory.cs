@@ -645,26 +645,54 @@ public static class InventoryPatches
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
+        private static bool IsBackpackTeleportable(BackpackComponent backpack, bool allowAllItems)
+        {
+            if (backpack == null)
+                return true;
+
+            if (allowAllItems || (ZoneSystem.instance != null && ZoneSystem.instance.GetGlobalKey(GlobalKeys.TeleportAll)))
+                return true;
+
+            Inventory bpInventory = backpack.GetInventory();
+            if (bpInventory == null)
+                return true;
+
+            List<ItemDrop.ItemData> subItems = bpInventory.GetAllItems();
+            if (subItems != null)
+            {
+                foreach (ItemDrop.ItemData subItem in subItems)
+                {
+                    if (subItem == null)
+                        continue;
+
+                    if (!subItem.m_shared.m_teleportable || subItem.m_shared.m_toolTier >= 1000)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return bpInventory.IsTeleportable(allowAllItems);
+        }
+
         static void Postfix(Inventory __instance, bool allowAllItems, ref bool __result)
         {
-            if (__instance == null || Player.m_localPlayer == null)
+            if (!__result || __instance == null || Player.m_localPlayer == null)
                 return;
 
-            List<ItemDrop.ItemData> items = __instance.GetAllItems();
-            
             if (__instance == Player.m_localPlayer.GetInventory())
             {
                 if (Player.m_localPlayer.IsBackpackEquipped())
                 {
                     BackpackComponent backpack = Player.m_localPlayer.GetEquippedBackpack();
-                    Inventory bpInventory = backpack?.GetInventory();
-                    if (bpInventory != null && !bpInventory.IsTeleportable(allowAllItems))
+                    if (backpack != null && !IsBackpackTeleportable(backpack, allowAllItems))
                     {
                         __result = false;
                         return;
                     }
                 }
                 
+                List<ItemDrop.ItemData> items = __instance.GetAllItems();
                 if (items != null)
                 {
                     foreach (ItemDrop.ItemData item in items)
@@ -674,8 +702,8 @@ public static class InventoryPatches
                     
                         if (item.IsBackpack())
                         {
-                            Inventory bpInventory = item.Data()?.GetOrCreate<BackpackComponent>()?.GetInventory();
-                            if (bpInventory != null && !bpInventory.IsTeleportable(allowAllItems))
+                            BackpackComponent bpComponent = item.Data()?.GetOrCreate<BackpackComponent>();
+                            if (bpComponent != null && !IsBackpackTeleportable(bpComponent, allowAllItems))
                             {
                                 __result = false;
                                 return;

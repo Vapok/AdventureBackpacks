@@ -56,12 +56,28 @@ namespace AdventureBackpacks.Components
         
         public Inventory GetInventory()
         {
+            if (_backpackInventory == null)
+            {
+                if (!string.IsNullOrEmpty(Value))
+                {
+                    Deserialize(Value);
+                }
+                else if (Item?.m_customData != null && Item.m_customData.TryGetValue(OldPluginCustomData, out string oldBackpack) && !string.IsNullOrEmpty(oldBackpack))
+                {
+                    Value = oldBackpack;
+                    Deserialize(Value);
+                }
+                else if (Item?.m_shared?.m_name != null && Backpacks.BackpackTypes != null && Backpacks.BackpackTypes.Contains(Item.m_shared.m_name))
+                {
+                    _backpackInventory = Backpacks.NewInventoryInstance(Item.m_shared.m_name, Item.m_quality);
+                }
+            }
             return _backpackInventory;
         }
 
         public void UpdateContainerSizing(ref Container backpackContainer)
         {
-            var inventory = GetInventory();
+            Inventory inventory = GetInventory();
             if (backpackContainer == null || inventory == null)
                 return;
             
