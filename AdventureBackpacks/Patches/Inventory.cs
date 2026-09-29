@@ -640,12 +640,12 @@ public static class InventoryPatches
     }
 
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.IsTeleportable))]
-    static class IsTeleportablePatch
+    internal static class IsTeleportablePatch
     {
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
-        private static bool IsBackpackTeleportable(BackpackComponent backpack, bool allowAllItems)
+        internal static bool IsBackpackTeleportable(BackpackComponent backpack, bool allowAllItems)
         {
             if (backpack == null)
                 return true;
