@@ -217,6 +217,15 @@ public static class InventoryPatches
         if (AdventureBackpacks.PerformYardSale || AdventureBackpacks.QuickDropping || AdventureBackpacks.BypassMoveProtection)
             return true;
 
+        if (Player.m_localPlayer.IsDead())
+            return true;
+
+        if (__instance != Player.m_localPlayer.GetInventory())
+            return true;
+
+        if (InventoryGui.instance != null && InventoryGui.instance.m_currentContainer != null && !InventoryGui.instance.m_currentContainer.IsBackpackProxy() && __instance == InventoryGui.instance.m_currentContainer.GetInventory())
+            return true;
+
         if (!item.TryGetBackpackItem(out _))
             return true;
 
@@ -543,6 +552,7 @@ public static class InventoryPatches
     {
         static void Prefix(Inventory fromInventory, Inventory __instance)
         {
+            AdventureBackpacks.PushBypassMoveProtection();
             if (fromInventory == null)
                 return;
 
@@ -552,9 +562,10 @@ public static class InventoryPatches
             }
         }
         
-        static void Postfix()
+        static void Finalizer()
         {
             _movingItemBetweenContainers = false;
+            AdventureBackpacks.PopBypassMoveProtection();
         }
     }
     

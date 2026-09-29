@@ -1,3 +1,13 @@
+# 2.2.3 - Death & Container Move Hardening
+* **Tombstone Recovery & Death Yard Sale Protection (`AdventureBackpacks.cs`, `Patches/Player.cs`, `Patches/Container.cs`, `Patches/Inventory.cs`, `Patches/InventoryGui.cs`, `Assets/Backpacks.cs`)**:
+  * In `AdventureBackpacks.cs`, converted `BypassMoveProtection` into a reentrant property backed by an atomic depth counter (`PushBypassMoveProtection()` and `PopBypassMoveProtection()`), guaranteeing nested transfer operations cannot prematurely disable protection.
+  * In `Player.cs` (`PlayerOnDeathPatch`), wrapped `Player.OnDeath` in `[HarmonyPrefix]` and `[HarmonyFinalizer]` with `PushBypassMoveProtection` and `PopBypassMoveProtection`, preventing slot unequip operations from triggering yard sales and duplicating items during character death.
+  * In `Container.cs`, updated `ContainerTakeAllPatch` with `PushBypassMoveProtection` and `[HarmonyFinalizer]`, and added `ContainerRpcTakeAllResponsePatch` hooking `Container.RPC_TakeAllResponse` to maintain move protection across asynchronous network Take All responses on dedicated servers.
+  * In `InventoryGui.cs`, added `InventoryGuiOnTakeAllPatch` on `InventoryGui.OnTakeAll` to protect GUI Take All container transfers.
+  * In `Inventory.cs` (`MoveAllPatch`), added move protection push and finalizer pop around `Inventory.MoveAll`.
+  * In `Inventory.cs` (`RemoveItemPrefix`), added invariant checks ensuring yard sales are never triggered when `Player.m_localPlayer.IsDead()`, when the item is being removed from an inventory other than the local player's inventory (`__instance != Player.m_localPlayer.GetInventory()`), or when an open non-proxy container is active in `InventoryGui`.
+  * In `Backpacks.PerformYardSale`, added early return guards if `BypassMoveProtection` is active, if the player is dead, if the item is not currently in the player's inventory, or if the active container in `InventoryGui` is a `TombStone`.
+
 # 2.2.2 - Dedicated Server Hardening & Stability
 * **Portal Teleportation & Inventory Hardening (`Components/BackpackComponent.cs`, `Patches/Inventory.cs`, `Patches/Humanoid.cs`, `Extensions/PlayerExtensions.cs`, `Extensions/ItemDataExtensions.cs`)**:
   * In `BackpackComponent.GetInventory()`, added self-healing deserialization when `_backpackInventory` is null: automatically deserializes stored `Value` (or legacy `OldPluginCustomData`) on demand, preventing uninstantiated backpack inventories from returning null.

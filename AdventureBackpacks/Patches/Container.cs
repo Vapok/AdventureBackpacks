@@ -21,7 +21,7 @@ public static class ContainerPatches
     {
         static bool Prefix(Container __instance, Humanoid character, ref bool __result)
         {
-            AdventureBackpacks.BypassMoveProtection = true;
+            AdventureBackpacks.PushBypassMoveProtection();
             if (__instance.IsBackpackProxy())
             {
                 Player player = character as Player;
@@ -39,9 +39,29 @@ public static class ContainerPatches
             return true;
         }
 
-        static void Postfix(Container __instance)
+        static void Finalizer()
         {
-            AdventureBackpacks.BypassMoveProtection = false;
+            AdventureBackpacks.PopBypassMoveProtection();
+        }
+    }
+
+    [HarmonyPatch(typeof(Container), "RPC_TakeAllResponse")]
+    static class ContainerRpcTakeAllResponsePatch
+    {
+        static void Prefix(bool granted)
+        {
+            if (granted)
+            {
+                AdventureBackpacks.PushBypassMoveProtection();
+            }
+        }
+
+        static void Finalizer(bool granted)
+        {
+            if (granted)
+            {
+                AdventureBackpacks.PopBypassMoveProtection();
+            }
         }
     }
 

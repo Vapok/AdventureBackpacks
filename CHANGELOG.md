@@ -1,11 +1,16 @@
-# 2.2.2 - Dedicated Server Hardening & Stability
+# 2.2.3 - Death & Tombstone Recovery Fix
+* **Tombstone & Death Item Protection**: Fixed an issue where dying with a backpack or retrieving items from a gravestone/tombstone could trigger an unwanted yard sale and drop backpack contents on the ground in rare situations.
+* **Container Transfer Stability**: Hardened container "Take All" operations across multiplayer dedicated servers to ensure backpack contents are safely preserved during fast inventory transfers.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.2 - Dedicated Server Hardening & Stability
 * **Portal Restriction Fix**: Fixed a multi-mod interoperability issue where ores and non-teleportable metals stored inside backpacks could bypass portal restrictions when using custom equipment slot mods or carried in inventory under rare circumstances.
 * **Dedicated Server Safety**: Hardened yard sale routines and backpack weight calculations when running on dedicated servers without local players.
 * **Cheb's Necromancy Compatibility**: Restored compatibility with Cheb's Necromancy, fixing an issue where the Spectral Shroud backpack failed to load and preventing asset bundle conflicts during startup.
 * **Dependency Updates**: Updated internal dependencies for stability.
 
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.2.1 - Crafting Interoperability & Enchantment Transfer Fix
 * **Crafting & Enchantment Transfer Compatibility**:

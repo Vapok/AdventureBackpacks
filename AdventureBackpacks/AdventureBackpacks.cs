@@ -39,7 +39,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.2.2";
+        private const string _version = "2.2.3";
 
         //Interface Properties
         public string PluginId => _pluginId;
@@ -52,7 +52,26 @@ namespace AdventureBackpacks
         public static bool ValheimAwake;
         public static bool PerformYardSale = false;
         public static bool QuickDropping = false;
-        public static bool BypassMoveProtection = false;
+        private static bool _bypassMoveProtection = false;
+        private static int _bypassMoveProtectionDepth = 0;
+        public static bool BypassMoveProtection
+        {
+            get => _bypassMoveProtection || _bypassMoveProtectionDepth > 0;
+            set => _bypassMoveProtection = value;
+        }
+
+        public static void PushBypassMoveProtection()
+        {
+            System.Threading.Interlocked.Increment(ref _bypassMoveProtectionDepth);
+        }
+
+        public static void PopBypassMoveProtection()
+        {
+            if (_bypassMoveProtectionDepth > 0)
+            {
+                System.Threading.Interlocked.Decrement(ref _bypassMoveProtectionDepth);
+            }
+        }
         public static Waiting Waiter;
         public static ConfigSyncBase ActiveConfig => _config;
 
@@ -99,8 +118,6 @@ namespace AdventureBackpacks
             {
                 Tagline = "A feature-rich backpack progression system with custom models, effects, and inventory mechanics.",
                 ShowOnStartup = ConfigRegistry.ShowSplashOnStartup,
-                EnableTelemetry = ConfigRegistry.EnableTelemetry,
-                SendErrorReports = ConfigRegistry.SendErrorReports,
             });
         }
 

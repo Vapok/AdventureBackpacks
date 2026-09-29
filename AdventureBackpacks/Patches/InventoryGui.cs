@@ -703,4 +703,23 @@ internal static class InventoryGuiPatches
             CraftingContext.Reset();
         }
     }
+
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.OnTakeAll))]
+    static class InventoryGuiOnTakeAllPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        static void Prefix()
+        {
+            AdventureBackpacks.PushBypassMoveProtection();
+        }
+
+        [HarmonyFinalizer]
+        static void Finalizer()
+        {
+            AdventureBackpacks.PopBypassMoveProtection();
+        }
+    }
 }

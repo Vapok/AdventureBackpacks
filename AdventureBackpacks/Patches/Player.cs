@@ -290,6 +290,24 @@ public class PlayerPatches
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
+        [HarmonyPrefix]
+        static void Prefix(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                AdventureBackpacks.PushBypassMoveProtection();
+            }
+        }
+
+        [HarmonyFinalizer]
+        static void Finalizer(Player __instance)
+        {
+            if (__instance != null && __instance == Player.m_localPlayer)
+            {
+                AdventureBackpacks.PopBypassMoveProtection();
+            }
+        }
+
         [HarmonyPostfix]
         static void Postfix(Player __instance)
         {

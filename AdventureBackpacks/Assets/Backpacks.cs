@@ -276,6 +276,15 @@ namespace AdventureBackpacks.Assets
             if (mLocalPlayer == null || itemData == null || !itemData.IsBackpack())
                 return true;
 
+            if (AdventureBackpacks.BypassMoveProtection || mLocalPlayer.IsDead())
+                return true;
+
+            if (mLocalPlayer.GetInventory() != null && !mLocalPlayer.GetInventory().ContainsItem(itemData))
+                return true;
+
+            if (InventoryGui.instance != null && InventoryGui.instance.m_currentContainer != null && InventoryGui.instance.m_currentContainer.GetComponent<TombStone>() != null)
+                return true;
+
             var backpack = itemData.Data().Get<BackpackComponent>();
             if (backpack == null)
                 return true;
