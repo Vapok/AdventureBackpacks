@@ -1,5 +1,6 @@
 # 2.2.2 - Dedicated Server Hardening & Stability
 * **Dedicated Server Safety**: Hardened yard sale routines and backpack weight calculations when running on dedicated servers without local players.
+* **Cheb's Necromancy Compatibility**: Restored compatibility with Cheb's Necromancy, fixing an issue where the Spectral Shroud backpack failed to load and preventing asset bundle conflicts during startup.
 * **Dependency Updates**: Updated internal dependencies for stability.
 
 <details>

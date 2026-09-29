@@ -1,4 +1,7 @@
 # 2.2.2 - Dedicated Server Hardening & Stability
+* **Cheb's Necromancy Asset & Compatibility Fix (`Features/Utilities.cs`, `Compats/ChebsNecromancy.cs`)**:
+  * In `Utilities.LoadAssetBundle`, switched from `AssetUtils.LoadAssetBundle` to `AssetUtils.LoadAssetBundleFromResources(assetBundleFileName, typeof(AdventureBackpacks).Assembly)`, resolving an issue where the embedded `chebsbackpack` asset bundle was looked up as a file on disk and returned null, preventing the Spectral Shroud backpack from registering.
+  * In `ChebsNecromancy.SetupNecromancyBackpackUsingApi`, wrapped status effect extraction in a `try...finally` block that calls `assetBundle.Unload(false)`, releasing the bundle metadata and file handle so Cheb's Necromancy can load its own `chebgonaz` AssetBundle without throwing "another AssetBundle with the same files is already loaded" during `OnVanillaPrefabsAvailable`.
 * **Dedicated Server Null Guards (`Assets/Backpacks.cs`, `Patches/ItemDrop.cs`)**:
   * In `Backpacks.PerformYardSale`, added explicit null check for `mLocalPlayer == null` before querying active equipment or inventory, preventing `NullReferenceException` on headless dedicated servers during server item drops (resolves Sentry issue [ADVENTUREBACKPACKS-1Z](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1Z)).
   * In `ItemDrop.cs` (`OverrideBackpackWeight`), verified `Player.m_localPlayer != null` before evaluating local player weight modifications on server-spawned items.

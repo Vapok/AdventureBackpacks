@@ -458,7 +458,6 @@ This constructor has no parameters.
 Use this constructor when adding a backpack using the GameObject
 The item should have ItemDrop.ItemData on the item, and it should be an item that is utilizing the Shoulder slot.
 Equipped Detection won't detect if not in the shoulder slot.
-TODO: Make this more flexible for additional slots through AzuEPI
 
 ##### Parameters
 
@@ -474,7 +473,6 @@ TODO: Make this more flexible for additional slots through AzuEPI
 Use this constructor when adding a backpack using the AssetBundle and Prefab Name
 The item should have ItemDrop.ItemData on the item, and it should be an item that is utilizing the Shoulder slot.
 Equipped Detection won't detect if not in the shoulder slot.
-TODO: Make this more flexible for additional slots through AzuEPI
 
 ##### Parameters
 

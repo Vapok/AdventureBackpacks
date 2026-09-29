@@ -7,6 +7,6 @@ public static class Utilities
 {
     public static AssetBundle LoadAssetBundle(string assetBundleFileName, string folderName)
     {
-        return AssetUtils.LoadAssetBundle($".{folderName}." + assetBundleFileName);
+        return AssetUtils.LoadAssetBundleFromResources(assetBundleFileName, typeof(AdventureBackpacks).Assembly);
     }
 }

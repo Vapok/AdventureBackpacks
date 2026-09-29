@@ -42,13 +42,20 @@ public static class ChebsNecromancy
             
             skillUid = (Skills.SkillType)num;
             
-            var seStat = assetBundle.LoadAsset<SE_Stats>(effectName);
-            if (seStat != null)
+            try
             {
-                seStat.m_skillLevel = skillUid;
-                seStat.m_skillLevelModifier = 10; //This is obviously a value that can change, but let's keep it to the value in the mod using the API.
+                var seStat = assetBundle.LoadAsset<SE_Stats>(effectName);
+                if (seStat != null)
+                {
+                    seStat.m_skillLevel = skillUid;
+                    seStat.m_skillLevelModifier = 10;
+                }
+                externalStatusEffect = seStat;
             }
-            externalStatusEffect = seStat;
+            finally
+            {
+                assetBundle.Unload(false);
+            }
             
             //Register Effect First
             var effectDefinition = new ABAPI.EffectDefinition(

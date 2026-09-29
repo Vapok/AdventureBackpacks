@@ -219,7 +219,6 @@ public partial class ABAPI
         /// Use this constructor when adding a backpack using the GameObject
         /// The item should have ItemDrop.ItemData on the item, and it should be an item that is utilizing the Shoulder slot.
         /// Equipped Detection won't detect if not in the shoulder slot.
-        /// TODO: Make this more flexible for additional slots through AzuEPI
         /// </summary>
         /// <param name="backPackGo">GameObject of </param>
         public BackpackDefinition(GameObject backPackGo)
@@ -231,7 +230,6 @@ public partial class ABAPI
         /// Use this constructor when adding a backpack using the AssetBundle and Prefab Name
         /// The item should have ItemDrop.ItemData on the item, and it should be an item that is utilizing the Shoulder slot.
         /// Equipped Detection won't detect if not in the shoulder slot.
-        /// TODO: Make this more flexible for additional slots through AzuEPI
         /// </summary>
         /// <param name="assetBundle">Provide the Asset Bundle that contains the backpack prefab</param>
         /// <param name="prefabName">Prefab name of the backpack</param>
