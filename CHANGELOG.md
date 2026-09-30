@@ -1,6 +1,6 @@
 # 2.2.5 - Portal Interoperability & Crafting Stability
 * **Portal Mod Interoperability**: Improved compatibility with portal mods (such as Proper Portals and World Advancement Progression).
-* **Crafting Deduction Safety**: Added protections during backpack material consumption to prevent rare errors when third-party mods modify item removal routines.
+* **Crafting Null Reference Fix**: Added protections during backpack material consumption to prevent rare errors when third-party mods modify item removal routines.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
