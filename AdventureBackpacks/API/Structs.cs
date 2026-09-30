@@ -192,10 +192,20 @@ public partial class ABAPI
         /// </summary>
         public int CarryBonus;
         /// <summary>
+        /// Provides the configured armor per quality level applied to the backpack.
+        /// For registering a new backpack, this is the default value.
+        /// </summary>
+        public int ArmorPerLevel = 1;
+        /// <summary>
         /// Provides the Speed Modification that is applied on the backpack.
         /// For registering a new backpack, this is the default value.
         /// </summary>
         public float SpeedMod;
+        /// <summary>
+        /// Provides whether the movement speed penalty scales down with backpack quality level.
+        /// For registering a new backpack, this is the default value.
+        /// </summary>
+        public bool ScaleSpeedModByQuality = true;
         /// <summary>
         /// Provides whether the wearer of the backpack will freeze or not.
         /// </summary>

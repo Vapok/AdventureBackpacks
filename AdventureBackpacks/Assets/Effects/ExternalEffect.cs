@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Extensions;
 
@@ -67,7 +67,7 @@ public class ExternalEffect : EffectsBase
     public override bool HasActiveStatusEffect(ItemDrop.ItemData item, out StatusEffect statusEffect)
     {
         statusEffect = null;
-        if (!EnabledEffect.Value)
+        if (EnabledEffect == null || !EnabledEffect.Value)
             return false;
         
         LoadExternalStatusEffect();
@@ -81,7 +81,7 @@ public class ExternalEffect : EffectsBase
         {
             var equippedBackpack = player.GetEquippedBackpack();
             
-            if (equippedBackpack == null || !EnabledEffect.Value)
+            if (equippedBackpack == null || EnabledEffect == null || !EnabledEffect.Value)
                 return false;
             
             var itemData = equippedBackpack.Item;

@@ -128,7 +128,7 @@ public abstract class EffectsBase
     
     public virtual bool IsEffectActive(ItemDrop.ItemData itemData)
     {
-        if (!EnabledEffect.Value)
+        if (EnabledEffect == null || !EnabledEffect.Value)
             return false;
 
         if (itemData != null && itemData.TryGetBackpackItem(out var backpack))

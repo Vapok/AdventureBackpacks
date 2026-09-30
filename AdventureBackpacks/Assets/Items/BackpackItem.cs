@@ -44,7 +44,9 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize = new();
     internal ConfigEntry<float> WeightMultiplier;
     internal ConfigEntry<int> CarryBonus;
+    internal ConfigEntry<int> ArmorPerLevel;
     internal ConfigEntry<float> SpeedMod;
+    internal ConfigEntry<bool> ScaleSpeedModByQuality;
     internal ConfigEntry<bool> EnableFreezing;
     internal ConfigEntry<bool> ShowBackpackStatusEffect;
     internal ConfigEntry<string> CustomStatusEffectName;
@@ -248,17 +250,57 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         }
     }
 
-    internal virtual void RegisterSpeedMod(float defaultValue = -0.15f)
+    internal virtual void RegisterArmorPerLevel(int defaultValue = 1)
+    {
+        ConfigSyncBase.SyncedConfig(_englishSection, "Armor Per Level", defaultValue,
+            new ConfigDescription("The armor value per quality level provided by the backpack.",
+                new AcceptableValueRange<int>(0, 50),
+                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 7 }), ref ArmorPerLevel);
+        
+        if (ArmorPerLevel != null)
+        {
+            ArmorPerLevel.SettingChanged += (_, _) => ResetPrefabArmor();
+            ArmorPerLevel.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+            ResetPrefabArmor();
+        }
+    }
+
+    internal virtual void RegisterSpeedMod(float defaultValue = -0.15f, bool defaultScale = true)
     {
         ConfigSyncBase.SyncedConfig(_englishSection, "Speed Modifier", defaultValue,
             new ConfigDescription("Wearing the backpack slows you down by this much.",
                 new AcceptableValueRange<float>(-1f, -0f),
-                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 7 }), ref SpeedMod);
+                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 8 }), ref SpeedMod);
         
         if (SpeedMod != null)
         {
             SpeedMod.SettingChanged += Backpacks.UpdateItemDataConfigValues;
         }
+
+        ConfigSyncBase.SyncedConfig(_englishSection, "Scale Speed Modifier By Level", defaultScale,
+            new ConfigDescription("When enabled, the speed modifier is reduced as the backpack is upgraded (divided by quality level). When disabled, the speed modifier remains constant across all quality levels.",
+                null,
+                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 9 }), ref ScaleSpeedModByQuality);
+        
+        if (ScaleSpeedModByQuality != null)
+        {
+            ScaleSpeedModByQuality.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
+    }
+
+    internal float GetSpeedModifier(int quality)
+    {
+        if (SpeedMod == null)
+        {
+            return 0f;
+        }
+
+        if (ScaleSpeedModByQuality == null || ScaleSpeedModByQuality.Value)
+        {
+            return quality > 0 ? SpeedMod.Value / quality : SpeedMod.Value;
+        }
+
+        return SpeedMod.Value;
     }
 
     internal virtual void RegisterEnableFreezing(bool defaultValue = true)
@@ -266,7 +308,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         ConfigSyncBase.SyncedConfig(_englishSection, "Prevent freezing/cold?", defaultValue,
             new ConfigDescription("Wearing the backpack protects you against freezing/cold, just like capes.",
                 null,
-                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 8 }),ref EnableFreezing);
+                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 10 }), ref EnableFreezing);
         
         if (EnableFreezing != null)
         {

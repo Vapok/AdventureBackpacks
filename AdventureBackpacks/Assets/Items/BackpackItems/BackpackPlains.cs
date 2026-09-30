@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
@@ -11,6 +11,8 @@ internal class BackpackPlains : BackpackItem
     public BackpackPlains(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
     {
         RegisterConfigSettings();
+        if (Item == null)
+            return;
         Item.Configurable = Configurability.Recipe | Configurability.Drop;
         AssignCraftingTable(CraftingTable.Forge,3);
         
@@ -41,6 +43,7 @@ internal class BackpackPlains : BackpackItem
         RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(25);
+        RegisterArmorPerLevel();
         RegisterSpeedMod();
         if ((BackpackBiome.Value & BackpackBiomes.Plains) != 0)
         {
@@ -52,7 +55,7 @@ internal class BackpackPlains : BackpackItem
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
-        itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
+        itemData.m_shared.m_movementModifier = GetSpeedModifier(quality);
         
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;
     }

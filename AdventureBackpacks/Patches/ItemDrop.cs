@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
+using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using Vapok.Common.Managers;
 
@@ -103,4 +105,56 @@ public class ItemDropPatches
         }
     }
 
+    [HarmonyPatch(typeof(ItemDrop.ItemData), nameof(ItemDrop.ItemData.GetTooltip), typeof(ItemDrop.ItemData), typeof(int), typeof(bool), typeof(float), typeof(int), typeof(bool))]
+    internal static class ItemDataGetTooltipPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPriority(Priority.Low)]
+        private static void Postfix(ItemDrop.ItemData item, int qualityLevel, float worldLevel, ref string __result)
+        {
+            if (item == null || string.IsNullOrEmpty(__result) || !item.IsBackpack())
+                return;
+
+            if (!__result.Contains("$item_armor"))
+            {
+                float armor = item.GetArmor(qualityLevel, worldLevel);
+                string armorString = $"\n$item_armor: <color=orange>{armor}</color>";
+
+                if (item.m_shared.m_damageModifiers != null && item.m_shared.m_damageModifiers.Count > 0)
+                {
+                    string damageModifiersTooltipString = SE_Stats.GetDamageModifiersTooltipString(item.m_shared.m_damageModifiers);
+                    if (!string.IsNullOrEmpty(damageModifiersTooltipString) && !__result.Contains(damageModifiersTooltipString))
+                    {
+                        armorString += damageModifiersTooltipString;
+                    }
+                }
+
+                int insertIndex = __result.IndexOf("$item_quality", StringComparison.Ordinal);
+                if (insertIndex >= 0)
+                {
+                    int endOfLine = __result.IndexOf('\n', insertIndex);
+                    if (endOfLine >= 0)
+                    {
+                        __result = __result.Insert(endOfLine, armorString);
+                        return;
+                    }
+                }
+
+                int weightIndex = __result.IndexOf("$item_weight", StringComparison.Ordinal);
+                if (weightIndex >= 0)
+                {
+                    int endOfLine = __result.IndexOf('\n', weightIndex);
+                    if (endOfLine >= 0)
+                    {
+                        __result = __result.Insert(endOfLine, armorString);
+                        return;
+                    }
+                }
+
+                __result += armorString;
+            }
+        }
+    }
 }

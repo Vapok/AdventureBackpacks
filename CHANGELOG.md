@@ -1,9 +1,16 @@
-# 2.2.3 - Death & Tombstone Recovery Fix
-* **Tombstone & Death Item Protection**: Fixed an issue where dying with a backpack or retrieving items from a gravestone/tombstone could trigger an unwanted yard sale and drop backpack contents on the ground in rare situations.
-* **Container Transfer Stability**: Hardened container "Take All" operations across multiplayer dedicated servers to ensure backpack contents are safely preserved during fast inventory transfers.
+# 2.2.4 - Backpack Armor & Speed Tuning
+* **Configurable Backpack Armor**: Added a setting to customize the armor value provided per backpack level (defaults to 1 armor per level), giving your backpacks protective defense as you upgrade them.
+* **Extended Inventory Armor Support**: Backpack armor now correctly applies to your character's total armor when equipped in custom or extra equipment slots alongside shoulder capes.
+* **Speed Penalty Scaling Option**: Added a setting to choose whether the movement speed penalty scales down as you upgrade your backpack or stays at a flat value across all tiers.
+* **Backpack Tooltip Info**: Tooltips now clearly show armor values and elemental resistances when equipped or inspected in custom equipment slots.
+* **Server Stability**: Hardened backpack initialization and status effect checks to prevent startup errors on dedicated servers.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.3 - Death & Tombstone Recovery Fix
+* **Tombstone & Death Item Protection**: Fixed an issue where dying with a backpack or retrieving items from a gravestone/tombstone could trigger an unwanted yard sale and drop backpack contents on the ground in rare situations.
+* **Container Transfer Stability**: Hardened container "Take All" operations across multiplayer dedicated servers to ensure backpack contents are safely preserved during fast inventory transfers.
 
 ### 2.2.2 - Dedicated Server Hardening & Stability
 * **Portal Restriction Fix**: Fixed a multi-mod interoperability issue where ores and non-teleportable metals stored inside backpacks could bypass portal restrictions when using custom equipment slot mods or carried in inventory under rare circumstances.

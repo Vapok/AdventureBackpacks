@@ -68,7 +68,9 @@ public partial class ABAPI
             BackpackSizeByQuality = GetBackpackSizing(backpack),
             WeightMultiplier = backpack.WeightMultiplier != null ? backpack.WeightMultiplier.Value : 0.5f,
             CarryBonus = backpack.CarryBonus != null ? backpack.CarryBonus.Value : 0,
+            ArmorPerLevel = backpack.ArmorPerLevel != null ? backpack.ArmorPerLevel.Value : 1,
             SpeedMod = backpack.SpeedMod != null ? backpack.SpeedMod.Value : 0f,
+            ScaleSpeedModByQuality = backpack.ScaleSpeedModByQuality == null || backpack.ScaleSpeedModByQuality.Value,
             EnableFreezing = backpack.EnableFreezing != null ? backpack.EnableFreezing.Value : false,
             BackpackBiome = backpack.BackpackBiome != null ? backpack.BackpackBiome.Value : BackpackBiomes.None
         };

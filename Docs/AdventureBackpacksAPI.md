@@ -44,6 +44,7 @@
   - [BackPackGo](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-BackPackGo 'AdventureBackpacks.API.ABAPI.BackpackDefinition.BackPackGo')
   - [BackpackBiome](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-BackpackBiome 'AdventureBackpacks.API.ABAPI.BackpackDefinition.BackpackBiome')
   - [BackpackSizeByQuality](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-BackpackSizeByQuality 'AdventureBackpacks.API.ABAPI.BackpackDefinition.BackpackSizeByQuality')
+  - [ArmorPerLevel](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ArmorPerLevel 'AdventureBackpacks.API.ABAPI.BackpackDefinition.ArmorPerLevel')
   - [CarryBonus](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-CarryBonus 'AdventureBackpacks.API.ABAPI.BackpackDefinition.CarryBonus')
   - [ConfigSection](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ConfigSection 'AdventureBackpacks.API.ABAPI.BackpackDefinition.ConfigSection')
   - [CraftingTable](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-CraftingTable 'AdventureBackpacks.API.ABAPI.BackpackDefinition.CraftingTable')
@@ -55,6 +56,7 @@
   - [MaxRequiredStationLevel](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-MaxRequiredStationLevel 'AdventureBackpacks.API.ABAPI.BackpackDefinition.MaxRequiredStationLevel')
   - [PrefabName](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-PrefabName 'AdventureBackpacks.API.ABAPI.BackpackDefinition.PrefabName')
   - [RecipeIngredients](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-RecipeIngredients 'AdventureBackpacks.API.ABAPI.BackpackDefinition.RecipeIngredients')
+  - [ScaleSpeedModByQuality](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ScaleSpeedModByQuality 'AdventureBackpacks.API.ABAPI.BackpackDefinition.ScaleSpeedModByQuality')
   - [SpeedMod](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-SpeedMod 'AdventureBackpacks.API.ABAPI.BackpackDefinition.SpeedMod')
   - [StationLevel](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-StationLevel 'AdventureBackpacks.API.ABAPI.BackpackDefinition.StationLevel')
   - [UpgradeIngredients](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-UpgradeIngredients 'AdventureBackpacks.API.ABAPI.BackpackDefinition.UpgradeIngredients')
@@ -515,6 +517,14 @@ Dictionary of Vector2's that contain the x and y sizing of the backpack at each 
 Dictionary key is the Item's Quality level.
 Dictionary value is the Vector2 object.
 
+<a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ArmorPerLevel'></a>
+### ArmorPerLevel `constants`
+
+##### Summary
+
+Provides the configured armor per quality level applied to the backpack.
+For registering a new backpack, this is the default value.
+
 <a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-CarryBonus'></a>
 ### CarryBonus `constants`
 
@@ -609,6 +619,14 @@ Prefab Name of the Backpack Asset
 ##### Summary
 
 List of Recipe Ingredients.
+
+<a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ScaleSpeedModByQuality'></a>
+### ScaleSpeedModByQuality `constants`
+
+##### Summary
+
+Provides whether the movement speed penalty scales down with backpack quality level.
+For registering a new backpack, this is the default value.
 
 <a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-SpeedMod'></a>
 ### SpeedMod `constants`

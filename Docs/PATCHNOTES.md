@@ -1,3 +1,21 @@
+# 2.2.4 - Backpack Armor & Speed Tuning
+* **Backpack Armor Scaling & Configuration (`Assets/Items/BackpackItem.cs`, `Assets/Items/AssetItem.cs`, `Assets/Backpacks.cs`, `Patches/Player.cs`, `Patches/ItemDrop.cs`)**:
+  * In `BackpackItem.cs`, implemented `RegisterArmorPerLevel(int defaultValue = 1)` declaring synced configuration entry `Armor Per Level` (0–50 range, order 7) across all backpacks.
+  * In `AssetItem.cs` (`ResetPrefabArmor`), dynamically assigns configured `ArmorPerLevel` to `itemData.m_shared.m_armorPerLevel` and `itemData.m_shared.m_armor`.
+  * In `Backpacks.cs` (`UpdateStatusEffects`), assigned `itemData.m_shared.m_armorPerLevel` and `itemData.m_shared.m_armor` from `backpack.ArmorPerLevel.Value` so armor values properly re-evaluate during runtime item upgrades and configuration sync.
+  * In `Patches/Player.cs`, added `PlayerGetBodyArmorPatch` postfix on `Player.GetBodyArmor()` with `[HarmonyPrepare]` dedicated server exclusion: iterates equipped items on `Player.m_localPlayer` and adds backpack armor to `__result` when the backpack is equipped in a custom or extended inventory slot and not already counted as `m_shoulderItem`.
+  * In `Patches/ItemDrop.cs`, added `ItemDataGetTooltipPatch` postfix on `ItemDrop.ItemData.GetTooltip(...)` with `[HarmonyPrepare]` dedicated server exclusion: detects backpacks missing `$item_armor` in generated tooltip string and injects formatted armor and damage modifier text into tooltip layout.
+* **Speed Modifier Scaling Control (`Assets/Items/BackpackItem.cs`, `Assets/Items/BackpackItems/*.cs`)**:
+  * In `BackpackItem.cs`, implemented `Scale Speed Modifier By Level` configuration entry (`bool`, default: `true`, order 9).
+  * In `BackpackItem.cs`, implemented `GetSpeedModifier(int quality)`: divides `SpeedMod.Value / quality` when scaling is enabled, or returns static `SpeedMod.Value` across all quality tiers when disabled.
+  * Updated all backpack classes (`BackpackMeadows`, `BackpackBlackForest`, `BackpackSwamp`, `BackpackMountains`, `BackpackPlains`, `BackpackMistlands`, `ExternalBackpack`, `LegacyIronBackpack`, `LegacySilverBackpack`) to assign `itemData.m_shared.m_movementModifier = GetSpeedModifier(quality)`.
+* **Dedicated Server & Null Safety Hardening (`Assets/Effects/EffectsBase.cs`, `Assets/Effects/FrostResistance.cs`, `Assets/Effects/ExternalEffect.cs`, `Assets/Effects/TrollArmor.cs`, `Assets/Items/BackpackItems/*.cs`, `Patches/ItemDrop.cs`)**:
+  * Added defensive `EnabledEffect == null` checks across `EffectsBase.IsEffectActive(ItemDrop.ItemData)`, `FrostResistance.IsEffectActive(Humanoid)`, `ExternalEffect.HasActiveStatusEffect / IsEffectActive`, and `TrollArmor.IsEffectActive`, resolving Sentry issue [ADVENTUREBACKPACKS-1C](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-1C) on dedicated servers.
+  * Added `if (Item == null) return;` early return in `BackpackMeadows`, `BackpackBlackForest`, `BackpackMountains`, `BackpackPlains`, and `BackpackMistlands` constructors, resolving [ADVENTUREBACKPACKS-25](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-25).
+  * Added `[HarmonyPrepare]` dedicated server exclusion to `ItemDataGetTooltipPatch` in `Patches/ItemDrop.cs`.
+* **ABAPI Updates (`API/Structs.cs`, `API/Privates.cs`)**:
+  * Added `ArmorPerLevel` and `ScaleSpeedModByQuality` to `ABAPI.BackpackDefinition` with full XML doc comments.
+
 # 2.2.3 - Death & Container Move Hardening
 * **Tombstone Recovery & Death Yard Sale Protection (`AdventureBackpacks.cs`, `Patches/Player.cs`, `Patches/Container.cs`, `Patches/Inventory.cs`, `Patches/InventoryGui.cs`, `Assets/Backpacks.cs`)**:
   * In `AdventureBackpacks.cs`, converted `BypassMoveProtection` into a reentrant property backed by an atomic depth counter (`PushBypassMoveProtection()` and `PopBypassMoveProtection()`), guaranteeing nested transfer operations cannot prematurely disable protection.

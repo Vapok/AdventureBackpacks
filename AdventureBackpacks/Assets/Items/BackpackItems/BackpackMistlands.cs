@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Factories;
 using ItemManager;
@@ -12,6 +12,8 @@ internal class BackpackMistlands : BackpackItem
     public BackpackMistlands(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
     {
         RegisterConfigSettings();
+        if (Item == null)
+            return;
         
         Item.Configurable = Configurability.Recipe | Configurability.Drop;
         
@@ -44,6 +46,7 @@ internal class BackpackMistlands : BackpackItem
         RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(30);
+        RegisterArmorPerLevel();
         RegisterSpeedMod();
         if ((BackpackBiome.Value & BackpackBiomes.Mistlands) != 0)
         {
@@ -56,7 +59,7 @@ internal class BackpackMistlands : BackpackItem
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
-        itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
+        itemData.m_shared.m_movementModifier = GetSpeedModifier(quality);
         
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;
     }

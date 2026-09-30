@@ -1,4 +1,4 @@
-﻿using AdventureBackpacks.Extensions;
+using AdventureBackpacks.Extensions;
 
 namespace AdventureBackpacks.Assets.Effects;
 
@@ -26,7 +26,7 @@ public class TrollArmor : EffectsBase
         {
             var equippedBackpack = player.GetEquippedBackpack();
             
-            if (equippedBackpack == null || !EnabledEffect.Value)
+            if (equippedBackpack == null || EnabledEffect == null || !EnabledEffect.Value)
                 return false;
             
             var itemData = equippedBackpack.Item;

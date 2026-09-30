@@ -380,5 +380,39 @@ public class PlayerPatches
             }
         }
     }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.GetBodyArmor))]
+    internal static class PlayerGetBodyArmorPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        private static void Postfix(Player __instance, ref float __result)
+        {
+            if (__instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                return;
+
+            Inventory inventory = __instance.GetInventory();
+            if (inventory == null)
+                return;
+
+            List<ItemDrop.ItemData> equippedItems = inventory.GetEquippedItems();
+            if (equippedItems == null)
+                return;
+
+            for (int i = 0; i < equippedItems.Count; i++)
+            {
+                ItemDrop.ItemData item = equippedItems[i];
+                if (item != null && item != __instance.m_shoulderItem && item.IsBackpack())
+                {
+                    float backpackArmor = item.GetArmor();
+                    if (backpackArmor > 0f)
+                    {
+                        __result += backpackArmor;
+                    }
+                }
+            }
+        }
+    }
 }
 

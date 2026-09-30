@@ -47,6 +47,7 @@ internal class BackpackSwamp : BackpackItem
         RegisterStatusEffectInfo();
         RegisterWeightMultiplier();
         RegisterCarryBonus(15);
+        RegisterArmorPerLevel();
         RegisterSpeedMod();
         if (BackpackBiome != null && (BackpackBiome.Value & BackpackBiomes.Swamp) != 0)
         {
@@ -59,7 +60,7 @@ internal class BackpackSwamp : BackpackItem
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
-        itemData.m_shared.m_movementModifier = SpeedMod.Value/quality;
+        itemData.m_shared.m_movementModifier = GetSpeedModifier(quality);
 
         ((SE_Stats)statusEffects.Effect).m_addMaxCarryWeight = CarryBonus.Value * quality;
     }

@@ -158,7 +158,13 @@ internal abstract class AssetItem : IAssetItem
             itemDrop.m_autoPickup = true;
             if (itemData.m_shared != null)
             {
-                itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel;
+                float armorPerLevel = itemData.m_shared.m_armorPerLevel;
+                if (this is BackpackItem backpack && backpack.ArmorPerLevel != null)
+                {
+                    armorPerLevel = backpack.ArmorPerLevel.Value;
+                }
+                itemData.m_shared.m_armorPerLevel = armorPerLevel;
+                itemData.m_shared.m_armor = armorPerLevel;
             }
         }
     }

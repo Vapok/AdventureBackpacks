@@ -51,7 +51,7 @@ public class FrostResistance : EffectsBase
         {
             var equippedBackpack = player.GetEquippedBackpack();
             
-            if (equippedBackpack == null || !EnabledEffect.Value)
+            if (equippedBackpack == null || EnabledEffect == null || !EnabledEffect.Value)
                 return false;
             
             var itemData = equippedBackpack.Item;

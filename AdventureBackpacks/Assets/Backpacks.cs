@@ -80,7 +80,7 @@ namespace AdventureBackpacks.Assets
                         {
                             ValidateBackpackInventorySizing(player, item);
                         }
-                        
+                        UpdateStatusEffects(item);
                     }
                 }
             }
@@ -420,10 +420,10 @@ namespace AdventureBackpacks.Assets
                 statusEffects.Effect.m_startMessage = $"$vapok_mod_useful_backpack";
             }
             
-            var modifierList = new List<HitData.DamageModPair>();
-            //Set Armor Default
-            //TODO: Make this configurable
-            itemData.m_shared.m_armor = itemData.m_shared.m_armorPerLevel * backpackQuality;
+            List<HitData.DamageModPair> modifierList = new List<HitData.DamageModPair>();
+            float armorPerLevel = backpack.ArmorPerLevel != null ? backpack.ArmorPerLevel.Value : itemData.m_shared.m_armorPerLevel;
+            itemData.m_shared.m_armorPerLevel = armorPerLevel;
+            itemData.m_shared.m_armor = armorPerLevel;
             
             //Apply Frost Resistance if configured.
             var frostResistEffect = EffectsFactory.EffectList[BackpackEffect.FrostResistance];
