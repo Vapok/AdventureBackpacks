@@ -1,5 +1,5 @@
 # 2.2.5 - Portal Interoperability & Crafting Stability
-* **Portal Mod Interoperability**: Improved compatibility with portal mods (such as Proper Portals and World Advancement Progression). Backpack contents now follow the exact portal rules established by the game and your installed portal mods, allowing unrestricted travel when permitted while properly respecting standard metal restrictions.
+* **Portal Mod Interoperability**: Improved compatibility with portal mods (such as Proper Portals and World Advancement Progression).
 * **Crafting Deduction Safety**: Added protections during backpack material consumption to prevent rare errors when third-party mods modify item removal routines.
 
 <details>
