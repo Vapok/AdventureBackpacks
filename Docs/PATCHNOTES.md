@@ -1,3 +1,10 @@
+# 2.2.5 - Portal Interoperability & Crafting Stability
+* **Portal Teleportation Interoperability (`Patches/Inventory.cs`, `Patches/Humanoid.cs`)**:
+  * In `Patches/Inventory.cs` (`IsTeleportablePatch.IsBackpackTeleportable`), removed hardcoded manual loops over `m_shared.m_teleportable` and `m_toolTier >= 1000`. Simplified method to delegate directly to `bpInventory.IsTeleportable(allowAllItems)`. This allows external portal mods (such as Proper Portals, which transpiles `Inventory.IsTeleportable` to unconditionally return true) and progression mods (such as World Advancement Progression, which dynamically evaluates boss progression keys on inventories) to govern portal behavior on backpack contents uniformly without Adventure Backpacks enforcing preemptive restrictions.
+  * In `Patches/Humanoid.cs`, removed `HumanoidIsTeleportablePatch` (`[HarmonyPriority(Priority.VeryLow)]` on `Humanoid.IsTeleportable`). Decoupled character-level portal validation from Adventure Backpacks so third-party mods modifying character or player teleportation rules retain full authority without being overridden.
+* **Crafting Item Deduction Hardening (`Features/CraftFromBackpack.cs`)**:
+  * In `CraftFromBackpack.DeductBackpackCraftingItem`, wrapped `backpackInventory.RemoveItem(itemName, toConsumeFromBp, itemQuality)` in a defensive `try...catch` block, preventing nested removal exceptions or third-party item hook failures from escaping and aborting craft operations (resolves Sentry issue [ADVENTUREBACKPACKS-22](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-22)).
+
 # 2.2.4 - Backpack Armor & Speed Tuning
 * **Backpack Armor Scaling & Configuration (`Assets/Items/BackpackItem.cs`, `Assets/Items/AssetItem.cs`, `Assets/Backpacks.cs`, `Patches/Player.cs`, `Patches/ItemDrop.cs`)**:
   * In `BackpackItem.cs`, implemented `RegisterArmorPerLevel(int defaultValue = 1)` declaring synced configuration entry `Armor Per Level` (0–50 range, order 7) across all backpacks.

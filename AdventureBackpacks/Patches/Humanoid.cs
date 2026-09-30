@@ -264,54 +264,5 @@ public class HumanoidPatches
             }
         }
     }
-
-    [HarmonyPatch(typeof(Humanoid), nameof(Humanoid.IsTeleportable))]
-    static class HumanoidIsTeleportablePatch
-    {
-        [HarmonyPrepare]
-        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
-
-        [HarmonyPostfix]
-        [HarmonyPriority(Priority.VeryLow)]
-        private static void Postfix(Humanoid __instance, bool allowAllItems, ref bool __result)
-        {
-            if (!__result || __instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
-                return;
-
-            if (Player.m_localPlayer.IsBackpackEquipped())
-            {
-                BackpackComponent backpack = Player.m_localPlayer.GetEquippedBackpack();
-                if (backpack != null && !InventoryPatches.IsTeleportablePatch.IsBackpackTeleportable(backpack, allowAllItems))
-                {
-                    __result = false;
-                    return;
-                }
-            }
-
-            Inventory inventory = Player.m_localPlayer.GetInventory();
-            if (inventory != null)
-            {
-                List<ItemDrop.ItemData> items = inventory.GetAllItems();
-                if (items != null)
-                {
-                    foreach (ItemDrop.ItemData item in items)
-                    {
-                        if (item == null)
-                            continue;
-
-                        if (item.IsBackpack())
-                        {
-                            BackpackComponent bpComponent = item.Data()?.GetOrCreate<BackpackComponent>();
-                            if (bpComponent != null && !InventoryPatches.IsTeleportablePatch.IsBackpackTeleportable(bpComponent, allowAllItems))
-                            {
-                                __result = false;
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 

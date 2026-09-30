@@ -661,27 +661,9 @@ public static class InventoryPatches
             if (backpack == null)
                 return true;
 
-            if (allowAllItems || (ZoneSystem.instance != null && ZoneSystem.instance.GetGlobalKey(GlobalKeys.TeleportAll)))
-                return true;
-
             Inventory bpInventory = backpack.GetInventory();
             if (bpInventory == null)
                 return true;
-
-            List<ItemDrop.ItemData> subItems = bpInventory.GetAllItems();
-            if (subItems != null)
-            {
-                foreach (ItemDrop.ItemData subItem in subItems)
-                {
-                    if (subItem == null)
-                        continue;
-
-                    if (!subItem.m_shared.m_teleportable || subItem.m_shared.m_toolTier >= 1000)
-                    {
-                        return false;
-                    }
-                }
-            }
 
             return bpInventory.IsTeleportable(allowAllItems);
         }

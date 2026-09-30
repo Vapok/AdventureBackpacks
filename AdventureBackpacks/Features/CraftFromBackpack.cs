@@ -253,7 +253,14 @@ public static class CraftFromBackpack
 
         if (toConsumeFromBp > 0)
         {
-            backpackInventory.RemoveItem(itemName, toConsumeFromBp, itemQuality);
+            try
+            {
+                backpackInventory.RemoveItem(itemName, toConsumeFromBp, itemQuality);
+            }
+            catch (System.Exception ex)
+            {
+                AdventureBackpacks.Log?.Warning($"Error removing {itemName} from backpack: {ex.Message}");
+            }
         }
 
         int remainingForPlayer = amount - toConsumeFromBp;
