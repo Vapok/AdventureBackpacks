@@ -50,12 +50,16 @@ internal class BackpackMistlands : BackpackItem
         RegisterCarryBonus(30);
         RegisterArmorPerLevel();
         RegisterSpeedMod();
-        if ((BackpackBiome.Value & BackpackBiomes.Mistlands) != 0)
+        if (BackpackBiome != null && (BackpackBiome.Value & BackpackBiomes.Mistlands) != 0)
         {
-            EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 3);
-            EffectsFactory.EffectList[BackpackEffect.Demister].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 2);
-            EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 2);
-            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 1);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.FeatherFall))
+                EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 3);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.Demister))
+                EffectsFactory.EffectList[BackpackEffect.Demister].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 2);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.FrostResistance))
+                EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 2);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.ColdResistance))
+                EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 1);
         }
     }
 

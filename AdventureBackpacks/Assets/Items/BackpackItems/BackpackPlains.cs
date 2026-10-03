@@ -47,10 +47,12 @@ internal class BackpackPlains : BackpackItem
         RegisterCarryBonus(25);
         RegisterArmorPerLevel();
         RegisterSpeedMod();
-        if ((BackpackBiome.Value & BackpackBiomes.Plains) != 0)
+        if (BackpackBiome != null && (BackpackBiome.Value & BackpackBiomes.Plains) != 0)
         {
-            EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 3);
-            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 1);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.FrostResistance))
+                EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 3);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.ColdResistance))
+                EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 1);
         }
             
     }

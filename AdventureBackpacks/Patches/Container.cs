@@ -122,6 +122,46 @@ public static class ContainerPatches
         }
     }
 
+    [HarmonyPatch(typeof(ZNetView), nameof(ZNetView.IsOwner))]
+    static class ZNetViewIsOwnerPatch
+    {
+        static bool Prefix(ZNetView __instance, ref bool __result)
+        {
+            if (__instance != null && __instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
+            {
+                __result = true;
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(ZNetView), nameof(ZNetView.InvokeRPC), new[] { typeof(string), typeof(object[]) })]
+    static class ZNetViewInvokeRpcPatch
+    {
+        static bool Prefix(ZNetView __instance)
+        {
+            if (__instance != null && __instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(ZNetView), nameof(ZNetView.InvokeRPC), new[] { typeof(long), typeof(string), typeof(object[]) })]
+    static class ZNetViewInvokeRpcWithTargetPatch
+    {
+        static bool Prefix(ZNetView __instance)
+        {
+            if (__instance != null && __instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+
     [HarmonyPatch(typeof(Container), nameof(Container.Awake))]
     static class ContainerAwakePatch
     {
