@@ -164,22 +164,12 @@ namespace AdventureBackpacks.Assets
                 AdventureBackpacks.Log.Debug($"[{i}]Called by: {callingMethod?.DeclaringType?.FullName}.{callingMethod?.Name}");
             }
             
-            if (!currentBackpack.TryGetBackpackItem(out var backpackDefinition)) return;
+            if (!currentBackpack.TryGetBackpackItem(out BackpackItem backpackDefinition)) return;
 
-            if (!backpackDefinition.BackpackSize.TryGetValue(currentBackpack.m_quality, out var vectorConfig))
-            {
-                AdventureBackpacks.Log.Warning(
-                    $"Backpack '{currentBackpack.m_shared.m_name}' has unexpected quality '{currentBackpack.m_quality}'. " +
-                    "Falling back to quality 1.");
-    
-                // pick a sensible default
-                vectorConfig = backpackDefinition.BackpackSize[1];
-            }
-            
-            var vectorSize = ValidateMinMaxChestSize(vectorConfig.Value.x, vectorConfig.Value.y);
-            var targetWidth = (int)Math.Floor(vectorSize.x);
-            var targetHeight = (int)Math.Floor(vectorSize.y);
-            var backpackSize = targetWidth * targetHeight;
+            Vector2i targetDimensions = backpackDefinition.GetInventorySize(currentBackpack.m_quality);
+            int targetWidth = targetDimensions.x;
+            int targetHeight = targetDimensions.y;
+            int backpackSize = targetWidth * targetHeight;
             AdventureBackpacks.Log.Debug($"[{currentBackpack.m_shared.m_name}]### Backpack Slot Size: {backpackSize}");
                         
             var backpackItem = currentBackpack.Data().GetOrCreate<BackpackComponent>();
@@ -286,23 +276,28 @@ namespace AdventureBackpacks.Assets
         }
         public static bool PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly = false, int numberItems = 0)
         {
+            return PerformYardSale(mLocalPlayer, itemData, backpackOnly, numberItems, false);
+        }
+
+        public static bool PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly, int numberItems, bool skipInventoryCheck)
+        {
             if (mLocalPlayer == null || itemData == null || !itemData.IsBackpack())
                 return true;
 
             if (AdventureBackpacks.BypassMoveProtection || mLocalPlayer.IsDead())
                 return true;
 
-            if (mLocalPlayer.GetInventory() != null && !mLocalPlayer.GetInventory().ContainsItem(itemData))
+            if (!skipInventoryCheck && mLocalPlayer.GetInventory() != null && !mLocalPlayer.GetInventory().ContainsItem(itemData))
                 return true;
 
             if (InventoryGui.instance != null && InventoryGui.instance.m_currentContainer != null && InventoryGui.instance.m_currentContainer.GetComponent<TombStone>() != null)
                 return true;
 
-            var backpack = itemData.Data().Get<BackpackComponent>();
+            BackpackComponent backpack = itemData.Data().Get<BackpackComponent>();
             if (backpack == null)
                 return true;
 
-            var dropWasBlocked = false;
+            bool dropWasBlocked = false;
 
             void EmtpyInventory(Inventory inventory)
             {
@@ -322,12 +317,12 @@ namespace AdventureBackpacks.Assets
                             if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
                                 break;
 
-                            var item = inventory.m_inventory[0];
+                            ItemDrop.ItemData item = inventory.m_inventory[0];
 
-                            var amount = inventory.CountItems(item.m_shared.m_name, -1);
+                            int amount = inventory.CountItems(item.m_shared.m_name, -1);
 
-                            var dropAmount = amount > item.m_stack ? item.m_stack : amount;
-                            var totalBefore = inventory.CountItems(item.m_shared.m_name, -1);
+                            int dropAmount = amount > item.m_stack ? item.m_stack : amount;
+                            int totalBefore = inventory.CountItems(item.m_shared.m_name, -1);
                             mLocalPlayer.DropItem(inventory,item,dropAmount);
                             if (inventory.CountItems(item.m_shared.m_name, -1) >= totalBefore)
                             {
@@ -339,22 +334,22 @@ namespace AdventureBackpacks.Assets
                     }
                     else
                     {
-                        var dropped = 0;
+                        int dropped = 0;
                         while (dropped < numberItems && inventory.m_inventory.Count > 0)
                         {
                             if (inventory.m_inventory.Count == 0 || inventory.m_inventory[0] == null)
                                 break;
 
-                            var item = inventory.m_inventory[0]; // safe because of Count check
+                            ItemDrop.ItemData item = inventory.m_inventory[0];
 
-                            var amount = inventory.CountItems(item.m_shared.m_name, -1);
+                            int amount = inventory.CountItems(item.m_shared.m_name, -1);
                             AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Number of {item.m_shared.m_name}: {amount}");
                             AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Stack Size of {item.m_shared.m_name}: {item.m_stack}");
 
-                            var dropAmount = amount > item.m_stack ? item.m_stack : amount;
+                            int dropAmount = amount > item.m_stack ? item.m_stack : amount;
                             AdventureBackpacks.Log.Debug($"[{itemData.m_shared.m_name}] Drop Amount: {dropAmount}");
 
-                            var totalBefore = inventory.CountItems(item.m_shared.m_name, -1);
+                            int totalBefore = inventory.CountItems(item.m_shared.m_name, -1);
                             mLocalPlayer.DropItem(inventory, item, dropAmount);
                             if (inventory.CountItems(item.m_shared.m_name, -1) >= totalBefore)
                             {
@@ -373,8 +368,8 @@ namespace AdventureBackpacks.Assets
                 }
             }
 
-            var inventory = backpack.GetInventory();
-            EmtpyInventory(inventory);
+            Inventory backpackInventory = backpack.GetInventory();
+            EmtpyInventory(backpackInventory);
 
             if (dropWasBlocked)
             {
@@ -385,7 +380,7 @@ namespace AdventureBackpacks.Assets
 
             if (!backpackOnly)
             {
-                var playerInventory = mLocalPlayer.GetInventory();
+                Inventory playerInventory = mLocalPlayer.GetInventory();
                 EmtpyInventory(playerInventory);
 
                 mLocalPlayer.UnequipAllItems();

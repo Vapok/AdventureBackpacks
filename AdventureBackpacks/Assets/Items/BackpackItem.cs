@@ -153,19 +153,23 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     
     internal virtual Vector2i GetInventorySize(int quality)
     {
-        quality = Mathf.Clamp(quality, 1, 4);
-        
-        if (!BackpackSize.TryGetValue(quality, out var sizeEntry) || sizeEntry?.Value == null)
+        int clampedQuality = Mathf.Clamp(quality, 1, 4);
+        ConfigEntry<Vector2> sizeEntry = null;
+
+        for (int q = clampedQuality; q >= 1; q--)
         {
-            if (BackpackSize.TryGetValue(1, out sizeEntry) && sizeEntry?.Value != null)
+            if (BackpackSize.TryGetValue(q, out sizeEntry) && sizeEntry?.Value != null)
             {
-                var fallback = new Vector2i(Mathf.Clamp((int)sizeEntry.Value.x, 1, 256), Mathf.Clamp((int)sizeEntry.Value.y, 1, 256));
-                return Backpacks.ValidateMinMaxChestSizeInt(fallback.x, fallback.y);
+                break;
             }
+        }
+
+        if (sizeEntry?.Value == null)
+        {
             return new Vector2i(6, 3);
         }
 
-        var backpackSize = new Vector2i(Mathf.Clamp((int)sizeEntry.Value.x, 1, 256), Mathf.Clamp((int)sizeEntry.Value.y, 1, 256));
+        Vector2i backpackSize = new Vector2i(Mathf.Clamp((int)sizeEntry.Value.x, 1, 256), Mathf.Clamp((int)sizeEntry.Value.y, 1, 256));
 
         return Backpacks.ValidateMinMaxChestSizeInt(backpackSize.x, backpackSize.y);
     }

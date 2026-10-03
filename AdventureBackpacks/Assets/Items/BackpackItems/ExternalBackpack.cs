@@ -44,6 +44,11 @@ internal class ExternalBackpack : BackpackItem
             AddUpgradeIngredient(ingredient.ItemPrefabName,ingredient.Quantity);    
         }
 
+        foreach (ABAPI.RecipeIngredient ingredient in _backpackDefinition.UpgraderIngredients)
+        {
+            AddUpgraderIngredient(ingredient.ItemPrefabName, ingredient.Quantity);
+        }
+
         foreach (var target in _backpackDefinition.DropsFrom)
         {
             Item.DropsFrom.Add(target.Creature, target.Chance, target.Min, target.Max);    

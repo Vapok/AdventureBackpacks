@@ -29,6 +29,8 @@ internal class BackpackMistlands : BackpackItem
         AddUpgradeIngredient("Eitr", 2);
         AddUpgradeIngredient("Softtissue", 5);
         
+        AddUpgraderIngredient("Upgrader5Armor", 1);
+        
         Item.DropsFrom.Add("Dverger", 0.002f, 1,dontScale:true);
         Item.DropsFrom.Add("DvergerMage", 0.002f, 1,dontScale:true);
         Item.DropsFrom.Add("DvergerMageFire", 0.002f, 1,dontScale:true);
@@ -51,7 +53,7 @@ internal class BackpackMistlands : BackpackItem
         if ((BackpackBiome.Value & BackpackBiomes.Mistlands) != 0)
         {
             EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 3);
-            EffectsFactory.EffectList[BackpackEffect.Demister].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 4);
+            EffectsFactory.EffectList[BackpackEffect.Demister].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 2);
             EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 2);
             EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mistlands, 1);
         }

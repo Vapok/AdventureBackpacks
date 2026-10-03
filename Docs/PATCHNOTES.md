@@ -1,3 +1,19 @@
+# 2.2.7 - Deep North Forge of Potential Compatibility & Quality Scaling
+* **Forge of Potential Upgrading (`Assets/Factories/BackpackFactory.cs`, `Patches/ObjectDB.cs`, `Assets/Items/AssetItem.cs`, `Assets/Items/BackpackItem.cs`, `Assets/Items/BackpackItems/*.cs`, `Compats/ChebsNecromancy.cs`)**:
+  * In `AssetItem.cs`, added `_upgraderIngredients` list, `UpgraderIngredients` property, and `AddUpgraderIngredient(string prefabName, int quantity = 1)`.
+  * In `BackpackFactory.cs`, implemented `ApplyUpgraderResources(ObjectDB objectDB)` to iterate registered backpacks and inject `Piece.Requirement` with `m_upgraderResource = true`, `m_amountPerLevel = 0`, and `m_recover = false` onto corresponding recipes in `ObjectDB.m_recipes`.
+  * Added `ObjectDBPatches` (`Patches/ObjectDB.cs`) hooking `ObjectDB.CopyOtherDB` and `ObjectDB.Awake` (Priority.Last) to invoke `BackpackFactory.ApplyUpgraderResources(__instance)`.
+  * Registered tier-matching Protection Idols (`Upgrader0Armor` through `Upgrader5Armor`) across all built-in, legacy, and compatibility backpack definitions.
+* **ABAPI Upgrader Ingredients (`API/Structs.cs`, `Assets/Items/BackpackItems/ExternalBackpack.cs`)**:
+  * Added `public readonly List<RecipeIngredient> UpgraderIngredients = new ();` to `ABAPI.BackpackDefinition` with full XML documentation comments.
+  * In `ExternalBackpack.cs`, mapped third-party `UpgraderIngredients` directly to internal `AddUpgraderIngredient`.
+* **Quality Scaling & Inventory Sizing Protection (`Assets/Backpacks.cs`, `Assets/Items/BackpackItem.cs`)**:
+  * In `BackpackItem.GetInventorySize(int quality)`, clamped quality lookup to maximum defined tier (`Math.Min(quality, 4)`) and implemented downward fallback iteration (`for (int q = clampedQuality; q >= 1; q--)`) to prevent unmapped quality tiers from resetting dimensions to 1x1.
+  * In `Backpacks.ValidateBackpackInventorySizing`, updated target dimension resolution to call `backpackDefinition.GetInventorySize(currentBackpack.m_quality)` instead of direct `BackpackSize.TryGetValue(m_quality)` lookup, resolving dimension mismatch warnings and preventing inventory reset loops at quality >= 5.
+* **Forge of Potential Break Protection & Yard Sale Hardening (`Patches/InventoryGui.cs`, `Assets/Backpacks.cs`)**:
+  * In `Assets/Backpacks.cs`, added `PerformYardSale(Player mLocalPlayer, ItemDrop.ItemData itemData, bool backpackOnly, int numberItems, bool skipInventoryCheck)` overload allowing yard sales when an item has already been removed from player inventory due to crafting destruction.
+  * In `Patches/InventoryGui.cs` (`InventoryGuiDoCraftingPatch`), added `__state` tracking of upgrading backpack items in `Prefix`. In `Postfix`, detects if an upgrading backpack failed and broke during Forge of Potential processing (`!player.GetInventory().ContainsItem(backpack.Item)`), triggering `Backpacks.PerformYardSale` with `skipInventoryCheck: true` to prevent contents from being permanently deleted.
+
 # 2.2.6 - Mod Developer Integration & Inventory APIs
 * **ABAPI Inventory Enumeration (`API/ABAPI.cs`)**:
   * Added `GetAllBackpackInventories(Player player)` returning `List<Inventory>` containing all valid backpack inventories equipped or carried on the specified player.

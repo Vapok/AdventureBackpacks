@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Assets.Items.BackpackItems;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
 
@@ -61,5 +62,56 @@ internal class BackpackFactory : AssetFactory
     internal static List<string> BackpackTypes()
     {
         return BackpackItems.Select(x => x.ItemName).ToList();
+    }
+
+    internal static void ApplyUpgraderResources(ObjectDB objectDB)
+    {
+        if (objectDB == null || objectDB.m_recipes == null)
+            return;
+
+        foreach (BackpackItem backpack in _backpackItems)
+        {
+            if (backpack.UpgraderIngredients.Count == 0)
+                continue;
+
+            List<Recipe> recipes = objectDB.m_recipes
+                .Where(r => r != null && r.m_item != null && r.m_item.gameObject.name.Equals(backpack.PrefabName))
+                .ToList();
+
+            foreach (Recipe recipe in recipes)
+            {
+                List<Piece.Requirement> resourceList = recipe.m_resources.ToList();
+                bool modified = false;
+
+                foreach (KeyValuePair<string, int> upgraderIng in backpack.UpgraderIngredients)
+                {
+                    if (resourceList.Any(x => x.m_resItem != null && x.m_resItem.gameObject.name.Equals(upgraderIng.Key) && x.m_upgraderResource))
+                        continue;
+
+                    GameObject prefab = objectDB.GetItemPrefab(upgraderIng.Key);
+                    if (prefab == null)
+                        continue;
+
+                    ItemDrop itemDrop = prefab.GetComponent<ItemDrop>();
+                    if (itemDrop == null)
+                        continue;
+
+                    resourceList.Add(new Piece.Requirement
+                    {
+                        m_resItem = itemDrop,
+                        m_amount = upgraderIng.Value,
+                        m_upgraderResource = true,
+                        m_amountPerLevel = 0,
+                        m_recover = false
+                    });
+                    modified = true;
+                }
+
+                if (modified)
+                {
+                    recipe.m_resources = resourceList.ToArray();
+                }
+            }
+        }
     }
 }

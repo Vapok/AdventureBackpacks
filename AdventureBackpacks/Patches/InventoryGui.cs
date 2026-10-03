@@ -27,45 +27,75 @@ internal static class InventoryGuiPatches
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.DoCrafting))]
     static class InventoryGuiDoCraftingPatch
     {
+        private class CraftUpgradeState
+        {
+            public ItemDrop.ItemData UpgradeItem;
+            public BackpackComponent Backpack;
+        }
+
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
         [HarmonyPrefix]
         [HarmonyPriority(900)]
-        static void Prefix()
+        private static void Prefix(InventoryGui __instance, out CraftUpgradeState __state)
         {
             CraftingContext.Enter();
+            if (__instance != null && __instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
+            {
+                BackpackComponent backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
+                __state = new CraftUpgradeState
+                {
+                    UpgradeItem = __instance.m_craftUpgradeItem,
+                    Backpack = backpack
+                };
+            }
+            else
+            {
+                __state = null;
+            }
         }
 
         [HarmonyFinalizer]
         [HarmonyPriority(100)]
-        static void Finalizer()
+        private static void Finalizer()
         {
             CraftingContext.Exit();
         }
 
         [HarmonyPostfix]
-        static void Postfix(InventoryGui __instance)
+        private static void Postfix(InventoryGui __instance, CraftUpgradeState __state)
         {
             if (Player.m_localPlayer == null)
                 return;
             Player player = Player.m_localPlayer;
             
-            if (__instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
+            if (__state != null && __state.Backpack != null)
             {
-                BackpackComponent backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
-                if (backpack == null)
-                    return;
+                BackpackComponent backpack = __state.Backpack;
+                ItemDrop.ItemData upgradingItem = __state.UpgradeItem;
 
-                backpack.Load();
-
-                if (player.IsThisBackpackEquipped(backpack.Item))
+                bool survived = player.GetInventory() != null && backpack.Item != null && player.GetInventory().ContainsItem(backpack.Item);
+                if (!survived)
                 {
-                    Container backpackContainer = player.GetBackpackContainerProxy();
-                    backpack.UpdateContainerSizing(ref backpackContainer);
+                    Inventory bpInventory = backpack.GetInventory();
+                    if (bpInventory != null && bpInventory.m_inventory.Count > 0)
+                    {
+                        Backpacks.PerformYardSale(player, upgradingItem, true, 0, true);
+                    }
                 }
-                
-                player.UpdateEquipmentStatusEffects();
+                else
+                {
+                    backpack.Load();
+
+                    if (player.IsThisBackpackEquipped(backpack.Item))
+                    {
+                        Container backpackContainer = player.GetBackpackContainerProxy();
+                        backpack.UpdateContainerSizing(ref backpackContainer);
+                    }
+                    
+                    player.UpdateEquipmentStatusEffects();
+                }
             }
         }
     }

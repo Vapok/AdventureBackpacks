@@ -25,6 +25,8 @@ internal class BackpackPlains : BackpackItem
         AddUpgradeIngredient("LoxPelt", 2);
         AddUpgradeIngredient("BlackMetal", 5);
 
+        AddUpgraderIngredient("Upgrader4Armor", 1);
+
         Item.DropsFrom.Add("Goblin", 0.002f, 1,dontScale:true);
         Item.DropsFrom.Add("GoblinArcher", 0.002f, 1,dontScale:true);
         Item.DropsFrom.Add("GoblinBrute", 0.002f, 1,dontScale:true);
