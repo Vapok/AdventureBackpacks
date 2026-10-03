@@ -3,6 +3,7 @@
   * A lightweight reflection client (`ABAPI_Client.cs`) for zero-dependency integration.
   * Direct assembly references with dynamic bytecode redirection, allowing third-party mods to safely bundle API stubs without version conflicts.
 * **Backpack Inventory Enumeration**: Added helper methods to retrieve all equipped and worn backpack inventories on a player, making it easier for crafting, storage, and utility mods to audit or interact with backpack contents.
+* **Dedicated Server Stability**: Hardened backpack inventory resizing routines on dedicated servers to ensure inventory state resets properly if unexpected errors occur during transfers.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>

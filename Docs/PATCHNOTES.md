@@ -6,7 +6,8 @@
 * **Zero-Dependency Integration Client (`Docs/ABAPI_Client.cs`, `Docs/API_INTEGRATION.md`)**:
   * Provided `ABAPI_Client.cs` standalone drop-in reflection client for mod developers who wish to integrate with Adventure Backpacks without taking a compile-time or distribution dependency on `AdventureBackpacksAPI.dll`.
   * Implemented cached delegate reflection filtered by assembly name (`assembly.GetName().Name == "AdventureBackpacks"`).
-  * Added `Docs/API_INTEGRATION.md` detailing architectural guidance for both `APIManager` assembly redirection and `ABAPI_Client.cs` reflection integration.
+* **Inventory Resize Exception Hardening (`Assets/Backpacks.cs`)**:
+  * In `Backpacks.ValidateBackpackInventorySizing`, wrapped `newInventory.MoveAll(currentInventory)` in a `try...catch` and guarded `backpackItem.IsLoadingInventory = false` within a `finally` block. Guarantees that any server or third-party method exceptions during inventory resizing cannot leave the backpack in a permanent loading lock state (resolves Sentry issue [ADVENTUREBACKPACKS-2E](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2E)).
 
 # 2.2.5 - Portal Interoperability & Crafting Stability
 * **Portal Teleportation Interoperability (`Patches/Inventory.cs`, `Patches/Humanoid.cs`)**:

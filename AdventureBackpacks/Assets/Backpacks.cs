@@ -204,18 +204,31 @@ namespace AdventureBackpacks.Assets
                 }
 
                 backpackItem.IsLoadingInventory = true;
-                var newInventory = NewInventoryInstance(backpackDefinition.ItemName, currentBackpack.m_quality);
-                if (newInventory == null)
+                try
                 {
-                    AdventureBackpacks.Log.Warning(
-                        $"[{currentBackpack.m_shared.m_name}] Could not create resized inventory instance; skipping MoveAll.");
-                    backpackItem.IsLoadingInventory = false;
+                    Inventory newInventory = NewInventoryInstance(backpackDefinition.ItemName, currentBackpack.m_quality);
+                    if (newInventory == null)
+                    {
+                        AdventureBackpacks.Log.Warning(
+                            $"[{currentBackpack.m_shared.m_name}] Could not create resized inventory instance; skipping MoveAll.");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            newInventory.MoveAll(currentInventory);
+                            backpackItem.SetInventory(newInventory);
+                        }
+                        catch (Exception ex)
+                        {
+                            AdventureBackpacks.Log.Warning(
+                                $"[{currentBackpack.m_shared.m_name}] Error moving inventory contents during resize: {ex.Message}");
+                        }
+                    }
                 }
-                else
+                finally
                 {
-                    newInventory.MoveAll(currentInventory);
                     backpackItem.IsLoadingInventory = false;
-                    backpackItem.SetInventory(newInventory);
                 }
             }
             
