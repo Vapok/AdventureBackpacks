@@ -3,22 +3,22 @@
 This guide details how external mod developers can integrate with Adventure Backpacks.
 
 Two integration workflows are supported:
-1. **Option A: Repackable API Assembly (`AdventureBackpacksAPI.dll`)** — Compile against the standalone API assembly and merge it using `ILRepack`.
-2. **Option B: Zero-Dependency Client Wrapper (`Docs/ABAPI_Client.cs`)** — Drop a single standalone C# file into your project with zero external DLL references.
+1. **Option A: Repackable API Assembly ([`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases))** — Compile against the standalone API assembly and merge it using `ILRepack`.
+2. **Option B: Zero-Dependency Client Wrapper ([`Docs/ABAPI_Client.cs`](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs))** — Drop a single standalone C# file into your project with zero external DLL references.
 
-For complete class, struct, and method signatures, consult [AdventureBackpacksAPI.md](file:///home/vapok/Modding/Valheim/AdventureBackpacks/Docs/AdventureBackpacksAPI.md).
+For complete class, struct, and method signatures, consult [AdventureBackpacksAPI.md](AdventureBackpacksAPI.md).
 
 ---
 
-## Option A: Repackable API Assembly (`AdventureBackpacksAPI.dll`)
+## Option A: Repackable API Assembly ([`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases))
 
 This option is recommended if your mod already uses `ILRepack` to bundle dependencies and you prefer compile-time type safety directly against the API types.
 
 ### 1. Download the API Assembly
-Download `AdventureBackpacksAPI-Vapok-<Version>.zip` from [GitHub Releases](https://github.com/Vapok/AdventureBackpacks/releases). Extract `AdventureBackpacksAPI.dll`.
+Download `AdventureBackpacksAPI-Vapok-<Version>.zip` from [GitHub Releases](https://github.com/Vapok/AdventureBackpacks/releases). Extract [`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases).
 
 ### 2. Add Project Reference
-Reference `AdventureBackpacksAPI.dll` in your `.csproj`:
+Reference [`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases) in your `.csproj`:
 
 ```xml
 <ItemGroup>
@@ -30,7 +30,7 @@ Reference `AdventureBackpacksAPI.dll` in your `.csproj`:
 ```
 
 ### 3. Configure ILRepack
-Add `AdventureBackpacksAPI.dll` to your `ILRepack` inputs. Adventure Backpacks dynamically intercepts assembly loading and redirects all API references to the live `AdventureBackpacks.dll` assembly at runtime.
+Add [`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases) to your `ILRepack` inputs. Adventure Backpacks dynamically intercepts assembly loading and redirects all API references to the live `AdventureBackpacks.dll` assembly at runtime.
 
 When Adventure Backpacks is not installed, the repacked stub methods execute safely and return default values (`false`, `null`, empty collections) without causing runtime exceptions.
 
@@ -67,12 +67,12 @@ public class BackpackAuditIntegration
 
 ---
 
-## Option B: Zero-Dependency Client Wrapper (`ABAPI_Client.cs`)
+## Option B: Zero-Dependency Client Wrapper ([`Docs/ABAPI_Client.cs`](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs))
 
 This option is recommended for mods that integrate with Adventure Backpacks as an optional soft dependency and want to avoid adding extra assembly references or configuring ILRepack.
 
 ### 1. Add the Client File
-Copy [Docs/ABAPI_Client.cs](file:///home/vapok/Modding/Valheim/AdventureBackpacks/Docs/ABAPI_Client.cs) directly into your mod's project source.
+Copy [`Docs/ABAPI_Client.cs`](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) directly into your mod's project source.
 
 ### 2. How It Works
 The `ABAPIClient` class inspects the current `AppDomain` for the loaded `"AdventureBackpacks"` assembly and binds typed reflection delegates. 
@@ -113,9 +113,9 @@ public class SoftBackpackIntegration
 
 ## Comparison Summary
 
-| Characteristic | Option A (`AdventureBackpacksAPI.dll`) | Option B (`ABAPI_Client.cs`) |
+| Characteristic | Option A ([`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases)) | Option B ([`Docs/ABAPI_Client.cs`](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs)) |
 | :--- | :--- | :--- |
-| **Dependencies** | Requires `AdventureBackpacksAPI.dll` at compile time | Zero external dependencies |
+| **Dependencies** | Requires [`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases) at compile time | Zero external dependencies |
 | **Build Tooling** | Requires `ILRepack` | Standard compilation (drop-in `.cs`) |
 | **Runtime Mechanism** | Dynamic assembly redirection | Cached reflection delegates via `ABAPIClient` |
 | **Missing Mod Safety** | Executes repacked dummy stubs returning defaults | Returns safe defaults via null-checked delegates |
