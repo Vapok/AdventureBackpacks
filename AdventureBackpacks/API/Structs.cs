@@ -155,6 +155,10 @@ public partial class ABAPI
         /// </summary>
         public readonly List<RecipeIngredient> UpgradeIngredients = new ();
         /// <summary>
+        /// List of Upgrader Resources for the Forge of Potential.
+        /// </summary>
+        public readonly List<RecipeIngredient> UpgraderIngredients = new ();
+        /// <summary>
         /// List of Ingredients for Upgrading.
         /// </summary>
         public readonly List<DropTarget> DropsFrom = new ();

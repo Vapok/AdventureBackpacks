@@ -88,6 +88,7 @@ public static class ChebsNecromancy
             backpackDefinition.RecipeIngredients.Add(new ABAPI.RecipeIngredient("TrollHide",5));
             backpackDefinition.UpgradeIngredients.Add(new ABAPI.RecipeIngredient("Chain", 1));
             backpackDefinition.UpgradeIngredients.Add(new ABAPI.RecipeIngredient("TrollHide", 5));
+            backpackDefinition.UpgraderIngredients.Add(new ABAPI.RecipeIngredient("Upgrader1Armor", 1));
             backpackDefinition.DropsFrom.Add(new ABAPI.DropTarget("ChebGonaz_GuardianWraith",0.002f, 1));
 
             backpackDefinition.BackpackBiome = BackpackBiomes.EffectBiome1 | BackpackBiomes.BlackForest;

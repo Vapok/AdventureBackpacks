@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AdventureBackpacks.Configuration;
 using ItemManager;
 using UnityEngine;
@@ -110,6 +111,9 @@ internal abstract class AssetItem : IAssetItem
         }
     }
 
+    private readonly List<KeyValuePair<string, int>> _upgraderIngredients = new();
+    internal IReadOnlyList<KeyValuePair<string, int>> UpgraderIngredients => _upgraderIngredients;
+
     internal void AddRecipeIngredient(string prefabName, int quantity)
     {
         _item.RequiredItems.Add(prefabName,quantity);
@@ -118,6 +122,11 @@ internal abstract class AssetItem : IAssetItem
     internal void AddUpgradeIngredient(string prefabName, int quantity)
     {
         _item.RequiredUpgradeItems.Add(prefabName,quantity);
+    }
+
+    internal void AddUpgraderIngredient(string prefabName, int quantity = 1)
+    {
+        _upgraderIngredients.Add(new KeyValuePair<string, int>(prefabName, quantity));
     }
 
     internal ItemDrop GetItemDrop()

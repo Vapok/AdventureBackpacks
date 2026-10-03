@@ -67,6 +67,7 @@
   - [SpeedMod](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-SpeedMod 'AdventureBackpacks.API.ABAPI.BackpackDefinition.SpeedMod')
   - [StationLevel](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-StationLevel 'AdventureBackpacks.API.ABAPI.BackpackDefinition.StationLevel')
   - [UpgradeIngredients](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-UpgradeIngredients 'AdventureBackpacks.API.ABAPI.BackpackDefinition.UpgradeIngredients')
+  - [UpgraderIngredients](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-UpgraderIngredients 'AdventureBackpacks.API.ABAPI.BackpackDefinition.UpgraderIngredients')
   - [WeightMultiplier](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-WeightMultiplier 'AdventureBackpacks.API.ABAPI.BackpackDefinition.WeightMultiplier')
 - [DropTarget](#T-AdventureBackpacks-API-ABAPI-DropTarget 'AdventureBackpacks.API.ABAPI.DropTarget')
   - [#ctor(creature,chance,min,max)](#M-AdventureBackpacks-API-ABAPI-DropTarget-#ctor-System-String,System-Single,System-Int32,System-Nullable{System-Int32}- 'AdventureBackpacks.API.ABAPI.DropTarget.#ctor(System.String,System.Single,System.Int32,System.Nullable{System.Int32})')
@@ -786,6 +787,13 @@ Minimum Level of Crafting Table Station before Bag can be crafted
 ##### Summary
 
 List of Ingredients for Upgrading.
+
+<a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-UpgraderIngredients'></a>
+### UpgraderIngredients `constants`
+
+##### Summary
+
+List of Upgrader Resources for the Forge of Potential.
 
 <a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-WeightMultiplier'></a>
 ### WeightMultiplier `constants`

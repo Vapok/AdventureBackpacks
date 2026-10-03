@@ -9,6 +9,7 @@ internal class LegacySilverBackpack : BackpackItem
     public LegacySilverBackpack(string assetName, string prefabName, string itemName) : base(assetName, prefabName, itemName)
     {
         RegisterConfigSettings();
+        AddUpgraderIngredient("Upgrader3Armor", 1);
     }
 
     internal sealed override void RegisterConfigSettings()

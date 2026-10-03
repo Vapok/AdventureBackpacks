@@ -1,12 +1,18 @@
-# 2.2.6 - Mod Developer Integration & Inventory APIs
+# 2.2.7 - Forge of Potential Upgrades & Infinite Quality Support
+* **Forge of Potential Upgrading**: Backpacks can now be upgraded at the Deep North Forge of Potential using Protection Idols. Each backpack tier accepts its matching biome idol (Meadows through Mistlands, plus legacy and compatibility backpacks).
+* **Infinite Quality Scaling**: Quality levels beyond level 4 are now fully supported. Armor, carry weight bonuses, and speed modifier improvements continue to scale as your backpack increases in quality.
+* **Inventory Sizing Protection**: Backpack inventory slot counts remain stable at maximum size (Level 4 dimensions) when upgrading beyond level 4, preventing unexpected inventory resizing or dropped items.
+* **Forge of Potential Yard Sale Safety**: If an upgrade fails and breaks at the Forge of Potential, your backpack's contents are safely dropped at your feet instead of being lost with the destroyed pack.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.6 - Mod Developer Integration & Inventory APIs
 * **Mod Developer Integration Options**: Added comprehensive integration documentation and support for two ways other mod authors can integrate with Adventure Backpacks:
   * A lightweight reflection client (`ABAPI_Client.cs`) for zero-dependency integration.
   * Direct assembly references with dynamic bytecode redirection, allowing third-party mods to safely bundle API stubs without version conflicts.
 * **Backpack Inventory Enumeration**: Added helper methods to retrieve all equipped and worn backpack inventories on a player, making it easier for crafting, storage, and utility mods to audit or interact with backpack contents.
 * **Dedicated Server Stability**: Hardened backpack inventory resizing routines on dedicated servers to ensure inventory state resets properly if unexpected errors occur during transfers.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.2.5 - Portal Interoperability & Crafting Stability
 * **Portal Mod Interoperability**: Improved compatibility with portal mods (such as Proper Portals and World Advancement Progression).

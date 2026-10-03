@@ -191,6 +191,7 @@
         <Compile Include="Patches\Inventory.cs" />
         <Compile Include="Patches\InventoryGui.cs" />
         <Compile Include="Patches\ItemDrop.cs" />
+        <Compile Include="Patches\ObjectDB.cs" />
         <Compile Include="Patches\Player.cs" />
         <Compile Include="Patches\Recipe.cs" />
         <Compile Include="Patches\SEMan.cs" />

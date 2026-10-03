@@ -25,6 +25,8 @@ internal class BackpackMountains : BackpackItem
         AddUpgradeIngredient("WolfPelt", 5);
         AddUpgradeIngredient("Silver", 5);
         
+        AddUpgraderIngredient("Upgrader3Armor", 1);
+        
         Item.DropsFrom.Add("Fenring_Cultist", 0.002f, 1,dontScale:true);
         Item.DropsFrom.Add("Ulv", 0.001f, 1,dontScale:true);
         Item.DropsFrom.Add("Fenring", 0.008f, 1,dontScale:true);

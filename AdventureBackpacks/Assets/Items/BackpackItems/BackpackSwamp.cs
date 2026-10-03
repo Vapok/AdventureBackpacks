@@ -26,6 +26,8 @@ internal class BackpackSwamp : BackpackItem
             AddUpgradeIngredient("Bloodbag", 2);
             AddUpgradeIngredient("Iron", 5);
             
+            AddUpgraderIngredient("Upgrader2Armor", 1);
+            
             if (Item.DropsFrom != null)
             {
                 Item.DropsFrom.Add("Draugr", 0.002f, 1,dontScale:true);
