@@ -45,11 +45,14 @@ internal class BackpackMountains : BackpackItem
         RegisterCarryBonus(20);
         RegisterArmorPerLevel();
         RegisterSpeedMod();
-        if ((BackpackBiome.Value & BackpackBiomes.Mountains) != 0)
+        if (BackpackBiome != null && (BackpackBiome.Value & BackpackBiomes.Mountains) != 0)
         {
-            EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 4);
-            EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 1);
-            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 1);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.FeatherFall))
+                EffectsFactory.EffectList[BackpackEffect.FeatherFall].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 4);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.FrostResistance))
+                EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 1);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.ColdResistance))
+                EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Mountains, 1);
         }
                         
     }

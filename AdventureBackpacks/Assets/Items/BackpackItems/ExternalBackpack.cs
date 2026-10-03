@@ -61,7 +61,7 @@ internal class ExternalBackpack : BackpackItem
     {
         foreach (var applyEffect in _backpackDefinition.EffectsToApply)
         {
-            if ((BackpackBiome.Value & applyEffect.Key) == 0) continue;
+            if (BackpackBiome == null || (BackpackBiome.Value & applyEffect.Key) == 0) continue;
 
             foreach (var effectsBase in EffectsFactory.AllEffects)
             {

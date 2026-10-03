@@ -1,3 +1,10 @@
+# 2.2.8 - QuickStackStore & Container Sorting Compatibility
+* **Proxy Container Network View Parity & RPC Protection (`Patches/Container.cs`)**:
+  * Added `ZNetViewIsOwnerPatch` prefix on `ZNetView.IsOwner()` returning `true` for `AB_BackpackProxy`. Aligns `m_nview.IsOwner()` with existing `Container.IsOwner()` patch so third-party inventory and sorting mods (such as Goldenrevolver's QuickStackStore) that inspect `container.m_nview` instead of `container.IsOwner()` recognize client ownership and sort backpack inventories locally rather than attempting remote RPC routing.
+  * Added `ZNetViewInvokeRpcPatch` and `ZNetViewInvokeRpcWithTargetPatch` prefixes on `ZNetView.InvokeRPC` overloads for `AB_BackpackProxy` to suppress RPC transmission on proxy network views without a ZDO, preventing `NullReferenceException` crashes.
+* **Biome Configuration & Effect Lookup Hardening (`Assets/Items/BackpackItems/*.cs`)**:
+  * Hardened `RegisterConfigSettings()` across `BackpackPlains`, `BackpackMountains`, `BackpackMistlands`, `BackpackBlackForest`, `BackpackMeadows`, and `ExternalBackpack` with explicit `BackpackBiome != null` checks and `EffectsFactory.EffectList.ContainsKey(...)` verification before accessing effect collections, preventing `NullReferenceException` crashes during mod initialization ([ADVENTUREBACKPACKS-21](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-21)).
+
 # 2.2.7 - Deep North Forge of Potential Compatibility & Quality Scaling
 * **Forge of Potential Upgrading (`Assets/Factories/BackpackFactory.cs`, `Patches/ObjectDB.cs`, `Assets/Items/AssetItem.cs`, `Assets/Items/BackpackItem.cs`, `Assets/Items/BackpackItems/*.cs`, `Compats/ChebsNecromancy.cs`)**:
   * In `AssetItem.cs`, added `_upgraderIngredients` list, `UpgraderIngredients` property, and `AddUpgraderIngredient(string prefabName, int quantity = 1)`.

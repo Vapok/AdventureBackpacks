@@ -1,11 +1,17 @@
-# 2.2.7 - Forge of Potential Upgrades & Infinite Quality Support
+# 2.2.8 - QuickStackStore & Container Sorting Compatibility
+* **Inventory & Container Sorting Compatibility**:
+  * Fixed an issue where using QuickStackStore's sort button while having a backpack open caused an error and prevented the backpack from sorting. Backpacks now sort cleanly alongside chest and inventory sorting mods.
+* **Biome & Effect Registration Safeguards**:
+  * Hardened backpack biome and power registration to prevent errors when loading backpacks or reading custom configuration settings.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.7 - Forge of Potential Upgrades & Infinite Quality Support
 * **Forge of Potential Upgrading**: Backpacks can now be upgraded at the Deep North Forge of Potential using Protection Idols. Each backpack tier accepts its matching biome idol (Meadows through Mistlands, plus legacy and compatibility backpacks).
 * **Infinite Quality Scaling**: Quality levels beyond level 4 are now fully supported. Armor, carry weight bonuses, and speed modifier improvements continue to scale as your backpack increases in quality.
 * **Inventory Sizing Protection**: Backpack inventory slot counts remain stable at maximum size (Level 4 dimensions) when upgrading beyond level 4, preventing unexpected inventory resizing or dropped items.
 * **Forge of Potential Yard Sale Safety**: If an upgrade fails and breaks at the Forge of Potential, your backpack's contents are safely dropped at your feet instead of being lost with the destroyed pack.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.2.6 - Mod Developer Integration & Inventory APIs
 * **Mod Developer Integration Options**: Added comprehensive integration documentation and support for two ways other mod authors can integrate with Adventure Backpacks:

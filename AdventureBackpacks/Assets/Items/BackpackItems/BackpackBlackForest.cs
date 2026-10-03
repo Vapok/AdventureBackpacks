@@ -48,10 +48,12 @@ internal class BackpackBlackForest : BackpackItem
         RegisterCarryBonus(10);
         RegisterArmorPerLevel();
         RegisterSpeedMod();
-        if ((BackpackBiome.Value & BackpackBiomes.BlackForest) != 0)
+        if (BackpackBiome != null && (BackpackBiome.Value & BackpackBiomes.BlackForest) != 0)
         {
-            EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.BlackForest, 1);
-            EffectsFactory.EffectList[BackpackEffect.TrollArmor].RegisterEffectBiomeQuality(BackpackBiomes.BlackForest, 2);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.ColdResistance))
+                EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.BlackForest, 1);
+            if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.TrollArmor))
+                EffectsFactory.EffectList[BackpackEffect.TrollArmor].RegisterEffectBiomeQuality(BackpackBiomes.BlackForest, 2);
         }
     }
 
