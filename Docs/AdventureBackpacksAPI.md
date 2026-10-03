@@ -99,7 +99,7 @@ Mod developers can integrate with Adventure Backpacks using either of two method
    - Provides full typed access with cached reflection delegates. Requires no external DLL references or ILRepack.
 2. **Repackable API Assembly**:
    - Reference `AdventureBackpacksAPI.dll` (from release zips) and merge into your mod via `ILRepack`.
-   - `AdventureBackpacks` automatically rewrites IL bytecode references to the live mod at runtime via `APIManager`.
+   - `AdventureBackpacks` automatically redirects API references to the live mod at runtime.
 
 <a name='M-AdventureBackpacks-API-ABAPI-CanOpenBackpack-Player-'></a>
 ### CanOpenBackpack(player) `method`

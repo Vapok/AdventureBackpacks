@@ -119,7 +119,7 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
 
 Adventure Backpacks provides two integration pathways for third-party mod developers:
 
-* **Option A (Repackable API Assembly)**: Reference `AdventureBackpacksAPI.dll` at compile time and bundle via `ILRepack`. At runtime, `APIManager` automatically rewrites IL bytecode references to the live mod.
+* **Option A (Repackable API Assembly)**: Reference `AdventureBackpacksAPI.dll` at compile time and bundle via `ILRepack`.
 * **Option B (Zero-Dependency Client Wrapper)**: Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) directly into your project for zero-dependency reflection with cached delegates.
 
 ### Developer Guides & Resources:

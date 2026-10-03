@@ -1,7 +1,7 @@
 # 2.2.6 - Mod Developer Integration & Inventory APIs
 * **Mod Developer Integration Options**: Added comprehensive integration documentation and support for two ways other mod authors can integrate with Adventure Backpacks:
   * A lightweight reflection client (`ABAPI_Client.cs`) for zero-dependency integration.
-  * Direct assembly references with dynamic bytecode redirection (`APIManager`), allowing third-party mods to safely bundle API stubs without version conflicts.
+  * Direct assembly references with dynamic bytecode redirection, allowing third-party mods to safely bundle API stubs without version conflicts.
 * **Backpack Inventory Enumeration**: Added helper methods to retrieve all equipped and worn backpack inventories on a player, making it easier for crafting, storage, and utility mods to audit or interact with backpack contents.
 
 <details>

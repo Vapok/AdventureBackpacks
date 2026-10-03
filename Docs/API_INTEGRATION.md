@@ -30,7 +30,7 @@ Reference `AdventureBackpacksAPI.dll` in your `.csproj`:
 ```
 
 ### 3. Configure ILRepack
-Add `AdventureBackpacksAPI.dll` to your `ILRepack` inputs. Adventure Backpacks embeds `APIManager` at runtime, which intercepts BepInEx assembly loading and dynamically redirects all IL references from `AdventureBackpacks.API` to the live `AdventureBackpacks.dll` assembly.
+Add `AdventureBackpacksAPI.dll` to your `ILRepack` inputs. Adventure Backpacks dynamically intercepts assembly loading and redirects all API references to the live `AdventureBackpacks.dll` assembly at runtime.
 
 When Adventure Backpacks is not installed, the repacked stub methods execute safely and return default values (`false`, `null`, empty collections) without causing runtime exceptions.
 
@@ -117,6 +117,6 @@ public class SoftBackpackIntegration
 | :--- | :--- | :--- |
 | **Dependencies** | Requires `AdventureBackpacksAPI.dll` at compile time | Zero external dependencies |
 | **Build Tooling** | Requires `ILRepack` | Standard compilation (drop-in `.cs`) |
-| **Runtime Mechanism** | Bytecode redirection via `APIManager` | Cached reflection delegates via `ABAPIClient` |
+| **Runtime Mechanism** | Dynamic assembly redirection | Cached reflection delegates via `ABAPIClient` |
 | **Missing Mod Safety** | Executes repacked dummy stubs returning defaults | Returns safe defaults via null-checked delegates |
 | **Recommended Use** | Hard or repacked integrations | Soft, optional integrations |
