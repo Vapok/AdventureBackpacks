@@ -9,7 +9,15 @@ using AdventureBackpacks.Features;
 namespace AdventureBackpacks.API;
 
 /// <summary>
-/// Adventure Backpacks API. Be sure to include the AdventureBackpacksAPI.dll as a dependency to your project.
+/// Adventure Backpacks developer API.
+/// 
+/// Mod developers can integrate with Adventure Backpacks using either of two methods:
+/// 
+/// 1. Zero-Dependency Client Wrapper (Recommended for soft integrations):
+///    Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) into your mod project. Provides full typed access with cached reflection delegates. Requires no external DLL references or ILRepack.
+/// 
+/// 2. Repackable API Assembly:
+///    Reference [AdventureBackpacksAPI.dll](https://github.com/Vapok/AdventureBackpacks/releases) and merge into your mod via ILRepack. Adventure Backpacks automatically redirects API references to the live mod at runtime.
 /// </summary>
 [PublicAPI]
 // ReSharper disable once InconsistentNaming

@@ -6,16 +6,23 @@
 - [ABAPI](#T-AdventureBackpacks-API-ABAPI 'AdventureBackpacks.API.ABAPI')
   - [CanOpenBackpack(player)](#M-AdventureBackpacks-API-ABAPI-CanOpenBackpack-Player- 'AdventureBackpacks.API.ABAPI.CanOpenBackpack(Player)')
   - [GetActiveBackpackStatusEffects()](#M-AdventureBackpacks-API-ABAPI-GetActiveBackpackStatusEffects 'AdventureBackpacks.API.ABAPI.GetActiveBackpackStatusEffects')
+  - [GetAllBackpackInventories(player)](#M-AdventureBackpacks-API-ABAPI-GetAllBackpackInventories-Player- 'AdventureBackpacks.API.ABAPI.GetAllBackpackInventories(Player)')
   - [GetBackpack(itemData)](#M-AdventureBackpacks-API-ABAPI-GetBackpack-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.GetBackpack(ItemDrop.ItemData)')
+  - [GetBackpackInventory(itemData)](#M-AdventureBackpacks-API-ABAPI-GetBackpackInventory-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.GetBackpackInventory(ItemDrop.ItemData)')
   - [GetEquippedBackpack(player)](#M-AdventureBackpacks-API-ABAPI-GetEquippedBackpack-Player- 'AdventureBackpacks.API.ABAPI.GetEquippedBackpack(Player)')
+  - [GetEquippedBackpackInventory(player)](#M-AdventureBackpacks-API-ABAPI-GetEquippedBackpackInventory-Player- 'AdventureBackpacks.API.ABAPI.GetEquippedBackpackInventory(Player)')
   - [GetRegisterdStatusEffects()](#M-AdventureBackpacks-API-ABAPI-GetRegisterdStatusEffects 'AdventureBackpacks.API.ABAPI.GetRegisterdStatusEffects')
   - [IsBackpack(itemData)](#M-AdventureBackpacks-API-ABAPI-IsBackpack-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.IsBackpack(ItemDrop.ItemData)')
   - [IsBackpackEquipped(player)](#M-AdventureBackpacks-API-ABAPI-IsBackpackEquipped-Player- 'AdventureBackpacks.API.ABAPI.IsBackpackEquipped(Player)')
+  - [IsDisplayTotalIngredientCountEnabled()](#M-AdventureBackpacks-API-ABAPI-IsDisplayTotalIngredientCountEnabled 'AdventureBackpacks.API.ABAPI.IsDisplayTotalIngredientCountEnabled')
   - [IsLoaded()](#M-AdventureBackpacks-API-ABAPI-IsLoaded 'AdventureBackpacks.API.ABAPI.IsLoaded')
   - [IsThisBackpackEquipped(player,itemData)](#M-AdventureBackpacks-API-ABAPI-IsThisBackpackEquipped-Player,ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.IsThisBackpackEquipped(Player,ItemDrop.ItemData)')
   - [OpenBackpack(player,gui)](#M-AdventureBackpacks-API-ABAPI-OpenBackpack-Player,InventoryGui- 'AdventureBackpacks.API.ABAPI.OpenBackpack(Player,InventoryGui)')
   - [RegisterBackpack(definition)](#M-AdventureBackpacks-API-ABAPI-RegisterBackpack-AdventureBackpacks-API-ABAPI-BackpackDefinition- 'AdventureBackpacks.API.ABAPI.RegisterBackpack(AdventureBackpacks.API.ABAPI.BackpackDefinition)')
   - [RegisterEffect(effectDefinition)](#M-AdventureBackpacks-API-ABAPI-RegisterEffect-AdventureBackpacks-API-ABAPI-EffectDefinition- 'AdventureBackpacks.API.ABAPI.RegisterEffect(AdventureBackpacks.API.ABAPI.EffectDefinition)')
+  - [TryGetAllBackpackInventories(player,inventories)](#M-AdventureBackpacks-API-ABAPI-TryGetAllBackpackInventories-Player,System-Collections-Generic-List{Inventory}@- 'AdventureBackpacks.API.ABAPI.TryGetAllBackpackInventories(Player,System.Collections.Generic.List{Inventory}@)')
+  - [TryGetBackpackInventory(itemData,inventory)](#M-AdventureBackpacks-API-ABAPI-TryGetBackpackInventory-ItemDrop-ItemData,Inventory@- 'AdventureBackpacks.API.ABAPI.TryGetBackpackInventory(ItemDrop.ItemData,Inventory@)')
+  - [TryGetEquippedBackpackInventory(player,inventory)](#M-AdventureBackpacks-API-ABAPI-TryGetEquippedBackpackInventory-Player,Inventory@- 'AdventureBackpacks.API.ABAPI.TryGetEquippedBackpackInventory(Player,Inventory@)')
 - [Backpack](#T-AdventureBackpacks-API-ABAPI-Backpack 'AdventureBackpacks.API.ABAPI.Backpack')
   - [Definition](#F-AdventureBackpacks-API-ABAPI-Backpack-Definition 'AdventureBackpacks.API.ABAPI.Backpack.Definition')
   - [Inventory](#F-AdventureBackpacks-API-ABAPI-Backpack-Inventory 'AdventureBackpacks.API.ABAPI.Backpack.Inventory')
@@ -40,11 +47,11 @@
   - [#ctor()](#M-AdventureBackpacks-API-ABAPI-BackpackDefinition-#ctor 'AdventureBackpacks.API.ABAPI.BackpackDefinition.#ctor')
   - [#ctor(backPackGo)](#M-AdventureBackpacks-API-ABAPI-BackpackDefinition-#ctor-UnityEngine-GameObject- 'AdventureBackpacks.API.ABAPI.BackpackDefinition.#ctor(UnityEngine.GameObject)')
   - [#ctor(assetBundle,prefabName)](#M-AdventureBackpacks-API-ABAPI-BackpackDefinition-#ctor-UnityEngine-AssetBundle,System-String- 'AdventureBackpacks.API.ABAPI.BackpackDefinition.#ctor(UnityEngine.AssetBundle,System.String)')
+  - [ArmorPerLevel](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ArmorPerLevel 'AdventureBackpacks.API.ABAPI.BackpackDefinition.ArmorPerLevel')
   - [AssetBundle](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-AssetBundle 'AdventureBackpacks.API.ABAPI.BackpackDefinition.AssetBundle')
   - [BackPackGo](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-BackPackGo 'AdventureBackpacks.API.ABAPI.BackpackDefinition.BackPackGo')
   - [BackpackBiome](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-BackpackBiome 'AdventureBackpacks.API.ABAPI.BackpackDefinition.BackpackBiome')
   - [BackpackSizeByQuality](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-BackpackSizeByQuality 'AdventureBackpacks.API.ABAPI.BackpackDefinition.BackpackSizeByQuality')
-  - [ArmorPerLevel](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ArmorPerLevel 'AdventureBackpacks.API.ABAPI.BackpackDefinition.ArmorPerLevel')
   - [CarryBonus](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-CarryBonus 'AdventureBackpacks.API.ABAPI.BackpackDefinition.CarryBonus')
   - [ConfigSection](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ConfigSection 'AdventureBackpacks.API.ABAPI.BackpackDefinition.ConfigSection')
   - [CraftingTable](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-CraftingTable 'AdventureBackpacks.API.ABAPI.BackpackDefinition.CraftingTable')
@@ -90,16 +97,13 @@ AdventureBackpacks.API
 
 Adventure Backpacks developer API.
 
-##### Integration Options
-
 Mod developers can integrate with Adventure Backpacks using either of two methods:
 
-1. **Zero-Dependency Client Wrapper (Recommended for soft integrations)**:
-   - Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) into your mod project.
-   - Provides full typed access with cached reflection delegates. Requires no external DLL references or ILRepack.
-2. **Repackable API Assembly**:
-   - Reference [`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases) (from release zips) and merge into your mod via `ILRepack`.
-   - `AdventureBackpacks` automatically redirects API references to the live mod at runtime.
+1. Zero-Dependency Client Wrapper (Recommended for soft integrations):
+   Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) into your mod project. Provides full typed access with cached reflection delegates. Requires no external DLL references or ILRepack.
+
+2. Repackable API Assembly:
+   Reference [AdventureBackpacksAPI.dll](https://github.com/Vapok/AdventureBackpacks/releases) and merge into your mod via ILRepack. Adventure Backpacks automatically redirects API references to the live mod at runtime.
 
 <a name='M-AdventureBackpacks-API-ABAPI-CanOpenBackpack-Player-'></a>
 ### CanOpenBackpack(player) `method`
@@ -133,6 +137,24 @@ HashSet of Status Effects.
 
 This method has no parameters.
 
+<a name='M-AdventureBackpacks-API-ABAPI-GetAllBackpackInventories-Player-'></a>
+### GetAllBackpackInventories(player) `method`
+
+##### Summary
+
+Retrieves all distinct backpack inventories associated with the player,
+including equipped backpacks (handling custom equipment slots) and backpacks carried in the player's inventory.
+
+##### Returns
+
+A list of unique backpack Inventory instances.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| player | [Player](#T-Player 'Player') | The player to inspect, usually Player.m_localPlayer. |
+
 <a name='M-AdventureBackpacks-API-ABAPI-GetBackpack-ItemDrop-ItemData-'></a>
 ### GetBackpack(itemData) `method`
 
@@ -150,6 +172,23 @@ Nullable Backpack Object. Check HasValue.
 | ---- | ---- | ----------- |
 | itemData | [ItemDrop.ItemData](#T-ItemDrop-ItemData 'ItemDrop.ItemData') | ItemDrop.ItemData object |
 
+<a name='M-AdventureBackpacks-API-ABAPI-GetBackpackInventory-ItemDrop-ItemData-'></a>
+### GetBackpackInventory(itemData) `method`
+
+##### Summary
+
+Retrieves the Inventory of a backpack from an ItemDrop.ItemData object.
+
+##### Returns
+
+Inventory object, or null if not a backpack or uninitialized
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| itemData | [ItemDrop.ItemData](#T-ItemDrop-ItemData 'ItemDrop.ItemData') | ItemDrop.ItemData object |
+
 <a name='M-AdventureBackpacks-API-ABAPI-GetEquippedBackpack-Player-'></a>
 ### GetEquippedBackpack(player) `method`
 
@@ -160,6 +199,23 @@ Returns a Backpack object if the provided Player is currently wearing a backpack
 ##### Returns
 
 Nullable Backpack Object
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
+
+<a name='M-AdventureBackpacks-API-ABAPI-GetEquippedBackpackInventory-Player-'></a>
+### GetEquippedBackpackInventory(player) `method`
+
+##### Summary
+
+Retrieves the Inventory of the equipped backpack on the specified player.
+
+##### Returns
+
+Inventory object, or null if no backpack equipped
 
 ##### Parameters
 
@@ -215,6 +271,21 @@ true or false
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
+
+<a name='M-AdventureBackpacks-API-ABAPI-IsDisplayTotalIngredientCountEnabled'></a>
+### IsDisplayTotalIngredientCountEnabled() `method`
+
+##### Summary
+
+Indicates whether requirement counts in the crafting panel display as 'Available/Required'.
+
+##### Returns
+
+True if enabled, false otherwise.
+
+##### Parameters
+
+This method has no parameters.
 
 <a name='M-AdventureBackpacks-API-ABAPI-IsLoaded'></a>
 ### IsLoaded() `method`
@@ -288,6 +359,60 @@ Use this method in the Awake() of your mod to register a Status Effect that can 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | effectDefinition | [AdventureBackpacks.API.ABAPI.EffectDefinition](#T-AdventureBackpacks-API-ABAPI-EffectDefinition 'AdventureBackpacks.API.ABAPI.EffectDefinition') | Create a new EffectDefinition that contains the overall parameters that are needed to register the new effect. |
+
+<a name='M-AdventureBackpacks-API-ABAPI-TryGetAllBackpackInventories-Player,System-Collections-Generic-List{Inventory}@-'></a>
+### TryGetAllBackpackInventories(player,inventories) `method`
+
+##### Summary
+
+Tries to retrieve all distinct backpack inventories associated with the player.
+
+##### Returns
+
+True if at least one backpack inventory was found; otherwise false.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| player | [Player](#T-Player 'Player') | The player to inspect. |
+| inventories | [System.Collections.Generic.List{Inventory}@](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Collections.Generic.List 'System.Collections.Generic.List{Inventory}@') | Output list containing all found backpack inventories. |
+
+<a name='M-AdventureBackpacks-API-ABAPI-TryGetBackpackInventory-ItemDrop-ItemData,Inventory@-'></a>
+### TryGetBackpackInventory(itemData,inventory) `method`
+
+##### Summary
+
+Tries to retrieve the Inventory of a backpack from an ItemDrop.ItemData object.
+
+##### Returns
+
+true if item is a backpack and inventory exists, otherwise false
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| itemData | [ItemDrop.ItemData](#T-ItemDrop-ItemData 'ItemDrop.ItemData') | ItemDrop.ItemData object |
+| inventory | [Inventory@](#T-Inventory@ 'Inventory@') | Out parameter for the backpack inventory |
+
+<a name='M-AdventureBackpacks-API-ABAPI-TryGetEquippedBackpackInventory-Player,Inventory@-'></a>
+### TryGetEquippedBackpackInventory(player,inventory) `method`
+
+##### Summary
+
+Tries to retrieve the Inventory of the equipped backpack on the specified player.
+
+##### Returns
+
+true if backpack equipped and inventory exists, otherwise false
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
+| inventory | [Inventory@](#T-Inventory@ 'Inventory@') | Out parameter for the backpack inventory |
 
 <a name='T-AdventureBackpacks-API-ABAPI-Backpack'></a>
 ## Backpack `type`
@@ -494,6 +619,14 @@ Equipped Detection won't detect if not in the shoulder slot.
 | assetBundle | [UnityEngine.AssetBundle](#T-UnityEngine-AssetBundle 'UnityEngine.AssetBundle') | Provide the Asset Bundle that contains the backpack prefab |
 | prefabName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Prefab name of the backpack |
 
+<a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ArmorPerLevel'></a>
+### ArmorPerLevel `constants`
+
+##### Summary
+
+Provides the configured armor per quality level applied to the backpack.
+For registering a new backpack, this is the default value.
+
 <a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-AssetBundle'></a>
 ### AssetBundle `constants`
 
@@ -527,14 +660,6 @@ This is flag enum.
 Dictionary of Vector2's that contain the x and y sizing of the backpack at each Quality level'
 Dictionary key is the Item's Quality level.
 Dictionary value is the Vector2 object.
-
-<a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-ArmorPerLevel'></a>
-### ArmorPerLevel `constants`
-
-##### Summary
-
-Provides the configured armor per quality level applied to the backpack.
-For registering a new backpack, this is the default value.
 
 <a name='F-AdventureBackpacks-API-ABAPI-BackpackDefinition-CarryBonus'></a>
 ### CarryBonus `constants`

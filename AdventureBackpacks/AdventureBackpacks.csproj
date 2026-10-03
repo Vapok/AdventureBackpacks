@@ -248,6 +248,9 @@
         <Copy SourceFiles="@(TranslationFiles)" DestinationFolder="$(ReleaseRoot)/$(ProjectName)-Vapok/plugins/Translations" SkipUnchangedFiles="true" />
         <Copy SourceFiles="@(PackageDocs)" DestinationFolder="$(ReleaseRoot)/$(ProjectName)-Vapok" SkipUnchangedFiles="true" />
     </Target>
+    <Target Name="EnsureVsxmdPermissions" BeforeTargets="Vsxmd" Condition=" $([MSBuild]::IsOsPlatform('Linux')) or $([MSBuild]::IsOsPlatform('OSX')) ">
+        <Exec Command="chmod +x &quot;$(MSBuildProjectDirectory)/../packages/Vsxmd.1.4.6/tools/linux-x64/Vsxmd&quot;" Condition="Exists('$(MSBuildProjectDirectory)/../packages/Vsxmd.1.4.6/tools/linux-x64/Vsxmd')" />
+    </Target>
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
         <PropertyGroup>
             <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
@@ -255,9 +258,11 @@
         <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
         <Error Condition="!Exists('..\packages\JotunnLib.2.30.2\build\JotunnLib.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JotunnLib.2.30.2\build\JotunnLib.props'))" />
         <Error Condition="!Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets'))" />
+        <Error Condition="!Exists('..\packages\Vsxmd.1.4.6\build\Vsxmd.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Vsxmd.1.4.6\build\Vsxmd.targets'))" />
     </Target>
     <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.44.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
     <Import Project="..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets" Condition="Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" />
+    <Import Project="..\packages\Vsxmd.1.4.6\build\Vsxmd.targets" Condition="Exists('..\packages\Vsxmd.1.4.6\build\Vsxmd.targets')" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">
