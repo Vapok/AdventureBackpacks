@@ -1,9 +1,15 @@
-# 2.2.5 - Portal Interoperability & Crafting Stability
-* **Portal Mod Interoperability**: Improved compatibility with portal mods (such as Proper Portals and World Advancement Progression).
-* **Crafting Null Reference Fix**: Added protections during backpack material consumption to prevent rare errors when third-party mods modify item removal routines.
+# 2.2.6 - Mod Developer Integration & Inventory APIs
+* **Mod Developer Integration Options**: Added comprehensive integration documentation and support for two ways other mod authors can integrate with Adventure Backpacks:
+  * A lightweight reflection client (`ABAPI_Client.cs`) for zero-dependency integration.
+  * Direct assembly references with dynamic bytecode redirection (`APIManager`), allowing third-party mods to safely bundle API stubs without version conflicts.
+* **Backpack Inventory Enumeration**: Added helper methods to retrieve all equipped and worn backpack inventories on a player, making it easier for crafting, storage, and utility mods to audit or interact with backpack contents.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.5 - Portal Interoperability & Crafting Stability
+* **Portal Mod Interoperability**: Improved compatibility with portal mods (such as Proper Portals and World Advancement Progression).
+* **Crafting Null Reference Fix**: Added protections during backpack material consumption to prevent rare errors when third-party mods modify item removal routines.
 
 ### 2.2.4 - Backpack Armor & Speed Tuning
 * **Configurable Backpack Armor**: Added a setting to customize the armor value provided per backpack level (defaults to 1 armor per level), giving your backpacks protective defense as you upgrade them.

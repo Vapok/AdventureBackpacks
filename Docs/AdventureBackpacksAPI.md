@@ -88,7 +88,18 @@ AdventureBackpacks.API
 
 ##### Summary
 
-Adventure Backpacks API. Be sure to include the AdventureBackpacksAPI.dll as a dependency to your project.
+Adventure Backpacks developer API.
+
+##### Integration Options
+
+Mod developers can integrate with Adventure Backpacks using either of two methods:
+
+1. **Zero-Dependency Client Wrapper (Recommended for soft integrations)**:
+   - Drop [Docs/ABAPI_Client.cs](file:///home/vapok/Modding/Valheim/AdventureBackpacks/Docs/ABAPI_Client.cs) into your mod project.
+   - Provides full typed access with cached reflection delegates. Requires no external DLL references or ILRepack.
+2. **Repackable API Assembly**:
+   - Reference `AdventureBackpacksAPI.dll` (from release zips) and merge into your mod via `ILRepack`.
+   - `AdventureBackpacks` automatically rewrites IL bytecode references to the live mod at runtime via `APIManager`.
 
 <a name='M-AdventureBackpacks-API-ABAPI-CanOpenBackpack-Player-'></a>
 ### CanOpenBackpack(player) `method`
