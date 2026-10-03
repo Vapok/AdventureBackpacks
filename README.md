@@ -117,15 +117,15 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
 
 ## 🧩 Adventure Backpacks API (ABAPI)
 
-Mod developers can easily build custom backpacks and register effects using our dedicated API assembly:
+Adventure Backpacks provides two integration pathways for third-party mod developers:
 
-* 📖 [ABAPI Documentation](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)
-* 💾 [Download ABAPI.DLL Releases](https://github.com/Vapok/AdventureBackpacks/releases)
+* **Option A (Repackable API Assembly)**: Reference `AdventureBackpacksAPI.dll` at compile time and bundle via `ILRepack`.
+* **Option B (Zero-Dependency Client Wrapper)**: Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) directly into your project for zero-dependency reflection with cached delegates.
 
-### API Capabilities:
-* 🎒 Register custom 3D backpack prefabs, textures, and recipes.
-* 🪄 Register and attach custom status effects.
-* 🔍 Query backpack state, equipped equipment, and inspect backpack contents.
+### Developer Guides & Resources:
+* 🛠️ **[API Integration Guide](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/API_INTEGRATION.md)** — Step-by-step walkthrough for configuring both integration options.
+* 📖 **[ABAPI Class Reference](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)** — Detailed documentation for all classes, methods, and parameters.
+* 💾 **[Download AdventureBackpacksAPI.dll](https://github.com/Vapok/AdventureBackpacks/releases)** — Standalone API assembly archives.
 
 ---
 

@@ -1,3 +1,14 @@
+# 2.2.6 - Mod Developer Integration & Inventory APIs
+* **ABAPI Inventory Enumeration (`API/ABAPI.cs`)**:
+  * Added `GetAllBackpackInventories(Player player)` returning `List<Inventory>` containing all valid backpack inventories equipped or carried on the specified player.
+  * Added `TryGetAllBackpackInventories(Player player, out List<Inventory> backpackInventories)` providing safe boolean try-pattern access for third-party mod integrations.
+  * Documented both methods with full XML documentation comments in `API/ABAPI.cs`.
+* **Zero-Dependency Integration Client (`Docs/ABAPI_Client.cs`, `Docs/API_INTEGRATION.md`)**:
+  * Provided `ABAPI_Client.cs` standalone drop-in reflection client for mod developers who wish to integrate with Adventure Backpacks without taking a compile-time or distribution dependency on `AdventureBackpacksAPI.dll`.
+  * Implemented cached delegate reflection filtered by assembly name (`assembly.GetName().Name == "AdventureBackpacks"`).
+* **Inventory Resize Exception Hardening (`Assets/Backpacks.cs`)**:
+  * In `Backpacks.ValidateBackpackInventorySizing`, wrapped `newInventory.MoveAll(currentInventory)` in a `try...catch` and guarded `backpackItem.IsLoadingInventory = false` within a `finally` block. Guarantees that any server or third-party method exceptions during inventory resizing cannot leave the backpack in a permanent loading lock state (resolves Sentry issue [ADVENTUREBACKPACKS-2E](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2E)).
+
 # 2.2.5 - Portal Interoperability & Crafting Stability
 * **Portal Teleportation Interoperability (`Patches/Inventory.cs`, `Patches/Humanoid.cs`)**:
   * In `Patches/Inventory.cs` (`IsTeleportablePatch.IsBackpackTeleportable`), removed hardcoded manual loops over `m_shared.m_teleportable` and `m_toolTier >= 1000`. Simplified method to delegate directly to `bpInventory.IsTeleportable(allowAllItems)`. This allows external portal mods (such as Proper Portals, which transpiles `Inventory.IsTeleportable` to unconditionally return true) and progression mods (such as World Advancement Progression, which dynamically evaluates boss progression keys on inventories) to govern portal behavior on backpack contents uniformly without Adventure Backpacks enforcing preemptive restrictions.

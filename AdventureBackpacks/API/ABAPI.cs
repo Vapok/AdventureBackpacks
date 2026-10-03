@@ -9,7 +9,15 @@ using AdventureBackpacks.Features;
 namespace AdventureBackpacks.API;
 
 /// <summary>
-/// Adventure Backpacks API. Be sure to include the AdventureBackpacksAPI.dll as a dependency to your project.
+/// Adventure Backpacks developer API.
+/// 
+/// Mod developers can integrate with Adventure Backpacks using either of two methods:
+/// 
+/// 1. Zero-Dependency Client Wrapper (Recommended for soft integrations):
+///    Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) into your mod project. Provides full typed access with cached reflection delegates. Requires no external DLL references or ILRepack.
+/// 
+/// 2. Repackable API Assembly:
+///    Reference [AdventureBackpacksAPI.dll](https://github.com/Vapok/AdventureBackpacks/releases) and merge into your mod via ILRepack. Adventure Backpacks automatically redirects API references to the live mod at runtime.
 /// </summary>
 [PublicAPI]
 // ReSharper disable once InconsistentNaming
@@ -295,5 +303,56 @@ return null;
 #if ! API
         CraftingContext.Unsuppress(modIdentifier);
 #endif
+    }
+
+    /// <summary>
+    /// Retrieves all distinct backpack inventories associated with the player,
+    /// including equipped backpacks (handling custom equipment slots) and backpacks carried in the player's inventory.
+    /// </summary>
+    /// <param name="player">The player to inspect, usually Player.m_localPlayer.</param>
+    /// <returns>A list of unique backpack Inventory instances.</returns>
+    public static List<Inventory> GetAllBackpackInventories(Player player)
+    {
+#if ! API
+        List<Inventory> inventories = new List<Inventory>();
+        if (player == null)
+            return inventories;
+
+        HashSet<Inventory> seen = new HashSet<Inventory>();
+
+        Inventory equippedInv = GetEquippedBackpackInventory(player);
+        if (equippedInv != null && seen.Add(equippedInv))
+        {
+            inventories.Add(equippedInv);
+        }
+
+        Inventory playerInv = player.GetInventory();
+        if (playerInv != null)
+        {
+            foreach (ItemDrop.ItemData item in playerInv.GetAllItems())
+            {
+                if (TryGetBackpackInventory(item, out Inventory bagInv) && bagInv != null && seen.Add(bagInv))
+                {
+                    inventories.Add(bagInv);
+                }
+            }
+        }
+
+        return inventories;
+#else
+        return new List<Inventory>();
+#endif
+    }
+
+    /// <summary>
+    /// Tries to retrieve all distinct backpack inventories associated with the player.
+    /// </summary>
+    /// <param name="player">The player to inspect.</param>
+    /// <param name="inventories">Output list containing all found backpack inventories.</param>
+    /// <returns>True if at least one backpack inventory was found; otherwise false.</returns>
+    public static bool TryGetAllBackpackInventories(Player player, out List<Inventory> inventories)
+    {
+        inventories = GetAllBackpackInventories(player);
+        return inventories != null && inventories.Count > 0;
     }
 }
