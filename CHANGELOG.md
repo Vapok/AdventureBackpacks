@@ -1,11 +1,15 @@
-# 2.2.8 - QuickStackStore & Container Sorting Compatibility
+# 2.2.9 - UI Input & Mod Interoperability Fix
+* **Inventory Input & Mod Interoperability**:
+  * Improved compatibility with mods that modify inventory input keys (such as Marketplace and Server NPCs), preventing startup errors and ensuring backpack hotkeys continue to respond properly.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.8 - QuickStackStore & Container Sorting Compatibility
 * **Inventory & Container Sorting Compatibility**:
   * Fixed an issue where using QuickStackStore's sort button while having a backpack open caused an error and prevented the backpack from sorting. Backpacks now sort cleanly alongside chest and inventory sorting mods.
 * **Biome & Effect Registration Safeguards**:
   * Hardened backpack biome and power registration to prevent errors when loading backpacks or reading custom configuration settings.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.2.7 - Forge of Potential Upgrades & Infinite Quality Support
 * **Forge of Potential Upgrading**: Backpacks can now be upgraded at the Deep North Forge of Potential using Protection Idols. Each backpack tier accepts its matching biome idol (Meadows through Mistlands, plus legacy and compatibility backpacks).
