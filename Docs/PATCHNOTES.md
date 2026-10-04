@@ -1,3 +1,8 @@
+# 2.2.9 - UI Input & Transpiler Interoperability Fix
+* **InventoryGui.Update Transpiler Hardening (`Patches/InventoryGui.cs`)**:
+  * In `InventoryGuiUpdateTranspiler`, updated the pattern-matching anchor for `DetectInputToHide` injection. Previously, the transpiler matched `ZInput.GetKeyDown(KeyCode.Escape)` followed by string literal operand `"Use"`. Replaced the `"Use"` string check with a structural check for `OpCodes.Ldstr` followed by `OpCodes.Call` to `ZInput.GetButtonDown(string)`.
+  * Prevents transpiler failure and startup errors when running alongside mods that mutate or replace the vanilla `"Use"` keybind string in `InventoryGui.Update` (such as `Marketplace and Server NPCs`, which replaces `"Use"` with `"None"`).
+
 # 2.2.8 - QuickStackStore & Container Sorting Compatibility
 * **Proxy Container Network View Parity & RPC Protection (`Patches/Container.cs`)**:
   * Added `ZNetViewIsOwnerPatch` prefix on `ZNetView.IsOwner()` returning `true` for `AB_BackpackProxy`. Aligns `m_nview.IsOwner()` with existing `Container.IsOwner()` patch so third-party inventory and sorting mods (such as Goldenrevolver's QuickStackStore) that inspect `container.m_nview` instead of `container.IsOwner()` recognize client ownership and sort backpack inventories locally rather than attempting remote RPC routing.
