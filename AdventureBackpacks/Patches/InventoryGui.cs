@@ -31,6 +31,8 @@ internal static class InventoryGuiPatches
         {
             public ItemDrop.ItemData UpgradeItem;
             public BackpackComponent Backpack;
+            public Vector2i GridPos;
+            public string ItemName;
         }
 
         [HarmonyPrepare]
@@ -43,11 +45,14 @@ internal static class InventoryGuiPatches
             CraftingContext.Enter();
             if (__instance != null && __instance.m_craftUpgradeItem != null && __instance.m_craftUpgradeItem.IsBackpack())
             {
-                BackpackComponent backpack = __instance.m_craftUpgradeItem.Data().Get<BackpackComponent>();
+                ItemDrop.ItemData upgradeItem = __instance.m_craftUpgradeItem;
+                BackpackComponent backpack = upgradeItem.Data().Get<BackpackComponent>();
                 __state = new CraftUpgradeState
                 {
-                    UpgradeItem = __instance.m_craftUpgradeItem,
-                    Backpack = backpack
+                    UpgradeItem = upgradeItem,
+                    Backpack = backpack,
+                    GridPos = upgradeItem.m_gridPos,
+                    ItemName = upgradeItem.m_shared?.m_name ?? string.Empty
                 };
             }
             else
@@ -74,8 +79,43 @@ internal static class InventoryGuiPatches
             {
                 BackpackComponent backpack = __state.Backpack;
                 ItemDrop.ItemData upgradingItem = __state.UpgradeItem;
+                Inventory playerInventory = player.GetInventory();
 
-                bool survived = player.GetInventory() != null && backpack.Item != null && player.GetInventory().ContainsItem(backpack.Item);
+                ItemDrop.ItemData newItem = null;
+                bool survived = false;
+
+                if (playerInventory != null)
+                {
+                    if (backpack.Item != null && playerInventory.ContainsItem(backpack.Item))
+                    {
+                        survived = true;
+                        newItem = backpack.Item;
+                    }
+                    else
+                    {
+                        ItemDrop.ItemData itemAtGrid = playerInventory.GetItemAt(__state.GridPos.x, __state.GridPos.y);
+                        if (itemAtGrid != null && itemAtGrid.IsBackpack() && itemAtGrid.m_shared != null && itemAtGrid.m_shared.m_name == __state.ItemName)
+                        {
+                            survived = true;
+                            newItem = itemAtGrid;
+                        }
+                        else
+                        {
+                            CraftingStation currentStation = player.GetCurrentCraftingStation();
+                            bool isUpgrader = currentStation != null && currentStation.m_upgrader;
+                            if (!isUpgrader)
+                            {
+                                ItemDrop.ItemData fallbackItem = playerInventory.GetAllItems().FirstOrDefault(i => i.IsBackpack() && i.m_shared != null && i.m_shared.m_name == __state.ItemName);
+                                if (fallbackItem != null)
+                                {
+                                    survived = true;
+                                    newItem = fallbackItem;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (!survived)
                 {
                     Inventory bpInventory = backpack.GetInventory();
@@ -86,14 +126,19 @@ internal static class InventoryGuiPatches
                 }
                 else
                 {
-                    backpack.Load();
-
-                    if (player.IsThisBackpackEquipped(backpack.Item))
+                    if (newItem != null)
                     {
-                        Container backpackContainer = player.GetBackpackContainerProxy();
-                        backpack.UpdateContainerSizing(ref backpackContainer);
+                        BackpackComponent newBackpack = newItem.Data().GetOrCreate<BackpackComponent>();
+                        newBackpack.Load();
+                        Backpacks.ValidateBackpackInventorySizing(player, newItem);
+
+                        if (player.IsThisBackpackEquipped(newItem))
+                        {
+                            Container backpackContainer = player.GetBackpackContainerProxy();
+                            newBackpack.UpdateContainerSizing(ref backpackContainer);
+                        }
                     }
-                    
+
                     player.UpdateEquipmentStatusEffects();
                 }
             }

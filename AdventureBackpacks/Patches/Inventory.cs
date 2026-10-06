@@ -367,10 +367,10 @@ public static class InventoryPatches
 
         static bool Prefix(Inventory __instance, string name, int stack, int quality, int variant, long crafterID, string crafterName, Vector2i position, bool cheated, bool pickedUp, bool dropIfFullInv, ref ItemDrop.ItemData __result)
         {
-            if (!CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+            if (!CraftingContext.IsActive || Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null || __instance == null || __instance != Player.m_localPlayer.GetInventory())
                 return true;
 
-            if (_movingItemBetweenContainers)
+            if (_movingItemBetweenContainers || ObjectDB.instance == null)
                 return true;
 
             GameObject prefab = ObjectDB.instance.GetItemPrefab(name);
@@ -447,7 +447,7 @@ public static class InventoryPatches
 
         static void Postfix(Inventory __instance, string name, int quality, ref int __result)
         {
-            if (!CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+            if (__instance == null || !CraftingContext.IsActive || Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null || __instance != Player.m_localPlayer.GetInventory())
                 return;
 
             List<ItemDrop.ItemData> equipped = __instance.GetEquippedItems();
