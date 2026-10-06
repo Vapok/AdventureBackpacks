@@ -1,3 +1,13 @@
+# 2.2.10 - Backpack Upgrade & Item Duplication Fix
+* **Crafting Upgrade Survival & Yard Sale Protection (`Patches/InventoryGui.cs`)**:
+  * In `InventoryGuiDoCraftingPatch`, resolved item duplication during backpack upgrades where `bool survived` incorrectly evaluated to false on successful upgrades due to vanilla's `Inventory.RemoveItem` removing the pre-upgrade `ItemData` reference prior to generating the upgraded item.
+  * Added `GridPos` and `ItemName` tracking in `__state` during `Prefix`. In `Postfix`, verifies if the newly created upgraded backpack exists at `GridPos` with matching item identity or across inventory on standard crafting stations before evaluating destruction.
+  * Ensures `Backpacks.PerformYardSale` is strictly triggered only when an upgrader station (such as the Forge of Potential) breaks and permanently destroys a backpack without generating a replacement.
+  * Automatically invokes `Backpacks.ValidateBackpackInventorySizing` on the new item instance to ensure newly unlocked quality tier dimensions are initialized immediately.
+* **Crafting & Inventory Query Null-Safety Hardening (`Patches/Inventory.cs`)**:
+  * In `AddItemCraftPatch.Prefix`, added explicit null guards for `Player.m_localPlayer.GetInventory()`, `__instance`, and `ObjectDB.instance` before querying item prefabs, preventing `NullReferenceException` during background additions on dedicated servers ([ADVENTUREBACKPACKS-2F](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2F)).
+  * In `CountItemsPatch.Postfix`, added explicit null guards for `__instance` and `Player.m_localPlayer.GetInventory()` before querying equipped items during crafting context, preventing `NullReferenceException` ([ADVENTUREBACKPACKS-2J](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2J)).
+
 # 2.2.9 - UI Input & Transpiler Interoperability Fix
 * **InventoryGui.Update Transpiler Hardening (`Patches/InventoryGui.cs`)**:
   * In `InventoryGuiUpdateTranspiler`, updated the pattern-matching anchor for `DetectInputToHide` injection. Previously, the transpiler matched `ZInput.GetKeyDown(KeyCode.Escape)` followed by string literal operand `"Use"`. Replaced the `"Use"` string check with a structural check for `OpCodes.Ldstr` followed by `OpCodes.Call` to `ZInput.GetButtonDown(string)`.
