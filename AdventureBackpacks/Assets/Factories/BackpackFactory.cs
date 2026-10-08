@@ -43,6 +43,8 @@ internal class BackpackFactory : AssetFactory
         _backpackItems.Add(new BackpackMountains("backpack_mountains","BackpackMountains","$vapok_mod_item_backpack_mountains"));
         _backpackItems.Add(new BackpackPlains("backpack_plains","BackpackPlains","$vapok_mod_item_backpack_plains"));
         _backpackItems.Add(new BackpackMistlands("backpack_mistlands","BackpackMistlands","$vapok_mod_item_backpack_mistlands"));
+        _backpackItems.Add(new BackpackAshlands("backpack_ashlands","BackpackAshlands","$vapok_mod_item_backpack_ashlands"));
+        _backpackItems.Add(new BackpackDeepNorth("backpack_deepnorth","BackpackDeepNorth","$vapok_mod_item_backpack_deepnorth"));
         _backpackItems.Add(new LegacyIronBackpack("vapokbackpacks","CapeIronBackpack","$vapok_mod_item_rugged_backpack"));
         _backpackItems.Add(new LegacySilverBackpack("vapokbackpacks","CapeSilverBackpack","$vapok_mod_item_arctic_backpack"));
 

@@ -165,6 +165,8 @@
         <Compile Include="Assets\Items\BackpackItems\BackpackBlackForest.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMeadows.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMistlands.cs" />
+        <Compile Include="Assets\Items\BackpackItems\BackpackAshlands.cs" />
+        <Compile Include="Assets\Items\BackpackItems\BackpackDeepNorth.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackMountains.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackPlains.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackSwamp.cs" />
@@ -206,6 +208,8 @@
         <EmbeddedResource Include="Assets\Bundles\backpack_black_forest" />
         <EmbeddedResource Include="Assets\Bundles\backpack_meadows" />
         <EmbeddedResource Include="Assets\Bundles\backpack_mistlands" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_ashlands" />
+        <EmbeddedResource Include="Assets\Bundles\backpack_deepnorth" />
         <EmbeddedResource Include="Assets\Bundles\backpack_mountains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_plains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_swamp" />
