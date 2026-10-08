@@ -1,11 +1,16 @@
-# 2.2.10 - Backpack Upgrade & Item Duplication Fix
+# 2.2.11 - Performance Optimization & Frame Stutter Fix
+* **Performance & Frame Rate Improvement**:
+  * Fixed an issue that caused small frame hitches and lower frame rates in large bases with many building pieces and creatures.
+  * Optimized network ownership checks so normal game objects skip backpack checks, significantly reducing memory usage and eliminating micro-stutters.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.2.10 - Backpack Upgrade & Item Duplication Fix
 * **Backpack Upgrade Duplication Fix**:
   * Fixed an issue where upgrading a backpack at a crafting station or upgrader dropped duplicate contents onto the workbench while retaining them inside the upgraded bag.
 * **Crafting & Inventory Hardening**:
   * Added safety checks during crafting and inventory queries to prevent errors on dedicated servers and when crafting items with external inventory mods.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.2.9 - UI Input & Mod Interoperability Fix
 * **Inventory Input & Mod Interoperability**:

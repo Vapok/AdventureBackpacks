@@ -127,7 +127,12 @@ public static class ContainerPatches
     {
         static bool Prefix(ZNetView __instance, ref bool __result)
         {
-            if (__instance != null && __instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
+            if (__instance == null || __instance.GetZDO() != null)
+            {
+                return true;
+            }
+
+            if (__instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
             {
                 __result = true;
                 return false;
@@ -141,7 +146,12 @@ public static class ContainerPatches
     {
         static bool Prefix(ZNetView __instance)
         {
-            if (__instance != null && __instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
+            if (__instance == null || __instance.GetZDO() != null)
+            {
+                return true;
+            }
+
+            if (__instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
             {
                 return false;
             }
@@ -154,7 +164,12 @@ public static class ContainerPatches
     {
         static bool Prefix(ZNetView __instance)
         {
-            if (__instance != null && __instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
+            if (__instance == null || __instance.GetZDO() != null)
+            {
+                return true;
+            }
+
+            if (__instance.gameObject != null && __instance.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName))
             {
                 return false;
             }
