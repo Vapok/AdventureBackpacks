@@ -44,6 +44,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal Dictionary<int,ConfigEntry<Vector2>> BackpackSize = new();
     internal ConfigEntry<float> WeightMultiplier;
     internal ConfigEntry<int> CarryBonus;
+    internal ConfigEntry<float> HeatResistance;
     internal ConfigEntry<int> ArmorPerLevel;
     internal ConfigEntry<float> SpeedMod;
     internal ConfigEntry<bool> ScaleSpeedModByQuality;
@@ -53,6 +54,8 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ConfigEntry<BackpackBiomes> BackpackBiome;
     
     internal ConfigSyncBase Config => _config;
+    protected string EnglishSection => _englishSection;
+    protected string LocalizedCategory => _localizedCategory;
     internal ILogIt Log => _logger;
 
 
@@ -215,6 +218,19 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         if (BackpackBiome != null)
         {
             BackpackBiome.SettingChanged += Backpacks.UpdateItemDataConfigValues;
+        }
+    }
+
+    internal virtual void RegisterHeatResistance(float defaultValue = 0.1f)
+    {
+        ConfigSyncBase.SyncedConfig(_englishSection, "Heat Resistance", defaultValue,
+            new ConfigDescription("Heat resistance per item level. Reduces lava damage and delays boiling water damage. Does nothing against burning.",
+                new AcceptableValueRange<float>(0f, 0.25f),
+                new ConfigurationManagerAttributes { Category = _localizedCategory, Order = 11 }), ref HeatResistance);
+
+        if (HeatResistance != null)
+        {
+            HeatResistance.SettingChanged += Backpacks.UpdateItemDataConfigValues;
         }
     }
 
