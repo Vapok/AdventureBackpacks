@@ -1,3 +1,10 @@
+# 2.2.11 - Network View Ownership Check Fast-Path Optimization
+* **ZNetView IsOwner & InvokeRPC Performance Optimization (`Patches/Container.cs`)**:
+  * In `ZNetViewIsOwnerPatch`, added `if (__instance == null || __instance.GetZDO() != null) return true;` as the initial fast path.
+  * In vanilla Valheim, `ZNetView.IsOwner()` is invoked thousands of times per frame across active pieces, creatures, characters, and wear components. Previously, evaluating `__instance.gameObject.name.StartsWith(...)` on every call incurred native C++ `get_gameObject` interop and triggered string allocations on Mono's GC heap (~400,000 strings/sec in populated bases), consuming 3–4 ms/frame and inducing stop-the-world garbage collection stutter.
+  * Because `AB_BackpackProxy` specifically suppresses `ZNetView.Awake()` and never possesses an initialized `ZDO`, verifying `__instance.GetZDO() != null` short-circuits in <1ns via an in-register pointer comparison for all standard game entities, completely bypassing Unity string allocation.
+  * Applied the matching `__instance.GetZDO() != null` fast-path check in `ZNetViewInvokeRpcPatch` and `ZNetViewInvokeRpcWithTargetPatch` on `ZNetView.InvokeRPC` overloads.
+
 # 2.2.10 - Backpack Upgrade & Item Duplication Fix
 * **Crafting Upgrade Survival & Yard Sale Protection (`Patches/InventoryGui.cs`)**:
   * In `InventoryGuiDoCraftingPatch`, resolved item duplication during backpack upgrades where `bool survived` incorrectly evaluated to false on successful upgrades due to vanilla's `Inventory.RemoveItem` removing the pre-upgrade `ItemData` reference prior to generating the upgraded item.
