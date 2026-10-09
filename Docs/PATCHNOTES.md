@@ -1,3 +1,10 @@
+# 2.2.12 - Startup Screen Stability & Dependency Updates
+* **Startup Screen Stability**:
+  * In `Vapok.Valheim.Common` 3.1017.1, resolved `NullReferenceException` in `ModSplashManager` during startup notice display and component destruction ([ADVENTUREBACKPACKS-2C](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2C), [ADVENTUREBACKPACKS-2B](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2B)).
+* **Dependency & Engine Alignment**:
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1017.1.
+  * Aligned game assembly references to Valheim 1.0.17.
+
 # 2.2.11 - Network View Ownership Check Fast-Path Optimization
 * **ZNetView IsOwner & InvokeRPC Performance Optimization (`Patches/Container.cs`)**:
   * In `ZNetViewIsOwnerPatch`, added `if (__instance == null || __instance.GetZDO() != null) return true;` as the initial fast path.

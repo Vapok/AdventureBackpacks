@@ -1,10 +1,15 @@
-# 2.2.11 - Performance Optimization & Frame Stutter Fix
-* **Performance & Frame Rate Improvement**:
-  * Fixed an issue that caused small frame hitches and lower frame rates in large bases with many building pieces and creatures.
-  * Optimized network ownership checks so normal game objects skip backpack checks, significantly reducing memory usage and eliminating micro-stutters.
+# 2.2.12 - Startup Screen Stability & Dependency Updates
+* Fixed an issue where the game startup screen could cause errors or fail to show under certain mod loading conditions.
+* Updated internal dependencies for stability.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 2.2.11 - Performance Optimization & Frame Stutter Fix
+* **Performance & Frame Rate Improvement**:
+  * Fixed an issue that caused small frame hitches and lower frame rates in large bases with many building pieces and creatures.
+  * Optimized network ownership checks so normal game objects skip backpack checks, significantly reducing memory usage and eliminating micro-stutters.
 
 ### 2.2.10 - Backpack Upgrade & Item Duplication Fix
 * **Backpack Upgrade Duplication Fix**:
