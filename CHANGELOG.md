@@ -1,10 +1,36 @@
-# 2.2.11 - Performance Optimization & Frame Stutter Fix
-* **Performance & Frame Rate Improvement**:
-  * Fixed an issue that caused small frame hitches and lower frame rates in large bases with many building pieces and creatures.
-  * Optimized network ownership checks so normal game objects skip backpack checks, significantly reducing memory usage and eliminating micro-stutters.
+# 2.3.0 - Container Tabs, Crafting Auto-Open & HUD Key Hints
+* **Chest & Backpack Container Tabs**:
+  * When opening chests or world containers with an equipped backpack, interactive Chest and Backpack tabs now display directly below the container title.
+  * Easily toggle between chest storage and your backpack using the on-screen buttons, Left and Right arrow keys, or gamepad Right Stick Click (R3).
+  * The container panel smoothly expands downward when tabs are active, keeping all item slots completely visible and unobstructed without overlapping the player inventory above.
+  * Custom chest names and localized backpack names are fully preserved.
+  * Enabled by default and configurable under Local Config (`Enable Container Tabs`).
+* **Crafting Station Auto-Open**:
+  * Added an option to automatically open your backpack alongside crafting stations. Enabled by default and configurable under Local Config (`Open with Crafting Station`).
+* **HUD Key Hints**:
+  * Added bottom-right HUD key hints for backpack interactions, showing active keyboard and gamepad bindings while viewing containers and inventory.
+* **Startup Safety**:
+  * Improved startup safety to prevent rare errors if status effects are loaded before the game database is ready.
+* **Mod Developer API Enhancements**: Added new methods to the developer API (`ABAPI`) and reflection client (`ABAPI_Client.cs`):
+  * `IsBackpackOpen()`: Check whether the backpack GUI is currently open on the player's screen.
+  * `OpenBackpack(player, gui, activeGroup)`: Open the backpack with specific UI group focus (such as crafting stations or inventory).
+  * `IsOpenWithCraftingStationEnabled()` & `IsOpenWithInventoryEnabled()`: Check whether crafting station or inventory auto-opening are enabled in user configuration.
+  * `IsEnableContainerTabsEnabled()`: Check whether container tabs are enabled in user configuration.
+  * `HasActiveExternalContainer()`: Check whether an external container (chest) is currently open and managed alongside the backpack.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 2.2.12 - Startup Screen Stability & Dependency Updates
+* Fixed an issue where the game startup screen could cause errors or fail to show under certain mod loading conditions.
+* Updated internal dependencies for stability.
+
+
+### 2.2.11 - Performance Optimization & Frame Stutter Fix
+* **Performance & Frame Rate Improvement**:
+  * Fixed an issue that caused small frame hitches and lower frame rates in large bases with many building pieces and creatures.
+  * Optimized network ownership checks so normal game objects skip backpack checks, significantly reducing memory usage and eliminating micro-stutters.
 
 ### 2.2.10 - Backpack Upgrade & Item Duplication Fix
 * **Backpack Upgrade Duplication Fix**:

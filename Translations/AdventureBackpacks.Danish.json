@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Frostremodstand",
   "vapok_mod_se_wet_resistance": "Vandmodstand",
   "vapok_mod_yard_sale_blocked": "Kunne ikke tømme rygsæk; fjernelse af genstand blev blokeret. Rygsæk blev ikke flyttet.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Spektralt Opbevaringssvøb"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Spektralt Opbevaringssvøb",
+  "vapok_mod_backpack": "Rygsæk",
+  "vapok_mod_open_backpack": "Åbn rygsæk",
+  "vapok_mod_close_backpack": "Luk rygsæk",
+  "vapok_mod_switch_container": "Skift beholder",
+  "vapok_mod_drop_backpack": "Smid rygsæk",
+  "vapok_mod_quickdrop_backpack": "Hurtigfraslæb rygsæk",
+  "vapok_mod_quickdrop": "Hurtigfraslæb"
 }

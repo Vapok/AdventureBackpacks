@@ -1,44 +1,40 @@
 {
   "vapok_mod_item_backpack_meadows": "Sekk",
   "vapok_mod_item_backpack_meadows_description": "En liten sekk som er i stand til å holde ting.",
-
   "vapok_mod_item_backpack_blackforest": "Robust sekk",
   "vapok_mod_item_backpack_blackforest_description": "En robust sekk med spenner og fine lærremmer.",
-
   "vapok_mod_item_backpack_swamp": "Blodsekk Våtsekk",
   "vapok_mod_item_backpack_swamp_description": "En slitesterk sekk som er forseglet med vanntette blodposer.",
-
   "vapok_mod_item_backpack_mountains": "Arktisk Sherpa-sekk",
   "vapok_mod_item_backpack_mountains_description": "En arktisk sekk, egnet for lange turer gjennom fjellene.",
-
   "vapok_mod_item_backpack_plains": "Lox Skinn Knappsack",
   "vapok_mod_item_backpack_plains_description": "En eventyrsekk laget av svært slitesterkt lox skinn.",
-
   "vapok_mod_item_backpack_mistlands": "Oppdagers Wisppack",
   "vapok_mod_item_backpack_mistlands_description": "En fint håndlaget, mystisk sekk. Komplett med sin egen boks med oppbevaring. Ingen er helt sikre på hvordan det virker.",
-
   "vapok_mod_item_rugged_backpack": "Gammel robust sekk",
   "vapok_mod_item_rugged_backpack_description": "En robust sekk med spenner og fine lærremmer.",
-
   "vapok_mod_item_arctic_backpack": "Gammel arktisk sekk",
   "vapok_mod_item_arctic_backpack_description": "En arktisk sekk, egnet for lange turer gjennom fjellene.",
-
   "vapok_mod_no_inception1": "Ikke irriter gudene.",
   "vapok_mod_no_inception2": "Du har blitt advart.",
   "vapok_mod_no_inception3": "Du har irritert gudene!",
   "vapok_mod_no_inception4": "Sukk ... Thor vil ta seg av deg snart.",
   "vapok_mod_no_inception5": "Thor har fratatt deg dine krefter!!",
-
   "vapok_mod_thor_saves_contents": "Den ryggsekken hadde ting i seg. Thor har lagret det for deg.",
-
   "vapok_mod_useful_backpack": "Din sekk føles nyttig.",
   "vapok_mod_you_droped_bag": "Du slapp en sekk!",
   "vapok_mod_level": "Nivå",
   "vapok_mod_effect": "Effekt",
   "vapok_mod_quick_drop_unavailable": "Hurtigfall ikke tilgjengelig.",
-
   "vapok_mod_se_cold_immunity": "Kuldeimmunitet",
   "vapok_mod_se_frost_resistance": "Frostmotstand",
   "vapok_mod_se_wet_resistance": "Vanntett",
-  "vapok_mod_yard_sale_blocked": "Kunne ikke tømme ryggsekken; fjerning av gjenstander ble blokkert. Ryggsekken ble ikke flyttet."
+  "vapok_mod_yard_sale_blocked": "Kunne ikke tømme ryggsekken; fjerning av gjenstander ble blokkert. Ryggsekken ble ikke flyttet.",
+  "vapok_mod_backpack": "Ryggsekk",
+  "vapok_mod_open_backpack": "Åpne ryggsekk",
+  "vapok_mod_close_backpack": "Lukk ryggsekk",
+  "vapok_mod_switch_container": "Bytt beholder",
+  "vapok_mod_drop_backpack": "Slipp ryggsekk",
+  "vapok_mod_quickdrop_backpack": "Hurtigslipp ryggsekk",
+  "vapok_mod_quickdrop": "Hurtigslipp"
 }

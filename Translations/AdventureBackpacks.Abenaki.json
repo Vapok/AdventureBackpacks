@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Wabikw Wlipos",
   "vapok_mod_se_wet_resistance": "Nebiz Wlipos",
   "vapok_mod_yard_sale_blocked": "Oda kizi pakina môdawa. Môdawa oda wjôsa.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Chibai Agwôbik Môdawa"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Chibai Agwôbik Môdawa",
+  "vapok_mod_backpack": "Môdawa",
+  "vapok_mod_open_backpack": "Tônhô Môdawa",
+  "vapok_mod_close_backpack": "Kôbhodô Môdawa",
+  "vapok_mod_switch_container": "Alikw Wadokôgan",
+  "vapok_mod_drop_backpack": "Peni Môdawa",
+  "vapok_mod_quickdrop_backpack": "Nzi Peni Môdawa",
+  "vapok_mod_quickdrop": "Nzi Peni"
 }

@@ -1,44 +1,40 @@
 {
-   "vapok_mod_item_backpack_meadows": "작은 배낭",
-   "vapok_mod_item_backpack_meadows_description": "물건을 담을 수 있는 작은 배낭입니다.",
- 
-   "vapok_mod_item_backpack_blackforest": "견고한 배낭",
-   "vapok_mod_item_backpack_blackforest_description": "버클형 타입으로 고급가죽이 사용되었습니다. 튼튼해 보입니다.",
- 
-   "vapok_mod_item_backpack_swamp": "혈액이 묻은 배낭",
-   "vapok_mod_item_backpack_swamp_description": "혈액 주머니를 이용하여 제작된 방수형 배낭입니다.",
- 
-   "vapok_mod_item_backpack_mountains": "북극 셰르파 배낭",
-   "vapok_mod_item_backpack_mountains_description": "추위를 견딜수 있습니다. 산을 통과하는데 적합한 배낭입니다.",
- 
-   "vapok_mod_item_backpack_plains": "록스가죽 배낭",
-   "vapok_mod_item_backpack_plains_description": "록스가죽보다 더 튼튼한 가죽은 없습니다. 이시대의 모험가에게 최고의 선물입니다.",
- 
-   "vapok_mod_item_backpack_mistlands": "위습 탐험가의 배낭",
-   "vapok_mod_item_backpack_mistlands_description": "신들이 감탄합니다! 매우 정교하게 만들어졌습니다. 자체 보관함과 함께 완성됩니다. 어떻게 작동하는지 아무도 모릅니다.",
- 
-   "vapok_mod_item_rugged_backpack": "오래되고 투박한 배낭",
-   "vapok_mod_item_rugged_backpack_description": "버클형 타입으로 고급가죽이 사용되었습니다. 튼튼해 보입니다.",
- 
-   "vapok_mod_item_arctic_backpack": "북극 트레킹 배낭",
-   "vapok_mod_item_arctic_backpack_description": "추위를 견딜수 있습니다. 산을 통과하는데 적합한 배낭입니다.",
-  
-   "vapok_mod_no_inception1": "신들을 화나게 하지 마십시오.",
-   "vapok_mod_no_inception2": "당신은 경고 받았습니다.",
-   "vapok_mod_no_inception3": "신들이 분노합니다!",
-   "vapok_mod_no_inception4": "하아... 토르가 당신을 곧 처리할 겁니다.",
-   "vapok_mod_no_inception5": "토르가 당신의 힘을 빼앗아갑니다!!",
-
-   "vapok_mod_thor_saves_contents": "배낭에는 물건이 들어있었다. 토르는 당신을 위해 보관했습니다.",
-
-   "vapok_mod_useful_backpack": "상당히 유용한 배낭이라고 생각합니다.",
-   "vapok_mod_you_droped_bag": "배낭을 떨어뜨렸습니다!",
-   "vapok_mod_level": "레벨",
-   "vapok_mod_effect": "효과",
-   "vapok_mod_quick_drop_unavailable": "빠른 드롭을 사용할 수 없습니다.",
-
-   "vapok_mod_se_cold_immunity": "한파 면역",
-   "vapok_mod_se_frost_resistance": "서리 저항",
-   "vapok_mod_se_wet_resistance": "물 저항",
-   "vapok_mod_yard_sale_blocked": "가방을 비울 수 없습니다. 아이템 제거가 차단되었습니다. 가방이 이동되지 않았습니다."
+  "vapok_mod_item_backpack_meadows": "작은 배낭",
+  "vapok_mod_item_backpack_meadows_description": "물건을 담을 수 있는 작은 배낭입니다.",
+  "vapok_mod_item_backpack_blackforest": "견고한 배낭",
+  "vapok_mod_item_backpack_blackforest_description": "버클형 타입으로 고급가죽이 사용되었습니다. 튼튼해 보입니다.",
+  "vapok_mod_item_backpack_swamp": "혈액이 묻은 배낭",
+  "vapok_mod_item_backpack_swamp_description": "혈액 주머니를 이용하여 제작된 방수형 배낭입니다.",
+  "vapok_mod_item_backpack_mountains": "북극 셰르파 배낭",
+  "vapok_mod_item_backpack_mountains_description": "추위를 견딜수 있습니다. 산을 통과하는데 적합한 배낭입니다.",
+  "vapok_mod_item_backpack_plains": "록스가죽 배낭",
+  "vapok_mod_item_backpack_plains_description": "록스가죽보다 더 튼튼한 가죽은 없습니다. 이시대의 모험가에게 최고의 선물입니다.",
+  "vapok_mod_item_backpack_mistlands": "위습 탐험가의 배낭",
+  "vapok_mod_item_backpack_mistlands_description": "신들이 감탄합니다! 매우 정교하게 만들어졌습니다. 자체 보관함과 함께 완성됩니다. 어떻게 작동하는지 아무도 모릅니다.",
+  "vapok_mod_item_rugged_backpack": "오래되고 투박한 배낭",
+  "vapok_mod_item_rugged_backpack_description": "버클형 타입으로 고급가죽이 사용되었습니다. 튼튼해 보입니다.",
+  "vapok_mod_item_arctic_backpack": "북극 트레킹 배낭",
+  "vapok_mod_item_arctic_backpack_description": "추위를 견딜수 있습니다. 산을 통과하는데 적합한 배낭입니다.",
+  "vapok_mod_no_inception1": "신들을 화나게 하지 마십시오.",
+  "vapok_mod_no_inception2": "당신은 경고 받았습니다.",
+  "vapok_mod_no_inception3": "신들이 분노합니다!",
+  "vapok_mod_no_inception4": "하아... 토르가 당신을 곧 처리할 겁니다.",
+  "vapok_mod_no_inception5": "토르가 당신의 힘을 빼앗아갑니다!!",
+  "vapok_mod_thor_saves_contents": "배낭에는 물건이 들어있었다. 토르는 당신을 위해 보관했습니다.",
+  "vapok_mod_useful_backpack": "상당히 유용한 배낭이라고 생각합니다.",
+  "vapok_mod_you_droped_bag": "배낭을 떨어뜨렸습니다!",
+  "vapok_mod_level": "레벨",
+  "vapok_mod_effect": "효과",
+  "vapok_mod_quick_drop_unavailable": "빠른 드롭을 사용할 수 없습니다.",
+  "vapok_mod_se_cold_immunity": "한파 면역",
+  "vapok_mod_se_frost_resistance": "서리 저항",
+  "vapok_mod_se_wet_resistance": "물 저항",
+  "vapok_mod_yard_sale_blocked": "가방을 비울 수 없습니다. 아이템 제거가 차단되었습니다. 가방이 이동되지 않았습니다.",
+  "vapok_mod_backpack": "배낭",
+  "vapok_mod_open_backpack": "배낭 열기",
+  "vapok_mod_close_backpack": "배낭 닫기",
+  "vapok_mod_switch_container": "보관함 전환",
+  "vapok_mod_drop_backpack": "배낭 버리기",
+  "vapok_mod_quickdrop_backpack": "배낭 빠른 버리기",
+  "vapok_mod_quickdrop": "빠른 버리기"
 }

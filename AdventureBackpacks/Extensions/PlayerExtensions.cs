@@ -117,7 +117,7 @@ public static class PlayerExtensions
                     existingNview = existingTransform.gameObject.AddComponent<ZNetView>();
 
                 existingContainer = existingTransform.gameObject.AddComponent<Container>();
-                existingContainer.m_name = "Backpack";
+                existingContainer.m_name = "$vapok_mod_backpack";
                 existingContainer.m_nview = existingNview;
                 return existingContainer;
             }
@@ -131,7 +131,7 @@ public static class PlayerExtensions
             ZNetView proxyNview = proxyObj.AddComponent<ZNetView>();
 
             Container newContainer = proxyObj.AddComponent<Container>();
-            newContainer.m_name = "Backpack";
+            newContainer.m_name = "$vapok_mod_backpack";
             newContainer.m_nview = proxyNview;
 
             return newContainer;
@@ -170,6 +170,11 @@ public static class PlayerExtensions
 
     public static void OpenBackpack(this Player player, InventoryGui instance = null)
     {
+        player.OpenBackpack(instance, 1);
+    }
+
+    public static void OpenBackpack(this Player player, InventoryGui instance, int activeGroup)
+    {
         if (player == null || !player.IsBackpackEquipped())
             return;
 
@@ -179,11 +184,11 @@ public static class PlayerExtensions
         if (instance == null)
             return;
 
-        var backpack = player.GetEquippedBackpack();
+        BackpackComponent backpack = player.GetEquippedBackpack();
         if (backpack == null)
             return;
 
-        var backpackContainer = player.GetBackpackContainerProxy();
+        Container backpackContainer = player.GetBackpackContainerProxy();
         if (backpackContainer == null)
             return;
 
@@ -192,7 +197,7 @@ public static class PlayerExtensions
         InventoryGuiPatches.BackpackIsOpen = true;
         try
         {
-            instance.Show(backpackContainer);
+            instance.Show(backpackContainer, activeGroup);
         }
         catch (System.Exception ex)
         {

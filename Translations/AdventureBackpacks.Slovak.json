@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Odolnosť Voči Mrazu",
   "vapok_mod_se_wet_resistance": "Odolnosť Voči Vode",
   "vapok_mod_yard_sale_blocked": "Nepodarilo sa vyprázdniť batoh; odstránenie predmetu bolo zablokované. Batoh nebol presunutý.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Prízračný Úložný Rubáš"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Prízračný Úložný Rubáš",
+  "vapok_mod_backpack": "Batoh",
+  "vapok_mod_open_backpack": "Otvoriť batoh",
+  "vapok_mod_close_backpack": "Zavrieť batoh",
+  "vapok_mod_switch_container": "Prepnúť kontajner",
+  "vapok_mod_drop_backpack": "Odložiť batoh",
+  "vapok_mod_quickdrop_backpack": "Rýchlo odložiť batoh",
+  "vapok_mod_quickdrop": "Rýchle odloženie"
 }

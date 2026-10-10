@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Frost Resistance",
   "vapok_mod_se_wet_resistance": "Water Resistance",
   "vapok_mod_yard_sale_blocked": "Could not empty backpack; item removal was blocked. Backpack was not moved.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Spectral Shroud of Holding"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Spectral Shroud of Holding",
+  "vapok_mod_backpack": "Backpack",
+  "vapok_mod_open_backpack": "Open Backpack",
+  "vapok_mod_close_backpack": "Close Backpack",
+  "vapok_mod_switch_container": "Switch Container",
+  "vapok_mod_drop_backpack": "Drop Backpack",
+  "vapok_mod_quickdrop_backpack": "Quickdrop Backpack",
+  "vapok_mod_quickdrop": "Quickdrop"
 }

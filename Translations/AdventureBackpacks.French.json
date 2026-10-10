@@ -1,46 +1,41 @@
 {
   "vapok_mod_item_backpack_meadows": "Sac à dos",
   "vapok_mod_item_backpack_meadows_description": "Un petit sac capable de contenir quelques affaires",
-
   "vapok_mod_item_backpack_blackforest": "Sac à dos robuste",
   "vapok_mod_item_backpack_blackforest_description": "Un sac à dos robuste, renforcé de boucles et de fines lanières de cuir.",
-
   "vapok_mod_item_backpack_swamp": "Sac imperméable",
   "vapok_mod_item_backpack_swamp_description": "Un sac à dos résistant, imperméabilisé avec des poches de sang.",
-
   "vapok_mod_item_backpack_mountains": "Sac de sherpa",
   "vapok_mod_item_backpack_mountains_description": "Un sac à dos arctique, adapté pour de longues randonnées en montagne.",
-
   "vapok_mod_item_backpack_plains": "Sac renforcé en cuir de lox",
   "vapok_mod_item_backpack_plains_description": "Un sac d'aventurier fait avec du cuir de lox extrêmement résistant.",
-
   "vapok_mod_item_backpack_mistlands": "Sac-feu-follet d'explorateur",
   "vapok_mod_item_backpack_mistlands_description": "Un sac à dos mystique, finement ouvragé. Conçu avec sa propre poche sans fond. Personne ne sait vraiment comment il fonctionne.",
-
   "vapok_mod_item_rugged_backpack": "Ancien sac à dos robuste",
   "vapok_mod_item_rugged_backpack_description": "Un sac à dos robuste, renforcé de boucles et de fines lanières de cuir.",
-
   "vapok_mod_item_arctic_backpack": "Ancien sac arctique",
   "vapok_mod_item_arctic_backpack_description": "Un sac à dos arctique, adapté pour de longues randonnées en montagne.",
-  
   "vapok_mod_no_inception": "Vous avez provoqué la colère des dieux!",
-
   "vapok_mod_no_inception1": "Ne fâchez pas les dieux.",
   "vapok_mod_no_inception2": "Tu étais prévenu.",
   "vapok_mod_no_inception3": "Vous avez provoqué la colère des dieux !",
   "vapok_mod_no_inception4": "Soupir... Thor s'occupera de vous bientôt.",
   "vapok_mod_no_inception5": "Thor vous a dépouillé de vos pouvoirs !!",
-
   "vapok_mod_thor_saves_contents": "Ce sac à dos contenait des trucs. Thor l'a gardé pour vous.",
-
   "vapok_mod_useful_backpack": "Votre sac à dos a l'air utile...",
   "vapok_mod_you_droped_bag": "Vous avez laissé tomber votre sac !",
   "vapok_mod_level": "Niveau",
   "vapok_mod_effect": "Effet",
   "vapok_mod_quick_drop_unavailable": "Dépôt rapide indisponible.",
-
   "vapok_mod_se_cold_immunity": "Immunité au froid",
   "vapok_mod_se_frost_resistance": "Résistance au gel",
   "vapok_mod_se_wet_resistance": "Résistance à l'eau",
-  "vapok_mod_yard_sale_blocked": "Impossible de vider le sac ; la suppression d'objet a été bloquée. Le sac n'a pas été déplacé."
+  "vapok_mod_yard_sale_blocked": "Impossible de vider le sac ; la suppression d'objet a été bloquée. Le sac n'a pas été déplacé.",
+  "vapok_mod_backpack": "Sac à dos",
+  "vapok_mod_open_backpack": "Ouvrir le sac à dos",
+  "vapok_mod_close_backpack": "Fermer le sac à dos",
+  "vapok_mod_switch_container": "Changer de conteneur",
+  "vapok_mod_drop_backpack": "Lâcher le sac à dos",
+  "vapok_mod_quickdrop_backpack": "Délestage rapide du sac à dos",
+  "vapok_mod_quickdrop": "Délestage rapide"
 }

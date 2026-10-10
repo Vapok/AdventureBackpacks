@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Rezistență la Îngheț",
   "vapok_mod_se_wet_resistance": "Rezistență la Apă",
   "vapok_mod_yard_sale_blocked": "Rucsacul nu a putut fi golit; îndepărtarea obiectelor a fost blocată. Rucsacul nu a fost mutat.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Giulgiu Spectral de Păstrare"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Giulgiu Spectral de Păstrare",
+  "vapok_mod_backpack": "Rucsac",
+  "vapok_mod_open_backpack": "Deschide rucsacul",
+  "vapok_mod_close_backpack": "Închide rucsacul",
+  "vapok_mod_switch_container": "Comută recipientul",
+  "vapok_mod_drop_backpack": "Aruncă rucsacul",
+  "vapok_mod_quickdrop_backpack": "Aruncare rapidă rucsac",
+  "vapok_mod_quickdrop": "Aruncare rapidă"
 }

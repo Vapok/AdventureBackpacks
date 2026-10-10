@@ -47,6 +47,9 @@ public abstract class EffectsBase
 
     public virtual void SetStatusEffect(string effectName)
     {
+        if (string.IsNullOrEmpty(effectName) || ObjectDB.instance == null)
+            return;
+
         _statusEffect = _statusEffect == null ? ObjectDB.instance.GetStatusEffect(effectName.GetStableHashCode()) : _statusEffect;
     }
 

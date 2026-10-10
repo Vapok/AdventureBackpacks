@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 #if ! API
 using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Features;
+using AdventureBackpacks.Patches;
 #endif
 
 namespace AdventureBackpacks.API;
@@ -76,6 +78,19 @@ return false;
         return player != null && player.CanOpenBackpack();
 #else
 return false;
+#endif
+    }
+
+    /// <summary>
+    /// Indicates whether the backpack container is currently open in the local player's InventoryGui.
+    /// </summary>
+    /// <returns>True if open, otherwise false.</returns>
+    public static bool IsBackpackOpen()
+    {
+#if ! API
+        return InventoryGuiPatches.BackpackIsOpen;
+#else
+        return false;
 #endif
     }
 
@@ -221,6 +236,20 @@ return null;
     }
 
     /// <summary>
+    /// Method to activate the backpack on the local player's GUI with a specific active UI group.
+    /// </summary>
+    /// <param name="player">Player, usually Player.m_localPlayer</param>
+    /// <param name="gui">The instance of InventoryGui</param>
+    /// <param name="activeGroup">The UI group index to retain active focus (e.g. 3 for crafting station, 1 for inventory).</param>
+    public static void OpenBackpack(Player player, InventoryGui gui, int activeGroup)
+    {
+#if ! API
+        if (player != null)
+            player.OpenBackpack(gui, activeGroup);
+#endif
+    }
+
+    /// <summary>
     /// Use this method in the Awake() of your mod to register a Status Effect that can be utilized on Adventure Backpacks
     /// </summary>
     /// <param name="effectDefinition">Create a new EffectDefinition that contains the overall parameters that are needed to register the new effect.</param>
@@ -246,6 +275,58 @@ return null;
     {
 #if ! API
         return CraftFromBackpack.EnableCraftFromBackpack?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Indicates whether opening the backpack alongside crafting stations is enabled in configuration.
+    /// </summary>
+    /// <returns>True if enabled, false otherwise.</returns>
+    public static bool IsOpenWithCraftingStationEnabled()
+    {
+#if ! API
+        return ConfigRegistry.OpenWithCraftingStation?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Indicates whether opening the backpack with the inventory is enabled in configuration.
+    /// </summary>
+    /// <returns>True if enabled, false otherwise.</returns>
+    public static bool IsOpenWithInventoryEnabled()
+    {
+#if ! API
+        return ConfigRegistry.OpenWithInventory?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Indicates whether toggling between an opened container and backpack via tabs is enabled in configuration.
+    /// </summary>
+    /// <returns>True if enabled, false otherwise.</returns>
+    public static bool IsEnableContainerTabsEnabled()
+    {
+#if ! API
+        return ConfigRegistry.EnableContainerTabs?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Indicates whether an external container is currently open and managed alongside the backpack.
+    /// </summary>
+    /// <returns>True if an external container is active with container tabs, false otherwise.</returns>
+    public static bool HasActiveExternalContainer()
+    {
+#if ! API
+        return ContainerTabs.HasActiveExternalContainer;
 #else
         return false;
 #endif
