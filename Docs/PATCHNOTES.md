@@ -1,3 +1,17 @@
+# 2.2.13 - Crafting Station Auto-Open & API Enhancements
+* **Crafting Station Auto-Open (`Patches/InventoryGui.cs`, `Configuration/ConfigRegistry.cs`)**:
+  * Added `OpenWithCraftingStation` configuration entry under `"Local Config"` (default: `true`).
+  * In `InventoryGuiPatches`, added `InventoryGuiShowPatch` on `InventoryGui.Show(Container, int)` to open the player's equipped backpack alongside crafting stations (`activeGroup == 3`, `container == null`).
+  * Added re-entrancy protection flag `_isOpening` to prevent recursion when calling `Show` from within the postfix.
+  * Added active UI group overload `PlayerExtensions.OpenBackpack(this Player, InventoryGui, int activeGroup)` to pass active group 3 directly into `instance.Show(backpackContainer, activeGroup)` without losing focus on the station crafting panel.
+  * In `InventoryGuiHidePatch.Postfix`, ensured `BackpackIsOpen = false` is cleanly set whenever `InventoryGui.Hide()` is invoked.
+* **Status Effect Startup Null-Safety (`Assets/Effects/EffectsBase.cs`)**:
+  * In `EffectsBase.SetStatusEffect(string effectName)`, added defensive null-checks for `string.IsNullOrEmpty(effectName)` and `ObjectDB.instance == null` before querying `ObjectDB.instance.GetStatusEffect(...)`, preventing `NullReferenceException` during early startup status effect registration ([ADVENTUREBACKPACKS-2M](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2M)).
+* **ABAPI & ABAPIClient Additions (`API/ABAPI.cs`, `Docs/ABAPI_Client.cs`)**:
+  * Added `ABAPI.IsBackpackOpen()` and `ABAPIClient.IsBackpackOpen()` to query whether the backpack GUI is currently open.
+  * Added `ABAPI.OpenBackpack(Player, InventoryGui, int activeGroup)` and companion overload in `ABAPIClient` to support opening backpacks with specific active UI groups.
+  * Added `ABAPI.IsOpenWithCraftingStationEnabled()` and `ABAPI.IsOpenWithInventoryEnabled()` with matching client wrapper methods.
+
 # 2.2.12 - Startup Screen Stability & Dependency Updates
 * **Startup Screen Stability**:
   * In `Vapok.Valheim.Common` 3.1017.1, resolved `NullReferenceException` in `ModSplashManager` during startup notice display and component destruction ([ADVENTUREBACKPACKS-2C](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2C), [ADVENTUREBACKPACKS-2B](https://vapok-gaming.sentry.io/issues/ADVENTUREBACKPACKS-2B)).

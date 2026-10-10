@@ -18,6 +18,7 @@ namespace AdventureBackpacks.API.Client
         private static MethodInfo _isBackpackMethod;
         private static MethodInfo _isBackpackEquippedMethod;
         private static MethodInfo _canOpenBackpackMethod;
+        private static MethodInfo _isBackpackOpenMethod;
         private static MethodInfo _isThisBackpackEquippedMethod;
         private static MethodInfo _getEquippedBackpackInventoryMethod;
         private static MethodInfo _tryGetEquippedBackpackInventoryMethod;
@@ -26,6 +27,9 @@ namespace AdventureBackpacks.API.Client
         private static MethodInfo _getAllBackpackInventoriesMethod;
         private static MethodInfo _tryGetAllBackpackInventoriesMethod;
         private static MethodInfo _openBackpackMethod;
+        private static MethodInfo _openBackpackWithGroupMethod;
+        private static MethodInfo _isOpenWithCraftingStationEnabledMethod;
+        private static MethodInfo _isOpenWithInventoryEnabledMethod;
         private static MethodInfo _isCraftFromBackpackEnabledMethod;
         private static MethodInfo _isCraftingContextActiveMethod;
         private static MethodInfo _getConsumptionPriorityMethod;
@@ -62,6 +66,7 @@ namespace AdventureBackpacks.API.Client
                         _isBackpackMethod = _apiType.GetMethod("IsBackpack", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(ItemDrop.ItemData) }, null);
                         _isBackpackEquippedMethod = _apiType.GetMethod("IsBackpackEquipped", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player) }, null);
                         _canOpenBackpackMethod = _apiType.GetMethod("CanOpenBackpack", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player) }, null);
+                        _isBackpackOpenMethod = _apiType.GetMethod("IsBackpackOpen", BindingFlags.Public | BindingFlags.Static);
                         _isThisBackpackEquippedMethod = _apiType.GetMethod("IsThisBackpackEquipped", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(ItemDrop.ItemData) }, null);
                         _getEquippedBackpackInventoryMethod = _apiType.GetMethod("GetEquippedBackpackInventory", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player) }, null);
                         _tryGetEquippedBackpackInventoryMethod = _apiType.GetMethod("TryGetEquippedBackpackInventory", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(Inventory).MakeByRefType() }, null);
@@ -70,6 +75,9 @@ namespace AdventureBackpacks.API.Client
                         _getAllBackpackInventoriesMethod = _apiType.GetMethod("GetAllBackpackInventories", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player) }, null);
                         _tryGetAllBackpackInventoriesMethod = _apiType.GetMethod("TryGetAllBackpackInventories", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(List<Inventory>).MakeByRefType() }, null);
                         _openBackpackMethod = _apiType.GetMethod("OpenBackpack", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(InventoryGui) }, null);
+                        _openBackpackWithGroupMethod = _apiType.GetMethod("OpenBackpack", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(InventoryGui), typeof(int) }, null);
+                        _isOpenWithCraftingStationEnabledMethod = _apiType.GetMethod("IsOpenWithCraftingStationEnabled", BindingFlags.Public | BindingFlags.Static);
+                        _isOpenWithInventoryEnabledMethod = _apiType.GetMethod("IsOpenWithInventoryEnabled", BindingFlags.Public | BindingFlags.Static);
                         _isCraftFromBackpackEnabledMethod = _apiType.GetMethod("IsCraftFromBackpackEnabled", BindingFlags.Public | BindingFlags.Static);
                         _isCraftingContextActiveMethod = _apiType.GetMethod("IsCraftingContextActive", BindingFlags.Public | BindingFlags.Static);
                         _getConsumptionPriorityMethod = _apiType.GetMethod("GetConsumptionPriority", BindingFlags.Public | BindingFlags.Static);
@@ -119,6 +127,16 @@ namespace AdventureBackpacks.API.Client
             if (_canOpenBackpackMethod != null && player != null)
             {
                 return (bool)_canOpenBackpackMethod.Invoke(null, new object[] { player });
+            }
+            return false;
+        }
+
+        public static bool IsBackpackOpen()
+        {
+            EnsureInitialized();
+            if (_isBackpackOpenMethod != null)
+            {
+                return (bool)_isBackpackOpenMethod.Invoke(null, null);
             }
             return false;
         }
@@ -212,6 +230,39 @@ namespace AdventureBackpacks.API.Client
             {
                 _openBackpackMethod.Invoke(null, new object[] { player, gui });
             }
+        }
+
+        public static void OpenBackpack(Player player, InventoryGui gui, int activeGroup)
+        {
+            EnsureInitialized();
+            if (_openBackpackWithGroupMethod != null && player != null && gui != null)
+            {
+                _openBackpackWithGroupMethod.Invoke(null, new object[] { player, gui, activeGroup });
+            }
+            else if (_openBackpackMethod != null && player != null && gui != null)
+            {
+                _openBackpackMethod.Invoke(null, new object[] { player, gui });
+            }
+        }
+
+        public static bool IsOpenWithCraftingStationEnabled()
+        {
+            EnsureInitialized();
+            if (_isOpenWithCraftingStationEnabledMethod != null)
+            {
+                return (bool)_isOpenWithCraftingStationEnabledMethod.Invoke(null, null);
+            }
+            return false;
+        }
+
+        public static bool IsOpenWithInventoryEnabled()
+        {
+            EnsureInitialized();
+            if (_isOpenWithInventoryEnabledMethod != null)
+            {
+                return (bool)_isOpenWithInventoryEnabledMethod.Invoke(null, null);
+            }
+            return false;
         }
 
         public static bool IsCraftFromBackpackEnabled()

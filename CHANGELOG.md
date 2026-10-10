@@ -1,9 +1,18 @@
-# 2.2.12 - Startup Screen Stability & Dependency Updates
-* Fixed an issue where the game startup screen could cause errors or fail to show under certain mod loading conditions.
-* Updated internal dependencies for stability.
+# 2.2.13 - Crafting Station Auto-Open & API Enhancements
+* Added an option to automatically open your backpack alongside crafting stations. Enabled by default and configurable under Local Config (`Open with Crafting Station`).
+* Improved startup safety to prevent rare errors if status effects are loaded before the game database is ready.
+* **Mod Developer API Enhancements**: Added new methods to the developer API (`ABAPI`) and reflection client (`ABAPI_Client.cs`):
+  * `IsBackpackOpen()`: Check whether the backpack GUI is currently open on the player's screen.
+  * `OpenBackpack(player, gui, activeGroup)`: Open the backpack with specific UI group focus (such as crafting stations or inventory).
+  * `IsOpenWithCraftingStationEnabled()` & `IsOpenWithInventoryEnabled()`: Check whether crafting station or inventory auto-opening are enabled in user configuration.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 2.2.12 - Startup Screen Stability & Dependency Updates
+* Fixed an issue where the game startup screen could cause errors or fail to show under certain mod loading conditions.
+* Updated internal dependencies for stability.
 
 
 ### 2.2.11 - Performance Optimization & Frame Stutter Fix

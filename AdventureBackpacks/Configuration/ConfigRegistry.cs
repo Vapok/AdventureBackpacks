@@ -12,6 +12,7 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<KeyboardShortcut> HotKeyOpen;
         internal static ConfigEntry<KeyboardShortcut> HotKeyDrop;
         internal static ConfigEntry<bool> OpenWithInventory;
+        internal static ConfigEntry<bool> OpenWithCraftingStation;
         internal static ConfigEntry<bool> OpenWithHoverInteract;
         internal static ConfigEntry<bool> CloseInventory;
         internal static ConfigEntry<bool> OutwardMode;
@@ -48,6 +49,10 @@ namespace AdventureBackpacks.Configuration
             UnsyncedConfig("Local Config", "Open with Inventory", false,
                 new ConfigDescription("If enabled, both backpack and inventory will open when Inventory is opened.",
                     null, new ConfigurationManagerAttributes { Order = 3 }),ref OpenWithInventory);
+            
+            UnsyncedConfig("Local Config", "Open with Crafting Station", true,
+                new ConfigDescription("If enabled, the backpack panel will automatically open alongside crafting stations (workbench, forge, cauldron, modded stations).",
+                    null, new ConfigurationManagerAttributes { Order = 3 }), ref OpenWithCraftingStation);
             
             UnsyncedConfig("Local Config", "Open with Interactive Hover", false,
                 new ConfigDescription("If enabled, backpack will only open while hovering over equipped backpack and pressing hotkey.  This option overrides Open with Inventory.",

@@ -777,7 +777,44 @@ internal static class InventoryGuiPatches
         [HarmonyPostfix]
         static void Postfix()
         {
+            BackpackIsOpen = false;
             CraftingContext.Reset();
+        }
+    }
+
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.Show), typeof(Container), typeof(int))]
+    static class InventoryGuiShowPatch
+    {
+        private static bool _isOpening;
+
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPostfix]
+        private static void Postfix(InventoryGui __instance, Container container, int activeGroup)
+        {
+            if (_isOpening || container != null || activeGroup != 3)
+                return;
+
+            if (!ConfigRegistry.OpenWithCraftingStation.Value || ConfigRegistry.OpenWithHoverInteract.Value)
+                return;
+
+            Player localPlayer = Player.m_localPlayer;
+            if (localPlayer == null || localPlayer.GetCurrentCraftingStation() == null)
+                return;
+
+            if (BackpackIsOpen || !localPlayer.CanOpenBackpack())
+                return;
+
+            _isOpening = true;
+            try
+            {
+                localPlayer.OpenBackpack(__instance, activeGroup);
+            }
+            finally
+            {
+                _isOpening = false;
+            }
         }
     }
 

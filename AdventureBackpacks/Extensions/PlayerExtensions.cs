@@ -170,6 +170,11 @@ public static class PlayerExtensions
 
     public static void OpenBackpack(this Player player, InventoryGui instance = null)
     {
+        player.OpenBackpack(instance, 1);
+    }
+
+    public static void OpenBackpack(this Player player, InventoryGui instance, int activeGroup)
+    {
         if (player == null || !player.IsBackpackEquipped())
             return;
 
@@ -179,11 +184,11 @@ public static class PlayerExtensions
         if (instance == null)
             return;
 
-        var backpack = player.GetEquippedBackpack();
+        BackpackComponent backpack = player.GetEquippedBackpack();
         if (backpack == null)
             return;
 
-        var backpackContainer = player.GetBackpackContainerProxy();
+        Container backpackContainer = player.GetBackpackContainerProxy();
         if (backpackContainer == null)
             return;
 
@@ -192,7 +197,7 @@ public static class PlayerExtensions
         InventoryGuiPatches.BackpackIsOpen = true;
         try
         {
-            instance.Show(backpackContainer);
+            instance.Show(backpackContainer, activeGroup);
         }
         catch (System.Exception ex)
         {

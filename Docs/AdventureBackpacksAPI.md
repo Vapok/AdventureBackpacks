@@ -14,10 +14,14 @@
   - [GetRegisterdStatusEffects()](#M-AdventureBackpacks-API-ABAPI-GetRegisterdStatusEffects 'AdventureBackpacks.API.ABAPI.GetRegisterdStatusEffects')
   - [IsBackpack(itemData)](#M-AdventureBackpacks-API-ABAPI-IsBackpack-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.IsBackpack(ItemDrop.ItemData)')
   - [IsBackpackEquipped(player)](#M-AdventureBackpacks-API-ABAPI-IsBackpackEquipped-Player- 'AdventureBackpacks.API.ABAPI.IsBackpackEquipped(Player)')
+  - [IsBackpackOpen()](#M-AdventureBackpacks-API-ABAPI-IsBackpackOpen 'AdventureBackpacks.API.ABAPI.IsBackpackOpen')
   - [IsDisplayTotalIngredientCountEnabled()](#M-AdventureBackpacks-API-ABAPI-IsDisplayTotalIngredientCountEnabled 'AdventureBackpacks.API.ABAPI.IsDisplayTotalIngredientCountEnabled')
   - [IsLoaded()](#M-AdventureBackpacks-API-ABAPI-IsLoaded 'AdventureBackpacks.API.ABAPI.IsLoaded')
+  - [IsOpenWithCraftingStationEnabled()](#M-AdventureBackpacks-API-ABAPI-IsOpenWithCraftingStationEnabled 'AdventureBackpacks.API.ABAPI.IsOpenWithCraftingStationEnabled')
+  - [IsOpenWithInventoryEnabled()](#M-AdventureBackpacks-API-ABAPI-IsOpenWithInventoryEnabled 'AdventureBackpacks.API.ABAPI.IsOpenWithInventoryEnabled')
   - [IsThisBackpackEquipped(player,itemData)](#M-AdventureBackpacks-API-ABAPI-IsThisBackpackEquipped-Player,ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.IsThisBackpackEquipped(Player,ItemDrop.ItemData)')
   - [OpenBackpack(player,gui)](#M-AdventureBackpacks-API-ABAPI-OpenBackpack-Player,InventoryGui- 'AdventureBackpacks.API.ABAPI.OpenBackpack(Player,InventoryGui)')
+  - [OpenBackpack(player,gui,activeGroup)](#M-AdventureBackpacks-API-ABAPI-OpenBackpack-Player,InventoryGui,System-Int32- 'AdventureBackpacks.API.ABAPI.OpenBackpack(Player,InventoryGui,System.Int32)')
   - [RegisterBackpack(definition)](#M-AdventureBackpacks-API-ABAPI-RegisterBackpack-AdventureBackpacks-API-ABAPI-BackpackDefinition- 'AdventureBackpacks.API.ABAPI.RegisterBackpack(AdventureBackpacks.API.ABAPI.BackpackDefinition)')
   - [RegisterEffect(effectDefinition)](#M-AdventureBackpacks-API-ABAPI-RegisterEffect-AdventureBackpacks-API-ABAPI-EffectDefinition- 'AdventureBackpacks.API.ABAPI.RegisterEffect(AdventureBackpacks.API.ABAPI.EffectDefinition)')
   - [TryGetAllBackpackInventories(player,inventories)](#M-AdventureBackpacks-API-ABAPI-TryGetAllBackpackInventories-Player,System-Collections-Generic-List{Inventory}@- 'AdventureBackpacks.API.ABAPI.TryGetAllBackpackInventories(Player,System.Collections.Generic.List{Inventory}@)')
@@ -273,6 +277,21 @@ true or false
 | ---- | ---- | ----------- |
 | player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
 
+<a name='M-AdventureBackpacks-API-ABAPI-IsBackpackOpen'></a>
+### IsBackpackOpen() `method`
+
+##### Summary
+
+Indicates whether the backpack container is currently open in the local player's InventoryGui.
+
+##### Returns
+
+True if open, otherwise false.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='M-AdventureBackpacks-API-ABAPI-IsDisplayTotalIngredientCountEnabled'></a>
 ### IsDisplayTotalIngredientCountEnabled() `method`
 
@@ -298,6 +317,36 @@ Notifies if the ABAPI is active or not.
 ##### Returns
 
 true of false
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-AdventureBackpacks-API-ABAPI-IsOpenWithCraftingStationEnabled'></a>
+### IsOpenWithCraftingStationEnabled() `method`
+
+##### Summary
+
+Indicates whether opening the backpack alongside crafting stations is enabled in configuration.
+
+##### Returns
+
+True if enabled, false otherwise.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-AdventureBackpacks-API-ABAPI-IsOpenWithInventoryEnabled'></a>
+### IsOpenWithInventoryEnabled() `method`
+
+##### Summary
+
+Indicates whether opening the backpack with the inventory is enabled in configuration.
+
+##### Returns
+
+True if enabled, false otherwise.
 
 ##### Parameters
 
@@ -334,6 +383,21 @@ Method to activate the backpack on the local player's GUI and open it. Use in co
 | ---- | ---- | ----------- |
 | player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
 | gui | [InventoryGui](#T-InventoryGui 'InventoryGui') | The instance of InventoryGui |
+
+<a name='M-AdventureBackpacks-API-ABAPI-OpenBackpack-Player,InventoryGui,System-Int32-'></a>
+### OpenBackpack(player,gui,activeGroup) `method`
+
+##### Summary
+
+Method to activate the backpack on the local player's GUI with a specific active UI group.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
+| gui | [InventoryGui](#T-InventoryGui 'InventoryGui') | The instance of InventoryGui |
+| activeGroup | [System.Int32](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Int32 'System.Int32') | The UI group index to retain active focus (e.g. 3 for crafting station, 1 for inventory). |
 
 <a name='M-AdventureBackpacks-API-ABAPI-RegisterBackpack-AdventureBackpacks-API-ABAPI-BackpackDefinition-'></a>
 ### RegisterBackpack(definition) `method`
