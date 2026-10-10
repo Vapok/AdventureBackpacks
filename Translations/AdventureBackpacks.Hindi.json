@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "पाला प्रतिरोध",
   "vapok_mod_se_wet_resistance": "जल प्रतिरोध",
   "vapok_mod_yard_sale_blocked": "बैकपैक खाली नहीं किया जा सका; वस्तु निष्कासन अवरुद्ध था। बैकपैक स्थानांतरित नहीं हुआ।",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "अलौकिक संधारण कफ़न"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "अलौकिक संधारण कफ़न",
+  "vapok_mod_backpack": "बैकपैक",
+  "vapok_mod_open_backpack": "बैकपैक खोलें",
+  "vapok_mod_close_backpack": "बैकपैक बंद करें",
+  "vapok_mod_switch_container": "कंटेनर बदलें",
+  "vapok_mod_drop_backpack": "बैकपैक गिराएं",
+  "vapok_mod_quickdrop_backpack": "बैकपैक तुरंत गिराएं",
+  "vapok_mod_quickdrop": "तुरंत गिराएं"
 }

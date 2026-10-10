@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Устойчивост на Мраз",
   "vapok_mod_se_wet_resistance": "Водоустойчивост",
   "vapok_mod_yard_sale_blocked": "Раницата не можа да се изпразни; премахването на предмети бе блокирано. Раницата не бе преместена.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Призрачен Покров за Съхранение"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Призрачен Покров за Съхранение",
+  "vapok_mod_backpack": "Раница",
+  "vapok_mod_open_backpack": "Отвори раницата",
+  "vapok_mod_close_backpack": "Затвори раницата",
+  "vapok_mod_switch_container": "Смени контейнера",
+  "vapok_mod_drop_backpack": "Пусни раницата",
+  "vapok_mod_quickdrop_backpack": "Бързо пускане на раница",
+  "vapok_mod_quickdrop": "Бързо пускане"
 }

@@ -30,6 +30,8 @@ namespace AdventureBackpacks.API.Client
         private static MethodInfo _openBackpackWithGroupMethod;
         private static MethodInfo _isOpenWithCraftingStationEnabledMethod;
         private static MethodInfo _isOpenWithInventoryEnabledMethod;
+        private static MethodInfo _isEnableContainerTabsEnabledMethod;
+        private static MethodInfo _hasActiveExternalContainerMethod;
         private static MethodInfo _isCraftFromBackpackEnabledMethod;
         private static MethodInfo _isCraftingContextActiveMethod;
         private static MethodInfo _getConsumptionPriorityMethod;
@@ -78,6 +80,8 @@ namespace AdventureBackpacks.API.Client
                         _openBackpackWithGroupMethod = _apiType.GetMethod("OpenBackpack", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(InventoryGui), typeof(int) }, null);
                         _isOpenWithCraftingStationEnabledMethod = _apiType.GetMethod("IsOpenWithCraftingStationEnabled", BindingFlags.Public | BindingFlags.Static);
                         _isOpenWithInventoryEnabledMethod = _apiType.GetMethod("IsOpenWithInventoryEnabled", BindingFlags.Public | BindingFlags.Static);
+                        _isEnableContainerTabsEnabledMethod = _apiType.GetMethod("IsEnableContainerTabsEnabled", BindingFlags.Public | BindingFlags.Static);
+                        _hasActiveExternalContainerMethod = _apiType.GetMethod("HasActiveExternalContainer", BindingFlags.Public | BindingFlags.Static);
                         _isCraftFromBackpackEnabledMethod = _apiType.GetMethod("IsCraftFromBackpackEnabled", BindingFlags.Public | BindingFlags.Static);
                         _isCraftingContextActiveMethod = _apiType.GetMethod("IsCraftingContextActive", BindingFlags.Public | BindingFlags.Static);
                         _getConsumptionPriorityMethod = _apiType.GetMethod("GetConsumptionPriority", BindingFlags.Public | BindingFlags.Static);
@@ -261,6 +265,26 @@ namespace AdventureBackpacks.API.Client
             if (_isOpenWithInventoryEnabledMethod != null)
             {
                 return (bool)_isOpenWithInventoryEnabledMethod.Invoke(null, null);
+            }
+            return false;
+        }
+
+        public static bool IsEnableContainerTabsEnabled()
+        {
+            EnsureInitialized();
+            if (_isEnableContainerTabsEnabledMethod != null)
+            {
+                return (bool)_isEnableContainerTabsEnabledMethod.Invoke(null, null);
+            }
+            return false;
+        }
+
+        public static bool HasActiveExternalContainer()
+        {
+            EnsureInitialized();
+            if (_hasActiveExternalContainerMethod != null)
+            {
+                return (bool)_hasActiveExternalContainerMethod.Invoke(null, null);
             }
             return false;
         }

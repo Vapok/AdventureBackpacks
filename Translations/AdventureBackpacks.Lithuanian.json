@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Atsparumas Šalčiui",
   "vapok_mod_se_wet_resistance": "Atsparumas Vandeniui",
   "vapok_mod_yard_sale_blocked": "Nepavyko ištuštinti kuprinės; daiktų šalinimas buvo užblokuotas. Kuprinė nepajudinta.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Vaiduokliška Talpinimo Skraistė"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Vaiduokliška Talpinimo Skraistė",
+  "vapok_mod_backpack": "Kuprinė",
+  "vapok_mod_open_backpack": "Atidaryti kuprinę",
+  "vapok_mod_close_backpack": "Uždaryti kuprinę",
+  "vapok_mod_switch_container": "Perjungti konteinerį",
+  "vapok_mod_drop_backpack": "Išmesti kuprinę",
+  "vapok_mod_quickdrop_backpack": "Greitas kuprinės išmetimas",
+  "vapok_mod_quickdrop": "Greitas išmetimas"
 }

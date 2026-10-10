@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "ყინვისადმი გამძლეობა",
   "vapok_mod_se_wet_resistance": "წყლისადმი გამძლეობა",
   "vapok_mod_yard_sale_blocked": "ზურგჩანთის დაცლა ვერ მოხერხდა; ნივთის ამოღება დაბლოკილია. ზურგჩანთა არ გადაადგილებულა.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "მოჩვენებითი შესანახი სუდარა"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "მოჩვენებითი შესანახი სუდარა",
+  "vapok_mod_backpack": "ზურგჩანთა",
+  "vapok_mod_open_backpack": "ზურგჩანთის გახსნა",
+  "vapok_mod_close_backpack": "ზურგჩანთის დახურვა",
+  "vapok_mod_switch_container": "კონტეინერის შეცვლა",
+  "vapok_mod_drop_backpack": "ზურგჩანთის დაგდება",
+  "vapok_mod_quickdrop_backpack": "ზურგჩანთის სწრაფი დაგდება",
+  "vapok_mod_quickdrop": "სწრაფი დაგდება"
 }

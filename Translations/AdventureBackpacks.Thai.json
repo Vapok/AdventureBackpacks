@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "ต้านทานความเย็นจัด",
   "vapok_mod_se_wet_resistance": "ต้านทานน้ำ",
   "vapok_mod_yard_sale_blocked": "ไม่สามารถนำของออกจากเป้ได้ การย้ายไอเท็มถูกระงับ เป้ไม่ได้ถูกย้าย",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "ผ้าคลุมวิญญาณแห่งการเก็บของ"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "ผ้าคลุมวิญญาณแห่งการเก็บของ",
+  "vapok_mod_backpack": "กระเป๋าสะพายหลัง",
+  "vapok_mod_open_backpack": "เปิดกระเป๋าสะพายหลัง",
+  "vapok_mod_close_backpack": "ปิดกระเป๋าสะพายหลัง",
+  "vapok_mod_switch_container": "สลับที่เก็บของ",
+  "vapok_mod_drop_backpack": "ทิ้งกระเป๋าสะพายหลัง",
+  "vapok_mod_quickdrop_backpack": "ทิ้งกระเป๋าสะพายหลังด่วน",
+  "vapok_mod_quickdrop": "ทิ้งด่วน"
 }

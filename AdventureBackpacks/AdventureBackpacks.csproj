@@ -180,6 +180,8 @@
         <Compile Include="Features\EquipmentEffectCache.cs" />
         <Compile Include="Features\QuickTransfer.cs" />
         <Compile Include="Features\StoreToBackpack.cs" />
+        <Compile Include="Features\ContainerTabs.cs" />
+        <Compile Include="Features\BackpackKeyHints.cs" />
         <Compile Include="Patches\ArmorStand.cs" />
         <Compile Include="Patches\Container.cs" />
         <Compile Include="Patches\Door.cs" />

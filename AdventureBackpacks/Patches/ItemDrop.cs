@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Threading;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Components;
+using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
 using HarmonyLib;
 using Vapok.Common.Managers;
@@ -138,22 +139,54 @@ public class ItemDropPatches
                     if (endOfLine >= 0)
                     {
                         __result = __result.Insert(endOfLine, armorString);
-                        return;
                     }
-                }
-
-                int weightIndex = __result.IndexOf("$item_weight", StringComparison.Ordinal);
-                if (weightIndex >= 0)
-                {
-                    int endOfLine = __result.IndexOf('\n', weightIndex);
-                    if (endOfLine >= 0)
+                    else
                     {
-                        __result = __result.Insert(endOfLine, armorString);
-                        return;
+                        __result += armorString;
                     }
                 }
+                else
+                {
+                    int weightIndex = __result.IndexOf("$item_weight", StringComparison.Ordinal);
+                    if (weightIndex >= 0)
+                    {
+                        int endOfLine = __result.IndexOf('\n', weightIndex);
+                        if (endOfLine >= 0)
+                        {
+                            __result = __result.Insert(endOfLine, armorString);
+                        }
+                        else
+                        {
+                            __result += armorString;
+                        }
+                    }
+                    else
+                    {
+                        __result += armorString;
+                    }
+                }
+            }
 
-                __result += armorString;
+            if (item.m_equipped)
+            {
+                bool isBackpackOpen = InventoryGui.instance != null && InventoryGui.instance.m_currentContainer != null && InventoryGui.instance.m_currentContainer.IsBackpackProxy();
+                string openKey = ConfigRegistry.HotKeyOpen.Value.MainKey.ToString();
+                string actionKey = isBackpackOpen ? "$vapok_mod_close_backpack" : "$vapok_mod_open_backpack";
+                string actionText = Localization.instance != null
+                    ? Localization.instance.Localize(actionKey)
+                    : (isBackpackOpen ? "Close Backpack" : "Open Backpack");
+                string tooltipHint = $"\n[<color=yellow><b>{openKey}</b></color>] {actionText}";
+
+                if (ConfigRegistry.OutwardMode.Value)
+                {
+                    string dropKey = ConfigRegistry.HotKeyDrop.Value.MainKey.ToString();
+                    string quickdropText = Localization.instance != null
+                        ? Localization.instance.Localize("$vapok_mod_quickdrop_backpack")
+                        : "Quickdrop Backpack";
+                    tooltipHint += $"\n[<color=yellow><b>{dropKey}</b></color>] {quickdropText}";
+                }
+
+                __result += tooltipHint;
             }
         }
     }

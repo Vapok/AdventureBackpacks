@@ -12,10 +12,12 @@
   - [GetEquippedBackpack(player)](#M-AdventureBackpacks-API-ABAPI-GetEquippedBackpack-Player- 'AdventureBackpacks.API.ABAPI.GetEquippedBackpack(Player)')
   - [GetEquippedBackpackInventory(player)](#M-AdventureBackpacks-API-ABAPI-GetEquippedBackpackInventory-Player- 'AdventureBackpacks.API.ABAPI.GetEquippedBackpackInventory(Player)')
   - [GetRegisterdStatusEffects()](#M-AdventureBackpacks-API-ABAPI-GetRegisterdStatusEffects 'AdventureBackpacks.API.ABAPI.GetRegisterdStatusEffects')
+  - [HasActiveExternalContainer()](#M-AdventureBackpacks-API-ABAPI-HasActiveExternalContainer 'AdventureBackpacks.API.ABAPI.HasActiveExternalContainer')
   - [IsBackpack(itemData)](#M-AdventureBackpacks-API-ABAPI-IsBackpack-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.IsBackpack(ItemDrop.ItemData)')
   - [IsBackpackEquipped(player)](#M-AdventureBackpacks-API-ABAPI-IsBackpackEquipped-Player- 'AdventureBackpacks.API.ABAPI.IsBackpackEquipped(Player)')
   - [IsBackpackOpen()](#M-AdventureBackpacks-API-ABAPI-IsBackpackOpen 'AdventureBackpacks.API.ABAPI.IsBackpackOpen')
   - [IsDisplayTotalIngredientCountEnabled()](#M-AdventureBackpacks-API-ABAPI-IsDisplayTotalIngredientCountEnabled 'AdventureBackpacks.API.ABAPI.IsDisplayTotalIngredientCountEnabled')
+  - [IsEnableContainerTabsEnabled()](#M-AdventureBackpacks-API-ABAPI-IsEnableContainerTabsEnabled 'AdventureBackpacks.API.ABAPI.IsEnableContainerTabsEnabled')
   - [IsLoaded()](#M-AdventureBackpacks-API-ABAPI-IsLoaded 'AdventureBackpacks.API.ABAPI.IsLoaded')
   - [IsOpenWithCraftingStationEnabled()](#M-AdventureBackpacks-API-ABAPI-IsOpenWithCraftingStationEnabled 'AdventureBackpacks.API.ABAPI.IsOpenWithCraftingStationEnabled')
   - [IsOpenWithInventoryEnabled()](#M-AdventureBackpacks-API-ABAPI-IsOpenWithInventoryEnabled 'AdventureBackpacks.API.ABAPI.IsOpenWithInventoryEnabled')
@@ -243,6 +245,21 @@ HashSet of Status Effects.
 
 This method has no parameters.
 
+<a name='M-AdventureBackpacks-API-ABAPI-HasActiveExternalContainer'></a>
+### HasActiveExternalContainer() `method`
+
+##### Summary
+
+Indicates whether an external container is currently open and managed alongside the backpack.
+
+##### Returns
+
+True if an external container is active with container tabs, false otherwise.
+
+##### Parameters
+
+This method has no parameters.
+
 <a name='M-AdventureBackpacks-API-ABAPI-IsBackpack-ItemDrop-ItemData-'></a>
 ### IsBackpack(itemData) `method`
 
@@ -298,6 +315,21 @@ This method has no parameters.
 ##### Summary
 
 Indicates whether requirement counts in the crafting panel display as 'Available/Required'.
+
+##### Returns
+
+True if enabled, false otherwise.
+
+##### Parameters
+
+This method has no parameters.
+
+<a name='M-AdventureBackpacks-API-ABAPI-IsEnableContainerTabsEnabled'></a>
+### IsEnableContainerTabsEnabled() `method`
+
+##### Summary
+
+Indicates whether toggling between an opened container and backpack via tabs is enabled in configuration.
 
 ##### Returns
 

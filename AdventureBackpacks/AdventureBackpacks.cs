@@ -135,6 +135,7 @@ namespace AdventureBackpacks
             QuickTransfer.FeatureInitialized = true;
             CraftFromBackpack.FeatureInitialized = true;
             StoreToBackpack.FeatureInitialized = true;
+            ContainerTabs.FeatureInitialized = true;
         }
 
         private void Update()

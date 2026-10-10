@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Fagyállóság",
   "vapok_mod_se_wet_resistance": "Vízállóság",
   "vapok_mod_yard_sale_blocked": "Nem sikerült kiüríteni a hátizsákot; a tárgy eltávolítása blokkolva volt. A hátizsák nem mozdult el.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Kísérteties Tároló Szemfedő"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Kísérteties Tároló Szemfedő",
+  "vapok_mod_backpack": "Hátizsák",
+  "vapok_mod_open_backpack": "Hátizsák kinyitása",
+  "vapok_mod_close_backpack": "Hátizsák bezárása",
+  "vapok_mod_switch_container": "Tároló váltása",
+  "vapok_mod_drop_backpack": "Hátizsák eldobása",
+  "vapok_mod_quickdrop_backpack": "Hátizsák gyors eldobása",
+  "vapok_mod_quickdrop": "Gyors eldobás"
 }

@@ -10,7 +10,16 @@ public static class ContainerPatches
 {
     public static bool IsBackpackProxy(this Container container)
     {
-        if (container == null || container.gameObject == null) return false;
+        if (container == null || !container)
+            return false;
+
+        Player localPlayer = Player.m_localPlayer;
+        if (localPlayer != null && container.transform.parent != null && container.transform.parent == localPlayer.transform)
+            return true;
+
+        if (container.gameObject == null)
+            return false;
+
         return container.gameObject.name.StartsWith(PlayerExtensions.BackpackProxyName) ||
                container.gameObject.name.Equals("Player(Clone)") ||
                container.GetComponentInParent<Player>() != null;
@@ -189,7 +198,7 @@ public static class ContainerPatches
                     __instance.m_nview = __instance.GetComponent<ZNetView>();
 
                 if (__instance.m_inventory == null)
-                    __instance.m_inventory = new Inventory("Backpack", null, 1, 1);
+                    __instance.m_inventory = new Inventory("$vapok_mod_backpack", null, 1, 1);
 
                 return false;
             }

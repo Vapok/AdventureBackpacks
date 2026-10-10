@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Αντίσταση στον Παγετό",
   "vapok_mod_se_wet_resistance": "Αντίσταση στο Νερό",
   "vapok_mod_yard_sale_blocked": "Δεν ήταν δυνατό το άδειασμα του σακιδίου. Η αφαίρεση αντικειμένου εμποδίστηκε. Το σακίδιο δεν μετακινήθηκε.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Φασματικό Σάβανο Αποθήκευσης"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Φασματικό Σάβανο Αποθήκευσης",
+  "vapok_mod_backpack": "Σακίδιο",
+  "vapok_mod_open_backpack": "Άνοιγμα σακιδίου",
+  "vapok_mod_close_backpack": "Κλείσιμο σακιδίου",
+  "vapok_mod_switch_container": "Εναλλαγή δοχείου",
+  "vapok_mod_drop_backpack": "Ρίψη σακιδίου",
+  "vapok_mod_quickdrop_backpack": "Γρήγορη ρίψη σακιδίου",
+  "vapok_mod_quickdrop": "Γρήγορη ρίψη"
 }

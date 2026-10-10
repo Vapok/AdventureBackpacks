@@ -1,44 +1,40 @@
 {
   "vapok_mod_item_backpack_meadows": "Ранец",
   "vapok_mod_item_backpack_meadows_description": "Небольшой ранец, способный вместить немного вещей.",
-
   "vapok_mod_item_backpack_blackforest": "Прочный рюкзак",
   "vapok_mod_item_backpack_blackforest_description": "Прочный рюкзак с пряжками и тонкими кожаными ремешками.",
-
   "vapok_mod_item_backpack_swamp": "Болотный мешок",
   "vapok_mod_item_backpack_swamp_description": "Крепкий рюкзак из водонепроницаемой шкуры пиявки.",
-
   "vapok_mod_item_backpack_mountains": "Арктический рюкзак",
   "vapok_mod_item_backpack_mountains_description": "Утепленный арктический рюкзак, отлично подходит для длительных походов в горы.",
-
   "vapok_mod_item_backpack_plains": "Вечный рюкзак быкоящера",
   "vapok_mod_item_backpack_plains_description": "Вечный рюкзак для приключений из чрезвычайно прочной шкуры быкоящера.",
-
   "vapok_mod_item_backpack_mistlands": "Небывалый рюкзак исследователя",
   "vapok_mod_item_backpack_mistlands_description": "Искусно изготовленный загадочный рюкзак. С сундуком. Никто не знает, как именно он работает.",
-
   "vapok_mod_item_rugged_backpack": "Древний прочный рюкзак",
   "vapok_mod_item_rugged_backpack_description": "Древний прочный рюкзак с пряжками и тонкими кожаными ремнями.",
-
   "vapok_mod_item_arctic_backpack": "Древний арктический рюкзак",
   "vapok_mod_item_arctic_backpack_description": "Древний арктический рюкзак, подходящий для длительных походов по горам.",
-
   "vapok_mod_no_inception1": "Не злите богов.",
   "vapok_mod_no_inception2": "Вы были предупреждены.",
   "vapok_mod_no_inception3": "Вы злите богов!",
   "vapok_mod_no_inception4": "Прекратите... Или вами займется Тор.",
   "vapok_mod_no_inception5": "Тор лишил вас своих сил!!!",
-
   "vapok_mod_thor_saves_contents": "В этом рюкзаке были вещи. Тор сохранил его для тебя.",
-
   "vapok_mod_useful_backpack": "Ваш рюкзак кажется полезным.",
   "vapok_mod_you_droped_bag": "Ты уронил рюкзак!",
   "vapok_mod_level": "Уровень",
   "vapok_mod_effect": "Эффект",
   "vapok_mod_quick_drop_unavailable": "Быстрое сбрасывание недоступно.",
-
   "vapok_mod_se_cold_immunity": "Устойчивость к холоду",
   "vapok_mod_se_frost_resistance": "Сопротивление морозу",
   "vapok_mod_se_wet_resistance": "Устойчивость к намоканию",
-  "vapok_mod_yard_sale_blocked": "Не удалось опустошить рюкзак; удаление предметов заблокировано. Рюкзак не был перемещён."
+  "vapok_mod_yard_sale_blocked": "Не удалось опустошить рюкзак; удаление предметов заблокировано. Рюкзак не был перемещён.",
+  "vapok_mod_backpack": "Рюкзак",
+  "vapok_mod_open_backpack": "Открыть рюкзак",
+  "vapok_mod_close_backpack": "Закрыть рюкзак",
+  "vapok_mod_switch_container": "Сменить контейнер",
+  "vapok_mod_drop_backpack": "Сбросить рюкзак",
+  "vapok_mod_quickdrop_backpack": "Быстрый сброс рюкзака",
+  "vapok_mod_quickdrop": "Быстрый сброс"
 }

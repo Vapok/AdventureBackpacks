@@ -306,6 +306,32 @@ return null;
 #endif
     }
 
+    /// <summary>
+    /// Indicates whether toggling between an opened container and backpack via tabs is enabled in configuration.
+    /// </summary>
+    /// <returns>True if enabled, false otherwise.</returns>
+    public static bool IsEnableContainerTabsEnabled()
+    {
+#if ! API
+        return ConfigRegistry.EnableContainerTabs?.Value ?? false;
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Indicates whether an external container is currently open and managed alongside the backpack.
+    /// </summary>
+    /// <returns>True if an external container is active with container tabs, false otherwise.</returns>
+    public static bool HasActiveExternalContainer()
+    {
+#if ! API
+        return ContainerTabs.HasActiveExternalContainer;
+#else
+        return false;
+#endif
+    }
+
     public static bool IsCraftingContextActive()
     {
 #if ! API

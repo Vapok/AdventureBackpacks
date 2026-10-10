@@ -255,112 +255,93 @@ internal static class InventoryGuiPatches
         if (player == null || instance == null || PlayerExtensions.IsDedicatedOrHeadless() || ZInput.instance == null)
             return false;
 
-        var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
-        var hotKeyDownOnClose = ConfigRegistry.CloseInventory.Value && hotKeyDown && !ConfigRegistry.OpenWithHoverInteract.Value;
-        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
+        KeyCode openKey = ConfigRegistry.HotKeyOpen.Value.MainKey;
+        KeyCode dropKey = ConfigRegistry.HotKeyDrop.Value.MainKey;
 
-        var openBackpack = hotKeyDown && !BackpackIsOpen && player.CanOpenBackpack() && !ConfigRegistry.OpenWithHoverInteract.Value;
-        
-        var grids = new List<InventoryGrid>();
-        if (instance.m_player != null)
-            grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
+        bool hotKeyDown = (ZInput.instance != null && ZInput.GetKeyDown(openKey)) 
+                          || ConfigRegistry.HotKeyOpen.Value.IsDown() 
+                          || Input.GetKeyDown(openKey);
 
-        if (hotKeyDown && !BackpackIsOpen && ConfigRegistry.OpenWithHoverInteract.Value && !CheckForTextInput())
-        {
-            ItemDrop.ItemData hoveredItem = null;
-            
-            foreach (var grid in grids)
-            {
-                if (grid == null || grid.GetHoveredElement() == null)
-                    continue;
-                
-                var hoveredElement = grid.GetHoveredElement();
-                var gridInv = grid.GetInventory();
-                if (gridInv != null)
-                    hoveredItem = gridInv.GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
-            }
+        bool hotKeyDrop = ConfigRegistry.OutwardMode.Value 
+                          && ((ZInput.instance != null && ZInput.GetKeyDown(dropKey)) 
+                              || ConfigRegistry.HotKeyDrop.Value.IsDown() 
+                              || Input.GetKeyDown(dropKey));
 
-            if (ZInput.IsGamepadActive() && hoveredItem == null)
-            {
-                foreach (var grid in grids)
-                {
-                    if (grid == null || grid.GetGamepadSelectedItem() == null)
-                        continue;
-                    hoveredItem = grid.GetGamepadSelectedItem();
-                }
-            }
-            
-            if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equipped && !BackpackIsOpen &&
-                player.CanOpenBackpack())
-            {
-                openBackpack = true;
-            }
-        }
-
-        if (openBackpack & !CheckForTextInput())
-        {
-            if (instance.m_currentContainer != null)
-            {
-                instance.m_currentContainer.SetInUse(false);
-                instance.m_currentContainer = null;
-            }
-            player.OpenBackpack(instance);
-            return false;
-        }
-        
-        if (hotKeyDown && BackpackIsOpen && (!hotKeyDownOnClose || ConfigRegistry.OpenWithHoverInteract.Value) && !CheckForTextInput())
-        {
-            bool closeBackpack = false;
-            
-            if (ConfigRegistry.OpenWithHoverInteract.Value)
-            {
-                ItemDrop.ItemData hoveredItem = null;
-            
-                foreach (var grid in grids)
-                {
-                    if (grid == null || grid.GetHoveredElement() == null)
-                        continue;
-                
-                    var hoveredElement = grid.GetHoveredElement();
-                    var gridInv = grid.GetInventory();
-                    if (gridInv != null)
-                        hoveredItem = gridInv.GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
-                }
-
-                if (ZInput.IsGamepadActive() && hoveredItem == null)
-                {
-                    foreach (var grid in grids)
-                    {
-                        if (grid == null || grid.GetGamepadSelectedItem() == null)
-                            continue;
-                        hoveredItem = grid.GetGamepadSelectedItem();
-                    }
-                }
-                
-                if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equipped && BackpackIsOpen)
-                {
-                    closeBackpack = true;
-                }
-            }
-            else
-            {
-                closeBackpack = true;
-            }
-
-            if (closeBackpack)
-            {
-                instance.CloseContainer();
-                BackpackIsOpen = false;
-                return false;
-            }
-        }
-       
         if (hotKeyDrop && !CheckForTextInput())
         {
             player.QuickDropBackpack();
         }
 
-        return ((hotKeyDownOnClose) || hotKeyDrop) && !CheckForTextInput();
+        bool isBackpackOpen = BackpackIsOpen || (instance.m_currentContainer != null && instance.m_currentContainer.IsBackpackProxy());
+        BackpackIsOpen = isBackpackOpen;
+
+        if (hotKeyDown && !CheckForTextInput())
+        {
+            if (ContainerTabs.HasActiveExternalContainer && ConfigRegistry.EnableContainerTabs.Value)
+            {
+                return false;
+            }
+
+            if (isBackpackOpen)
+            {
+                instance.CloseContainer();
+                BackpackIsOpen = false;
+
+                if (ConfigRegistry.CloseInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value)
+                {
+                    instance.Hide();
+                    return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                if (player.CanOpenBackpack())
+                {
+                    if (ConfigRegistry.OpenWithHoverInteract.Value)
+                    {
+                        List<InventoryGrid> grids = new List<InventoryGrid>();
+                        if (instance.m_player != null)
+                            grids.AddRange(instance.m_player.GetComponentsInChildren<InventoryGrid>());
+
+                        ItemDrop.ItemData hoveredItem = null;
+                        foreach (InventoryGrid grid in grids)
+                        {
+                            if (grid == null || grid.GetHoveredElement() == null)
+                                continue;
+
+                            InventoryElement hoveredElement = grid.GetHoveredElement();
+                            Inventory gridInv = grid.GetInventory();
+                            if (gridInv != null)
+                                hoveredItem = gridInv.GetItemAt(hoveredElement.Position.x, hoveredElement.Position.y);
+                        }
+
+                        if (ZInput.IsGamepadActive() && hoveredItem == null)
+                        {
+                            foreach (InventoryGrid grid in grids)
+                            {
+                                if (grid == null || grid.GetGamepadSelectedItem() == null)
+                                    continue;
+                                hoveredItem = grid.GetGamepadSelectedItem();
+                            }
+                        }
+
+                        if (hoveredItem != null && hoveredItem.IsBackpack() && hoveredItem.m_equipped)
+                        {
+                            player.OpenBackpack(instance);
+                        }
+                    }
+                    else
+                    {
+                        player.OpenBackpack(instance);
+                    }
+                    return false;
+                }
+            }
+        }
+
+        return false;
     }
     
     public static bool DetectInputToShow(Player player, InventoryGui instance)
@@ -368,8 +349,17 @@ internal static class InventoryGuiPatches
         if (player == null || instance == null || PlayerExtensions.IsDedicatedOrHeadless() || ZInput.instance == null)
             return false;
 
-        var hotKeyDown = ZInput.GetKeyDown(ConfigRegistry.HotKeyOpen.Value.MainKey);
-        var hotKeyDrop = ConfigRegistry.OutwardMode.Value && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey);
+        KeyCode openKey = ConfigRegistry.HotKeyOpen.Value.MainKey;
+        KeyCode dropKey = ConfigRegistry.HotKeyDrop.Value.MainKey;
+
+        bool hotKeyDown = (ZInput.instance != null && ZInput.GetKeyDown(openKey)) 
+                          || ConfigRegistry.HotKeyOpen.Value.IsDown() 
+                          || Input.GetKeyDown(openKey);
+
+        bool hotKeyDrop = ConfigRegistry.OutwardMode.Value 
+                          && ((ZInput.instance != null && ZInput.GetKeyDown(dropKey)) 
+                              || ConfigRegistry.HotKeyDrop.Value.IsDown() 
+                              || Input.GetKeyDown(dropKey));
 
         if (hotKeyDrop && !CheckForTextInput())
         {
@@ -613,6 +603,19 @@ internal static class InventoryGuiPatches
                 Thread.Sleep(5000);
             }
         }
+
+        [HarmonyPostfix]
+        static void Postfix(InventoryGui __instance)
+        {
+            Player localPlayer = Player.m_localPlayer;
+            if (localPlayer != null)
+            {
+                if (ContainerTabs.HasActiveExternalContainer)
+                {
+                    ContainerTabs.Update(__instance, localPlayer);
+                }
+            }
+        }
     }
     
     [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.SetupRequirement))]
@@ -775,10 +778,24 @@ internal static class InventoryGuiPatches
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
         [HarmonyPostfix]
-        static void Postfix()
+        static void Postfix(InventoryGui __instance)
         {
             BackpackIsOpen = false;
             CraftingContext.Reset();
+            ContainerTabs.Reset(__instance);
+        }
+    }
+
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.CloseContainer))]
+    static class InventoryGuiCloseContainerPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPostfix]
+        static void Postfix(InventoryGui __instance)
+        {
+            ContainerTabs.Reset(__instance);
         }
     }
 
@@ -793,27 +810,61 @@ internal static class InventoryGuiPatches
         [HarmonyPostfix]
         private static void Postfix(InventoryGui __instance, Container container, int activeGroup)
         {
-            if (_isOpening || container != null || activeGroup != 3)
-                return;
-
-            if (!ConfigRegistry.OpenWithCraftingStation.Value || ConfigRegistry.OpenWithHoverInteract.Value)
+            if (_isOpening)
                 return;
 
             Player localPlayer = Player.m_localPlayer;
-            if (localPlayer == null || localPlayer.GetCurrentCraftingStation() == null)
+            if (localPlayer == null)
                 return;
 
-            if (BackpackIsOpen || !localPlayer.CanOpenBackpack())
-                return;
-
-            _isOpening = true;
-            try
+            if (container != null && !container.IsBackpackProxy())
             {
-                localPlayer.OpenBackpack(__instance, activeGroup);
+                if (ConfigRegistry.EnableContainerTabs.Value && localPlayer.CanOpenBackpack())
+                {
+                    ContainerTabs.InitializeWithContainer(container, __instance, localPlayer);
+                }
+                else
+                {
+                    ContainerTabs.Reset(__instance);
+                }
+                return;
             }
-            finally
+
+            if (container != null && container.IsBackpackProxy())
             {
-                _isOpening = false;
+                if (!ContainerTabs.IsViewingBackpack)
+                {
+                    ContainerTabs.ClearExternalContainer(__instance);
+                }
+                return;
+            }
+
+            if (container == null && activeGroup == 3)
+            {
+                if (!ConfigRegistry.OpenWithCraftingStation.Value || ConfigRegistry.OpenWithHoverInteract.Value)
+                    return;
+
+                if (localPlayer.GetCurrentCraftingStation() == null)
+                    return;
+
+                if (BackpackIsOpen || !localPlayer.CanOpenBackpack())
+                    return;
+
+                _isOpening = true;
+                try
+                {
+                    localPlayer.OpenBackpack(__instance, activeGroup);
+                }
+                finally
+                {
+                    _isOpening = false;
+                }
+                return;
+            }
+
+            if (container == null)
+            {
+                ContainerTabs.Reset(__instance);
             }
         }
     }

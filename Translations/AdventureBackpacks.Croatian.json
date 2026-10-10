@@ -30,5 +30,12 @@
   "vapok_mod_se_frost_resistance": "Otpornost na Mraz",
   "vapok_mod_se_wet_resistance": "Otpornost na Vodu",
   "vapok_mod_yard_sale_blocked": "Nije moguće isprazniti ruksak; uklanjanje predmeta je blokirano. Ruksak nije pomaknut.",
-  "item_friendlyskeletonwand_spectralshroud_backpack": "Sablasni Pokrov Pohrane"
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Sablasni Pokrov Pohrane",
+  "vapok_mod_backpack": "Ruksak",
+  "vapok_mod_open_backpack": "Otvori ruksak",
+  "vapok_mod_close_backpack": "Zatvori ruksak",
+  "vapok_mod_switch_container": "Promijeni spremnik",
+  "vapok_mod_drop_backpack": "Ispusti ruksak",
+  "vapok_mod_quickdrop_backpack": "Brzo ispusti ruksak",
+  "vapok_mod_quickdrop": "Brzo ispuštanje"
 }
