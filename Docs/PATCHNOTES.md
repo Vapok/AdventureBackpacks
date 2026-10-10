@@ -1,3 +1,14 @@
+# 2.3.1 - Controller Navigation Hotfix
+* **Gamepad & Controller Input Safety (`Features/ContainerTabs.cs`, `Features/BackpackKeyHints.cs`)**:
+  * In `ContainerTabs.Update`, strictly isolated directional keyboard checks (`KeyCode.LeftArrow`, `KeyCode.RightArrow`, `KeyCode.Comma`, `KeyCode.Period`, `KeyCode.Less`, `KeyCode.Greater`) to `!ZInput.IsGamepadActive()`. When a controller is active, directional inputs are reserved exclusively for native `InventoryGrid` selection navigation and `SplitDialog` slider adjustments, preventing Steam Input / Unity D-Pad arrow emulation from inadvertently switching tabs.
+  * Added comprehensive input guards across `SwitchToBackpack`, `SwitchToChest`, `ToggleTab`, and `Update` ensuring tab switching cannot execute while:
+    * Trigger or modifier keys are depressed (`JoyLTrigger`, `JoyAltKeys`, `JoyRTrigger`, `LeftShift`, `RightShift`, `LeftControl`, `RightControl`).
+    * Modal dialogs are active (`gui.m_splitDialog.gameObject.activeInHierarchy`).
+    * Items are being dragged (`gui.m_dragItem != null || gui.m_dragGo != null`).
+    * Text input is active (`InventoryGuiPatches.CheckForTextInput()`).
+  * In `SwitchToBackpack` and `SwitchToChest`, automatically reset gamepad selection to `(0, 0)` via `gui.m_containerGrid.SetGamepadSelection(new Vector2i(0, 0))` when switching container contexts on a controller.
+  * In `BackpackKeyHints`, dynamically query `ZInput.instance.GetBoundKeyString("JoyRStick")` with fallback to `"R3"` for the gamepad HUD tab hint.
+
 # 2.3.0 - Container Tabs, Crafting Auto-Open & HUD Key Hints
 * **Chest & Backpack Container Tabs (`Features/ContainerTabs.cs`, `Patches/InventoryGui.cs`, `Configuration/ConfigRegistry.cs`)**:
   * Implemented `ContainerTabs` feature providing interactive `[ Chest ]` and `[ Backpack ]` toggle tabs within `gui.m_container` when opening external containers with an equipped backpack.

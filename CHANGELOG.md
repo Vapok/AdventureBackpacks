@@ -1,4 +1,15 @@
-# 2.3.0 - Container Tabs, Crafting Auto-Open & HUD Key Hints
+# 2.3.1 - Controller Navigation Hotfix
+* **Controller & Gamepad Input Issue Fixed**:
+  * Fixed an issue where holding the controller modifier button (L2) to split stacks or quick-move items from a chest inadvertently triggered container tab switching to the backpack.
+  * Keyboard arrow keys (`LeftArrow` / `RightArrow`) for tab switching are now strictly ignored when a gamepad is active, reserving directional inputs exclusively for inventory slot navigation and stack splitting.
+  * Container tab switching is now completely blocked while holding trigger modifiers (L2 / R2), while dragging items, and while the stack split dialog is open.
+  * Dynamically displays the configured controller button for the container tab HUD hint.
+  * To my Controller friends, sorry about that!
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.3.0 - Container Tabs, Crafting Auto-Open & HUD Key Hints
 * **Chest & Backpack Container Tabs**:
   * When opening chests or world containers with an equipped backpack, interactive Chest and Backpack tabs now display directly below the container title.
   * Easily toggle between chest storage and your backpack using the on-screen buttons, Left and Right arrow keys, or gamepad Right Stick Click (R3).
@@ -18,8 +29,6 @@
   * `IsEnableContainerTabsEnabled()`: Check whether container tabs are enabled in user configuration.
   * `HasActiveExternalContainer()`: Check whether an external container (chest) is currently open and managed alongside the backpack.
 
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 
 ### 2.2.12 - Startup Screen Stability & Dependency Updates

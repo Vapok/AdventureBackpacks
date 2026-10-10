@@ -51,6 +51,9 @@ public static class ContainerTabs
             string chestTabLabel = Localization.instance != null ? Localization.instance.Localize("$piece_chestwood") : "Chest";
             string backpackTabLabel = Localization.instance != null ? Localization.instance.Localize("$vapok_mod_backpack") : "Backpack";
 
+            SanitizeTabButton(_chestTabButton);
+            SanitizeTabButton(_backpackTabButton);
+
             SetTabButtonText(_chestTabButton, chestTabLabel);
             SetTabButtonText(_backpackTabButton, backpackTabLabel);
 
@@ -115,26 +118,14 @@ public static class ContainerTabs
 
         PositionTabBar(gui, tabBarRect);
 
-        Button template = gui.m_tabCraft != null ? gui.m_tabCraft : gui.m_takeAllButton;
+        Button template = gui.m_takeAllButton != null ? gui.m_takeAllButton : gui.m_tabCraft;
         if (template == null)
             return;
 
         Button chestButton = UnityEngine.Object.Instantiate(template, tabBarRect, false);
         chestButton.name = "ChestTab";
-        chestButton.onClick.RemoveAllListeners();
+        SanitizeTabButton(chestButton);
         chestButton.onClick.AddListener(() => SwitchToChest(gui, Player.m_localPlayer));
-
-        UITooltip chestTooltip = chestButton.GetComponent<UITooltip>();
-        if (chestTooltip != null)
-        {
-            UnityEngine.Object.Destroy(chestTooltip);
-        }
-
-        Localize[] chestLocalizers = chestButton.GetComponentsInChildren<Localize>(true);
-        for (int i = 0; i < chestLocalizers.Length; i++)
-        {
-            UnityEngine.Object.Destroy(chestLocalizers[i]);
-        }
 
         Image chestImage = chestButton.GetComponent<Image>();
         if (chestImage != null)
@@ -154,7 +145,7 @@ public static class ContainerTabs
         chestLayout.flexibleWidth = 0f;
         chestLayout.flexibleHeight = 0f;
 
-        TMP_Text chestLabel = chestButton.GetComponentInChildren<TMP_Text>();
+        TMP_Text chestLabel = GetPrimaryLabel(chestButton);
         if (chestLabel != null)
         {
             chestLabel.text = Localization.instance != null ? Localization.instance.Localize("$piece_chestwood") : "Chest";
@@ -166,20 +157,8 @@ public static class ContainerTabs
 
         Button backpackButton = UnityEngine.Object.Instantiate(template, tabBarRect, false);
         backpackButton.name = "BackpackTab";
-        backpackButton.onClick.RemoveAllListeners();
+        SanitizeTabButton(backpackButton);
         backpackButton.onClick.AddListener(() => SwitchToBackpack(gui, Player.m_localPlayer));
-
-        UITooltip bpTooltip = backpackButton.GetComponent<UITooltip>();
-        if (bpTooltip != null)
-        {
-            UnityEngine.Object.Destroy(bpTooltip);
-        }
-
-        Localize[] bpLocalizers = backpackButton.GetComponentsInChildren<Localize>(true);
-        for (int i = 0; i < bpLocalizers.Length; i++)
-        {
-            UnityEngine.Object.Destroy(bpLocalizers[i]);
-        }
 
         Image bpImage = backpackButton.GetComponent<Image>();
         if (bpImage != null)
@@ -199,7 +178,7 @@ public static class ContainerTabs
         bpLayout.flexibleWidth = 0f;
         bpLayout.flexibleHeight = 0f;
 
-        TMP_Text bpLabel = backpackButton.GetComponentInChildren<TMP_Text>();
+        TMP_Text bpLabel = GetPrimaryLabel(backpackButton);
         if (bpLabel != null)
         {
             bpLabel.text = Localization.instance != null ? Localization.instance.Localize("$vapok_mod_backpack") : "Backpack";
@@ -214,9 +193,82 @@ public static class ContainerTabs
         _backpackTabButton = backpackButton;
     }
 
+    private static void SanitizeTabButton(Button button)
+    {
+        if (button == null || !button)
+            return;
+
+        button.navigation = new Navigation { mode = Navigation.Mode.None };
+        button.onClick = new Button.ButtonClickedEvent();
+
+        UITooltip tooltip = button.GetComponent<UITooltip>();
+        if (tooltip != null)
+        {
+            UnityEngine.Object.Destroy(tooltip);
+        }
+
+        Localize[] localizers = button.GetComponentsInChildren<Localize>(true);
+        for (int i = 0; i < localizers.Length; i++)
+        {
+            UnityEngine.Object.Destroy(localizers[i]);
+        }
+
+        UIGamePad[] gpHandlers = button.GetComponentsInChildren<UIGamePad>(true);
+        for (int i = 0; i < gpHandlers.Length; i++)
+        {
+            if (gpHandlers[i].m_hint != null)
+            {
+                UnityEngine.Object.Destroy(gpHandlers[i].m_hint);
+            }
+            UnityEngine.Object.Destroy(gpHandlers[i]);
+        }
+
+        UIInputHint[] inputHints = button.GetComponentsInChildren<UIInputHint>(true);
+        for (int i = 0; i < inputHints.Length; i++)
+        {
+            if (inputHints[i].m_gamepadHint != null)
+            {
+                UnityEngine.Object.Destroy(inputHints[i].m_gamepadHint);
+            }
+            if (inputHints[i].m_mouseKeyboardHint != null)
+            {
+                UnityEngine.Object.Destroy(inputHints[i].m_mouseKeyboardHint);
+            }
+            if (inputHints[i].m_gamepadMouseHint != null)
+            {
+                UnityEngine.Object.Destroy(inputHints[i].m_gamepadMouseHint);
+            }
+            UnityEngine.Object.Destroy(inputHints[i]);
+        }
+
+        UIInputHandler[] inputHandlers = button.GetComponentsInChildren<UIInputHandler>(true);
+        for (int i = 0; i < inputHandlers.Length; i++)
+        {
+            UnityEngine.Object.Destroy(inputHandlers[i]);
+        }
+
+        for (int i = button.transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = button.transform.GetChild(i);
+            string childName = child.name.ToLower();
+            if (childName.Contains("hint") || childName.Contains("key") || childName.Contains("gamepad") || childName.Contains("binding"))
+            {
+                UnityEngine.Object.Destroy(child.gameObject);
+            }
+        }
+    }
+
     public static void SwitchToBackpack(InventoryGui gui, Player player)
     {
         if (gui == null || player == null || !player.CanOpenBackpack())
+            return;
+
+        if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
+            return;
+
+        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
+            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
             return;
 
         BackpackComponent backpack = player.GetEquippedBackpack();
@@ -240,6 +292,10 @@ public static class ContainerTabs
         gui.m_currentContainer = backpackContainer;
         gui.m_firstContainerUpdate = true;
         gui.m_containerGrid.ResetView();
+        if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
+        {
+            gui.m_containerGrid.SetGamepadSelection(new Vector2i(0, 0));
+        }
 
         PositionTabBar(gui);
         UpdateTabVisuals();
@@ -256,6 +312,14 @@ public static class ContainerTabs
             return;
         }
 
+        if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
+            return;
+
+        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
+            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            return;
+
         if (gui.m_dragItem != null)
         {
             gui.SetupDragItem(null, null, 1);
@@ -267,6 +331,10 @@ public static class ContainerTabs
         gui.m_currentContainer = _cachedExternalContainer;
         gui.m_firstContainerUpdate = true;
         gui.m_containerGrid.ResetView();
+        if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
+        {
+            gui.m_containerGrid.SetGamepadSelection(new Vector2i(0, 0));
+        }
 
         PositionTabBar(gui);
         UpdateTabVisuals();
@@ -274,6 +342,20 @@ public static class ContainerTabs
 
     public static void ToggleTab(InventoryGui gui, Player player)
     {
+        if (gui == null || player == null)
+            return;
+
+        if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
+            return;
+
+        if (gui.m_dragItem != null || gui.m_dragGo != null)
+            return;
+
+        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
+            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            return;
+
         if (_isViewingBackpack)
         {
             SwitchToChest(gui, player);
@@ -315,25 +397,44 @@ public static class ContainerTabs
             }
         }
 
-        if (!InventoryGuiPatches.CheckForTextInput() && (gui.m_splitDialog == null || !gui.m_splitDialog.IsActive))
+        if (InventoryGuiPatches.CheckForTextInput())
+            return;
+
+        if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
+            return;
+
+        if (gui.m_dragItem != null || gui.m_dragGo != null)
+            return;
+
+        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
+            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            return;
+
+        if (ZInput.IsGamepadActive())
         {
-            if (ZInput.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
+            if (ZInput.GetButtonDown("JoyRStick"))
+            {
+                ToggleTab(gui, player);
+            }
+        }
+        else
+        {
+            if (ZInput.GetKeyDown(KeyCode.Comma) || Input.GetKeyDown(KeyCode.Comma) ||
+                Input.GetKeyDown(KeyCode.Less))
             {
                 if (_isViewingBackpack)
                 {
                     SwitchToChest(gui, player);
                 }
             }
-            else if (ZInput.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            else if (ZInput.GetKeyDown(KeyCode.Period) || Input.GetKeyDown(KeyCode.Period) ||
+                     Input.GetKeyDown(KeyCode.Greater))
             {
                 if (!_isViewingBackpack)
                 {
                     SwitchToBackpack(gui, player);
                 }
-            }
-            else if (ZInput.GetButtonDown("JoyRStick"))
-            {
-                ToggleTab(gui, player);
             }
         }
     }
@@ -414,16 +515,30 @@ public static class ContainerTabs
         SetTabButtonColor(_backpackTabButton, goldColor);
     }
 
+    private static TMP_Text GetPrimaryLabel(Button button)
+    {
+        if (button == null || !button)
+            return null;
+
+        Transform textChild = button.transform.Find("Text");
+        if (textChild != null)
+        {
+            return textChild.GetComponent<TMP_Text>();
+        }
+
+        return button.GetComponentInChildren<TMP_Text>();
+    }
+
     private static void SetTabButtonText(Button button, string text)
     {
         if (button == null || !button)
             return;
 
-        TMP_Text[] labels = button.GetComponentsInChildren<TMP_Text>(true);
-        for (int i = 0; i < labels.Length; i++)
+        TMP_Text label = GetPrimaryLabel(button);
+        if (label != null)
         {
-            labels[i].text = text;
-            labels[i].color = new Color(1f, 0.85f, 0.35f, 1f);
+            label.text = text;
+            label.color = new Color(1f, 0.85f, 0.35f, 1f);
         }
     }
 
@@ -432,10 +547,10 @@ public static class ContainerTabs
         if (button == null || !button)
             return;
 
-        TMP_Text[] labels = button.GetComponentsInChildren<TMP_Text>(true);
-        for (int i = 0; i < labels.Length; i++)
+        TMP_Text label = GetPrimaryLabel(button);
+        if (label != null)
         {
-            labels[i].color = color;
+            label.color = color;
         }
     }
 

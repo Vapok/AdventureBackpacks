@@ -312,7 +312,12 @@ public static class BackpackKeyHints
                             string switchTextGp = Localization.instance != null
                                 ? Localization.instance.Localize("$vapok_mod_switch_container")
                                 : "Switch Container";
-                            if (_containerTabHintKeyGP != null) _containerTabHintKeyGP.text = "R3";
+                            string gpKeyStr = ZInput.instance != null ? ZInput.instance.GetBoundKeyString("JoyRStick", true) : "";
+                            if (string.IsNullOrEmpty(gpKeyStr))
+                            {
+                                gpKeyStr = "R3";
+                            }
+                            if (_containerTabHintKeyGP != null) _containerTabHintKeyGP.text = gpKeyStr;
                             if (_containerTabHintLabelGP != null) _containerTabHintLabelGP.text = switchTextGp;
                             _containerTabHintGP.SetActive(true);
                         }
