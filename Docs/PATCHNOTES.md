@@ -1,3 +1,12 @@
+# 2.3.3 - Armor Stand & Item Stand Mod Compatibility
+* **Armor Stand & Item Stand Protection (`Patches/ArmorStand.cs`, `Patches/ItemStand.cs`)**:
+  * In `ArmorStandPatches`, converted `ArmorStandUpdateAttachPatch` from direct boolean assignment (`BypassMoveProtection = true/false`) to re-entrant `AdventureBackpacks.PushBypassMoveProtection()` in `Prefix` and `AdventureBackpacks.PopBypassMoveProtection()` in Harmony `Finalizer` to guarantee depth tracking is safely unwound even on unhandled exceptions.
+  * Added `ArmorStandUseItemPatch` targeting `ArmorStand.UseItem(Switch, Humanoid, ItemDrop.ItemData)` with `PushBypassMoveProtection()` in `Prefix` and `PopBypassMoveProtection()` in `Finalizer`, ensuring third-party quick-swap mods (e.g. MySix ArmorStandSwap, SwapGear) executing synchronous equipment swaps within `UseItem` do not trip `Inventory.RemoveItemPrefix` or fire Thor's yard sale.
+  * In `ItemStandStandPatches`, mirrored the identical protection model across both `ItemStand.UpdateAttach` and `ItemStand.UseItem(Humanoid, ItemDrop.ItemData)`.
+* **Yard Sale Data Serialization & Duplication Prevention (`Assets/Backpacks.cs`)**:
+  * In `Backpacks.PerformYardSale(Player, ItemDrop.ItemData, bool, int, bool)`, added `backpack.Save()` immediately following `EmtpyInventory(backpackInventory)` so the emptied backpack inventory state is immediately serialized to `itemData.m_customData["AdventureBackpacks"]`.
+  * Eliminates ghost item data retention that previously enabled exponential item duplication if a backpack underwent multiple yard sales or external container swaps.
+
 # 2.3.2 - Controller Binding & Mod Compatibility Improvements
 * **Container Tab Gamepad Combination & Context Isolation (`Features/ContainerTabs.cs`, `Patches/Player.cs`, `Configuration/ConfigRegistry.cs`)**:
   * In `ConfigRegistry`, updated `ContainerTabsGamepadButton` default binding to `"JoyRTrigger + JoyRStick"` (RT + R3) and populated `AcceptableValueList<string>` with 25 single buttons and combination strings (`+` syntax) to prevent input conflicts with Quick Stack Store and Inventory Actions while providing comprehensive user customizability.

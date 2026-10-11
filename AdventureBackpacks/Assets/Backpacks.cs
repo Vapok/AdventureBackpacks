@@ -370,6 +370,7 @@ namespace AdventureBackpacks.Assets
 
             Inventory backpackInventory = backpack.GetInventory();
             EmtpyInventory(backpackInventory);
+            backpack.Save();
 
             if (dropWasBlocked)
             {

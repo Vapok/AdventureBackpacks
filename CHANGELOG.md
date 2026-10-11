@@ -1,4 +1,13 @@
-# 2.3.2 - Controller Binding & Mod Compatibility Improvements
+# 2.3.3 - Armor Stand & Item Stand Mod Compatibility
+* **Armor Stand & Item Stand Protection**:
+  * Fixed an issue where swapping or exchanging backpacks on Armor Stands or Item Stands using equipment swap mods could cause items to drop onto the ground.
+* **Item Safeguard & Duplication Fix**:
+  * Fixed a bug where emptied backpacks could retain their contents in saved data, preventing duplicate items from being created when backpacks are transferred or swapped in rare circumstances.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.3.2 - Controller Binding & Mod Compatibility Improvements
 * **Container Tab Gamepad Controls**:
   * Default gamepad shortcut is now **Right Trigger + Right Stick Click (RT + R3)** to switch between chest and backpack tabs when viewing a container.
     * Prevents input conflicts with Quick Stack Store and Inventory Actions.
@@ -7,9 +16,6 @@
   * Updated Gamepad Keyhints
 * **UI Mod Compatibility**:
   * Improved UI compatibility and layout alignment when running UI mods like ZenUI.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.3.1 - Controller Navigation Hotfix
 * **Controller & Gamepad Input Issue Fixed**:
