@@ -77,9 +77,34 @@ namespace AdventureBackpacks.Configuration
                 }
             };
             
-            UnsyncedConfig("Local Config", "Container Tabs Gamepad Button", "JoyLStick",
-                new ConfigDescription("The gamepad button used to toggle container tabs. Defaults to JoyLStick (Left Stick Click / L3). Set to None to disable gamepad toggling.",
-                    new AcceptableValueList<string>("JoyLStick", "JoyRStick", "JoyBack", "JoyTabLeft", "JoyTabRight", "None"),
+            UnsyncedConfig("Local Config", "Container Tabs Gamepad Button", "JoyRTrigger + JoyRStick",
+                new ConfigDescription("The gamepad button or combo used to toggle container tabs when focused on the container. Defaults to JoyRTrigger + JoyRStick (RT + R3). Set to None to disable gamepad toggling.",
+                    new AcceptableValueList<string>(
+                        "JoyRStick",
+                        "JoyLStick",
+                        "JoyTabLeft",
+                        "JoyTabRight",
+                        "JoyButtonY",
+                        "JoyButtonX",
+                        "JoyButtonA",
+                        "JoyButtonB",
+                        "JoyBack",
+                        "JoyStart",
+                        "JoyDPadUp",
+                        "JoyDPadDown",
+                        "JoyDPadLeft",
+                        "JoyDPadRight",
+                        "JoyLTrigger",
+                        "JoyRTrigger",
+                        "JoyLTrigger + JoyButtonY",
+                        "JoyLTrigger + JoyTabLeft",
+                        "JoyLTrigger + JoyTabRight",
+                        "JoyLTrigger + JoyRStick",
+                        "JoyLTrigger + JoyLStick",
+                        "JoyRTrigger + JoyButtonY",
+                        "JoyRTrigger + JoyRStick",
+                        "JoyTabLeft + JoyTabRight",
+                        "None"),
                     new ConfigurationManagerAttributes { Order = 3 }), ref ContainerTabsGamepadButton);
             
             UnsyncedConfig("Local Config", "Close Inventory", true,

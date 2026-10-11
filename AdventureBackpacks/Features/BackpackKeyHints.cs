@@ -52,8 +52,52 @@ public static class BackpackKeyHints
             if (isGamepad && inputHint.m_gamepadHint != null)
                 return inputHint.m_gamepadHint.transform;
         }
-
         return null;
+    }
+
+    private static string GetGamepadButtonDisplayName(string buttonName)
+    {
+        if (string.IsNullOrEmpty(buttonName))
+            return "";
+
+        if (buttonName.Contains("+"))
+        {
+            string[] parts = buttonName.Split('+');
+            List<string> renderedParts = new List<string>();
+            for (int i = 0; i < parts.Length; i++)
+            {
+                renderedParts.Add(GetSingleButtonDisplayName(parts[i].Trim()));
+            }
+            return string.Join(" + ", renderedParts);
+        }
+
+        return GetSingleButtonDisplayName(buttonName.Trim());
+    }
+
+    private static string GetSingleButtonDisplayName(string singleButton)
+    {
+        string boundStr = ZInput.instance != null ? ZInput.instance.GetBoundKeyString(singleButton, true) : "";
+        if (!string.IsNullOrEmpty(boundStr))
+            return boundStr;
+
+        if (singleButton.Equals("JoyLStick", StringComparison.OrdinalIgnoreCase)) return "L3";
+        if (singleButton.Equals("JoyRStick", StringComparison.OrdinalIgnoreCase)) return "R3";
+        if (singleButton.Equals("JoyBack", StringComparison.OrdinalIgnoreCase)) return "Back";
+        if (singleButton.Equals("JoyStart", StringComparison.OrdinalIgnoreCase)) return "Start";
+        if (singleButton.Equals("JoyTabLeft", StringComparison.OrdinalIgnoreCase)) return "LB";
+        if (singleButton.Equals("JoyTabRight", StringComparison.OrdinalIgnoreCase)) return "RB";
+        if (singleButton.Equals("JoyLTrigger", StringComparison.OrdinalIgnoreCase) || singleButton.Equals("JoyAltKeys", StringComparison.OrdinalIgnoreCase)) return "LT";
+        if (singleButton.Equals("JoyRTrigger", StringComparison.OrdinalIgnoreCase)) return "RT";
+        if (singleButton.Equals("JoyButtonY", StringComparison.OrdinalIgnoreCase)) return "Y";
+        if (singleButton.Equals("JoyButtonX", StringComparison.OrdinalIgnoreCase)) return "X";
+        if (singleButton.Equals("JoyButtonA", StringComparison.OrdinalIgnoreCase)) return "A";
+        if (singleButton.Equals("JoyButtonB", StringComparison.OrdinalIgnoreCase)) return "B";
+        if (singleButton.Equals("JoyDPadUp", StringComparison.OrdinalIgnoreCase)) return "D-Up";
+        if (singleButton.Equals("JoyDPadDown", StringComparison.OrdinalIgnoreCase)) return "D-Down";
+        if (singleButton.Equals("JoyDPadLeft", StringComparison.OrdinalIgnoreCase)) return "D-Left";
+        if (singleButton.Equals("JoyDPadRight", StringComparison.OrdinalIgnoreCase)) return "D-Right";
+
+        return singleButton;
     }
 
     private static GameObject SetupHintRow(Transform parent, string hintName, ref TMP_Text labelOut, ref TMP_Text keyOut)
@@ -82,6 +126,12 @@ public static class BackpackKeyHints
 
         if (hintObj != null)
         {
+            Localize rootLoc = hintObj.GetComponent<Localize>();
+            if (rootLoc != null)
+            {
+                UnityEngine.Object.Destroy(rootLoc);
+            }
+
             Transform labelTransform = hintObj.transform.Find("Text");
             if (labelTransform != null)
             {
@@ -306,8 +356,8 @@ public static class BackpackKeyHints
                 {
                     string gpButton = ConfigRegistry.ContainerTabsGamepadButton != null
                         ? ConfigRegistry.ContainerTabsGamepadButton.Value
-                        : "JoyLStick";
-                    bool showGpTabHint = hasTabs && !string.IsNullOrEmpty(gpButton) && !gpButton.Equals("None", StringComparison.OrdinalIgnoreCase);
+                        : "JoyRTrigger + JoyRStick";
+                    bool showGpTabHint = hasTabs && !string.IsNullOrEmpty(gpButton) && !gpButton.Equals("None", StringComparison.OrdinalIgnoreCase) && ContainerTabs.IsContainerGroupActive(InventoryGui.instance);
 
                     if (showGpTabHint)
                     {
@@ -317,17 +367,19 @@ public static class BackpackKeyHints
                             string switchTextGp = Localization.instance != null
                                 ? Localization.instance.Localize("$vapok_mod_switch_container")
                                 : "Switch Container";
-                            string gpKeyStr = ZInput.instance != null ? ZInput.instance.GetBoundKeyString(gpButton, true) : "";
-                            if (string.IsNullOrEmpty(gpKeyStr))
+                            string gpKeyStr = GetGamepadButtonDisplayName(gpButton);
+                            if (_containerTabHintLabelGP != null)
                             {
-                                gpKeyStr = gpButton.Equals("JoyLStick", StringComparison.OrdinalIgnoreCase) ? "L3" :
-                                           gpButton.Equals("JoyRStick", StringComparison.OrdinalIgnoreCase) ? "R3" :
-                                           gpButton.Equals("JoyBack", StringComparison.OrdinalIgnoreCase) ? "Back" :
-                                           gpButton.Equals("JoyTabLeft", StringComparison.OrdinalIgnoreCase) ? "LB" :
-                                           gpButton.Equals("JoyTabRight", StringComparison.OrdinalIgnoreCase) ? "RB" : gpButton;
+                                _containerTabHintLabelGP.text = switchTextGp;
+                                if (_containerTabHintKeyGP != null)
+                                {
+                                    _containerTabHintKeyGP.text = gpKeyStr;
+                                }
                             }
-                            if (_containerTabHintKeyGP != null) _containerTabHintKeyGP.text = gpKeyStr;
-                            if (_containerTabHintLabelGP != null) _containerTabHintLabelGP.text = switchTextGp;
+                            else if (_containerTabHintKeyGP != null)
+                            {
+                                _containerTabHintKeyGP.text = $"{gpKeyStr} {switchTextGp}".Trim();
+                            }
                             _containerTabHintGP.SetActive(true);
                         }
                     }

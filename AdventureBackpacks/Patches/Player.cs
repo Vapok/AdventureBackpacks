@@ -414,5 +414,22 @@ public class PlayerPatches
             }
         }
     }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.Update))]
+    internal static class PlayerUpdatePatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        [HarmonyPrefix]
+        [HarmonyPriority(Priority.High)]
+        private static void Prefix(Player __instance)
+        {
+            if (__instance == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer)
+                return;
+
+            ContainerTabs.CheckGamepadInput(__instance);
+        }
+    }
 }
 

@@ -1,3 +1,15 @@
+# 2.3.2 - Controller Binding & Mod Compatibility Improvements
+* **Container Tab Gamepad Combination & Context Isolation (`Features/ContainerTabs.cs`, `Patches/Player.cs`, `Configuration/ConfigRegistry.cs`)**:
+  * In `ConfigRegistry`, updated `ContainerTabsGamepadButton` default binding to `"JoyRTrigger + JoyRStick"` (RT + R3) and populated `AcceptableValueList<string>` with 25 single buttons and combination strings (`+` syntax) to prevent input conflicts with Quick Stack Store and Inventory Actions while providing comprehensive user customizability.
+  * In `ContainerTabs.IsGamepadButtonTriggered(string buttonConfig)`, added multi-button combo parsing: verifies modifier keys (`JoyLTrigger`, `JoyAltKeys`, `JoyRTrigger`, etc.) are held via `ZInput.GetButton()` before evaluating `ZInput.GetButtonDown(mainBtn)`. For single buttons, guards against active triggers and keyboard shift/ctrl modifiers.
+  * In `ContainerTabs.IsContainerGroupActive(InventoryGui gui)`, verifies `gui.ActiveGroup == 0` or `gui.m_containerGrid.m_uiGroup.IsActive` so controller tab swapping only triggers when the player is actively interacting with the container grid, preventing tab switching while navigating player inventory slots.
+  * Added `PlayerUpdatePatch` in `Patches/Player.cs` with high priority (`[HarmonyPriority(Priority.High)]`) on `Player.Update` to invoke `ContainerTabs.CheckGamepadInput` and consume stick clicks via `ContainerTabs.ResetGamepadButtonStatus`, preventing downstream mod postfixes (such as Quick Stack Store's "Store All") from firing concurrently.
+* **UI Mod Compatibility (`Features/ContainerTabs.cs`)**:
+  * Cleaned container tab anchoring and layout rebuilder hooks ensuring tab elements align properly without clipping container frames when running ZenUI.
+* **HUD Key Hints Multi-Button Formatting (`Features/BackpackKeyHints.cs`)**:
+  * In `BackpackKeyHints.SetupHintRow`, resolved missing label text by consolidating gamepad hints into a single `TMP_Text` element when child labels are absent on cloned native button hint prefabs.
+  * Added `GetGamepadButtonDisplayName` to decompose combination keybinds (e.g. `JoyRTrigger + JoyRStick`) and resolve native Valheim gamepad `<sprite>` glyph tags for each key part separated by `+`.
+
 # 2.3.1 - Controller Navigation Hotfix
 * **Gamepad & Controller Input Safety (`Features/ContainerTabs.cs`, `Features/BackpackKeyHints.cs`)**:
   * In `ContainerTabs.Update`, strictly isolated directional keyboard checks (`KeyCode.LeftArrow`, `KeyCode.RightArrow`, `KeyCode.Comma`, `KeyCode.Period`, `KeyCode.Less`, `KeyCode.Greater`) to `!ZInput.IsGamepadActive()`. When a controller is active, directional inputs are reserved exclusively for native `InventoryGrid` selection navigation and `SplitDialog` slider adjustments, preventing Steam Input / Unity D-Pad arrow emulation from inadvertently switching tabs.

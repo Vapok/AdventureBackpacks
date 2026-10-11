@@ -356,11 +356,6 @@ public static class ContainerTabs
         if (gui.m_dragItem != null || gui.m_dragGo != null)
             return;
 
-        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
-            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
-            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-            return;
-
         if (_isViewingBackpack)
         {
             SwitchToChest(gui, player);
@@ -368,6 +363,111 @@ public static class ContainerTabs
         else
         {
             SwitchToBackpack(gui, player);
+        }
+    }
+
+    public static bool IsGamepadButtonTriggered(string buttonConfig)
+    {
+        if (string.IsNullOrEmpty(buttonConfig) || buttonConfig.Equals("None", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (buttonConfig.Contains("+"))
+        {
+            string[] parts = buttonConfig.Split('+');
+            if (parts.Length < 2)
+                return false;
+
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                string mod = parts[i].Trim();
+                if (mod.Equals("JoyLTrigger", StringComparison.OrdinalIgnoreCase) || mod.Equals("JoyAltKeys", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!ZInput.GetButton("JoyLTrigger") && !ZInput.GetButton("JoyAltKeys"))
+                        return false;
+                }
+                else if (!ZInput.GetButton(mod))
+                {
+                    return false;
+                }
+            }
+
+            string mainBtn = parts[parts.Length - 1].Trim();
+            return ZInput.GetButtonDown(mainBtn);
+        }
+
+        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
+            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        {
+            return false;
+        }
+
+        return ZInput.GetButtonDown(buttonConfig.Trim());
+    }
+
+    public static void ResetGamepadButtonStatus(string buttonConfig)
+    {
+        if (string.IsNullOrEmpty(buttonConfig) || buttonConfig.Equals("None", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        if (buttonConfig.Contains("+"))
+        {
+            string[] parts = buttonConfig.Split('+');
+            string mainBtn = parts[parts.Length - 1].Trim();
+            ZInput.ResetButtonStatus(mainBtn);
+        }
+        else
+        {
+            ZInput.ResetButtonStatus(buttonConfig.Trim());
+        }
+    }
+
+    public static bool IsContainerGroupActive(InventoryGui gui)
+    {
+        if (gui == null)
+            return false;
+
+        if (gui.ActiveGroup == 0)
+            return true;
+
+        if (gui.m_containerGrid != null && gui.m_containerGrid.m_uiGroup != null && gui.m_containerGrid.m_uiGroup.IsActive)
+            return true;
+
+        return false;
+    }
+
+    public static void CheckGamepadInput(Player player)
+    {
+        if (player == null || !ConfigRegistry.EnableContainerTabs.Value || !HasActiveExternalContainer)
+            return;
+
+        InventoryGui gui = InventoryGui.instance;
+        if (gui == null || !InventoryGui.IsVisible())
+            return;
+
+        if (!player.CanOpenBackpack())
+            return;
+
+        if (InventoryGuiPatches.CheckForTextInput())
+            return;
+
+        if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
+            return;
+
+        if (gui.m_dragItem != null || gui.m_dragGo != null)
+            return;
+
+        if (ZInput.IsGamepadActive())
+        {
+            if (IsContainerGroupActive(gui))
+            {
+                string button = ConfigRegistry.ContainerTabsGamepadButton != null ? ConfigRegistry.ContainerTabsGamepadButton.Value : "JoyRTrigger + JoyRStick";
+                if (IsGamepadButtonTriggered(button))
+                {
+                    ToggleTab(gui, player);
+                    ResetGamepadButtonStatus(button);
+                }
+            }
         }
     }
 
@@ -418,11 +518,7 @@ public static class ContainerTabs
 
         if (ZInput.IsGamepadActive())
         {
-            string button = ConfigRegistry.ContainerTabsGamepadButton?.Value ?? "JoyLStick";
-            if (!string.IsNullOrEmpty(button) && !button.Equals("None", StringComparison.OrdinalIgnoreCase) && ZInput.GetButtonDown(button))
-            {
-                ToggleTab(gui, player);
-            }
+            CheckGamepadInput(player);
         }
         else
         {
