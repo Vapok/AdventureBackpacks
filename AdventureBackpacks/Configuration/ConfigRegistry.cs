@@ -1,4 +1,5 @@
 using System;
+using AdventureBackpacks.Features;
 using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
@@ -62,6 +63,18 @@ namespace AdventureBackpacks.Configuration
             UnsyncedConfig("Local Config", "Enable Container Tabs", true,
                 new ConfigDescription("If enabled, allows toggling between an opened container (such as a chest) and your equipped backpack using tab buttons or the backpack hotkey.",
                     null, new ConfigurationManagerAttributes { Order = 3 }), ref EnableContainerTabs);
+            
+            EnableContainerTabs.SettingChanged += (sender, args) =>
+            {
+                if (!EnableContainerTabs.Value)
+                {
+                    ContainerTabs.OnConfigDisabled();
+                }
+                else
+                {
+                    ContainerTabs.OnConfigEnabled();
+                }
+            };
             
             UnsyncedConfig("Local Config", "Close Inventory", true,
                 new ConfigDescription("If enabled, both backpack and inventory will close with Open Backpack keybind is pressed while Inventory is open.",
