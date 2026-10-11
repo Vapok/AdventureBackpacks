@@ -1,13 +1,23 @@
-# 2.3.1 - Controller Navigation Hotfix
+# 2.3.2 - Controller Binding & Mod Compatibility Improvements
+* **Container Tab Gamepad Controls**:
+  * Default gamepad shortcut is now **Right Trigger + Right Stick Click (RT + R3)** to switch between chest and backpack tabs when viewing a container.
+    * Prevents input conflicts with Quick Stack Store and Inventory Actions.
+  * Tab switching now requires the container grid to be actively focused so navigating player inventory slots will not switch tabs.
+  * Added expanded single-button and combo keybind choices in the configuration manager under Local Config (`Container Tabs Gamepad Button`).
+  * Updated Gamepad Keyhints
+* **UI Mod Compatibility**:
+  * Improved UI compatibility and layout alignment when running UI mods like ZenUI.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.3.1 - Controller Navigation Hotfix
 * **Controller & Gamepad Input Issue Fixed**:
   * Fixed an issue where holding the controller modifier button (L2) to split stacks or quick-move items from a chest inadvertently triggered container tab switching to the backpack.
   * Keyboard arrow keys (`LeftArrow` / `RightArrow`) for tab switching are now strictly ignored when a gamepad is active, reserving directional inputs exclusively for inventory slot navigation and stack splitting.
   * Container tab switching is now completely blocked while holding trigger modifiers (L2 / R2), while dragging items, and while the stack split dialog is open.
   * Dynamically displays the configured controller button for the container tab HUD hint.
   * To my Controller friends, sorry about that!
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.3.0 - Container Tabs, Crafting Auto-Open & HUD Key Hints
 * **Chest & Backpack Container Tabs**:

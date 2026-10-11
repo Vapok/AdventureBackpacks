@@ -20,14 +20,6 @@ public static class ContainerTabs
     private static Button _chestTabButton;
     private static Button _backpackTabButton;
 
-    private static Vector2 _originalContainerSizeDelta;
-    private static Vector2 _originalContainerAnchoredPos;
-    private static Vector2 _originalGridSizeDelta;
-    private static Vector2 _originalGridAnchoredPos;
-    private static RectTransform _originalGridDirectChild;
-    private static bool _isContainerStretched;
-    private const float ContainerExtraHeight = 44f;
-
     public static bool HasActiveExternalContainer => _cachedExternalContainer != null && (bool)_cachedExternalContainer;
     public static bool IsViewingBackpack => _isViewingBackpack;
     public static Container CachedExternalContainer => _cachedExternalContainer;
@@ -45,14 +37,10 @@ public static class ContainerTabs
 
         if (_tabBar != null && _tabBar)
         {
-            EnsureContainerStretched(gui);
             PositionTabBar(gui);
 
             string chestTabLabel = Localization.instance != null ? Localization.instance.Localize("$piece_chestwood") : "Chest";
             string backpackTabLabel = Localization.instance != null ? Localization.instance.Localize("$vapok_mod_backpack") : "Backpack";
-
-            SanitizeTabButton(_chestTabButton);
-            SanitizeTabButton(_backpackTabButton);
 
             SetTabButtonText(_chestTabButton, chestTabLabel);
             SetTabButtonText(_backpackTabButton, backpackTabLabel);
@@ -65,7 +53,7 @@ public static class ContainerTabs
 
     private static void PositionTabBar(InventoryGui gui, RectTransform tabBarRect = null)
     {
-        if (gui == null || gui.m_container == null)
+        if (gui == null || gui.m_container == null || !gui.m_container)
             return;
 
         if (tabBarRect == null)
@@ -80,29 +68,36 @@ public static class ContainerTabs
 
         tabBarRect.anchorMin = new Vector2(0.5f, 1f);
         tabBarRect.anchorMax = new Vector2(0.5f, 1f);
-        tabBarRect.pivot = new Vector2(0.5f, 1f);
+        tabBarRect.pivot = new Vector2(0.5f, 0f);
         tabBarRect.sizeDelta = new Vector2(280f, 34f);
-
-        RectTransform nameRect = gui.m_containerName != null ? gui.m_containerName.rectTransform : null;
-        if (nameRect != null)
-        {
-            float nameHeight = nameRect.rect.height > 10f ? nameRect.rect.height : 30f;
-            float nameBottom = nameRect.anchoredPosition.y - (nameHeight * nameRect.pivot.y);
-            tabBarRect.anchoredPosition = new Vector2(0f, nameBottom - 6f);
-        }
-        else
-        {
-            tabBarRect.anchoredPosition = new Vector2(0f, -60f);
-        }
+        tabBarRect.anchoredPosition = new Vector2(0f, 0f);
     }
 
     private static void EnsureTabBar(InventoryGui gui)
     {
-        if (gui == null || gui.m_container == null)
+        if (gui == null || gui.m_container == null || !gui.m_container)
             return;
 
         if (_tabBar != null && _tabBar)
+        {
+            if (_tabBar.transform.parent != gui.m_container)
+            {
+                _tabBar.transform.SetParent(gui.m_container, false);
+            }
+            PositionTabBar(gui);
+
+            if (_chestTabButton != null && _chestTabButton)
+            {
+                _chestTabButton.onClick.RemoveAllListeners();
+                _chestTabButton.onClick.AddListener(() => SwitchToChest(gui, Player.m_localPlayer));
+            }
+            if (_backpackTabButton != null && _backpackTabButton)
+            {
+                _backpackTabButton.onClick.RemoveAllListeners();
+                _backpackTabButton.onClick.AddListener(() => SwitchToBackpack(gui, Player.m_localPlayer));
+            }
             return;
+        }
 
         GameObject tabBarObj = new GameObject("AB_ContainerTabs", typeof(RectTransform));
         RectTransform tabBarRect = tabBarObj.GetComponent<RectTransform>();
@@ -118,13 +113,14 @@ public static class ContainerTabs
 
         PositionTabBar(gui, tabBarRect);
 
-        Button template = gui.m_takeAllButton != null ? gui.m_takeAllButton : gui.m_tabCraft;
+        Button template = gui.m_tabCraft != null ? gui.m_tabCraft : gui.m_takeAllButton;
         if (template == null)
             return;
 
         Button chestButton = UnityEngine.Object.Instantiate(template, tabBarRect, false);
         chestButton.name = "ChestTab";
         SanitizeTabButton(chestButton);
+        chestButton.onClick.RemoveAllListeners();
         chestButton.onClick.AddListener(() => SwitchToChest(gui, Player.m_localPlayer));
 
         Image chestImage = chestButton.GetComponent<Image>();
@@ -158,6 +154,7 @@ public static class ContainerTabs
         Button backpackButton = UnityEngine.Object.Instantiate(template, tabBarRect, false);
         backpackButton.name = "BackpackTab";
         SanitizeTabButton(backpackButton);
+        backpackButton.onClick.RemoveAllListeners();
         backpackButton.onClick.AddListener(() => SwitchToBackpack(gui, Player.m_localPlayer));
 
         Image bpImage = backpackButton.GetComponent<Image>();
@@ -266,11 +263,6 @@ public static class ContainerTabs
         if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
             return;
 
-        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
-            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
-            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-            return;
-
         BackpackComponent backpack = player.GetEquippedBackpack();
         if (backpack == null)
             return;
@@ -291,7 +283,16 @@ public static class ContainerTabs
 
         gui.m_currentContainer = backpackContainer;
         gui.m_firstContainerUpdate = true;
-        gui.m_containerGrid.ResetView();
+        if (gui.m_containerGrid != null)
+        {
+            gui.m_containerGrid.ResetView();
+            gui.m_containerGrid.UpdateInventory(backpackContainer.GetInventory(), null, gui.m_dragItem);
+        }
+        if (gui.m_containerName != null)
+        {
+            gui.m_containerName.text = Localization.instance.Localize(backpackContainer.GetInventory().GetName());
+        }
+
         if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
         {
             gui.m_containerGrid.SetGamepadSelection(new Vector2i(0, 0));
@@ -315,11 +316,6 @@ public static class ContainerTabs
         if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
             return;
 
-        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
-            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
-            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-            return;
-
         if (gui.m_dragItem != null)
         {
             gui.SetupDragItem(null, null, 1);
@@ -330,7 +326,16 @@ public static class ContainerTabs
 
         gui.m_currentContainer = _cachedExternalContainer;
         gui.m_firstContainerUpdate = true;
-        gui.m_containerGrid.ResetView();
+        if (gui.m_containerGrid != null)
+        {
+            gui.m_containerGrid.ResetView();
+            gui.m_containerGrid.UpdateInventory(_cachedExternalContainer.GetInventory(), null, gui.m_dragItem);
+        }
+        if (gui.m_containerName != null)
+        {
+            gui.m_containerName.text = Localization.instance.Localize(_cachedExternalContainer.GetInventory().GetName());
+        }
+
         if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
         {
             gui.m_containerGrid.SetGamepadSelection(new Vector2i(0, 0));
@@ -351,11 +356,6 @@ public static class ContainerTabs
         if (gui.m_dragItem != null || gui.m_dragGo != null)
             return;
 
-        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
-            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
-            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-            return;
-
         if (_isViewingBackpack)
         {
             SwitchToChest(gui, player);
@@ -366,9 +366,114 @@ public static class ContainerTabs
         }
     }
 
+    public static bool IsGamepadButtonTriggered(string buttonConfig)
+    {
+        if (string.IsNullOrEmpty(buttonConfig) || buttonConfig.Equals("None", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        if (buttonConfig.Contains("+"))
+        {
+            string[] parts = buttonConfig.Split('+');
+            if (parts.Length < 2)
+                return false;
+
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                string mod = parts[i].Trim();
+                if (mod.Equals("JoyLTrigger", StringComparison.OrdinalIgnoreCase) || mod.Equals("JoyAltKeys", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!ZInput.GetButton("JoyLTrigger") && !ZInput.GetButton("JoyAltKeys"))
+                        return false;
+                }
+                else if (!ZInput.GetButton(mod))
+                {
+                    return false;
+                }
+            }
+
+            string mainBtn = parts[parts.Length - 1].Trim();
+            return ZInput.GetButtonDown(mainBtn);
+        }
+
+        if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||
+            Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) ||
+            Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        {
+            return false;
+        }
+
+        return ZInput.GetButtonDown(buttonConfig.Trim());
+    }
+
+    public static void ResetGamepadButtonStatus(string buttonConfig)
+    {
+        if (string.IsNullOrEmpty(buttonConfig) || buttonConfig.Equals("None", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        if (buttonConfig.Contains("+"))
+        {
+            string[] parts = buttonConfig.Split('+');
+            string mainBtn = parts[parts.Length - 1].Trim();
+            ZInput.ResetButtonStatus(mainBtn);
+        }
+        else
+        {
+            ZInput.ResetButtonStatus(buttonConfig.Trim());
+        }
+    }
+
+    public static bool IsContainerGroupActive(InventoryGui gui)
+    {
+        if (gui == null)
+            return false;
+
+        if (gui.ActiveGroup == 0)
+            return true;
+
+        if (gui.m_containerGrid != null && gui.m_containerGrid.m_uiGroup != null && gui.m_containerGrid.m_uiGroup.IsActive)
+            return true;
+
+        return false;
+    }
+
+    public static void CheckGamepadInput(Player player)
+    {
+        if (player == null || !ConfigRegistry.EnableContainerTabs.Value || !HasActiveExternalContainer)
+            return;
+
+        InventoryGui gui = InventoryGui.instance;
+        if (gui == null || !InventoryGui.IsVisible())
+            return;
+
+        if (!player.CanOpenBackpack())
+            return;
+
+        if (InventoryGuiPatches.CheckForTextInput())
+            return;
+
+        if (gui.m_splitDialog != null && gui.m_splitDialog.gameObject.activeInHierarchy)
+            return;
+
+        if (gui.m_dragItem != null || gui.m_dragGo != null)
+            return;
+
+        if (ZInput.IsGamepadActive())
+        {
+            if (IsContainerGroupActive(gui))
+            {
+                string button = ConfigRegistry.ContainerTabsGamepadButton != null ? ConfigRegistry.ContainerTabsGamepadButton.Value : "JoyRTrigger + JoyRStick";
+                if (IsGamepadButtonTriggered(button))
+                {
+                    ToggleTab(gui, player);
+                    ResetGamepadButtonStatus(button);
+                }
+            }
+        }
+    }
+
     public static void Update(InventoryGui gui, Player player)
     {
-        if (gui == null || player == null)
+        if (gui == null || player == null || !ConfigRegistry.EnableContainerTabs.Value)
             return;
 
         if (_cachedExternalContainer == null || !_cachedExternalContainer)
@@ -413,14 +518,12 @@ public static class ContainerTabs
 
         if (ZInput.IsGamepadActive())
         {
-            if (ZInput.GetButtonDown("JoyRStick"))
-            {
-                ToggleTab(gui, player);
-            }
+            CheckGamepadInput(player);
         }
         else
         {
-            if (ZInput.GetKeyDown(KeyCode.Comma) || Input.GetKeyDown(KeyCode.Comma) ||
+            if (ZInput.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.LeftArrow) ||
+                ZInput.GetKeyDown(KeyCode.Comma) || Input.GetKeyDown(KeyCode.Comma) ||
                 Input.GetKeyDown(KeyCode.Less))
             {
                 if (_isViewingBackpack)
@@ -428,7 +531,8 @@ public static class ContainerTabs
                     SwitchToChest(gui, player);
                 }
             }
-            else if (ZInput.GetKeyDown(KeyCode.Period) || Input.GetKeyDown(KeyCode.Period) ||
+            else if (ZInput.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.RightArrow) ||
+                     ZInput.GetKeyDown(KeyCode.Period) || Input.GetKeyDown(KeyCode.Period) ||
                      Input.GetKeyDown(KeyCode.Greater))
             {
                 if (!_isViewingBackpack)
@@ -468,8 +572,6 @@ public static class ContainerTabs
             {
                 gui.m_containerName.gameObject.SetActive(true);
             }
-
-            RestoreContainerSize(gui);
         }
     }
 
@@ -492,6 +594,35 @@ public static class ContainerTabs
         }
 
         BackpackKeyHints.HideHudHints();
+    }
+
+    public static void OnConfigDisabled()
+    {
+        InventoryGui gui = InventoryGui.instance;
+        if (gui != null)
+        {
+            if (_isViewingBackpack && Player.m_localPlayer != null)
+            {
+                SwitchToChest(gui, Player.m_localPlayer);
+            }
+
+            if (_tabBar != null && _tabBar)
+            {
+                _tabBar.SetActive(false);
+            }
+
+            Reset(gui);
+        }
+    }
+
+    public static void OnConfigEnabled()
+    {
+        InventoryGui gui = InventoryGui.instance;
+        Player localPlayer = Player.m_localPlayer;
+        if (gui != null && gui.IsContainerOpen() && gui.m_currentContainer != null && !gui.m_currentContainer.IsBackpackProxy() && localPlayer != null && localPlayer.CanOpenBackpack())
+        {
+            InitializeWithContainer(gui.m_currentContainer, gui, localPlayer);
+        }
     }
 
     private static void UpdateTabVisuals()
@@ -523,10 +654,22 @@ public static class ContainerTabs
         Transform textChild = button.transform.Find("Text");
         if (textChild != null)
         {
-            return textChild.GetComponent<TMP_Text>();
+            TMP_Text tmp = textChild.GetComponent<TMP_Text>();
+            if (tmp != null)
+            {
+                tmp.raycastTarget = false;
+                return tmp;
+            }
         }
 
-        return button.GetComponentInChildren<TMP_Text>();
+        TMP_Text childTmp = button.GetComponentInChildren<TMP_Text>();
+        if (childTmp != null)
+        {
+            childTmp.raycastTarget = false;
+            return childTmp;
+        }
+
+        return null;
     }
 
     private static void SetTabButtonText(Button button, string text)
@@ -540,6 +683,15 @@ public static class ContainerTabs
             label.text = text;
             label.color = new Color(1f, 0.85f, 0.35f, 1f);
         }
+        else
+        {
+            Text legacyLabel = button.GetComponentInChildren<Text>();
+            if (legacyLabel != null)
+            {
+                legacyLabel.text = text;
+                legacyLabel.color = new Color(1f, 0.85f, 0.35f, 1f);
+            }
+        }
     }
 
     private static void SetTabButtonColor(Button button, Color color)
@@ -552,70 +704,13 @@ public static class ContainerTabs
         {
             label.color = color;
         }
-    }
-
-    private static void EnsureContainerStretched(InventoryGui gui)
-    {
-        if (gui == null || !gui || gui.m_container == null || !gui.m_container || _isContainerStretched)
-            return;
-
-        RectTransform containerRect = gui.m_container;
-        _originalContainerSizeDelta = containerRect.sizeDelta;
-        _originalContainerAnchoredPos = containerRect.anchoredPosition;
-
-        _originalGridDirectChild = null;
-        if (gui.m_containerGrid != null && gui.m_containerGrid)
+        else
         {
-            RectTransform current = gui.m_containerGrid.transform as RectTransform;
-            while (current != null && current.parent != null && current.parent != containerRect)
+            Text legacyLabel = button.GetComponentInChildren<Text>();
+            if (legacyLabel != null)
             {
-                current = current.parent as RectTransform;
+                legacyLabel.color = color;
             }
-            if (current != null && current.parent == containerRect)
-            {
-                _originalGridDirectChild = current;
-                _originalGridSizeDelta = current.sizeDelta;
-                _originalGridAnchoredPos = current.anchoredPosition;
-            }
-        }
-
-        containerRect.sizeDelta = new Vector2(_originalContainerSizeDelta.x, _originalContainerSizeDelta.y + ContainerExtraHeight);
-        containerRect.anchoredPosition = new Vector2(_originalContainerAnchoredPos.x, _originalContainerAnchoredPos.y - (ContainerExtraHeight * (1f - containerRect.pivot.y)));
-
-        if (_originalGridDirectChild != null)
-        {
-            float anchorHeightSpan = _originalGridDirectChild.anchorMax.y - _originalGridDirectChild.anchorMin.y;
-            _originalGridDirectChild.sizeDelta = new Vector2(_originalGridSizeDelta.x, _originalGridSizeDelta.y - (anchorHeightSpan * ContainerExtraHeight));
-            _originalGridDirectChild.anchoredPosition = new Vector2(_originalGridAnchoredPos.x, _originalGridAnchoredPos.y - (ContainerExtraHeight * _originalGridDirectChild.anchorMin.y));
-        }
-
-        _isContainerStretched = true;
-    }
-
-    private static void RestoreContainerSize(InventoryGui gui)
-    {
-        if (!_isContainerStretched)
-            return;
-
-        if (gui == null)
-        {
-            gui = InventoryGui.instance;
-        }
-
-        if (gui != null && gui && gui.m_container != null && gui.m_container)
-        {
-            RectTransform containerRect = gui.m_container;
-            containerRect.sizeDelta = _originalContainerSizeDelta;
-            containerRect.anchoredPosition = _originalContainerAnchoredPos;
-
-            if (_originalGridDirectChild != null)
-            {
-                _originalGridDirectChild.sizeDelta = _originalGridSizeDelta;
-                _originalGridDirectChild.anchoredPosition = _originalGridAnchoredPos;
-                _originalGridDirectChild = null;
-            }
-
-            _isContainerStretched = false;
         }
     }
 }

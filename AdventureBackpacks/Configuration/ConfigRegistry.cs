@@ -1,4 +1,5 @@
 using System;
+using AdventureBackpacks.Features;
 using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
@@ -15,6 +16,7 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<bool> OpenWithCraftingStation;
         internal static ConfigEntry<bool> OpenWithHoverInteract;
         internal static ConfigEntry<bool> EnableContainerTabs;
+        internal static ConfigEntry<string> ContainerTabsGamepadButton;
         internal static ConfigEntry<bool> CloseInventory;
         internal static ConfigEntry<bool> OutwardMode;
         internal static ConfigEntry<bool> ReplaceShader;
@@ -62,6 +64,48 @@ namespace AdventureBackpacks.Configuration
             UnsyncedConfig("Local Config", "Enable Container Tabs", true,
                 new ConfigDescription("If enabled, allows toggling between an opened container (such as a chest) and your equipped backpack using tab buttons or the backpack hotkey.",
                     null, new ConfigurationManagerAttributes { Order = 3 }), ref EnableContainerTabs);
+            
+            EnableContainerTabs.SettingChanged += (sender, args) =>
+            {
+                if (!EnableContainerTabs.Value)
+                {
+                    ContainerTabs.OnConfigDisabled();
+                }
+                else
+                {
+                    ContainerTabs.OnConfigEnabled();
+                }
+            };
+            
+            UnsyncedConfig("Local Config", "Container Tabs Gamepad Button", "JoyRTrigger + JoyRStick",
+                new ConfigDescription("The gamepad button or combo used to toggle container tabs when focused on the container. Defaults to JoyRTrigger + JoyRStick (RT + R3). Set to None to disable gamepad toggling.",
+                    new AcceptableValueList<string>(
+                        "JoyRStick",
+                        "JoyLStick",
+                        "JoyTabLeft",
+                        "JoyTabRight",
+                        "JoyButtonY",
+                        "JoyButtonX",
+                        "JoyButtonA",
+                        "JoyButtonB",
+                        "JoyBack",
+                        "JoyStart",
+                        "JoyDPadUp",
+                        "JoyDPadDown",
+                        "JoyDPadLeft",
+                        "JoyDPadRight",
+                        "JoyLTrigger",
+                        "JoyRTrigger",
+                        "JoyLTrigger + JoyButtonY",
+                        "JoyLTrigger + JoyTabLeft",
+                        "JoyLTrigger + JoyTabRight",
+                        "JoyLTrigger + JoyRStick",
+                        "JoyLTrigger + JoyLStick",
+                        "JoyRTrigger + JoyButtonY",
+                        "JoyRTrigger + JoyRStick",
+                        "JoyTabLeft + JoyTabRight",
+                        "None"),
+                    new ConfigurationManagerAttributes { Order = 3 }), ref ContainerTabsGamepadButton);
             
             UnsyncedConfig("Local Config", "Close Inventory", true,
                 new ConfigDescription("If enabled, both backpack and inventory will close with Open Backpack keybind is pressed while Inventory is open.",

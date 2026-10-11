@@ -279,6 +279,7 @@ internal static class InventoryGuiPatches
         {
             if (ContainerTabs.HasActiveExternalContainer && ConfigRegistry.EnableContainerTabs.Value)
             {
+                ContainerTabs.ToggleTab(instance, player);
                 return false;
             }
 
@@ -610,7 +611,7 @@ internal static class InventoryGuiPatches
             Player localPlayer = Player.m_localPlayer;
             if (localPlayer != null)
             {
-                if (ContainerTabs.HasActiveExternalContainer)
+                if (ContainerTabs.HasActiveExternalContainer && ConfigRegistry.EnableContainerTabs.Value)
                 {
                     ContainerTabs.Update(__instance, localPlayer);
                 }
