@@ -16,6 +16,7 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<bool> OpenWithCraftingStation;
         internal static ConfigEntry<bool> OpenWithHoverInteract;
         internal static ConfigEntry<bool> EnableContainerTabs;
+        internal static ConfigEntry<string> ContainerTabsGamepadButton;
         internal static ConfigEntry<bool> CloseInventory;
         internal static ConfigEntry<bool> OutwardMode;
         internal static ConfigEntry<bool> ReplaceShader;
@@ -75,6 +76,11 @@ namespace AdventureBackpacks.Configuration
                     ContainerTabs.OnConfigEnabled();
                 }
             };
+            
+            UnsyncedConfig("Local Config", "Container Tabs Gamepad Button", "JoyLStick",
+                new ConfigDescription("The gamepad button used to toggle container tabs. Defaults to JoyLStick (Left Stick Click / L3). Set to None to disable gamepad toggling.",
+                    new AcceptableValueList<string>("JoyLStick", "JoyRStick", "JoyBack", "JoyTabLeft", "JoyTabRight", "None"),
+                    new ConfigurationManagerAttributes { Order = 3 }), ref ContainerTabsGamepadButton);
             
             UnsyncedConfig("Local Config", "Close Inventory", true,
                 new ConfigDescription("If enabled, both backpack and inventory will close with Open Backpack keybind is pressed while Inventory is open.",

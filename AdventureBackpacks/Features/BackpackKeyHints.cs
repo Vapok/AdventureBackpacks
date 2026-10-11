@@ -304,7 +304,12 @@ public static class BackpackKeyHints
 
                 if (gpTransform != null)
                 {
-                    if (hasTabs)
+                    string gpButton = ConfigRegistry.ContainerTabsGamepadButton != null
+                        ? ConfigRegistry.ContainerTabsGamepadButton.Value
+                        : "JoyLStick";
+                    bool showGpTabHint = hasTabs && !string.IsNullOrEmpty(gpButton) && !gpButton.Equals("None", StringComparison.OrdinalIgnoreCase);
+
+                    if (showGpTabHint)
                     {
                         _containerTabHintGP = SetupHintRow(gpTransform, "AB_ContainerTabHintGP", ref _containerTabHintLabelGP, ref _containerTabHintKeyGP);
                         if (_containerTabHintGP != null)
@@ -312,10 +317,14 @@ public static class BackpackKeyHints
                             string switchTextGp = Localization.instance != null
                                 ? Localization.instance.Localize("$vapok_mod_switch_container")
                                 : "Switch Container";
-                            string gpKeyStr = ZInput.instance != null ? ZInput.instance.GetBoundKeyString("JoyRStick", true) : "";
+                            string gpKeyStr = ZInput.instance != null ? ZInput.instance.GetBoundKeyString(gpButton, true) : "";
                             if (string.IsNullOrEmpty(gpKeyStr))
                             {
-                                gpKeyStr = "R3";
+                                gpKeyStr = gpButton.Equals("JoyLStick", StringComparison.OrdinalIgnoreCase) ? "L3" :
+                                           gpButton.Equals("JoyRStick", StringComparison.OrdinalIgnoreCase) ? "R3" :
+                                           gpButton.Equals("JoyBack", StringComparison.OrdinalIgnoreCase) ? "Back" :
+                                           gpButton.Equals("JoyTabLeft", StringComparison.OrdinalIgnoreCase) ? "LB" :
+                                           gpButton.Equals("JoyTabRight", StringComparison.OrdinalIgnoreCase) ? "RB" : gpButton;
                             }
                             if (_containerTabHintKeyGP != null) _containerTabHintKeyGP.text = gpKeyStr;
                             if (_containerTabHintLabelGP != null) _containerTabHintLabelGP.text = switchTextGp;

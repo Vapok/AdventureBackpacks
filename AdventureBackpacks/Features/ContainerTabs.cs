@@ -418,7 +418,8 @@ public static class ContainerTabs
 
         if (ZInput.IsGamepadActive())
         {
-            if (ZInput.GetButtonDown("JoyRStick"))
+            string button = ConfigRegistry.ContainerTabsGamepadButton?.Value ?? "JoyLStick";
+            if (!string.IsNullOrEmpty(button) && !button.Equals("None", StringComparison.OrdinalIgnoreCase) && ZInput.GetButtonDown(button))
             {
                 ToggleTab(gui, player);
             }
