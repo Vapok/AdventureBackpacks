@@ -1,11 +1,19 @@
-# 2.3.3 - Armor Stand & Item Stand Mod Compatibility
+# 2.3.4 - Developer & AI Integration Standards
+* **Developer & AI Agent Guidelines**:
+  * Added comprehensive AI agent integration standards, guidelines, and core domain invariants to the repository (`AGENTS.md`, `.cursorrules`, `copilot-instructions.md`, `llms.txt`).
+
+* **Sidecar XML Documentation Packaging**:
+  * Enabled XML documentation file generation for release builds, shipping `AdventureBackpacks.xml` sidecar with the mod DLL so decompilers and developer IDEs automatically render full tooltips and API usage warnings.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.3.3 - Armor Stand & Item Stand Mod Compatibility
 * **Armor Stand & Item Stand Protection**:
   * Fixed an issue where swapping or exchanging backpacks on Armor Stands or Item Stands using equipment swap mods could cause items to drop onto the ground.
 * **Item Safeguard & Duplication Fix**:
   * Fixed a bug where emptied backpacks could retain their contents in saved data, preventing duplicate items from being created when backpacks are transferred or swapped in rare circumstances.
 
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.3.2 - Controller Binding & Mod Compatibility Improvements
 * **Container Tab Gamepad Controls**:

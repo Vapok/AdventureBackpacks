@@ -1,3 +1,12 @@
+# 2.3.4 - Developer & AI Integration Standards
+* **Developer & AI Agent Guidelines Integration (`AGENTS.md`, `.cursorrules`, `.github/copilot-instructions.md`, `llms.txt`)**:
+  * Established open agent standard (`AGENTS.md`) and ecosystem-wide agent instructions defining core invariants: single equipped backpack constraint, anti-inception prohibition (Thor's Inventory Guard), `RemoveItem` multi-context monitoring, and `PerformYardSale` sanctity.
+  * Added side-by-side remediation table mapping unsafe internal reflection hacks to strongly typed `ABAPIClient` calls.
+* **Sidecar XML Documentation Packaging (`AdventureBackpacks.csproj`)**:
+  * Enabled `<GenerateDocumentationFile>` on `Release|AnyCPU` configuration, outputting `AdventureBackpacks.xml`.
+  * Updated MSBuild `Copy` target to automatically copy `AdventureBackpacks.xml` alongside `AdventureBackpacks.dll` into the Release staging directory (`Modding/Releases/AdventureBackpacks-Vapok/plugins`).
+  * Enriched XML doc comments on `ABAPI` and key API methods with explicit anti-reflection warnings and feature request directions.
+
 # 2.3.3 - Armor Stand & Item Stand Mod Compatibility
 * **Armor Stand & Item Stand Protection (`Patches/ArmorStand.cs`, `Patches/ItemStand.cs`)**:
   * In `ArmorStandPatches`, converted `ArmorStandUpdateAttachPatch` from direct boolean assignment (`BypassMoveProtection = true/false`) to re-entrant `AdventureBackpacks.PushBypassMoveProtection()` in `Prefix` and `AdventureBackpacks.PopBypassMoveProtection()` in Harmony `Finalizer` to guarantee depth tracking is safely unwound even on unhandled exceptions.

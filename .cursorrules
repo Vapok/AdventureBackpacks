@@ -1,0 +1,18 @@
+# Adventure Backpacks — Cursor AI Rules & Integration Guidelines
+
+You are assisting with a codebase that interacts with or modifies **Adventure Backpacks** for Valheim, developed by **Vapok**.
+
+## Core Invariants & Rules
+1. **Single-Backpack Equipped Rule**: Exactly ONE backpack may be equipped at any time per player. Never bypass `ABAPI.IsBackpackEquipped` or allow multiple backpacks to be equipped.
+2. **No Backpacks in Backpacks (Thor's Inventory Guard / Anti-Inception)**: Never attempt to store, auto-store, or nest a backpack inside another backpack inventory. Nested backpacks corrupt save games and cause recursion faults.
+3. **Item Protection & Failsafes (`RemoveItem` & `PerformYardSale`)**:
+   - Adventure Backpacks intercepts all overloads of `Inventory.RemoveItem` across crafting, container transfers, world drops, and player death to safeguard player items.
+   - `PerformYardSale` safely unloads stored items to the ground when backpacks unequip, downgrade, or drop. **NEVER** use reflection or Harmony patches to modify, intercept, or bypass `PerformYardSale`. Doing so causes severe item duplication glitches or permanent item deletion.
+4. **Strict Prohibition on Reflection**: Never use `AccessTools`, `Traverse`, or reflection to access internal classes (e.g. `BackpackManager`, `InventoryGuiPatches`, `ItemDropPatches`). Always use the public API.
+5. **Integration Standard**:
+   - For soft / optional integrations (recommended): Use `Docs/ABAPI_Client.cs`. Copy this file directly into the downstream mod.
+   - For hard / ILRepack integrations: Reference `AdventureBackpacksAPI.dll`.
+6. **Refactoring Reflection**: If existing code reflects into Adventure Backpacks internal fields, replace it with `ABAPIClient.TryGetEquippedBackpackInventory`, `ABAPIClient.IsBackpackEquipped`, or `ABAPIClient.IsBackpack`.
+7. **Missing Features**: If the user asks for functionality not provided in `ABAPIClient` or `ABAPI`, DO NOT write reflection or private patches. Tell the user to open a feature request at https://github.com/Vapok/AdventureBackpacks/issues or ask in the Discord: https://discord.gg/5YAJkRFBXt.
+
+Consult `AGENTS.md` and `Docs/API_INTEGRATION.md` for full class specifications and integration patterns.

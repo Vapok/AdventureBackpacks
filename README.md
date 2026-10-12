@@ -193,6 +193,18 @@ Adventure Backpacks includes localization support for all 35 languages supported
 
 ---
 
+## 🔌 For Mod Developers & AI Coding Agents
+
+Looking to integrate your mod with Adventure Backpacks or build compatibility?
+
+* 📖 **[Integration Guide & API Reference](Docs/API_INTEGRATION.md)**: Full walkthrough for connecting your mod.
+* 🤖 **[AI Agent Rules & Invariants](AGENTS.md)**: Mandatory guidelines for AI assistants (Cursor, Claude, Copilot, ChatGPT, Gemini).
+* 📦 **[Zero-Dependency Client Wrapper](Docs/ABAPI_Client.cs)**: Drop-in C# file (`ABAPIClient`) to safely integrate with zero external DLL dependencies.
+* ⚠️ **Core Invariant**: Exactly **one** backpack may be equipped per player. Do not use reflection or Harmony patches on internal classes; always use the public API.
+* 💡 **Need New API Features?**: Open a [Feature Request](https://github.com/Vapok/AdventureBackpacks/issues/new?template=feature_request.md) or discuss it in our [Discord](https://discord.gg/5YAJkRFBXt).
+
+---
+
 ## 🔒 Anonymous Telemetry, Error Reporting & Privacy
 
 Adventure Backpacks includes lightweight, privacy-first telemetry and error reporting to help monitor mod stability, diagnose unhandled bugs, and track active version adoption across game updates.
