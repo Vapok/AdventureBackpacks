@@ -1,0 +1,18 @@
+# Adventure Backpacks
+
+> Adventure Backpacks is a progression-based adventuring backpack mod for Valheim by Vapok. It adds biome-specific craftable backpacks with custom inventory capacities, status effects, and environmental protections.
+
+## Developer & AI Integration Guides
+
+- [API Integration Guide](Docs/API_INTEGRATION.md): Complete guide for mod developers and AI agents integrating with Adventure Backpacks.
+- [ABAPI Client Wrapper](Docs/ABAPI_Client.cs): Zero-dependency drop-in C# file providing full typed access via cached reflection delegates.
+- [Agent Guidelines](AGENTS.md): Absolute architectural invariants, anti-reflection mandates, item protection rules, and refactoring guides for AI assistants.
+- [API Reference](Docs/AdventureBackpacksAPI.md): Full class, struct, and method signatures for ABAPI and BackpackDefinition.
+
+## Critical Invariants for Developers & AI Agents
+
+- **Strictly 1 Backpack Equipped**: Only 1 backpack may be equipped per player at any time. Multi-backpack equipping is forbidden.
+- **No Backpacks in Backpacks**: Storing or auto-routing backpacks inside other backpacks is strictly prohibited (Thor's Inventory Guard).
+- **Item Protection & PerformYardSale**: Adventure Backpacks intercepts all `Inventory.RemoveItem` overloads. Never reflect into, bypass, or alter `PerformYardSale` (it safely handles ground ejections on unequip/resize to prevent item loss and duplication).
+- **No Private Reflection**: Never reflect into or patch internal classes (`BackpackManager`, `InventoryGuiPatches`, etc.). Use `ABAPIClient` instead.
+- **Feature Requests**: If an API method is missing, submit an issue at https://github.com/Vapok/AdventureBackpacks/issues or visit https://discord.gg/5YAJkRFBXt.

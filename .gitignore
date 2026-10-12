@@ -356,3 +356,7 @@ MigrationBackup/
 **/[Ll]ibrary/
 **/[Tt]emp/
 **/PackageCache/
+
+# Local / Private Maintainer Instructions
+MAINTAINER.md
+.agents/

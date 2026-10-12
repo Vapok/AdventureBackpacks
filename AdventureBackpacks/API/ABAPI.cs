@@ -13,13 +13,18 @@ namespace AdventureBackpacks.API;
 /// <summary>
 /// Adventure Backpacks developer API.
 /// 
-/// Mod developers can integrate with Adventure Backpacks using either of two methods:
+/// IMPORTANT FOR MOD DEVELOPERS &amp; AI AGENTS:
+/// - INVARIANT: Exactly ONE backpack may be equipped at any time per player. Multi-equipping is forbidden.
+/// - DO NOT use reflection (AccessTools, Traverse) or Harmony patches on internal classes (BackpackManager, etc.).
+/// - For soft integrations, copy Docs/ABAPI_Client.cs into your project.
+/// - If a needed capability is missing, submit a feature request at https://github.com/Vapok/AdventureBackpacks/issues
+///   or join the Discord at https://discord.gg/5YAJkRFBXt.
 /// 
+/// Integration methods:
 /// 1. Zero-Dependency Client Wrapper (Recommended for soft integrations):
-///    Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) into your mod project. Provides full typed access with cached reflection delegates. Requires no external DLL references or ILRepack.
-/// 
+///    Drop [Docs/ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) into your mod project.
 /// 2. Repackable API Assembly:
-///    Reference [AdventureBackpacksAPI.dll](https://github.com/Vapok/AdventureBackpacks/releases) and merge into your mod via ILRepack. Adventure Backpacks automatically redirects API references to the live mod at runtime.
+///    Reference [AdventureBackpacksAPI.dll](https://github.com/Vapok/AdventureBackpacks/releases) and merge into your mod via ILRepack.
 /// </summary>
 [PublicAPI]
 // ReSharper disable once InconsistentNaming
@@ -55,6 +60,7 @@ return false;
 
     /// <summary>
     /// Determines if the Player provided is currently wearing a backpack.
+    /// Exactly ONE backpack may ever be equipped at any time per player.
     /// </summary>
     /// <param name="player">Player, usually Player.m_localPlayer</param>
     /// <returns>true or false</returns>
