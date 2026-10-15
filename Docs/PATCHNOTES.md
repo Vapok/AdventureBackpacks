@@ -1,3 +1,10 @@
+# 2.3.5 - Startup Window Controller Support & Valheim 1.0.20 Alignment
+* **Startup Overview Controller Navigation**:
+  * In internalized `Vapok.Valheim.Common` 3.1020.1, added full controller navigation, debounced stick stepping, and focus management to `ModSplashManager`.
+* **Dependency & Engine Alignment**:
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1020.1.
+  * Aligned game assembly references to Valheim 1.0.20.
+
 # 2.3.4 - Developer & AI Integration Standards
 * **Developer & AI Agent Guidelines Integration (`AGENTS.md`, `.cursorrules`, `.github/copilot-instructions.md`, `llms.txt`)**:
   * Established open agent standard (`AGENTS.md`) and ecosystem-wide agent instructions defining core invariants: single equipped backpack constraint, anti-inception prohibition (Thor's Inventory Guard), `RemoveItem` multi-context monitoring, and `PerformYardSale` sanctity.

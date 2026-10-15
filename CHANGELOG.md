@@ -1,12 +1,17 @@
-# 2.3.4 - Developer & AI Integration Standards
+# 2.3.5 - Startup Window Controller Support & Valheim 1.0.20 Alignment
+* **Controller Support**: Added full game controller navigation, debounced stick stepping, and focus management to the startup mod overview window.
+* **Compatibility**: Updated internal dependencies for stability and Valheim 1.0.20 compatibility.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 2.3.4 - Developer & AI Integration Standards
 * **Developer & AI Agent Guidelines**:
   * Added comprehensive AI agent integration standards, guidelines, and core domain invariants to the repository (`AGENTS.md`, `.cursorrules`, `copilot-instructions.md`, `llms.txt`).
 
 * **Sidecar XML Documentation Packaging**:
   * Enabled XML documentation file generation for release builds, shipping `AdventureBackpacks.xml` sidecar with the mod DLL so decompilers and developer IDEs automatically render full tooltips and API usage warnings.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.3.3 - Armor Stand & Item Stand Mod Compatibility
 * **Armor Stand & Item Stand Protection**:
