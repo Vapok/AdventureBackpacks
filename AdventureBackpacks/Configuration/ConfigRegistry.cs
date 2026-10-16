@@ -1,4 +1,5 @@
 using System;
+using AdventureBackpacks.Assets;
 using AdventureBackpacks.Features;
 using BepInEx.Configuration;
 using UnityEngine;
@@ -20,6 +21,12 @@ namespace AdventureBackpacks.Configuration
         internal static ConfigEntry<bool> CloseInventory;
         internal static ConfigEntry<bool> OutwardMode;
         internal static ConfigEntry<bool> ReplaceShader;
+        
+        public enum ModelStyle
+        {
+            Modern,
+            Classic
+        }
         
         public static Waiting Waiter;
 
@@ -118,7 +125,7 @@ namespace AdventureBackpacks.Configuration
             UnsyncedConfig("Local Config", "Replace Shader", true,
                 new ConfigDescription("Toggle To use the Material Shader Replacer (Requires Game Restart)",
                     null, new ConfigurationManagerAttributes { Order = 1 }), ref ReplaceShader);
-            
+
             _config.Save();
         }
     }

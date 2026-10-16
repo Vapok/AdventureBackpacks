@@ -217,6 +217,12 @@
         <EmbeddedResource Include="Assets\Bundles\backpack_mountains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_plains" />
         <EmbeddedResource Include="Assets\Bundles\backpack_swamp" />
+        <EmbeddedResource Include="Assets\Bundles\classic_backpack_black_forest" />
+        <EmbeddedResource Include="Assets\Bundles\classic_backpack_meadows" />
+        <EmbeddedResource Include="Assets\Bundles\classic_backpack_mistlands" />
+        <EmbeddedResource Include="Assets\Bundles\classic_backpack_mountains" />
+        <EmbeddedResource Include="Assets\Bundles\classic_backpack_plains" />
+        <EmbeddedResource Include="Assets\Bundles\classic_backpack_swamp" />
         <EmbeddedResource Include="Assets\Bundles\chebsbackpack" />
         <EmbeddedResource Include="Assets\Bundles\vapokbackpacks" />
         <EmbeddedResource Include="Translations\English.json" />

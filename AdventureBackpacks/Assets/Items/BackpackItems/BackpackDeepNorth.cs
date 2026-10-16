@@ -80,7 +80,7 @@ internal class BackpackDeepNorth : BackpackItem
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
-        var shared = itemData.m_shared;
+        ItemDrop.ItemData.SharedData shared = itemData.m_shared;
 
         shared.m_movementModifier = GetSpeedModifier(quality);
 
@@ -98,9 +98,9 @@ internal class BackpackDeepNorth : BackpackItem
 
         //Fires when adrenaline fills, bar resets after
         shared.m_fullAdrenalineSE = null;
-        if (quality >= 4 && !string.IsNullOrEmpty(SecondWindEffect?.Value) && ObjectDB.instance != null)
+        if (quality >= 4 && SecondWindEffect != null && !string.IsNullOrEmpty(SecondWindEffect.Value) && ObjectDB.instance != null)
         {
-            var effect = ObjectDB.instance.GetStatusEffect(SecondWindEffect.Value.GetStableHashCode());
+            StatusEffect effect = ObjectDB.instance.GetStatusEffect(SecondWindEffect.Value.GetStableHashCode());
             if (effect != null)
                 shared.m_fullAdrenalineSE = effect;
             else

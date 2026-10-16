@@ -64,7 +64,7 @@ internal class BackpackAshlands : BackpackItem
 
     internal override void UpdateStatusEffects(int quality, CustomSE statusEffects, List<HitData.DamageModPair> modifierList, ItemDrop.ItemData itemData)
     {
-        var shared = itemData.m_shared;
+        ItemDrop.ItemData.SharedData shared = itemData.m_shared;
 
         shared.m_movementModifier = GetSpeedModifier(quality);
 

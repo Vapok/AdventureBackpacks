@@ -1,4 +1,15 @@
-# 2.3.5 - API Expansion, Controller Support & Valheim 1.0.20 Alignment
+# 2.4.0 - Ashlands & Deep North Backpacks, Model Overhaul & Valheim 1.0.20 Alignment
+* **Ashlands & Deep North Biome Backpacks (`BackpackAshlands.cs`, `BackpackDeepNorth.cs`)**:
+  * Implemented `BackpackAshlands` (Cinderward Pack) with configurable `HeatResistance` reducing lava damage and delaying boiling water damage.
+  * Implemented `BackpackDeepNorth` (Frostbound Haversack) with `FrostResistance` and Quality 4 `SecondWindEffect` triggering adrenaline surge on critical health.
+* **Modern & Classic Visual Model Architecture (`BackpackFactory.cs`, `BackpackItem.cs`)**:
+  * Built standalone embedded AssetBundles for original classic models (`classic_backpack_*`) alongside reworked higher-detail modern assets.
+  * Encapsulated asset instantiation in `BackpackFactory.CreateBackpack<T>()`, dynamically resolving target AssetBundles at startup.
+  * Registered per-backpack client unsynced `Model Style` configuration (`ConfigRegistry.ModelStyle.Modern` / `ConfigRegistry.ModelStyle.Classic`) under each bag's English section (`[Backpack: Satchel]`, `[Backpack: Rugged Backpack]`, etc.).
+  * Added runtime `.SettingChanged` listener alerting players via center HUD message (`Player.m_localPlayer.Message`) and logging that a game restart is required when toggling model styles.
+* **Prefab Particle Sanitization (`AssetItem.cs`, `BackpackBlackForest.prefab`)**:
+  * Removed legacy `CinderParticles` GameObject and rogue `ParticleSystem` components from Black Forest prefab assets.
+  * Added runtime guard `StripUnwantedParticles()` in `AssetItem` to ensure non-target particle emitters never leak into world space.
 * **Public Developer API Query (`API/ABAPI.cs`, `Docs/ABAPI_Client.cs`, `Docs/AdventureBackpacksAPI.md`)**:
   * Added `WouldStorePickup(Player player, ItemDrop.ItemData item)` and `WouldStorePickup(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)` to `ABAPI` and `ABAPIClient`.
   * Allows external auto-pickup and magnet mods (such as EvuMagnets) to evaluate whether ground item drops would be accepted into an equipped backpack under active auto-store, inventory overflow, and anti-inception rules without modifying inventory contents or mutating state.

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Timers;
 using AdventureBackpacks.API;
+using AdventureBackpacks.Configuration;
 using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
@@ -52,6 +53,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ConfigEntry<bool> ShowBackpackStatusEffect;
     internal ConfigEntry<string> CustomStatusEffectName;
     internal ConfigEntry<BackpackBiomes> BackpackBiome;
+    internal ConfigEntry<ConfigRegistry.ModelStyle> ModelStyle;
     
     internal ConfigSyncBase Config => _config;
     protected string EnglishSection => _englishSection;
@@ -109,7 +111,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
         }
     }
 
-    private static string SafeGetTranslation(string language, string text)
+    internal static string SafeGetTranslation(string language, string text)
     {
         try
         {

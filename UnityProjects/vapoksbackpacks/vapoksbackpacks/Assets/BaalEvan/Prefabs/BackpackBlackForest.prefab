@@ -1284,8 +1284,6 @@ GameObject:
   - component: {fileID: 6782084579490719777}
   - component: {fileID: 6754282943425588397}
   - component: {fileID: 830346916017766063}
-  - component: {fileID: 6111942630225874051}
-  - component: {fileID: 3958514351991953056}
   m_Layer: 12
   m_Name: BackpackBlackForest
   m_TagString: Untagged
