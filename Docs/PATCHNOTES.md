@@ -3,6 +3,13 @@
   * Added `WouldStorePickup(Player player, ItemDrop.ItemData item)` and `WouldStorePickup(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)` to `ABAPI` and `ABAPIClient`.
   * Allows external auto-pickup and magnet mods (such as EvuMagnets) to evaluate whether ground item drops would be accepted into an equipped backpack under active auto-store, inventory overflow, and anti-inception rules without modifying inventory contents or mutating state.
   * Synchronized integration documentation in `Docs/API_INTEGRATION.md` and `AGENTS.md` with official replacement guidance replacing unsafe reflection into `StoreToBackpack.ShouldStoreToBackpack`.
+* **Plains Backpack Frost Resistance Progression (`Assets/Items/BackpackItems/BackpackPlains.cs`)**:
+  * Restored `EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 1)` default from 3 to 1, aligning default progression with `CapeLox` crafting recipe requirements and preventing loss of mountain frost protection on crafting.
+* **Equipment Effect Cache & Quality Refresh (`Patches/Humanoid.cs`)**:
+  * In `HumanoidUpdateEquipmentStatusEffectsPatch.Postfix`, updated `AddActiveBackpackEffects` invocation to run unconditionally when a backpack is equipped, ensuring active status effects are properly refreshed when a backpack's quality level is upgraded or modified.
+  * Purged stale `SE_vapok_ab_` effects from `Player.m_equipmentStatusEffects` and `SEMan` that are no longer active on the currently equipped backpack.
+* **Backpack Tooltip Damage Modifier Rendering (`Patches/ItemDrop.cs`)**:
+  * In `ItemDataGetTooltipPatch.Postfix`, added damage modifier resolution supporting `SE_Stats.m_mods` and dynamically evaluating biome quality thresholds (e.g. `FrostResistance`) for crafting recipe previews and inventory tooltips, formatting modifiers under `$item_armor` to match native Valheim cape tooltips.
 * **Startup Overview Controller Navigation**:
   * In internalized `Vapok.Valheim.Common` 3.1020.2, added full controller navigation, debounced stick stepping, and focus management to `ModSplashManager`.
 * **Dependency & Engine Alignment**:

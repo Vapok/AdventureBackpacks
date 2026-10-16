@@ -50,7 +50,7 @@ internal class BackpackPlains : BackpackItem
         if (BackpackBiome != null && (BackpackBiome.Value & BackpackBiomes.Plains) != 0)
         {
             if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.FrostResistance))
-                EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 3);
+                EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 1);
             if (EffectsFactory.EffectList.ContainsKey(BackpackEffect.ColdResistance))
                 EffectsFactory.EffectList[BackpackEffect.ColdResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 1);
         }
