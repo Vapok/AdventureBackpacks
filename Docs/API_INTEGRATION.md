@@ -151,6 +151,7 @@ If your codebase or AI assistant previously attempted to access Adventure Backpa
 | Accessing all carried/equipped backpacks | `ABAPIClient.GetAllBackpackInventories(player)` |
 | Checking if backpack UI is currently open | `ABAPIClient.IsBackpackOpen()` |
 | Toggling or opening backpack GUI | `ABAPIClient.OpenBackpack(player, inventoryGui)` |
+| `AccessTools.Method(..., "ShouldStoreToBackpack")` / pickup query | `ABAPIClient.WouldStorePickup(player, itemData)` |
 
 ---
 

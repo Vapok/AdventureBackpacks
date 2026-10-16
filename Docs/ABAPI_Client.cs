@@ -39,6 +39,8 @@ namespace AdventureBackpacks.API.Client
         private static MethodInfo _isDisplayTotalIngredientCountEnabledMethod;
         private static MethodInfo _suppressNativeCraftingMethod;
         private static MethodInfo _unsuppressNativeCraftingMethod;
+        private static MethodInfo _wouldStorePickupMethod;
+        private static MethodInfo _wouldStorePickupWithInventoryMethod;
 
         public static bool IsAvailable
         {
@@ -89,6 +91,8 @@ namespace AdventureBackpacks.API.Client
                         _isDisplayTotalIngredientCountEnabledMethod = _apiType.GetMethod("IsDisplayTotalIngredientCountEnabled", BindingFlags.Public | BindingFlags.Static);
                         _suppressNativeCraftingMethod = _apiType.GetMethod("SuppressNativeCrafting", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
                         _unsuppressNativeCraftingMethod = _apiType.GetMethod("UnsuppressNativeCrafting", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
+                        _wouldStorePickupMethod = _apiType.GetMethod("WouldStorePickup", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(ItemDrop.ItemData) }, null);
+                        _wouldStorePickupWithInventoryMethod = _apiType.GetMethod("WouldStorePickup", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(ItemDrop.ItemData), typeof(Inventory).MakeByRefType() }, null);
                     }
                     break;
                 }
@@ -354,6 +358,61 @@ namespace AdventureBackpacks.API.Client
             if (_unsuppressNativeCraftingMethod != null && !string.IsNullOrEmpty(modIdentifier))
             {
                 _unsuppressNativeCraftingMethod.Invoke(null, new object[] { modIdentifier });
+            }
+        }
+
+        /// <summary>
+        /// Determines whether Adventure Backpacks would store a picked up item into the equipped backpack of the specified player.
+        /// Returns false if Adventure Backpacks is not available or if the item would not be stored.
+        /// </summary>
+        /// <param name="player">Player, usually Player.m_localPlayer</param>
+        /// <param name="item">ItemDrop.ItemData candidate for pickup</param>
+        /// <returns>True if the item would be stored in the backpack, otherwise false.</returns>
+        public static bool WouldStorePickup(Player player, ItemDrop.ItemData item)
+        {
+            EnsureInitialized();
+            if (!_isAvailable || _wouldStorePickupMethod == null)
+                return false;
+
+            try
+            {
+                return (bool)_wouldStorePickupMethod.Invoke(null, new object[] { player, item });
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether Adventure Backpacks would store a picked up item into the equipped backpack of the specified player,
+        /// and outputs the backpack inventory if accepted.
+        /// Returns false if Adventure Backpacks is not available or if the item would not be stored.
+        /// </summary>
+        /// <param name="player">Player, usually Player.m_localPlayer</param>
+        /// <param name="item">ItemDrop.ItemData candidate for pickup</param>
+        /// <param name="backpackInventory">When true, contains the target backpack inventory; otherwise, null.</param>
+        /// <returns>True if the item would be stored in the backpack, otherwise false.</returns>
+        public static bool WouldStorePickup(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)
+        {
+            backpackInventory = null;
+            EnsureInitialized();
+            if (!_isAvailable || _wouldStorePickupWithInventoryMethod == null)
+                return false;
+
+            try
+            {
+                object[] args = new object[] { player, item, null };
+                bool result = (bool)_wouldStorePickupWithInventoryMethod.Invoke(null, args);
+                if (result)
+                {
+                    backpackInventory = args[2] as Inventory;
+                }
+                return result;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

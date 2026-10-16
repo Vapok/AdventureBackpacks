@@ -1,5 +1,7 @@
-# 2.3.5 - Startup Window Controller Support & Valheim 1.0.20 Alignment
+# 2.3.5 - API Expansion, Controller Support & Valheim 1.0.20 Alignment
+* **Developer API**: Added `WouldStorePickup` query methods to `ABAPI` and `ABAPIClient` allowing external mods (like item magnets) to check whether ground items will be stored in an equipped backpack without modifying inventory state.
 * **Controller Support**: Added full game controller navigation, debounced stick stepping, and focus management to the startup mod overview window.
+* **Compatibility**: Resolved a conflict with custom tool mods that could cause errors and respawn issues when equipping tools.
 * **Compatibility**: Updated internal dependencies for stability and Valheim 1.0.20 compatibility.
 
 <details>

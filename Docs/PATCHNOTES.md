@@ -1,8 +1,13 @@
-# 2.3.5 - Startup Window Controller Support & Valheim 1.0.20 Alignment
+# 2.3.5 - API Expansion, Controller Support & Valheim 1.0.20 Alignment
+* **Public Developer API Query (`API/ABAPI.cs`, `Docs/ABAPI_Client.cs`, `Docs/AdventureBackpacksAPI.md`)**:
+  * Added `WouldStorePickup(Player player, ItemDrop.ItemData item)` and `WouldStorePickup(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)` to `ABAPI` and `ABAPIClient`.
+  * Allows external auto-pickup and magnet mods (such as EvuMagnets) to evaluate whether ground item drops would be accepted into an equipped backpack under active auto-store, inventory overflow, and anti-inception rules without modifying inventory contents or mutating state.
+  * Synchronized integration documentation in `Docs/API_INTEGRATION.md` and `AGENTS.md` with official replacement guidance replacing unsafe reflection into `StoreToBackpack.ShouldStoreToBackpack`.
 * **Startup Overview Controller Navigation**:
-  * In internalized `Vapok.Valheim.Common` 3.1020.1, added full controller navigation, debounced stick stepping, and focus management to `ModSplashManager`.
+  * In internalized `Vapok.Valheim.Common` 3.1020.2, added full controller navigation, debounced stick stepping, and focus management to `ModSplashManager`.
 * **Dependency & Engine Alignment**:
-  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1020.1.
+  * Decoupled legacy standalone `PieceManager` from internalized `Vapok.Valheim.Common` 3.1020.2, eliminating tool category conflicts and respawn NRE loops with custom build tool mods.
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1020.2.
   * Aligned game assembly references to Valheim 1.0.20.
 
 # 2.3.4 - Developer & AI Integration Standards

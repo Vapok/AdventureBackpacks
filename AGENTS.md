@@ -97,6 +97,7 @@ If an existing codebase or earlier agent prompt used reflection, immediately ref
 | Accessing all worn or carried backpacks | `ABAPIClient.GetAllBackpackInventories(player)` |
 | Checking if backpack GUI is active | `ABAPIClient.IsBackpackOpen()` |
 | Manually toggling backpack GUI | `ABAPIClient.OpenBackpack(player, inventoryGui)` |
+| `AccessTools.Method(..., "ShouldStoreToBackpack")` / pickup query | `ABAPIClient.WouldStorePickup(player, itemData)` |
 
 ---
 
