@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AdventureBackpacks.API;
 using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Assets.Items.BackpackItems;
+using AdventureBackpacks.Configuration;
+using BepInEx.Configuration;
 using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers.Configuration;
@@ -35,27 +38,78 @@ internal class BackpackFactory : AssetFactory
     }
 
 
+    private string ResolveModelBundle(string baseBundleName, string itemName, out ConfigEntry<ConfigRegistry.ModelStyle> styleEntry)
+    {
+        string configSection = $"Backpack: {itemName}";
+        string englishSection = BackpackItem.SafeGetTranslation("English", configSection);
+        string localizedCategory = Localization.instance?.Localize(configSection) ?? configSection;
+
+        ConfigEntry<ConfigRegistry.ModelStyle> modelStyle = null;
+        ConfigSyncBase.UnsyncedConfig(englishSection, "Model Style", ConfigRegistry.ModelStyle.Modern,
+            new ConfigDescription("Select the visual model style for this backpack. Modern features reworked detailed models. Classic uses the original mod model. (Requires Game Restart)",
+                null,
+                new ConfigurationManagerAttributes { Category = localizedCategory, Order = 20, DispName = "Model Style (Requires Game Restart)" }), ref modelStyle);
+
+        if (modelStyle != null)
+        {
+            modelStyle.SettingChanged += (_, _) =>
+            {
+                AdventureBackpacks.Log?.Message($"Model Style changed for '{englishSection}' to {modelStyle.Value}. A game restart is required for changes to take effect.");
+                if (Player.m_localPlayer != null)
+                {
+                    Player.m_localPlayer.Message(MessageHud.MessageType.Center, "Adventure Backpacks: Game restart required for model changes to take effect.");
+                }
+            };
+        }
+
+        styleEntry = modelStyle;
+        return modelStyle?.Value == ConfigRegistry.ModelStyle.Classic 
+            ? $"classic_{baseBundleName}" 
+            : baseBundleName;
+    }
+
+    private T CreateBackpack<T>(string baseBundleName, string prefabName, string itemName, Func<string, string, string, T> factory) where T : BackpackItem
+    {
+        string bundleName = ResolveModelBundle(baseBundleName, itemName, out ConfigEntry<ConfigRegistry.ModelStyle> modelStyle);
+        T backpack = factory(bundleName, prefabName, itemName);
+        backpack.ModelStyle = modelStyle;
+        return backpack;
+    }
+
     internal override void CreateAssets()
     {
-        _backpackItems.Add(new BackpackMeadows("backpack_meadows","BackpackMeadows","$vapok_mod_item_backpack_meadows"));
-        _backpackItems.Add(new BackpackBlackForest("backpack_black_forest","BackpackBlackForest","$vapok_mod_item_backpack_blackforest"));
-        _backpackItems.Add(new BackpackSwamp("backpack_swamp","BackpackSwamp","$vapok_mod_item_backpack_swamp"));
-        _backpackItems.Add(new BackpackMountains("backpack_mountains","BackpackMountains","$vapok_mod_item_backpack_mountains"));
-        _backpackItems.Add(new BackpackPlains("backpack_plains","BackpackPlains","$vapok_mod_item_backpack_plains"));
-        _backpackItems.Add(new BackpackMistlands("backpack_mistlands","BackpackMistlands","$vapok_mod_item_backpack_mistlands"));
-        _backpackItems.Add(new LegacyIronBackpack("vapokbackpacks","CapeIronBackpack","$vapok_mod_item_rugged_backpack"));
-        _backpackItems.Add(new LegacySilverBackpack("vapokbackpacks","CapeSilverBackpack","$vapok_mod_item_arctic_backpack"));
+        _backpackItems.Add(CreateBackpack("backpack_meadows", "BackpackMeadows", "$vapok_mod_item_backpack_meadows",
+            (bundle, prefab, item) => new BackpackMeadows(bundle, prefab, item)));
 
-        foreach (var backpackDefinition in _externalBackpacks)
+        _backpackItems.Add(CreateBackpack("backpack_black_forest", "BackpackBlackForest", "$vapok_mod_item_backpack_blackforest",
+            (bundle, prefab, item) => new BackpackBlackForest(bundle, prefab, item)));
+
+        _backpackItems.Add(CreateBackpack("backpack_swamp", "BackpackSwamp", "$vapok_mod_item_backpack_swamp",
+            (bundle, prefab, item) => new BackpackSwamp(bundle, prefab, item)));
+
+        _backpackItems.Add(CreateBackpack("backpack_mountains", "BackpackMountains", "$vapok_mod_item_backpack_mountains",
+            (bundle, prefab, item) => new BackpackMountains(bundle, prefab, item)));
+
+        _backpackItems.Add(CreateBackpack("backpack_plains", "BackpackPlains", "$vapok_mod_item_backpack_plains",
+            (bundle, prefab, item) => new BackpackPlains(bundle, prefab, item)));
+
+        _backpackItems.Add(CreateBackpack("backpack_mistlands", "BackpackMistlands", "$vapok_mod_item_backpack_mistlands",
+            (bundle, prefab, item) => new BackpackMistlands(bundle, prefab, item)));
+
+        _backpackItems.Add(new BackpackAshlands("backpack_ashlands", "BackpackAshlands", "$vapok_mod_item_backpack_ashlands"));
+        _backpackItems.Add(new BackpackDeepNorth("backpack_deepnorth", "BackpackDeepNorth", "$vapok_mod_item_backpack_deepnorth"));
+        _backpackItems.Add(new LegacyIronBackpack("vapokbackpacks", "CapeIronBackpack", "$vapok_mod_item_rugged_backpack"));
+        _backpackItems.Add(new LegacySilverBackpack("vapokbackpacks", "CapeSilverBackpack", "$vapok_mod_item_arctic_backpack"));
+
+        foreach (ABAPI.BackpackDefinition backpackDefinition in _externalBackpacks)
         {
             if (_backpackItems.Any(x => x.ItemName.Equals(backpackDefinition.ItemName))) return;
             
-            var newBackpack = backpackDefinition.BackPackGo != null ? 
+            ExternalBackpack newBackpack = backpackDefinition.BackPackGo != null ? 
                 new ExternalBackpack(backpackDefinition, backpackDefinition.BackPackGo) : 
                 new ExternalBackpack(backpackDefinition);
             
             _backpackItems.Add(newBackpack);
-
         }
     }
 

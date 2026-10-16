@@ -1,3 +1,33 @@
+# 2.4.0 - Ashlands & Deep North Backpacks, Model Overhaul & Valheim 1.0.20 Alignment
+* **Ashlands & Deep North Biome Backpacks (`BackpackAshlands.cs`, `BackpackDeepNorth.cs`)**:
+  * Implemented `BackpackAshlands` (Cinderward Pack) with configurable `HeatResistance` reducing lava damage and delaying boiling water damage.
+  * Implemented `BackpackDeepNorth` (Frostbound Haversack) with `FrostResistance` and Quality 4 `SecondWindEffect` triggering adrenaline surge on critical health.
+* **Modern & Classic Visual Model Architecture (`BackpackFactory.cs`, `BackpackItem.cs`)**:
+  * Built standalone embedded AssetBundles for original classic models (`classic_backpack_*`) alongside reworked higher-detail modern assets.
+  * Encapsulated asset instantiation in `BackpackFactory.CreateBackpack<T>()`, dynamically resolving target AssetBundles at startup.
+  * Registered per-backpack client unsynced `Model Style` configuration (`ConfigRegistry.ModelStyle.Modern` / `ConfigRegistry.ModelStyle.Classic`) under each bag's English section (`[Backpack: Satchel]`, `[Backpack: Rugged Backpack]`, etc.).
+  * Added runtime `.SettingChanged` listener alerting players via center HUD message (`Player.m_localPlayer.Message`) and logging that a game restart is required when toggling model styles.
+* **Prefab Particle Sanitization (`AssetItem.cs`, `BackpackBlackForest.prefab`)**:
+  * Removed legacy `CinderParticles` GameObject and rogue `ParticleSystem` components from Black Forest prefab assets.
+  * Added runtime guard `StripUnwantedParticles()` in `AssetItem` to ensure non-target particle emitters never leak into world space.
+* **Public Developer API Query (`API/ABAPI.cs`, `Docs/ABAPI_Client.cs`, `Docs/AdventureBackpacksAPI.md`)**:
+  * Added `WouldStorePickup(Player player, ItemDrop.ItemData item)` and `WouldStorePickup(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)` to `ABAPI` and `ABAPIClient`.
+  * Allows external auto-pickup and magnet mods (such as EvuMagnets) to evaluate whether ground item drops would be accepted into an equipped backpack under active auto-store, inventory overflow, and anti-inception rules without modifying inventory contents or mutating state.
+  * Synchronized integration documentation in `Docs/API_INTEGRATION.md` and `AGENTS.md` with official replacement guidance replacing unsafe reflection into `StoreToBackpack.ShouldStoreToBackpack`.
+* **Plains Backpack Frost Resistance Progression (`Assets/Items/BackpackItems/BackpackPlains.cs`)**:
+  * Restored `EffectsFactory.EffectList[BackpackEffect.FrostResistance].RegisterEffectBiomeQuality(BackpackBiomes.Plains, 1)` default from 3 to 1, aligning default progression with `CapeLox` crafting recipe requirements and preventing loss of mountain frost protection on crafting.
+* **Equipment Effect Cache & Quality Refresh (`Patches/Humanoid.cs`)**:
+  * In `HumanoidUpdateEquipmentStatusEffectsPatch.Postfix`, updated `AddActiveBackpackEffects` invocation to run unconditionally when a backpack is equipped, ensuring active status effects are properly refreshed when a backpack's quality level is upgraded or modified.
+  * Purged stale `SE_vapok_ab_` effects from `Player.m_equipmentStatusEffects` and `SEMan` that are no longer active on the currently equipped backpack.
+* **Backpack Tooltip Damage Modifier Rendering (`Patches/ItemDrop.cs`)**:
+  * In `ItemDataGetTooltipPatch.Postfix`, added damage modifier resolution supporting `SE_Stats.m_mods` and dynamically evaluating biome quality thresholds (e.g. `FrostResistance`) for crafting recipe previews and inventory tooltips, formatting modifiers under `$item_armor` to match native Valheim cape tooltips.
+* **Startup Overview Controller Navigation**:
+  * In internalized `Vapok.Valheim.Common` 3.1020.2, added full controller navigation, debounced stick stepping, and focus management to `ModSplashManager`.
+* **Dependency & Engine Alignment**:
+  * Decoupled legacy standalone `PieceManager` from internalized `Vapok.Valheim.Common` 3.1020.2, eliminating tool category conflicts and respawn NRE loops with custom build tool mods.
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1020.2.
+  * Aligned game assembly references to Valheim 1.0.20.
+
 # 2.3.4 - Developer & AI Integration Standards
 * **Developer & AI Agent Guidelines Integration (`AGENTS.md`, `.cursorrules`, `.github/copilot-instructions.md`, `llms.txt`)**:
   * Established open agent standard (`AGENTS.md`) and ecosystem-wide agent instructions defining core invariants: single equipped backpack constraint, anti-inception prohibition (Thor's Inventory Guard), `RemoveItem` multi-context monitoring, and `PerformYardSale` sanctity.

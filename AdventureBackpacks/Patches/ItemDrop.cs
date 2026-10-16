@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Threading;
+using AdventureBackpacks.API;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Effects;
+using AdventureBackpacks.Assets.Factories;
+using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Components;
 using AdventureBackpacks.Configuration;
 using AdventureBackpacks.Extensions;
+using BepInEx.Configuration;
 using HarmonyLib;
 using Vapok.Common.Managers;
 
@@ -123,15 +128,6 @@ public class ItemDropPatches
                 float armor = item.GetArmor(qualityLevel, worldLevel);
                 string armorString = $"\n$item_armor: <color=orange>{armor}</color>";
 
-                if (item.m_shared.m_damageModifiers != null && item.m_shared.m_damageModifiers.Count > 0)
-                {
-                    string damageModifiersTooltipString = SE_Stats.GetDamageModifiersTooltipString(item.m_shared.m_damageModifiers);
-                    if (!string.IsNullOrEmpty(damageModifiersTooltipString) && !__result.Contains(damageModifiersTooltipString))
-                    {
-                        armorString += damageModifiersTooltipString;
-                    }
-                }
-
                 int insertIndex = __result.IndexOf("$item_quality", StringComparison.Ordinal);
                 if (insertIndex >= 0)
                 {
@@ -163,6 +159,60 @@ public class ItemDropPatches
                     else
                     {
                         __result += armorString;
+                    }
+                }
+            }
+
+            List<HitData.DamageModPair> damageMods = item.m_shared.m_damageModifiers;
+            if ((damageMods == null || damageMods.Count == 0) && item.m_shared.m_equipStatusEffect is SE_Stats seStats && seStats.m_mods != null && seStats.m_mods.Count > 0)
+            {
+                damageMods = seStats.m_mods;
+            }
+
+            if ((damageMods == null || damageMods.Count == 0) && item.TryGetBackpackItem(out BackpackItem backpackItem) && backpackItem.BackpackBiome != null)
+            {
+                if (EffectsFactory.EffectList.TryGetValue(BackpackEffect.FrostResistance, out EffectsBase frostEffect) && frostEffect != null)
+                {
+                    if (frostEffect.EnabledEffect != null && frostEffect.EnabledEffect.Value && frostEffect.BiomeQualityLevels != null)
+                    {
+                        int requiredQuality = 0;
+                        foreach (BackpackBiomes enumKeyBit in frostEffect.BiomeQualityLevels.Keys)
+                        {
+                            if ((backpackItem.BackpackBiome.Value & enumKeyBit) != 0 && frostEffect.BiomeQualityLevels.TryGetValue(enumKeyBit, out ConfigEntry<int> qualityEntry) && qualityEntry != null)
+                            {
+                                requiredQuality = qualityEntry.Value > requiredQuality ? qualityEntry.Value : requiredQuality;
+                            }
+                        }
+
+                        if (requiredQuality > 0 && qualityLevel >= requiredQuality)
+                        {
+                            damageMods = new List<HitData.DamageModPair> { FrostResistance.EffectMod };
+                        }
+                    }
+                }
+            }
+
+            if (damageMods != null && damageMods.Count > 0)
+            {
+                string damageModifiersTooltipString = SE_Stats.GetDamageModifiersTooltipString(damageMods);
+                if (!string.IsNullOrEmpty(damageModifiersTooltipString) && !__result.Contains(damageModifiersTooltipString))
+                {
+                    int armorIndex = __result.IndexOf("$item_armor", StringComparison.Ordinal);
+                    if (armorIndex >= 0)
+                    {
+                        int endOfArmorLine = __result.IndexOf('\n', armorIndex);
+                        if (endOfArmorLine >= 0)
+                        {
+                            __result = __result.Insert(endOfArmorLine, damageModifiersTooltipString);
+                        }
+                        else
+                        {
+                            __result += damageModifiersTooltipString;
+                        }
+                    }
+                    else
+                    {
+                        __result += damageModifiersTooltipString;
                     }
                 }
             }

@@ -29,6 +29,8 @@
   - [TryGetAllBackpackInventories(player,inventories)](#M-AdventureBackpacks-API-ABAPI-TryGetAllBackpackInventories-Player,System-Collections-Generic-List{Inventory}@- 'AdventureBackpacks.API.ABAPI.TryGetAllBackpackInventories(Player,System.Collections.Generic.List{Inventory}@)')
   - [TryGetBackpackInventory(itemData,inventory)](#M-AdventureBackpacks-API-ABAPI-TryGetBackpackInventory-ItemDrop-ItemData,Inventory@- 'AdventureBackpacks.API.ABAPI.TryGetBackpackInventory(ItemDrop.ItemData,Inventory@)')
   - [TryGetEquippedBackpackInventory(player,inventory)](#M-AdventureBackpacks-API-ABAPI-TryGetEquippedBackpackInventory-Player,Inventory@- 'AdventureBackpacks.API.ABAPI.TryGetEquippedBackpackInventory(Player,Inventory@)')
+  - [WouldStorePickup(player,item)](#M-AdventureBackpacks-API-ABAPI-WouldStorePickup-Player,ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.WouldStorePickup(Player,ItemDrop.ItemData)')
+  - [WouldStorePickup(player,item,backpackInventory)](#M-AdventureBackpacks-API-ABAPI-WouldStorePickup-Player,ItemDrop-ItemData,Inventory@- 'AdventureBackpacks.API.ABAPI.WouldStorePickup(Player,ItemDrop.ItemData,Inventory@)')
 - [Backpack](#T-AdventureBackpacks-API-ABAPI-Backpack 'AdventureBackpacks.API.ABAPI.Backpack')
   - [Definition](#F-AdventureBackpacks-API-ABAPI-Backpack-Definition 'AdventureBackpacks.API.ABAPI.Backpack.Definition')
   - [Inventory](#F-AdventureBackpacks-API-ABAPI-Backpack-Inventory 'AdventureBackpacks.API.ABAPI.Backpack.Inventory')
@@ -516,6 +518,48 @@ true if backpack equipped and inventory exists, otherwise false
 | ---- | ---- | ----------- |
 | player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
 | inventory | [Inventory@](#T-Inventory@ 'Inventory@') | Out parameter for the backpack inventory |
+
+<a name='M-AdventureBackpacks-API-ABAPI-WouldStorePickup-Player,ItemDrop-ItemData-'></a>
+### WouldStorePickup(player,item) `method`
+
+##### Summary
+
+Determines whether Adventure Backpacks would store a picked up item into the equipped backpack of the specified player.
+Evaluates auto-store and inventory-overflow configurations, open backpack state, yard sale and quick-drop protection,
+anti-inception constraints, and available space in the equipped backpack without actually inserting the item.
+
+##### Returns
+
+True if the item would be accepted and stored into the equipped backpack, otherwise false.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
+| item | [ItemDrop.ItemData](#T-ItemDrop-ItemData 'ItemDrop.ItemData') | ItemDrop.ItemData candidate for pickup |
+
+<a name='M-AdventureBackpacks-API-ABAPI-WouldStorePickup-Player,ItemDrop-ItemData,Inventory@-'></a>
+### WouldStorePickup(player,item,backpackInventory) `method`
+
+##### Summary
+
+Determines whether Adventure Backpacks would store a picked up item into the equipped backpack of the specified player,
+and retrieves the target backpack inventory if accepted.
+Evaluates auto-store and inventory-overflow configurations, open backpack state, yard sale and quick-drop protection,
+anti-inception constraints, and available space in the equipped backpack without actually inserting the item.
+
+##### Returns
+
+True if the item would be accepted and stored into the equipped backpack, otherwise false.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| player | [Player](#T-Player 'Player') | Player, usually Player.m_localPlayer |
+| item | [ItemDrop.ItemData](#T-ItemDrop-ItemData 'ItemDrop.ItemData') | ItemDrop.ItemData candidate for pickup |
+| backpackInventory | [Inventory@](#T-Inventory@ 'Inventory@') | When this method returns true, contains the target backpack inventory; otherwise, null. |
 
 <a name='T-AdventureBackpacks-API-ABAPI-Backpack'></a>
 ## Backpack `type`

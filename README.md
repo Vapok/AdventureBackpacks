@@ -48,13 +48,23 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
 | **Arctic Sherpa Pack** | ❄️ Mountain | *An insulated Mountain pack fit for freezing treks; grants **Frost & Cold Resistance**.* |
 | **Lox Hide Knappsack** | 🌾 Plains | *A massive Plains pack made from thick, durable lox hide with high carry capacity.* |
 | **Explorers Wisppack** | 🌫️ Mistlands | *A mystical backpack with a Box of Holding, built-in **Demister / Wisplight**, and **Slow Fall**.* |
-| **Ashlands Pack** | 🔥 Ashlands | *🔥 Coming Soon — Forged for the volcanic fires and molten depths.* |
-| **Deep North Pack** | 🧊 Deep North | *🧊 Coming Soon — Prepared for the sub-zero permafrost.* |
+| **Cinderward Pack** | 🔥 Ashlands | *Forged with flametal ribs and charred bone; grants **Heat Resistance** against lava heat and boiling water.* |
+| **Frostbound Haversack** | 🧊 Deep North | *Moose hide over a frost core; grants **Frost Resistance** and **Second Wind**.* |
 | **Legacy Packs** | ⚔️ Legacy | *Original Iron and Silver backpacks preserved for existing world saves.* |
 
+---
+
+## 🎨 Modern & Classic Model Styles
+
+Each backpack (Meadows through Mistlands) can be configured independently to use either modern or classic visuals:
+
+| Style | Description |
+| :--- | :--- |
+| **Modern** *(Default)* | Reworked 3D models with higher detail and updated texturing. |
+| **Classic** | Original mod models preserved for players who prefer the classic look. |
+
 <blockquote style="background-color: rgba(56, 139, 253, 0.08); border-left: 4px solid #388bfd; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
-  <p style="margin: 0 0 6px 0;">💡 <strong>Coming Soon: Ashlands &amp; Deep North Backpacks</strong></p>
-  <p style="margin: 0;">New biome-specific backpacks for the <strong>Ashlands</strong> and <strong>Deep North</strong> are actively in development, featuring custom models, materials, and unique biome status effects!</p>
+  <p style="margin: 0;">💡 <strong>Game Restart Required:</strong> Model style is an unsynced client setting configured per backpack under each bag's section in <code>vapok.mods.adventurebackpacks.cfg</code> (or via the in-game Configuration Manager). Because AssetBundles are loaded at startup, changing <strong>Model Style</strong> requires a game restart for the selected model assets to load.</p>
 </blockquote>
 
 ---
@@ -112,6 +122,8 @@ Starting as a wee Viking rummaging through the tranquil fields of the Meadows, y
   * Clears mist in the Mistlands.
   * Configurable toggle keybind (default <kbd>L</kbd>).
   * Includes smart biome logic to automatically stow the light outside the Mistlands.
+* 🔥 **Heat Resistance**: Protects against extreme Ashlands lava heat and delays boiling water damage.
+* 🌬️ **Second Wind**: Deep North protection that triggers a restorative adrenaline surge when health drops critically low.
 
 ---
 
@@ -216,6 +228,13 @@ Adventure Backpacks includes lightweight, privacy-first telemetry and error repo
   * **Data Disclaimers**: Hover over any toggle in the startup modal for interactive tooltip disclaimers detailing exactly what data is transmitted.
 * **In-Game & Online Privacy Policy**: The full privacy policy can be viewed directly in-game by clicking **`[ PRIVACY POLICY ]`** on the startup splash modal, or online at [vapok.io/privacy-policy](https://vapok.io/privacy-policy/).
 * **Configuration Files**: Settings can be managed in-game via the startup modal, through the BepInEx Configuration Manager, or under `[Local Config]` in `BepInEx/config/vapok.mods.adventurebackpacks.cfg`.
+
+---
+
+## 👥 Credits & Special Thanks
+
+* **Vapok**: Mod design, architecture, systems engineering, and maintenance.
+* **BaalEvan**: A huge thank you and special credit for contributing the reworked visual models and textures across the backpack updates, as well as collaborating on the design and creation of the Ashlands (Cinderward Pack) and Deep North (Frostbound Haversack) backpacks.
 
 ---
 

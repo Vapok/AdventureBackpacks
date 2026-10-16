@@ -1,12 +1,24 @@
-# 2.3.4 - Developer & AI Integration Standards
+# 2.4.0 - Ashlands & Deep North Backpacks, Model Overhaul & Valheim 1.0.20 Alignment
+* **New Backpacks**: Added the **Cinderward Pack** (Ashlands / Heat Resistance against extreme lava heat and boiling water) and **Frostbound Haversack** (Deep North / Frost Resistance and Second Wind).
+* **Modern & Classic Visual Models**: Overhauled 3D visual models and textures across all backpacks. Added a client setting for each backpack to freely choose between **Modern** and **Classic** models (requires game restart).
+* **Special Thanks**: Huge thanks to **BaalEvan** for contributing the updated 3D backpack models and collaborating on the Ashlands and Deep North packs!
+* **Lox Backpack Frost Resistance**: Restored Frost Resistance to Level 1 by default so crafting the Plains Backpack from a Lox Cape no longer removes your mountain frost protection.
+* **Tooltips & Upgrades**: Backpack tooltips now clearly show damage resistances (like Frost Resistance) under armor matching vanilla capes. Upgrading backpacks now properly refreshes active status effects immediately.
+* **Developer API**: Added `WouldStorePickup` query methods to `ABAPI` and `ABAPIClient` allowing external mods (like item magnets) to check whether ground items will be stored in an equipped backpack without modifying inventory state.
+* **Controller Support**: Added full game controller navigation, debounced stick stepping, and focus management to the startup mod overview window.
+* **Compatibility**: Resolved a conflict with custom tool mods that could cause errors and respawn issues when equipping tools.
+* **Dependencies**: Updated dependencies for stability and Valheim 1.0.20 compatibility.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 2.3.4 - Developer & AI Integration Standards
 * **Developer & AI Agent Guidelines**:
   * Added comprehensive AI agent integration standards, guidelines, and core domain invariants to the repository (`AGENTS.md`, `.cursorrules`, `copilot-instructions.md`, `llms.txt`).
 
 * **Sidecar XML Documentation Packaging**:
   * Enabled XML documentation file generation for release builds, shipping `AdventureBackpacks.xml` sidecar with the mod DLL so decompilers and developer IDEs automatically render full tooltips and API usage warnings.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.3.3 - Armor Stand & Item Stand Mod Compatibility
 * **Armor Stand & Item Stand Protection**:

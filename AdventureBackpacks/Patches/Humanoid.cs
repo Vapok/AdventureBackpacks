@@ -87,11 +87,26 @@ public class HumanoidPatches
 
             if (player.IsBackpackEquipped())
             {
-                if (EquipmentEffectCache.ActiveEffects == null || EquipmentEffectCache.ActiveEffects.Count == 0)
-                    EquipmentEffectCache.AddActiveBackpackEffects(__instance.m_equipmentStatusEffects, __instance);
+                EquipmentEffectCache.AddActiveBackpackEffects(__instance.m_equipmentStatusEffects, __instance);
 
                 if (EquipmentEffectCache.ActiveEffects != null)
                 {
+                    HashSet<StatusEffect> registered = EffectsFactory.GetRegisteredEffects();
+                    if (registered != null)
+                    {
+                        foreach (StatusEffect statusEffect in registered)
+                        {
+                            if (statusEffect == null)
+                                continue;
+
+                            if (statusEffect.name.StartsWith("SE_vapok_ab_") && !EquipmentEffectCache.ActiveEffects.Contains(statusEffect) && seMan.HaveStatusEffect(statusEffect.NameHash()))
+                            {
+                                seMan.RemoveStatusEffect(statusEffect.NameHash());
+                                __instance.m_equipmentStatusEffects.Remove(statusEffect);
+                            }
+                        }
+                    }
+
                     foreach (StatusEffect statusEffect in EquipmentEffectCache.ActiveEffects)
                     {
                         if (statusEffect == null)

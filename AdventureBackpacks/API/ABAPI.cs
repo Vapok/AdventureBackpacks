@@ -442,4 +442,41 @@ return null;
         inventories = GetAllBackpackInventories(player);
         return inventories != null && inventories.Count > 0;
     }
+
+    /// <summary>
+    /// Determines whether Adventure Backpacks would store a picked up item into the equipped backpack of the specified player.
+    /// Evaluates auto-store and inventory-overflow configurations, open backpack state, yard sale and quick-drop protection,
+    /// anti-inception constraints, and available space in the equipped backpack without actually inserting the item.
+    /// </summary>
+    /// <param name="player">Player, usually Player.m_localPlayer</param>
+    /// <param name="item">ItemDrop.ItemData candidate for pickup</param>
+    /// <returns>True if the item would be accepted and stored into the equipped backpack, otherwise false.</returns>
+    public static bool WouldStorePickup(Player player, ItemDrop.ItemData item)
+    {
+#if ! API
+        return StoreToBackpack.ShouldStoreToBackpack(player, item, out _);
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Determines whether Adventure Backpacks would store a picked up item into the equipped backpack of the specified player,
+    /// and retrieves the target backpack inventory if accepted.
+    /// Evaluates auto-store and inventory-overflow configurations, open backpack state, yard sale and quick-drop protection,
+    /// anti-inception constraints, and available space in the equipped backpack without actually inserting the item.
+    /// </summary>
+    /// <param name="player">Player, usually Player.m_localPlayer</param>
+    /// <param name="item">ItemDrop.ItemData candidate for pickup</param>
+    /// <param name="backpackInventory">When this method returns true, contains the target backpack inventory; otherwise, null.</param>
+    /// <returns>True if the item would be accepted and stored into the equipped backpack, otherwise false.</returns>
+    public static bool WouldStorePickup(Player player, ItemDrop.ItemData item, out Inventory backpackInventory)
+    {
+#if ! API
+        return StoreToBackpack.ShouldStoreToBackpack(player, item, out backpackInventory);
+#else
+        backpackInventory = null;
+        return false;
+#endif
+    }
 }

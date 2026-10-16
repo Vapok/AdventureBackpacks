@@ -92,6 +92,35 @@ internal abstract class AssetItem : IAssetItem
     {
         SetPersistence();
         ResetPrefabArmor();
+        StripUnwantedParticles();
+    }
+
+    private void StripUnwantedParticles()
+    {
+        if (_item?.Prefab == null || !string.Equals(PrefabName, "BackpackBlackForest", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        ParticleSystem[] particleSystems = _item.Prefab.GetComponentsInChildren<ParticleSystem>(true);
+        for (int i = particleSystems.Length - 1; i >= 0; i--)
+        {
+            ParticleSystem ps = particleSystems[i];
+            if (ps != null)
+            {
+                if (ps.gameObject != _item.Prefab)
+                {
+                    UnityEngine.Object.DestroyImmediate(ps.gameObject);
+                }
+                else
+                {
+                    ParticleSystemRenderer renderer = ps.GetComponent<ParticleSystemRenderer>();
+                    if (renderer != null)
+                    {
+                        UnityEngine.Object.DestroyImmediate(renderer);
+                    }
+                    UnityEngine.Object.DestroyImmediate(ps);
+                }
+            }
+        }
     }
 
     internal void AssignCraftingTable(CraftingTable craftingTable, int stationLevel)

@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.0.75f1
+CRC: 882950287
+HashAppended: 0
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: classic_backpack_meadows
+      Dependencies: {}
+    Info_1:
+      Name: classic_backpack_black_forest
+      Dependencies: {}
+    Info_2:
+      Name: classic_backpack_swamp
+      Dependencies: {}
+    Info_3:
+      Name: classic_backpack_mountains
+      Dependencies: {}
+    Info_4:
+      Name: classic_backpack_plains
+      Dependencies: {}
+    Info_5:
+      Name: classic_backpack_mistlands
+      Dependencies: {}

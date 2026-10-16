@@ -5163,7 +5163,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1935753275469189319}
   - {fileID: 5119223968914384587}
   - {fileID: 904213945136757968}
   - {fileID: 8528209962234358546}
@@ -5746,8 +5745,6 @@ GameObject:
   - component: {fileID: 5069137010980188399}
   - component: {fileID: 5473337387347802049}
   - component: {fileID: 7750606895468735862}
-  - component: {fileID: 2458405882292500145}
-  - component: {fileID: 4013026614352865147}
   m_Layer: 12
   m_Name: BackpackBlackForest
   m_TagString: Untagged
