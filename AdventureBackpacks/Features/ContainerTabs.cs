@@ -273,6 +273,10 @@ public static class ContainerTabs
 
         backpack.UpdateContainerSizing(ref backpackContainer);
 
+        Inventory bpInventory = backpackContainer.GetInventory();
+        if (bpInventory == null)
+            return;
+
         if (gui.m_dragItem != null)
         {
             gui.SetupDragItem(null, null, 1);
@@ -286,11 +290,11 @@ public static class ContainerTabs
         if (gui.m_containerGrid != null)
         {
             gui.m_containerGrid.ResetView();
-            gui.m_containerGrid.UpdateInventory(backpackContainer.GetInventory(), null, gui.m_dragItem);
+            gui.m_containerGrid.UpdateInventory(bpInventory, null, gui.m_dragItem);
         }
         if (gui.m_containerName != null)
         {
-            gui.m_containerName.text = Localization.instance.Localize(backpackContainer.GetInventory().GetName());
+            gui.m_containerName.text = Localization.instance.Localize(bpInventory.GetName());
         }
 
         if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
@@ -326,14 +330,15 @@ public static class ContainerTabs
 
         gui.m_currentContainer = _cachedExternalContainer;
         gui.m_firstContainerUpdate = true;
-        if (gui.m_containerGrid != null)
+        Inventory chestInventory = _cachedExternalContainer.GetInventory();
+        if (gui.m_containerGrid != null && chestInventory != null)
         {
             gui.m_containerGrid.ResetView();
-            gui.m_containerGrid.UpdateInventory(_cachedExternalContainer.GetInventory(), null, gui.m_dragItem);
+            gui.m_containerGrid.UpdateInventory(chestInventory, null, gui.m_dragItem);
         }
-        if (gui.m_containerName != null)
+        if (gui.m_containerName != null && chestInventory != null)
         {
-            gui.m_containerName.text = Localization.instance.Localize(_cachedExternalContainer.GetInventory().GetName());
+            gui.m_containerName.text = Localization.instance.Localize(chestInventory.GetName());
         }
 
         if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
@@ -545,11 +550,18 @@ public static class ContainerTabs
 
     public static void ClearExternalContainer(InventoryGui gui = null)
     {
-        if (_cachedExternalContainer != null)
+        if (_cachedExternalContainer != null && _cachedExternalContainer)
         {
-            if (_cachedExternalContainer)
+            try
             {
-                _cachedExternalContainer.SetInUse(false);
+                if (_cachedExternalContainer.m_nview != null && _cachedExternalContainer.m_nview.IsValid())
+                {
+                    _cachedExternalContainer.SetInUse(false);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                AdventureBackpacks.Log?.Debug($"Exception in ClearExternalContainer: {ex.Message}");
             }
             _cachedExternalContainer = null;
         }

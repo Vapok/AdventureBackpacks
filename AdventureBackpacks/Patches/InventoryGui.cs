@@ -163,12 +163,15 @@ internal static class InventoryGuiPatches
                         && item != null && item.m_shared != null
                         && Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
                     {
+                        if (mod == InventoryGrid.Modifier.Drop)
+                        {
                             Player.m_localPlayer.DropItem(Player.m_localPlayer.GetInventory(), item, 1);
                             BackpackIsOpen = false;
                             __instance.Hide();
                             Player.m_localPlayer.Message(MessageHud.MessageType.TopLeft, "$vapok_mod_you_droped_bag");
                             
                             return null;
+                        }
                     }
                 }
                 AdventureBackpacks.Log.Warning($"The following error was captured by Adventure Backpacks, but was caused by another mod. Advanced Backpacks is going to allow the operation to continue, but is going to replay the error below:");
