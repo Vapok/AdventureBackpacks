@@ -154,31 +154,40 @@ public class HumanoidPatches
         {
             try
             {
-                if (__0 is null || Player.m_localPlayer == null)
+                if (__0 == null || Player.m_localPlayer == null)
                     return;
 
-                var scene = SceneManager.GetActiveScene();
+                Scene scene = SceneManager.GetActiveScene();
                 if (scene.name == null || string.Equals(scene.name, "start"))
                     return;
 
-                var player = Player.m_localPlayer;
-                var item = __0;
+                Player player = Player.m_localPlayer;
+                ItemDrop.ItemData item = __0;
 
                 if (item.IsBackpack() && player.m_shoulderItem == item)
                 {
-                    var backpackInventory = player.GetEquippedBackpack();
-                    if (backpackInventory is null) return;
+                    BackpackComponent backpackInventory = player.GetEquippedBackpack();
+                    if (backpackInventory == null) return;
 
-                    //Save Backpack
                     backpackInventory.Save();
 
-                    var inventoryGui = InventoryGui.instance;
+                    InventoryGui inventoryGui = InventoryGui.instance;
 
-                    // Close the backpack inventory if it's currently open
                     if (inventoryGui != null && inventoryGui.IsContainerOpen())
                     {
-                        inventoryGui.CloseContainer();
-                        InventoryGuiPatches.BackpackIsOpen = false;
+                        if (ContainerTabs.HasActiveExternalContainer)
+                        {
+                            if (ContainerTabs.IsViewingBackpack)
+                            {
+                                ContainerTabs.SwitchToChest(inventoryGui, player);
+                            }
+                            ContainerTabs.Reset(inventoryGui);
+                        }
+                        else if (inventoryGui.m_currentContainer != null && inventoryGui.m_currentContainer.IsBackpackProxy())
+                        {
+                            inventoryGui.CloseContainer();
+                            InventoryGuiPatches.BackpackIsOpen = false;
+                        }
                     }
                     
                     player.DestroyBackpackContainerProxy();

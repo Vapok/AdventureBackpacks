@@ -1,4 +1,11 @@
-# 2.4.0 - Ashlands & Deep North Backpacks, Model Overhaul & Valheim 1.0.20 Alignment
+# 2.4.1 - Container Interaction & Companion Mod Fixes
+* **Container Transfer Fix**: Fixed an issue where shift-clicking an equipped backpack while interacting with a full external container or companion NPC (such as Vikings for Hire) could cause the backpack to be dropped and emptied onto the ground.
+* **Container Tabs Stability**: Added safety checks when switching tabs or closing external containers to prevent errors if a container is missing or destroyed.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.4.0 - Ashlands & Deep North Backpacks, Model Overhaul & Valheim 1.0.20 Alignment
 * **New Backpacks**: Added the **Cinderward Pack** (Ashlands / Heat Resistance against extreme lava heat and boiling water) and **Frostbound Haversack** (Deep North / Frost Resistance and Second Wind).
 * **Modern & Classic Visual Models**: Overhauled 3D visual models and textures across all backpacks. Added a client setting for each backpack to freely choose between **Modern** and **Classic** models (requires game restart).
 * **Special Thanks**: Huge thanks to **BaalEvan** for contributing the updated 3D backpack models and collaborating on the Ashlands and Deep North packs!
@@ -8,9 +15,6 @@
 * **Controller Support**: Added full game controller navigation, debounced stick stepping, and focus management to the startup mod overview window.
 * **Compatibility**: Resolved a conflict with custom tool mods that could cause errors and respawn issues when equipping tools.
 * **Dependencies**: Updated dependencies for stability and Valheim 1.0.20 compatibility.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 
 ### 2.3.4 - Developer & AI Integration Standards

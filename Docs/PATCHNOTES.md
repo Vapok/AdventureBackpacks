@@ -1,3 +1,15 @@
+# 2.4.1 - Container Interaction & Companion Mod Fixes
+* **Equipped Backpack Unequip Guard (`Patches/Humanoid.cs`)**:
+  * In `HumanoidUnequipItemPatch.Prefix`, corrected container close guard from generic `inventoryGui.IsContainerOpen()` to verify `inventoryGui.m_currentContainer.IsBackpackProxy()`.
+  * If an external container is active (`ContainerTabs.HasActiveExternalContainer`), safely switches back to the external chest (`ContainerTabs.SwitchToChest`) and resets tabs rather than closing the active external container.
+  * Prevents `InventoryGui.instance.m_currentContainer` from being set to `null` while `InventoryGui.OnSelectedItem` is in the middle of executing item move logic when an equipped backpack is shift-clicked.
+* **InventoryGui Finalizer Guard (`Patches/InventoryGui.cs`)**:
+  * In `InventoryGuiOnSelectedItem.Finalizer`, added `if (mod == InventoryGrid.Modifier.Drop)` guard around the legacy `Player.m_localPlayer.DropItem` fallback.
+  * Prevents unhandled exceptions during item move/transfer actions from inadvertently triggering `DropItem`, `PerformYardSale`, and closing the UI.
+* **Container Tabs Null Safety (`Features/ContainerTabs.cs`)**:
+  * In `ContainerTabs.SwitchToBackpack` and `ContainerTabs.SwitchToChest`, added defensive null checks on container inventories before querying names or updating grids.
+  * In `ContainerTabs.ClearExternalContainer`, added a try-catch and `m_nview != null && m_nview.IsValid()` guard before calling `_cachedExternalContainer.SetInUse(false)`.
+
 # 2.4.0 - Ashlands & Deep North Backpacks, Model Overhaul & Valheim 1.0.20 Alignment
 * **Ashlands & Deep North Biome Backpacks (`BackpackAshlands.cs`, `BackpackDeepNorth.cs`)**:
   * Implemented `BackpackAshlands` (Cinderward Pack) with configurable `HeatResistance` reducing lava damage and delaying boiling water damage.
