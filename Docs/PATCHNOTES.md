@@ -1,3 +1,10 @@
+# 2.4.2 - 35-Language Translation Updates & Container UI Guard
+* **35-Language Localization Parity (`Translations/*.json`)**:
+  * Synchronized all 35 Valheim-supported language files with localized item names and descriptions for `vapok_mod_item_backpack_ashlands` (Cinderward Pack) and `vapok_mod_item_backpack_deepnorth` (Frostbound Haversack).
+  * Added missing translations for `item_friendlyskeletonwand_spectralshroud_backpack` (Spectral Shroud of Holding) across the remaining 13 language files.
+* **Container Header Title Localization Safety (`Features/ContainerTabs.cs`)**:
+  * In `ContainerTabs.SwitchToBackpack` and `ContainerTabs.SwitchToChest`, added defensive null check on `Localization.instance` before invoking `Localize()` on container inventory names (`gui.m_containerName.text`), preventing possible NullReferenceExceptions if container switching executes during uninitialized or torn-down UI states.
+
 # 2.4.1 - Container Interaction & Companion Mod Fixes
 * **Equipped Backpack Unequip Guard (`Patches/Humanoid.cs`)**:
   * In `HumanoidUnequipItemPatch.Prefix`, corrected container close guard from generic `inventoryGui.IsContainerOpen()` to verify `inventoryGui.m_currentContainer.IsBackpackProxy()`.
