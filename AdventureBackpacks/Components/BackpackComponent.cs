@@ -2,9 +2,13 @@
 
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using AdventureBackpacks.Assets;
+using AdventureBackpacks.Assets.Items;
 using AdventureBackpacks.Extensions;
 using AdventureBackpacks.Patches;
+using HarmonyLib;
+using UnityEngine;
 using Vapok.Common.Abstractions;
 using Vapok.Common.Managers;
 using Vapok.Common.Managers.StatusEffects;
@@ -22,6 +26,93 @@ namespace AdventureBackpacks.Components
         public bool IsEmptyingBackpack = false;
 
         private ILogIt _log = AdventureBackpacks.Log;
+        private static readonly MethodInfo _memberwiseCloner = AccessTools.DeclaredMethod(typeof(object), "MemberwiseClone");
+        private bool _hasClonedSharedData;
+
+        private void EnsureClonedSharedData()
+        {
+            if (_hasClonedSharedData || Item == null || Item.m_shared == null)
+                return;
+
+            ItemDrop.ItemData.SharedData prefabShared = null;
+            if (Item.m_dropPrefab != null)
+            {
+                ItemDrop itemDrop = Item.m_dropPrefab.GetComponent<ItemDrop>();
+                if (itemDrop != null)
+                {
+                    prefabShared = itemDrop.m_itemData.m_shared;
+                }
+            }
+
+            if (prefabShared == null && Backpacks.TryGetBackpackItem(Item, out BackpackItem backpackDef))
+            {
+                if (backpackDef.Item != null && backpackDef.Item.Prefab != null)
+                {
+                    ItemDrop itemDrop = backpackDef.Item.Prefab.GetComponent<ItemDrop>();
+                    if (itemDrop != null)
+                    {
+                        prefabShared = itemDrop.m_itemData.m_shared;
+                    }
+                }
+            }
+
+            if (prefabShared != null && !ReferenceEquals(Item.m_shared, prefabShared))
+            {
+                _hasClonedSharedData = true;
+                return;
+            }
+
+            if (_memberwiseCloner != null)
+            {
+                Item.m_shared = (ItemDrop.ItemData.SharedData)_memberwiseCloner.Invoke(Item.m_shared, null);
+                _hasClonedSharedData = true;
+            }
+        }
+
+        private bool IsInventoryTeleportable(Inventory inventory)
+        {
+            if (inventory == null || inventory.m_inventory == null)
+                return true;
+
+            if (ZoneSystem.instance != null)
+                return inventory.IsTeleportable(false);
+
+            for (int i = 0; i < inventory.m_inventory.Count; i++)
+            {
+                ItemDrop.ItemData item = inventory.m_inventory[i];
+                if (item == null || item.m_shared == null)
+                    continue;
+
+                if (item.m_shared.m_toolTier >= 1000 || !item.m_shared.m_teleportable)
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void UpdateTeleportableStatus()
+        {
+            try
+            {
+                if (Item == null || Item.m_shared == null)
+                    return;
+
+                Inventory inventory = GetInventory();
+                if (inventory == null)
+                    return;
+
+                bool isTeleportable = IsInventoryTeleportable(inventory);
+                if (Item.m_shared.m_teleportable != isTeleportable)
+                {
+                    EnsureClonedSharedData();
+                    Item.m_shared.m_teleportable = isTeleportable;
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Warning($"[UpdateTeleportableStatus] Error updating teleportable status: {ex.Message}");
+            }
+        }
 
         public void SetInventory(Inventory inventoryInstance)
         {
@@ -180,6 +271,7 @@ namespace AdventureBackpacks.Components
                 SyncContainerInventory();
 
                 _statusEffects = Backpacks.UpdateStatusEffects(Item);
+                UpdateTeleportableStatus();
             }
             catch (Exception ex)
             {
@@ -214,6 +306,7 @@ namespace AdventureBackpacks.Components
                     Serialize();
                     _statusEffects = Backpacks.UpdateStatusEffects(Item);
                 }
+                UpdateTeleportableStatus();
             }
         }
     
@@ -242,6 +335,7 @@ namespace AdventureBackpacks.Components
                 Serialize();
                 _statusEffects = Backpacks.UpdateStatusEffects(Item);
             }
+            UpdateTeleportableStatus();
             IsLoadingInventory = false;
         }
 
@@ -250,6 +344,7 @@ namespace AdventureBackpacks.Components
             if (_backpackInventory == null)
             {
                 Serialize();
+                UpdateTeleportableStatus();
                 return;
             }
 
@@ -259,6 +354,7 @@ namespace AdventureBackpacks.Components
             _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting Value = {Value}");
             _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Starting backpack count {_backpackInventory.m_inventory?.Count ?? 0}");
             Value = Serialize();
+            UpdateTeleportableStatus();
             _log.Debug($"[Save() - {Item.m_shared.m_name}-Q{Item.m_quality}] Ending backpack count {_backpackInventory.m_inventory?.Count ?? 0}");
         }
 

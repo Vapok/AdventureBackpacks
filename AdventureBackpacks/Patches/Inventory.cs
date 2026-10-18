@@ -661,6 +661,8 @@ public static class InventoryPatches
             if (backpack == null)
                 return true;
 
+            backpack.UpdateTeleportableStatus();
+
             Inventory bpInventory = backpack.GetInventory();
             if (bpInventory == null)
                 return true;
