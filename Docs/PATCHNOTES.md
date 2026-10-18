@@ -1,3 +1,10 @@
+# 2.4.5 - Dynamic Portal Restrictions & Inter-Mod Compatibility
+* **Dynamic Per-Instance SharedData Teleportability (`Components/BackpackComponent.cs`, `Patches/Inventory.cs`)**:
+  * Implemented `EnsureClonedSharedData` to shallow-clone `Item.m_shared` via `MemberwiseClone` only when a backpack's teleportable status differs from its prefab definition, isolating per-item state without mutating global ObjectDB prefabs or causing heap churn on empty packs.
+  * Implemented `UpdateTeleportableStatus` and `IsInventoryTeleportable` to evaluate `_backpackInventory.IsTeleportable(false)`. Updates `Item.m_shared.m_teleportable` whenever backpack inventory contents change (`Save()`), load (`Deserialize()`, `FirstLoad()`, `Load()`), or before portal evaluation in `IsTeleportablePatch.IsBackpackTeleportable`.
+  * Preserved full inter-mod compatibility with third-party portal modifications (e.g. `PortalRules`, `ProperPortals`, `BossGatedPortals`) by delegating to `Inventory.IsTeleportable(false)` and updating the item's own `m_shared.m_teleportable` so mods querying player inventory items directly observe accurate cargo weight and restriction flags.
+  * In `IsInventoryTeleportable`, added null guard for `ZoneSystem.instance` during main menu character preview loading (`FejdStartup.SetupCharacterPreview`), falling back to direct item inspection to avoid unhandled NullReferenceExceptions when `ZoneSystem.instance.GetGlobalKey` is evaluated outside an active world session.
+
 # 2.4.4 - Custom Texture Packs, Visual Overhauls & Controller Fixes
 * **Custom Visual Pack System (`VisualPackRegistry.cs`, `BackpackFactory.cs`, `ConfigRegistry.cs`)**:
   * Implemented `VisualPackRegistry` to manage external AssetBundle overrides by pack name, backpack identifier, and model style (`Modern` or `Classic`).
