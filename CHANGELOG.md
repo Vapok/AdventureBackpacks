@@ -1,10 +1,14 @@
-# 2.4.2 - 35-Language Translation Updates & Container UI Guard
-* **Complete 35-Language Translations**: Fully translated and updated all 35 Valheim-supported language files with names and descriptions for the new Ashlands (Cinderward Pack) and Deep North (Frostbound Haversack) backpacks.
-* **Compatibility Translations**: Added missing translations for the Spectral Shroud backpack across all remaining language files.
-* **Container Header Safety**: Added defensive checks when localizing container and backpack header titles to protect against rare interface errors.
+# 2.4.3 - API Patcher Resolution & Mod Interop
+* **API Patcher Compatibility**: Resolved an issue in the internal API patcher where downstream mods embedding the developer API stub could encounter an error during startup.
+* **Downstream Mod Interoperability**: Ensured smooth API linking for companion mods that integrate with Adventure Backpacks.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.4.2 - 35-Language Translation Updates & Container UI Guard
+* **Complete 35-Language Translations**: Fully translated and updated all 35 Valheim-supported language files with names and descriptions for the new Ashlands (Cinderward Pack) and Deep North (Frostbound Haversack) backpacks.
+* **Compatibility Translations**: Added missing translations for the Spectral Shroud backpack across all remaining language files.
+* **Container Header Safety**: Added defensive checks when localizing container and backpack header titles to protect against rare interface errors.
 
 ### 2.4.1 - Container Interaction & Companion Mod Fixes
 * **Container Transfer Fix**: Fixed an issue where shift-clicking an equipped backpack while interacting with a full external container or companion NPC (such as Vikings for Hire) could cause the backpack to be dropped and emptied onto the ground.

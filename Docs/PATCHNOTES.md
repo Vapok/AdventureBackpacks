@@ -1,3 +1,9 @@
+# 2.4.3 - API Patcher Resolution & Mod Interop
+* **Internal API Patcher MethodDefinition Invariant (`APIManager/Patcher.cs`)**:
+  * In `Patcher.FixupModuleReferences.VisitMethod`, added guard check `!(method is MethodDefinition)` alongside `!(method is MethodSpecification)`.
+  * Prevents Mono.Cecil `InvalidCastException: Unable to cast object of type 'Mono.Cecil.TypeReference' to type 'Mono.Cecil.TypeDefinition'` when downstream mods embed and compile copies of `AdventureBackpacks.API.ABAPI` directly into their own assemblies.
+  * Rebuilt and synchronized internalized `APIManager.dll` across `References/APIManager/` and project binaries.
+
 # 2.4.2 - 35-Language Translation Updates & Container UI Guard
 * **35-Language Localization Parity (`Translations/*.json`)**:
   * Synchronized all 35 Valheim-supported language files with localized item names and descriptions for `vapok_mod_item_backpack_ashlands` (Cinderward Pack) and `vapok_mod_item_backpack_deepnorth` (Frostbound Haversack).
