@@ -294,7 +294,8 @@ public static class ContainerTabs
         }
         if (gui.m_containerName != null)
         {
-            gui.m_containerName.text = Localization.instance.Localize(bpInventory.GetName());
+            string bpName = bpInventory.GetName();
+            gui.m_containerName.text = Localization.instance != null ? Localization.instance.Localize(bpName) : bpName;
         }
 
         if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
@@ -338,7 +339,8 @@ public static class ContainerTabs
         }
         if (gui.m_containerName != null && chestInventory != null)
         {
-            gui.m_containerName.text = Localization.instance.Localize(chestInventory.GetName());
+            string chestName = chestInventory.GetName();
+            gui.m_containerName.text = Localization.instance != null ? Localization.instance.Localize(chestName) : chestName;
         }
 
         if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)

@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "Ein Abenteurer-Rucksack, der aus widerstandsfähigem Loxfell gefertigt wurde.",
   "vapok_mod_item_backpack_mistlands": "Rucksack des Explorators",
   "vapok_mod_item_backpack_mistlands_description": "Ein fein gearbeiteter, mystischer Rucksack mit ganz eigener Handhabung. Niemand weiß genau, wie er funktioniert.",
+  "vapok_mod_item_backpack_ashlands": "Glutschutz-Rucksack",
+  "vapok_mod_item_backpack_ashlands_description": "Flammenmetall-Streben und verkohlte Knochen halten die Hitze von deinem Rücken fern. Nicht die Flammen, nur die Hitze.",
+  "vapok_mod_item_backpack_deepnorth": "Frostgebundener Tornister",
+  "vapok_mod_item_backpack_deepnorth_description": "Elchfell über einem Frostkern. Schwer, wärmend und er scheint zu spüren, wann du kurz vor dem Fall bist.",
   "vapok_mod_item_rugged_backpack": "Vielseitiger Rucksack",
   "vapok_mod_item_rugged_backpack_description": "Ein vielseitiger Rucksack, an jedes Terrain angepasst.",
   "vapok_mod_item_arctic_backpack": "Arktischer Rucksack",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "Behälter wechseln",
   "vapok_mod_drop_backpack": "Rucksack fallen lassen",
   "vapok_mod_quickdrop_backpack": "Rucksack schnell abwerfen",
-  "vapok_mod_quickdrop": "Schnell abwerfen"
+  "vapok_mod_quickdrop": "Schnell abwerfen",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Spektralschleier des Fassungsvermögens"
 }

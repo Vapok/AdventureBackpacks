@@ -1,9 +1,14 @@
-# 2.4.1 - Container Interaction & Companion Mod Fixes
-* **Container Transfer Fix**: Fixed an issue where shift-clicking an equipped backpack while interacting with a full external container or companion NPC (such as Vikings for Hire) could cause the backpack to be dropped and emptied onto the ground.
-* **Container Tabs Stability**: Added safety checks when switching tabs or closing external containers to prevent errors if a container is missing or destroyed.
+# 2.4.2 - 35-Language Translation Updates & Container UI Guard
+* **Complete 35-Language Translations**: Fully translated and updated all 35 Valheim-supported language files with names and descriptions for the new Ashlands (Cinderward Pack) and Deep North (Frostbound Haversack) backpacks.
+* **Compatibility Translations**: Added missing translations for the Spectral Shroud backpack across all remaining language files.
+* **Container Header Safety**: Added defensive checks when localizing container and backpack header titles to protect against rare interface errors.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.4.1 - Container Interaction & Companion Mod Fixes
+* **Container Transfer Fix**: Fixed an issue where shift-clicking an equipped backpack while interacting with a full external container or companion NPC (such as Vikings for Hire) could cause the backpack to be dropped and emptied onto the ground.
+* **Container Tabs Stability**: Added safety checks when switching tabs or closing external containers to prevent errors if a container is missing or destroyed.
 
 ### 2.4.0 - Ashlands & Deep North Backpacks, Model Overhaul & Valheim 1.0.20 Alignment
 * **New Backpacks**: Added the **Cinderward Pack** (Ashlands / Heat Resistance against extreme lava heat and boiling water) and **Frostbound Haversack** (Deep North / Frost Resistance and Second Wind).

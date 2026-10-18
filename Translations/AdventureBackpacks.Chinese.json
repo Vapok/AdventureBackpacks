@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "用牦牛皮缝制的坚固背包，适合在北境平原使用",
   "vapok_mod_item_backpack_mistlands": "探险背包",
   "vapok_mod_item_backpack_mistlands_description": "一款制作精良的神秘背包，它能够带你从高处缓降，适合在迷雾之地使用",
+  "vapok_mod_item_backpack_ashlands": "灰烬守卫背包",
+  "vapok_mod_item_backpack_ashlands_description": "焰金属支架与焦黑骨骼为背部隔绝热量。只是热量，不能挡住火焰。",
+  "vapok_mod_item_backpack_deepnorth": "霜缚行囊",
+  "vapok_mod_item_backpack_deepnorth_description": "驼鹿皮包裹着寒霜核心。厚重温暖，它仿佛知道你何时即将倒下。",
   "vapok_mod_item_rugged_backpack": "小赤佬背包(弃用)",
   "vapok_mod_item_rugged_backpack_description": "一个小赤佬背包，适合你装额外的东西，减轻你的负重",
   "vapok_mod_item_arctic_backpack": "老毕登背包(弃用)",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "切换容器",
   "vapok_mod_drop_backpack": "丢下背包",
   "vapok_mod_quickdrop_backpack": "快速丢下背包",
-  "vapok_mod_quickdrop": "快速丢下"
+  "vapok_mod_quickdrop": "快速丢下",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "幽魂容纳裹尸布"
 }

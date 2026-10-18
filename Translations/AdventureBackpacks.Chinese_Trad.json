@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "冒險家的背包，使用非常堅韌的狐狸皮革製作而成。",
   "vapok_mod_item_backpack_mistlands": "探險家的背包",
   "vapok_mod_item_backpack_mistlands_description": "精心製作的神祕背包，設計有自己的的無底袋，沒有人知道它是如何製作的。",
+  "vapok_mod_item_backpack_ashlands": "燼火護衛背包",
+  "vapok_mod_item_backpack_ashlands_description": "焰金屬支架與焦黑骨骼為背部隔絕熱量。只是熱量，無法抵擋烈焰。",
+  "vapok_mod_item_backpack_deepnorth": "霜縛行囊",
+  "vapok_mod_item_backpack_deepnorth_description": "駝鹿皮包覆著寒霜核心。厚重溫暖，它似乎能預知你何時即將倒下。",
   "vapok_mod_item_rugged_backpack": "古老的堅固背包",
   "vapok_mod_item_rugged_backpack_description": "古老的堅固背包，使用鈕扣和精美皮革帶子固定製作而成。",
   "vapok_mod_item_arctic_backpack": "古老的北極背包",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "切換容器",
   "vapok_mod_drop_backpack": "丟下背包",
   "vapok_mod_quickdrop_backpack": "快速丟下背包",
-  "vapok_mod_quickdrop": "快速丟下"
+  "vapok_mod_quickdrop": "快速丟下",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "幽魂容納裹屍布"
 }
