@@ -7,12 +7,18 @@
   - [CanOpenBackpack(player)](#M-AdventureBackpacks-API-ABAPI-CanOpenBackpack-Player- 'AdventureBackpacks.API.ABAPI.CanOpenBackpack(Player)')
   - [GetActiveBackpackStatusEffects()](#M-AdventureBackpacks-API-ABAPI-GetActiveBackpackStatusEffects 'AdventureBackpacks.API.ABAPI.GetActiveBackpackStatusEffects')
   - [GetAllBackpackInventories(player)](#M-AdventureBackpacks-API-ABAPI-GetAllBackpackInventories-Player- 'AdventureBackpacks.API.ABAPI.GetAllBackpackInventories(Player)')
+  - [GetAvailableVisualPacks(backpackId,modelStyle)](#M-AdventureBackpacks-API-ABAPI-GetAvailableVisualPacks-System-String,AdventureBackpacks-API-ModelStyle- 'AdventureBackpacks.API.ABAPI.GetAvailableVisualPacks(System.String,AdventureBackpacks.API.ModelStyle)')
+  - [GetAvailableVisualPacks(backpack,modelStyle)](#M-AdventureBackpacks-API-ABAPI-GetAvailableVisualPacks-AdventureBackpacks-API-BackpackName,AdventureBackpacks-API-ModelStyle- 'AdventureBackpacks.API.ABAPI.GetAvailableVisualPacks(AdventureBackpacks.API.BackpackName,AdventureBackpacks.API.ModelStyle)')
+  - [GetAvailableVisualPacks(targetBundleName)](#M-AdventureBackpacks-API-ABAPI-GetAvailableVisualPacks-System-String- 'AdventureBackpacks.API.ABAPI.GetAvailableVisualPacks(System.String)')
   - [GetBackpack(itemData)](#M-AdventureBackpacks-API-ABAPI-GetBackpack-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.GetBackpack(ItemDrop.ItemData)')
   - [GetBackpackInventory(itemData)](#M-AdventureBackpacks-API-ABAPI-GetBackpackInventory-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.GetBackpackInventory(ItemDrop.ItemData)')
   - [GetEquippedBackpack(player)](#M-AdventureBackpacks-API-ABAPI-GetEquippedBackpack-Player- 'AdventureBackpacks.API.ABAPI.GetEquippedBackpack(Player)')
   - [GetEquippedBackpackInventory(player)](#M-AdventureBackpacks-API-ABAPI-GetEquippedBackpackInventory-Player- 'AdventureBackpacks.API.ABAPI.GetEquippedBackpackInventory(Player)')
   - [GetRegisterdStatusEffects()](#M-AdventureBackpacks-API-ABAPI-GetRegisterdStatusEffects 'AdventureBackpacks.API.ABAPI.GetRegisterdStatusEffects')
   - [HasActiveExternalContainer()](#M-AdventureBackpacks-API-ABAPI-HasActiveExternalContainer 'AdventureBackpacks.API.ABAPI.HasActiveExternalContainer')
+  - [HasVisualBundle(packName,backpackId,modelStyle)](#M-AdventureBackpacks-API-ABAPI-HasVisualBundle-System-String,System-String,AdventureBackpacks-API-ModelStyle- 'AdventureBackpacks.API.ABAPI.HasVisualBundle(System.String,System.String,AdventureBackpacks.API.ModelStyle)')
+  - [HasVisualBundle(packName,backpack,modelStyle)](#M-AdventureBackpacks-API-ABAPI-HasVisualBundle-System-String,AdventureBackpacks-API-BackpackName,AdventureBackpacks-API-ModelStyle- 'AdventureBackpacks.API.ABAPI.HasVisualBundle(System.String,AdventureBackpacks.API.BackpackName,AdventureBackpacks.API.ModelStyle)')
+  - [HasVisualBundle(packName,targetBundleName)](#M-AdventureBackpacks-API-ABAPI-HasVisualBundle-System-String,System-String- 'AdventureBackpacks.API.ABAPI.HasVisualBundle(System.String,System.String)')
   - [IsBackpack(itemData)](#M-AdventureBackpacks-API-ABAPI-IsBackpack-ItemDrop-ItemData- 'AdventureBackpacks.API.ABAPI.IsBackpack(ItemDrop.ItemData)')
   - [IsBackpackEquipped(player)](#M-AdventureBackpacks-API-ABAPI-IsBackpackEquipped-Player- 'AdventureBackpacks.API.ABAPI.IsBackpackEquipped(Player)')
   - [IsBackpackOpen()](#M-AdventureBackpacks-API-ABAPI-IsBackpackOpen 'AdventureBackpacks.API.ABAPI.IsBackpackOpen')
@@ -26,6 +32,10 @@
   - [OpenBackpack(player,gui,activeGroup)](#M-AdventureBackpacks-API-ABAPI-OpenBackpack-Player,InventoryGui,System-Int32- 'AdventureBackpacks.API.ABAPI.OpenBackpack(Player,InventoryGui,System.Int32)')
   - [RegisterBackpack(definition)](#M-AdventureBackpacks-API-ABAPI-RegisterBackpack-AdventureBackpacks-API-ABAPI-BackpackDefinition- 'AdventureBackpacks.API.ABAPI.RegisterBackpack(AdventureBackpacks.API.ABAPI.BackpackDefinition)')
   - [RegisterEffect(effectDefinition)](#M-AdventureBackpacks-API-ABAPI-RegisterEffect-AdventureBackpacks-API-ABAPI-EffectDefinition- 'AdventureBackpacks.API.ABAPI.RegisterEffect(AdventureBackpacks.API.ABAPI.EffectDefinition)')
+  - [RegisterVisualBundle(packName,backpackId,modelStyle,overrideBundle,isDefault)](#M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,System-String,AdventureBackpacks-API-ModelStyle,UnityEngine-AssetBundle,System-Boolean- 'AdventureBackpacks.API.ABAPI.RegisterVisualBundle(System.String,System.String,AdventureBackpacks.API.ModelStyle,UnityEngine.AssetBundle,System.Boolean)')
+  - [RegisterVisualBundle(packName,backpack,modelStyle,overrideBundle,isDefault)](#M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,AdventureBackpacks-API-BackpackName,AdventureBackpacks-API-ModelStyle,UnityEngine-AssetBundle,System-Boolean- 'AdventureBackpacks.API.ABAPI.RegisterVisualBundle(System.String,AdventureBackpacks.API.BackpackName,AdventureBackpacks.API.ModelStyle,UnityEngine.AssetBundle,System.Boolean)')
+  - [RegisterVisualBundle(packName,targetBundleName,overrideBundle)](#M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,System-String,UnityEngine-AssetBundle- 'AdventureBackpacks.API.ABAPI.RegisterVisualBundle(System.String,System.String,UnityEngine.AssetBundle)')
+  - [RegisterVisualBundle(packName,targetBundleName,overrideBundle,isDefault)](#M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,System-String,UnityEngine-AssetBundle,System-Boolean- 'AdventureBackpacks.API.ABAPI.RegisterVisualBundle(System.String,System.String,UnityEngine.AssetBundle,System.Boolean)')
   - [TryGetAllBackpackInventories(player,inventories)](#M-AdventureBackpacks-API-ABAPI-TryGetAllBackpackInventories-Player,System-Collections-Generic-List{Inventory}@- 'AdventureBackpacks.API.ABAPI.TryGetAllBackpackInventories(Player,System.Collections.Generic.List{Inventory}@)')
   - [TryGetBackpackInventory(itemData,inventory)](#M-AdventureBackpacks-API-ABAPI-TryGetBackpackInventory-ItemDrop-ItemData,Inventory@- 'AdventureBackpacks.API.ABAPI.TryGetBackpackInventory(ItemDrop.ItemData,Inventory@)')
   - [TryGetEquippedBackpackInventory(player,inventory)](#M-AdventureBackpacks-API-ABAPI-TryGetEquippedBackpackInventory-Player,Inventory@- 'AdventureBackpacks.API.ABAPI.TryGetEquippedBackpackInventory(Player,Inventory@)')
@@ -77,6 +87,17 @@
   - [UpgradeIngredients](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-UpgradeIngredients 'AdventureBackpacks.API.ABAPI.BackpackDefinition.UpgradeIngredients')
   - [UpgraderIngredients](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-UpgraderIngredients 'AdventureBackpacks.API.ABAPI.BackpackDefinition.UpgraderIngredients')
   - [WeightMultiplier](#F-AdventureBackpacks-API-ABAPI-BackpackDefinition-WeightMultiplier 'AdventureBackpacks.API.ABAPI.BackpackDefinition.WeightMultiplier')
+- [BackpackExtensions](#T-AdventureBackpacks-API-BackpackExtensions 'AdventureBackpacks.API.BackpackExtensions')
+  - [ToBackpackId(backpack)](#M-AdventureBackpacks-API-BackpackExtensions-ToBackpackId-AdventureBackpacks-API-BackpackName- 'AdventureBackpacks.API.BackpackExtensions.ToBackpackId(AdventureBackpacks.API.BackpackName)')
+- [BackpackName](#T-AdventureBackpacks-API-BackpackName 'AdventureBackpacks.API.BackpackName')
+  - [Ashlands](#F-AdventureBackpacks-API-BackpackName-Ashlands 'AdventureBackpacks.API.BackpackName.Ashlands')
+  - [BlackForest](#F-AdventureBackpacks-API-BackpackName-BlackForest 'AdventureBackpacks.API.BackpackName.BlackForest')
+  - [DeepNorth](#F-AdventureBackpacks-API-BackpackName-DeepNorth 'AdventureBackpacks.API.BackpackName.DeepNorth')
+  - [Meadows](#F-AdventureBackpacks-API-BackpackName-Meadows 'AdventureBackpacks.API.BackpackName.Meadows')
+  - [Mistlands](#F-AdventureBackpacks-API-BackpackName-Mistlands 'AdventureBackpacks.API.BackpackName.Mistlands')
+  - [Mountains](#F-AdventureBackpacks-API-BackpackName-Mountains 'AdventureBackpacks.API.BackpackName.Mountains')
+  - [Plains](#F-AdventureBackpacks-API-BackpackName-Plains 'AdventureBackpacks.API.BackpackName.Plains')
+  - [Swamp](#F-AdventureBackpacks-API-BackpackName-Swamp 'AdventureBackpacks.API.BackpackName.Swamp')
 - [DropTarget](#T-AdventureBackpacks-API-ABAPI-DropTarget 'AdventureBackpacks.API.ABAPI.DropTarget')
   - [#ctor(creature,chance,min,max)](#M-AdventureBackpacks-API-ABAPI-DropTarget-#ctor-System-String,System-Single,System-Int32,System-Nullable{System-Int32}- 'AdventureBackpacks.API.ABAPI.DropTarget.#ctor(System.String,System.Single,System.Int32,System.Nullable{System.Int32})')
   - [Chance](#F-AdventureBackpacks-API-ABAPI-DropTarget-Chance 'AdventureBackpacks.API.ABAPI.DropTarget.Chance')
@@ -90,6 +111,9 @@
   - [LocalizedName](#F-AdventureBackpacks-API-ABAPI-EffectDefinition-LocalizedName 'AdventureBackpacks.API.ABAPI.EffectDefinition.LocalizedName')
   - [Name](#F-AdventureBackpacks-API-ABAPI-EffectDefinition-Name 'AdventureBackpacks.API.ABAPI.EffectDefinition.Name')
   - [StatusEffect](#F-AdventureBackpacks-API-ABAPI-EffectDefinition-StatusEffect 'AdventureBackpacks.API.ABAPI.EffectDefinition.StatusEffect')
+- [ModelStyle](#T-AdventureBackpacks-API-ModelStyle 'AdventureBackpacks.API.ModelStyle')
+  - [Classic](#F-AdventureBackpacks-API-ModelStyle-Classic 'AdventureBackpacks.API.ModelStyle.Classic')
+  - [Modern](#F-AdventureBackpacks-API-ModelStyle-Modern 'AdventureBackpacks.API.ModelStyle.Modern')
 - [RecipeIngredient](#T-AdventureBackpacks-API-ABAPI-RecipeIngredient 'AdventureBackpacks.API.ABAPI.RecipeIngredient')
   - [#ctor(itemPrefabName,quantity)](#M-AdventureBackpacks-API-ABAPI-RecipeIngredient-#ctor-System-String,System-Int32- 'AdventureBackpacks.API.ABAPI.RecipeIngredient.#ctor(System.String,System.Int32)')
   - [ItemPrefabName](#F-AdventureBackpacks-API-ABAPI-RecipeIngredient-ItemPrefabName 'AdventureBackpacks.API.ABAPI.RecipeIngredient.ItemPrefabName')
@@ -168,6 +192,59 @@ A list of unique backpack Inventory instances.
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | player | [Player](#T-Player 'Player') | The player to inspect, usually Player.m_localPlayer. |
+
+<a name='M-AdventureBackpacks-API-ABAPI-GetAvailableVisualPacks-System-String,AdventureBackpacks-API-ModelStyle-'></a>
+### GetAvailableVisualPacks(backpackId,modelStyle) `method`
+
+##### Summary
+
+Retrieves all registered texture pack names available for a specific backpack and model style, with 'Native' always included.
+
+##### Returns
+
+An array of available texture pack names.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| backpackId | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The backpack identifier to query. |
+| modelStyle | [AdventureBackpacks.API.ModelStyle](#T-AdventureBackpacks-API-ModelStyle 'AdventureBackpacks.API.ModelStyle') | The model style to query (Modern or Classic). |
+
+<a name='M-AdventureBackpacks-API-ABAPI-GetAvailableVisualPacks-AdventureBackpacks-API-BackpackName,AdventureBackpacks-API-ModelStyle-'></a>
+### GetAvailableVisualPacks(backpack,modelStyle) `method`
+
+##### Summary
+
+Retrieves all registered texture pack names available for a specific progression backpack and model style, with 'Native' always included.
+
+##### Returns
+
+An array of available texture pack names.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| backpack | [AdventureBackpacks.API.BackpackName](#T-AdventureBackpacks-API-BackpackName 'AdventureBackpacks.API.BackpackName') | The strongly typed progression backpack identifier to query. |
+| modelStyle | [AdventureBackpacks.API.ModelStyle](#T-AdventureBackpacks-API-ModelStyle 'AdventureBackpacks.API.ModelStyle') | The model style to query (Modern or Classic). |
+
+<a name='M-AdventureBackpacks-API-ABAPI-GetAvailableVisualPacks-System-String-'></a>
+### GetAvailableVisualPacks(targetBundleName) `method`
+
+##### Summary
+
+Retrieves all registered texture pack names available for a specific bundle name, with 'Native' always included.
+
+##### Returns
+
+An array of available texture pack names.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| targetBundleName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The base bundle name to query. |
 
 <a name='M-AdventureBackpacks-API-ABAPI-GetBackpack-ItemDrop-ItemData-'></a>
 ### GetBackpack(itemData) `method`
@@ -266,6 +343,62 @@ True if an external container is active with container tabs, false otherwise.
 ##### Parameters
 
 This method has no parameters.
+
+<a name='M-AdventureBackpacks-API-ABAPI-HasVisualBundle-System-String,System-String,AdventureBackpacks-API-ModelStyle-'></a>
+### HasVisualBundle(packName,backpackId,modelStyle) `method`
+
+##### Summary
+
+Checks whether an asset bundle override is registered for the specified visual pack, backpack, and model style.
+
+##### Returns
+
+True if an override is registered, otherwise false.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| packName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Display name of the texture pack. |
+| backpackId | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The backpack identifier to check. |
+| modelStyle | [AdventureBackpacks.API.ModelStyle](#T-AdventureBackpacks-API-ModelStyle 'AdventureBackpacks.API.ModelStyle') | The model style to check (Modern or Classic). |
+
+<a name='M-AdventureBackpacks-API-ABAPI-HasVisualBundle-System-String,AdventureBackpacks-API-BackpackName,AdventureBackpacks-API-ModelStyle-'></a>
+### HasVisualBundle(packName,backpack,modelStyle) `method`
+
+##### Summary
+
+Checks whether an asset bundle override is registered for the specified visual pack, progression backpack, and model style.
+
+##### Returns
+
+True if an override is registered, otherwise false.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| packName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Display name of the texture pack. |
+| backpack | [AdventureBackpacks.API.BackpackName](#T-AdventureBackpacks-API-BackpackName 'AdventureBackpacks.API.BackpackName') | The strongly typed progression backpack identifier to check. |
+| modelStyle | [AdventureBackpacks.API.ModelStyle](#T-AdventureBackpacks-API-ModelStyle 'AdventureBackpacks.API.ModelStyle') | The model style to check (Modern or Classic). |
+
+<a name='M-AdventureBackpacks-API-ABAPI-HasVisualBundle-System-String,System-String-'></a>
+### HasVisualBundle(packName,targetBundleName) `method`
+
+##### Summary
+
+Checks whether an asset bundle override is registered for the specified visual pack and bundle name.
+
+##### Returns
+
+True if an override is registered, otherwise false.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| packName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Display name of the texture pack. |
+| targetBundleName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The base bundle name to check. |
 
 <a name='M-AdventureBackpacks-API-ABAPI-IsBackpack-ItemDrop-ItemData-'></a>
 ### IsBackpack(itemData) `method`
@@ -464,6 +597,75 @@ Use this method in the Awake() of your mod to register a Status Effect that can 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
 | effectDefinition | [AdventureBackpacks.API.ABAPI.EffectDefinition](#T-AdventureBackpacks-API-ABAPI-EffectDefinition 'AdventureBackpacks.API.ABAPI.EffectDefinition') | Create a new EffectDefinition that contains the overall parameters that are needed to register the new effect. |
+
+<a name='M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,System-String,AdventureBackpacks-API-ModelStyle,UnityEngine-AssetBundle,System-Boolean-'></a>
+### RegisterVisualBundle(packName,backpackId,modelStyle,overrideBundle,isDefault) `method`
+
+##### Summary
+
+Registers an AssetBundle override for a specific backpack and model style under a named Texture or Visual Pack.
+Enables companion mods to explicitly provide Modern and/or Classic visual assets.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| packName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD"). |
+| backpackId | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The backpack identifier (e.g. "backpack_meadows", "backpack_black_forest"). |
+| modelStyle | [AdventureBackpacks.API.ModelStyle](#T-AdventureBackpacks-API-ModelStyle 'AdventureBackpacks.API.ModelStyle') | The model style this bundle targets (Modern or Classic). |
+| overrideBundle | [UnityEngine.AssetBundle](#T-UnityEngine-AssetBundle 'UnityEngine.AssetBundle') | The loaded AssetBundle containing replacement assets. |
+| isDefault | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Optional: If true and no player configuration is set, this pack will be the default selection for this backpack and style. |
+
+<a name='M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,AdventureBackpacks-API-BackpackName,AdventureBackpacks-API-ModelStyle,UnityEngine-AssetBundle,System-Boolean-'></a>
+### RegisterVisualBundle(packName,backpack,modelStyle,overrideBundle,isDefault) `method`
+
+##### Summary
+
+Registers an AssetBundle override for a specific progression backpack and model style under a named Texture or Visual Pack.
+Enables companion mods to explicitly provide Modern and/or Classic visual assets using strongly-typed BackpackName.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| packName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD"). |
+| backpack | [AdventureBackpacks.API.BackpackName](#T-AdventureBackpacks-API-BackpackName 'AdventureBackpacks.API.BackpackName') | The strongly typed progression backpack identifier. |
+| modelStyle | [AdventureBackpacks.API.ModelStyle](#T-AdventureBackpacks-API-ModelStyle 'AdventureBackpacks.API.ModelStyle') | The model style this bundle targets (Modern or Classic). |
+| overrideBundle | [UnityEngine.AssetBundle](#T-UnityEngine-AssetBundle 'UnityEngine.AssetBundle') | The loaded AssetBundle containing replacement assets. |
+| isDefault | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Optional: If true and no player configuration is set, this pack will be the default selection for this backpack and style. |
+
+<a name='M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,System-String,UnityEngine-AssetBundle-'></a>
+### RegisterVisualBundle(packName,targetBundleName,overrideBundle) `method`
+
+##### Summary
+
+Registers an AssetBundle override for a specific backpack model under a named Texture or Visual Pack.
+Enables companion mods and community texture packs to offer selectable visual overhauls.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| packName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD"). |
+| targetBundleName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The base bundle name to override (e.g. "backpack_meadows", "classic_backpack_black_forest"). |
+| overrideBundle | [UnityEngine.AssetBundle](#T-UnityEngine-AssetBundle 'UnityEngine.AssetBundle') | The loaded AssetBundle containing replacement assets. |
+
+<a name='M-AdventureBackpacks-API-ABAPI-RegisterVisualBundle-System-String,System-String,UnityEngine-AssetBundle,System-Boolean-'></a>
+### RegisterVisualBundle(packName,targetBundleName,overrideBundle,isDefault) `method`
+
+##### Summary
+
+Registers an AssetBundle override for a specific backpack model under a named Texture or Visual Pack.
+Enables companion mods and community texture packs to offer selectable visual overhauls.
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| packName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD"). |
+| targetBundleName | [System.String](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.String 'System.String') | The base bundle name to override (e.g. "backpack_meadows", "classic_backpack_black_forest"). |
+| overrideBundle | [UnityEngine.AssetBundle](#T-UnityEngine-AssetBundle 'UnityEngine.AssetBundle') | The loaded AssetBundle containing replacement assets. |
+| isDefault | [System.Boolean](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Boolean 'System.Boolean') | Optional: If true and no player configuration is set, this pack will be the default selection for this bundle. |
 
 <a name='M-AdventureBackpacks-API-ABAPI-TryGetAllBackpackInventories-Player,System-Collections-Generic-List{Inventory}@-'></a>
 ### TryGetAllBackpackInventories(player,inventories) `method`
@@ -949,6 +1151,101 @@ List of Upgrader Resources for the Forge of Potential.
 Provides the configured weight multiplier that reduces the weight of the items in the backpack.
 For registering a new backpack, this is the default value.
 
+<a name='T-AdventureBackpacks-API-BackpackExtensions'></a>
+## BackpackExtensions `type`
+
+##### Namespace
+
+AdventureBackpacks.API
+
+##### Summary
+
+Extension methods for Adventure Backpacks API enumerations.
+
+<a name='M-AdventureBackpacks-API-BackpackExtensions-ToBackpackId-AdventureBackpacks-API-BackpackName-'></a>
+### ToBackpackId(backpack) `method`
+
+##### Summary
+
+Returns the internal canonical backpack identifier for the specified backpack enumeration value.
+
+##### Returns
+
+The string identifier (e.g. "backpack_meadows").
+
+##### Parameters
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| backpack | [AdventureBackpacks.API.BackpackName](#T-AdventureBackpacks-API-BackpackName 'AdventureBackpacks.API.BackpackName') | The backpack enumeration value. |
+
+<a name='T-AdventureBackpacks-API-BackpackName'></a>
+## BackpackName `type`
+
+##### Namespace
+
+AdventureBackpacks.API
+
+##### Summary
+
+Identifies the built-in progression backpacks in Adventure Backpacks.
+
+<a name='F-AdventureBackpacks-API-BackpackName-Ashlands'></a>
+### Ashlands `constants`
+
+##### Summary
+
+Ashlands progression backpack.
+
+<a name='F-AdventureBackpacks-API-BackpackName-BlackForest'></a>
+### BlackForest `constants`
+
+##### Summary
+
+Black Forest progression backpack.
+
+<a name='F-AdventureBackpacks-API-BackpackName-DeepNorth'></a>
+### DeepNorth `constants`
+
+##### Summary
+
+Deep North progression backpack.
+
+<a name='F-AdventureBackpacks-API-BackpackName-Meadows'></a>
+### Meadows `constants`
+
+##### Summary
+
+Meadows progression backpack.
+
+<a name='F-AdventureBackpacks-API-BackpackName-Mistlands'></a>
+### Mistlands `constants`
+
+##### Summary
+
+Mistlands progression backpack.
+
+<a name='F-AdventureBackpacks-API-BackpackName-Mountains'></a>
+### Mountains `constants`
+
+##### Summary
+
+Mountains progression backpack.
+
+<a name='F-AdventureBackpacks-API-BackpackName-Plains'></a>
+### Plains `constants`
+
+##### Summary
+
+Plains progression backpack.
+
+<a name='F-AdventureBackpacks-API-BackpackName-Swamp'></a>
+### Swamp `constants`
+
+##### Summary
+
+Swamp progression backpack.
+
 <a name='T-AdventureBackpacks-API-ABAPI-DropTarget'></a>
 ## DropTarget `type`
 
@@ -1071,6 +1368,31 @@ This is the Effect Name.
 
 This is your actual Status Effect from your own asset bundle or from another source.
 As long as it's of the type SE_Stats, you can use it.
+
+<a name='T-AdventureBackpacks-API-ModelStyle'></a>
+## ModelStyle `type`
+
+##### Namespace
+
+AdventureBackpacks.API
+
+##### Summary
+
+Defines the visual model geometry style for a backpack.
+
+<a name='F-AdventureBackpacks-API-ModelStyle-Classic'></a>
+### Classic `constants`
+
+##### Summary
+
+Classic original backpack model.
+
+<a name='F-AdventureBackpacks-API-ModelStyle-Modern'></a>
+### Modern `constants`
+
+##### Summary
+
+Modern style with detailed models and accessories.
 
 <a name='T-AdventureBackpacks-API-ABAPI-RecipeIngredient'></a>
 ## RecipeIngredient `type`

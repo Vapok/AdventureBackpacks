@@ -69,6 +69,20 @@ Each backpack (Meadows through Mistlands) can be configured independently to use
 
 ---
 
+## 🖌️ Custom Texture Pack Support
+
+Adventure Backpacks includes built-in support for selectable texture and visual packs. Community texture creators and mod developers can create standalone companion mods that supply custom visual models and textures for any or all backpacks without modifying the base mod.
+
+* **Per-Backpack Configuration**: Players can select their active texture pack independently for each backpack tier under `Backpack: <Backpack Name>` -> `Texture Pack` in `vapok.mods.adventurebackpacks.cfg` or via the in-game Configuration Manager.
+* **Modern & Classic Compatibility**: Visual packs can provide overrides for Modern models, Classic models, or both.
+* **Official HD Reference Mod**: We provide **Adventure Backpacks HD**, an official standalone texture pack companion mod that delivers 2K upscaled textures and serves as the open-source reference implementation:
+  * 📦 **[Adventure Backpacks HD on Thunderstore](https://thunderstore.io/c/valheim/p/Vapok/AdventureBackpacks_HD/)**
+  * 📦 **[Adventure Backpacks HD on Nexus Mods](https://www.nexusmods.com/valheim/mods/2204?tab=files)** *(Optional Files)*
+  * 💻 **[Source Code & Reference Project](https://github.com/Vapok/AdventureBackpacks/tree/main/AdventureBackpacks.HD)**
+* **Creator Guide**: For artists and modders interested in building texture packs, see the step-by-step **[Creating Texture Packs Guide](Docs/CREATING_TEXTURE_PACKS.md)**.
+
+---
+
 ## 🕹️ Controls & Interaction Modes
 
 | Control Mode | Input / Keybind | Description |
@@ -136,6 +150,7 @@ Adventure Backpacks provides two integration pathways for third-party mod develo
 
 ### Developer Guides & Resources:
 * 🛠️ **[API Integration Guide](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/API_INTEGRATION.md)** — Step-by-step walkthrough for configuring both integration options.
+* 🖌️ **[Creating Texture Packs Guide](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/CREATING_TEXTURE_PACKS.md)** — Step-by-step guide for creating standalone texture packs.
 * 📖 **[ABAPI Class Reference](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/AdventureBackpacksAPI.md)** — Detailed documentation for all classes, methods, and parameters.
 * 💾 **[Download AdventureBackpacksAPI.dll](https://github.com/Vapok/AdventureBackpacks/releases)** — Standalone API assembly archives.
 
@@ -210,6 +225,8 @@ Adventure Backpacks includes localization support for all 35 languages supported
 Looking to integrate your mod with Adventure Backpacks or build compatibility?
 
 * 📖 **[Integration Guide & API Reference](Docs/API_INTEGRATION.md)**: Full walkthrough for connecting your mod.
+* 🖌️ **[Creating Texture Packs](Docs/CREATING_TEXTURE_PACKS.md)**: Guide for creating standalone visual/texture packs for Adventure Backpacks.
+* 🖼️ **[Adventure Backpacks HD Reference](AdventureBackpacks.HD/)**: Open-source reference mod implementation for texture packs.
 * 🤖 **[AI Agent Rules & Invariants](AGENTS.md)**: Mandatory guidelines for AI assistants (Cursor, Claude, Copilot, ChatGPT, Gemini).
 * 📦 **[Zero-Dependency Client Wrapper](Docs/ABAPI_Client.cs)**: Drop-in C# file (`ABAPIClient`) to safely integrate with zero external DLL dependencies.
 * ⚠️ **Core Invariant**: Exactly **one** backpack may be equipped per player. Do not use reflection or Harmony patches on internal classes; always use the public API.

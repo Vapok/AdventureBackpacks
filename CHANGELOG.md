@@ -1,9 +1,17 @@
-# 2.4.3 - API Patcher Resolution & Mod Interop
-* **API Patcher Compatibility**: Resolved an issue in the internal API patcher where downstream mods embedding the developer API stub could encounter an error during startup.
-* **Downstream Mod Interoperability**: Ensured smooth API linking for companion mods that integrate with Adventure Backpacks.
+# 2.4.4 - Custom Texture Packs, Visual Overhauls & Controller Fixes
+* **Custom Texture Pack Support**: Added built-in support for selectable texture packs! Players can now choose between Native textures and any installed companion texture packs (such as the new official **Adventure Backpacks HD** pack) under each backpack's settings.
+* **Official HD Texture Pack**: Introduced **Adventure Backpacks HD**, a companion mod featuring 2K upscaled textures for all backpacks and serving as an open-source example for community artists.
+* **Texture Pack Creator Guide**: Added an easy step-by-step guide and template project in `Docs/CREATING_TEXTURE_PACKS.md` for creators who want to build their own visual packs.
+* **Developer API Overhaul**: Added new methods and strongly-typed backpack helpers to `ABAPI` and the drop-in `ABAPIClient` for registering custom visual bundles.
+* **Controller Navigation Fix**: Fixed a crash when using gamepad right-stick controls on recent game updates.
+* **Dependencies**: Updated internal dependencies for stability.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.4.3 - API Patcher Resolution & Mod Interop
+* **API Patcher Compatibility**: Resolved an issue in the internal API patcher where downstream mods embedding the developer API stub could encounter an error during startup.
+* **Downstream Mod Interoperability**: Ensured smooth API linking for companion mods that integrate with Adventure Backpacks.
 
 ### 2.4.2 - 35-Language Translation Updates & Container UI Guard
 * **Complete 35-Language Translations**: Fully translated and updated all 35 Valheim-supported language files with names and descriptions for the new Ashlands (Cinderward Pack) and Deep North (Frostbound Haversack) backpacks.

@@ -1,0 +1,10 @@
+{
+  "name": "AdventureBackpacks_HD",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/Vapok/AdventureBackpacks/tree/main/AdventureBackpacks.HD",
+  "description": "High-Definition 2K texture companion pack for Adventure Backpacks featuring upscaled materials and normal maps.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2351",
+    "Vapok-AdventureBackpacks-2.4.4"
+  ]
+}

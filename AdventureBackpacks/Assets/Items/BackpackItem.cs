@@ -53,7 +53,8 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     internal ConfigEntry<bool> ShowBackpackStatusEffect;
     internal ConfigEntry<string> CustomStatusEffectName;
     internal ConfigEntry<BackpackBiomes> BackpackBiome;
-    internal ConfigEntry<ConfigRegistry.ModelStyle> ModelStyle;
+    internal ConfigEntry<ModelStyle> ModelStyle;
+    internal ConfigEntry<string> TexturePack;
     
     internal ConfigSyncBase Config => _config;
     protected string EnglishSection => _englishSection;

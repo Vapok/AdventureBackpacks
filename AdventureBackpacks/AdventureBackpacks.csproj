@@ -162,6 +162,7 @@
         <Compile Include="Assets\Factories\BackpackFactory.cs" />
         <Compile Include="Assets\Factories\EffectsFactory.cs" />
         <Compile Include="Assets\Factories\FactoryBase.cs" />
+        <Compile Include="Assets\Factories\VisualPackRegistry.cs" />
         <Compile Include="Assets\Items\AssetItem.cs" />
         <Compile Include="Assets\Items\BackpackItem.cs" />
         <Compile Include="Assets\Items\BackpackItems\BackpackBlackForest.cs" />
