@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using UnityEngine;
 #if ! API
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Configuration;
@@ -477,6 +478,146 @@ return null;
 #else
         backpackInventory = null;
         return false;
+#endif
+    }
+
+    /// <summary>
+    /// Registers an AssetBundle override for a specific backpack and model style under a named Texture or Visual Pack.
+    /// Enables companion mods to explicitly provide Modern and/or Classic visual assets.
+    /// </summary>
+    /// <param name="packName">Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD").</param>
+    /// <param name="backpackId">The backpack identifier (e.g. "backpack_meadows", "backpack_black_forest").</param>
+    /// <param name="modelStyle">The model style this bundle targets (Modern or Classic).</param>
+    /// <param name="overrideBundle">The loaded AssetBundle containing replacement assets.</param>
+    /// <param name="isDefault">Optional: If true and no player configuration is set, this pack will be the default selection for this backpack and style.</param>
+    public static void RegisterVisualBundle(string packName, string backpackId, ModelStyle modelStyle, AssetBundle overrideBundle, bool isDefault = false)
+    {
+#if ! API
+        VisualPackRegistry.Register(packName, backpackId, modelStyle, overrideBundle, isDefault);
+#endif
+    }
+
+    /// <summary>
+    /// Registers an AssetBundle override for a specific progression backpack and model style under a named Texture or Visual Pack.
+    /// Enables companion mods to explicitly provide Modern and/or Classic visual assets using strongly-typed BackpackName.
+    /// </summary>
+    /// <param name="packName">Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD").</param>
+    /// <param name="backpack">The strongly typed progression backpack identifier.</param>
+    /// <param name="modelStyle">The model style this bundle targets (Modern or Classic).</param>
+    /// <param name="overrideBundle">The loaded AssetBundle containing replacement assets.</param>
+    /// <param name="isDefault">Optional: If true and no player configuration is set, this pack will be the default selection for this backpack and style.</param>
+    public static void RegisterVisualBundle(string packName, BackpackName backpack, ModelStyle modelStyle, AssetBundle overrideBundle, bool isDefault = false)
+    {
+        RegisterVisualBundle(packName, backpack.ToBackpackId(), modelStyle, overrideBundle, isDefault);
+    }
+
+    /// <summary>
+    /// Registers an AssetBundle override for a specific backpack model under a named Texture or Visual Pack.
+    /// Enables companion mods and community texture packs to offer selectable visual overhauls.
+    /// </summary>
+    /// <param name="packName">Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD").</param>
+    /// <param name="targetBundleName">The base bundle name to override (e.g. "backpack_meadows", "classic_backpack_black_forest").</param>
+    /// <param name="overrideBundle">The loaded AssetBundle containing replacement assets.</param>
+    public static void RegisterVisualBundle(string packName, string targetBundleName, AssetBundle overrideBundle)
+    {
+        RegisterVisualBundle(packName, targetBundleName, overrideBundle, false);
+    }
+
+    /// <summary>
+    /// Registers an AssetBundle override for a specific backpack model under a named Texture or Visual Pack.
+    /// Enables companion mods and community texture packs to offer selectable visual overhauls.
+    /// </summary>
+    /// <param name="packName">Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD").</param>
+    /// <param name="targetBundleName">The base bundle name to override (e.g. "backpack_meadows", "classic_backpack_black_forest").</param>
+    /// <param name="overrideBundle">The loaded AssetBundle containing replacement assets.</param>
+    /// <param name="isDefault">Optional: If true and no player configuration is set, this pack will be the default selection for this bundle.</param>
+    public static void RegisterVisualBundle(string packName, string targetBundleName, AssetBundle overrideBundle, bool isDefault)
+    {
+#if ! API
+        VisualPackRegistry.Register(packName, targetBundleName, overrideBundle, isDefault);
+#endif
+    }
+
+    /// <summary>
+    /// Checks whether an asset bundle override is registered for the specified visual pack, backpack, and model style.
+    /// </summary>
+    /// <param name="packName">Display name of the texture pack.</param>
+    /// <param name="backpackId">The backpack identifier to check.</param>
+    /// <param name="modelStyle">The model style to check (Modern or Classic).</param>
+    /// <returns>True if an override is registered, otherwise false.</returns>
+    public static bool HasVisualBundle(string packName, string backpackId, ModelStyle modelStyle)
+    {
+#if ! API
+        return VisualPackRegistry.HasOverride(packName, backpackId, modelStyle);
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Checks whether an asset bundle override is registered for the specified visual pack, progression backpack, and model style.
+    /// </summary>
+    /// <param name="packName">Display name of the texture pack.</param>
+    /// <param name="backpack">The strongly typed progression backpack identifier to check.</param>
+    /// <param name="modelStyle">The model style to check (Modern or Classic).</param>
+    /// <returns>True if an override is registered, otherwise false.</returns>
+    public static bool HasVisualBundle(string packName, BackpackName backpack, ModelStyle modelStyle)
+    {
+        return HasVisualBundle(packName, backpack.ToBackpackId(), modelStyle);
+    }
+
+    /// <summary>
+    /// Checks whether an asset bundle override is registered for the specified visual pack and bundle name.
+    /// </summary>
+    /// <param name="packName">Display name of the texture pack.</param>
+    /// <param name="targetBundleName">The base bundle name to check.</param>
+    /// <returns>True if an override is registered, otherwise false.</returns>
+    public static bool HasVisualBundle(string packName, string targetBundleName)
+    {
+#if ! API
+        return VisualPackRegistry.HasOverride(packName, targetBundleName);
+#else
+        return false;
+#endif
+    }
+
+    /// <summary>
+    /// Retrieves all registered texture pack names available for a specific backpack and model style, with 'Native' always included.
+    /// </summary>
+    /// <param name="backpackId">The backpack identifier to query.</param>
+    /// <param name="modelStyle">The model style to query (Modern or Classic).</param>
+    /// <returns>An array of available texture pack names.</returns>
+    public static string[] GetAvailableVisualPacks(string backpackId, ModelStyle modelStyle)
+    {
+#if ! API
+        return VisualPackRegistry.GetAvailablePacksFor(backpackId, modelStyle);
+#else
+        return new string[] { "Native" };
+#endif
+    }
+
+    /// <summary>
+    /// Retrieves all registered texture pack names available for a specific progression backpack and model style, with 'Native' always included.
+    /// </summary>
+    /// <param name="backpack">The strongly typed progression backpack identifier to query.</param>
+    /// <param name="modelStyle">The model style to query (Modern or Classic).</param>
+    /// <returns>An array of available texture pack names.</returns>
+    public static string[] GetAvailableVisualPacks(BackpackName backpack, ModelStyle modelStyle)
+    {
+        return GetAvailableVisualPacks(backpack.ToBackpackId(), modelStyle);
+    }
+
+    /// <summary>
+    /// Retrieves all registered texture pack names available for a specific bundle name, with 'Native' always included.
+    /// </summary>
+    /// <param name="targetBundleName">The base bundle name to query.</param>
+    /// <returns>An array of available texture pack names.</returns>
+    public static string[] GetAvailableVisualPacks(string targetBundleName)
+    {
+#if ! API
+        return VisualPackRegistry.GetAvailablePacksFor(targetBundleName);
+#else
+        return new string[] { "Native" };
 #endif
     }
 }

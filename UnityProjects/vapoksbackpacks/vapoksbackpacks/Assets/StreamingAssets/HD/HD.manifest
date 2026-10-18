@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.0.75f1
+CRC: 4130806673
+HashAppended: 0
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: hd_backpack_ashlands
+      Dependencies: {}
+    Info_1:
+      Name: hd_backpack_deepnorth
+      Dependencies: {}
+    Info_2:
+      Name: hd_backpack_swamp
+      Dependencies: {}
+    Info_3:
+      Name: hd_backpack_mistlands
+      Dependencies: {}
+    Info_4:
+      Name: hd_backpack_mountains
+      Dependencies: {}
+    Info_5:
+      Name: hd_backpack_plains
+      Dependencies: {}
+    Info_6:
+      Name: hd_backpack_black_forest
+      Dependencies: {}
+    Info_7:
+      Name: hd_backpack_meadows
+      Dependencies: {}

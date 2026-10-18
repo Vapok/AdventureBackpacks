@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace AdventureBackpacks.API.Client
 {
@@ -41,6 +42,43 @@ namespace AdventureBackpacks.API.Client
         private static MethodInfo _unsuppressNativeCraftingMethod;
         private static MethodInfo _wouldStorePickupMethod;
         private static MethodInfo _wouldStorePickupWithInventoryMethod;
+        private static MethodInfo _registerVisualBundleMethod;
+        private static MethodInfo _registerVisualBundleWithDefaultMethod;
+        private static Type _modelStyleType;
+        private static MethodInfo _registerVisualBundleStyleMethod;
+        private static MethodInfo _registerVisualBundleStyleWithDefaultMethod;
+
+        /// <summary>
+        /// Defines the visual model geometry style for a backpack.
+        /// </summary>
+        public enum ModelStyle
+        {
+            Modern = 0,
+            Classic = 1
+        }
+
+        /// <summary>
+        /// Identifies the progression backpacks in Adventure Backpacks.
+        /// </summary>
+        public enum BackpackName
+        {
+            /// <summary>Meadows tier backpack.</summary>
+            Meadows,
+            /// <summary>Black Forest tier backpack.</summary>
+            BlackForest,
+            /// <summary>Swamp tier backpack.</summary>
+            Swamp,
+            /// <summary>Mountains tier backpack.</summary>
+            Mountains,
+            /// <summary>Plains tier backpack.</summary>
+            Plains,
+            /// <summary>Mistlands tier backpack.</summary>
+            Mistlands,
+            /// <summary>Ashlands tier backpack.</summary>
+            Ashlands,
+            /// <summary>Deep North tier backpack.</summary>
+            DeepNorth
+        }
 
         public static bool IsAvailable
         {
@@ -93,6 +131,15 @@ namespace AdventureBackpacks.API.Client
                         _unsuppressNativeCraftingMethod = _apiType.GetMethod("UnsuppressNativeCrafting", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
                         _wouldStorePickupMethod = _apiType.GetMethod("WouldStorePickup", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(ItemDrop.ItemData) }, null);
                         _wouldStorePickupWithInventoryMethod = _apiType.GetMethod("WouldStorePickup", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(Player), typeof(ItemDrop.ItemData), typeof(Inventory).MakeByRefType() }, null);
+                        _registerVisualBundleMethod = _apiType.GetMethod("RegisterVisualBundle", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string), typeof(string), typeof(AssetBundle) }, null);
+                        _registerVisualBundleWithDefaultMethod = _apiType.GetMethod("RegisterVisualBundle", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string), typeof(string), typeof(AssetBundle), typeof(bool) }, null);
+
+                        _modelStyleType = assemblies[i].GetType("AdventureBackpacks.API.ModelStyle");
+                        if (_modelStyleType != null)
+                        {
+                            _registerVisualBundleStyleMethod = _apiType.GetMethod("RegisterVisualBundle", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string), typeof(string), _modelStyleType, typeof(AssetBundle) }, null);
+                            _registerVisualBundleStyleWithDefaultMethod = _apiType.GetMethod("RegisterVisualBundle", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string), typeof(string), _modelStyleType, typeof(AssetBundle), typeof(bool) }, null);
+                        }
                     }
                     break;
                 }
@@ -414,6 +461,126 @@ namespace AdventureBackpacks.API.Client
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Registers an AssetBundle replacement for a specific backpack model under a named Texture/Visual Pack.
+        /// </summary>
+        /// <param name="packName">Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD").</param>
+        /// <param name="targetBundleName">The base bundle name to override (e.g. "backpack_meadows", "classic_backpack_meadows").</param>
+        /// <param name="overrideBundle">The loaded AssetBundle containing replacement assets.</param>
+        /// <returns>True if successfully registered, false otherwise.</returns>
+        public static bool RegisterVisualBundle(string packName, string targetBundleName, AssetBundle overrideBundle)
+        {
+            return RegisterVisualBundle(packName, targetBundleName, overrideBundle, false);
+        }
+
+        public static bool RegisterVisualBundle(string packName, string targetBundleName, AssetBundle overrideBundle, bool isDefault)
+        {
+            EnsureInitialized();
+            if (!_isAvailable)
+                return false;
+
+            try
+            {
+                if (_registerVisualBundleWithDefaultMethod != null)
+                {
+                    _registerVisualBundleWithDefaultMethod.Invoke(null, new object[] { packName, targetBundleName, overrideBundle, isDefault });
+                    return true;
+                }
+
+                if (_registerVisualBundleMethod != null)
+                {
+                    _registerVisualBundleMethod.Invoke(null, new object[] { packName, targetBundleName, overrideBundle });
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Registers an AssetBundle replacement for a specific backpack and model style under a named Texture/Visual Pack.
+        /// </summary>
+        /// <param name="packName">Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD").</param>
+        /// <param name="backpackId">The backpack identifier to override (e.g. "backpack_meadows").</param>
+        /// <param name="modelStyle">The model style this override applies to (Modern or Classic).</param>
+        /// <param name="overrideBundle">The loaded AssetBundle containing replacement assets.</param>
+        /// <param name="isDefault">Optional: If true and no player configuration is set, this pack will be the default selection for this backpack and style.</param>
+        /// <returns>True if successfully registered, false otherwise.</returns>
+        public static bool RegisterVisualBundle(string packName, string backpackId, ModelStyle modelStyle, AssetBundle overrideBundle, bool isDefault = false)
+        {
+            EnsureInitialized();
+            if (!_isAvailable || _modelStyleType == null)
+                return false;
+
+            try
+            {
+                object boxedStyle = Enum.ToObject(_modelStyleType, (int)modelStyle);
+
+                if (_registerVisualBundleStyleWithDefaultMethod != null)
+                {
+                    _registerVisualBundleStyleWithDefaultMethod.Invoke(null, new object[] { packName, backpackId, boxedStyle, overrideBundle, isDefault });
+                    return true;
+                }
+
+                if (_registerVisualBundleStyleMethod != null)
+                {
+                    _registerVisualBundleStyleMethod.Invoke(null, new object[] { packName, backpackId, boxedStyle, overrideBundle });
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Registers an AssetBundle replacement for a specific progression backpack and model style under a named Texture/Visual Pack.
+        /// </summary>
+        /// <param name="packName">Display name of the texture/visual pack (e.g. "Native HD", "Willybach HD").</param>
+        /// <param name="backpack">The strongly typed progression backpack to override.</param>
+        /// <param name="modelStyle">The model style this override applies to (Modern or Classic).</param>
+        /// <param name="overrideBundle">The loaded AssetBundle containing replacement assets.</param>
+        /// <param name="isDefault">Optional: If true and no player configuration is set, this pack will be the default selection for this backpack and style.</param>
+        /// <returns>True if successfully registered, false otherwise.</returns>
+        public static bool RegisterVisualBundle(string packName, BackpackName backpack, ModelStyle modelStyle, AssetBundle overrideBundle, bool isDefault = false)
+        {
+            return RegisterVisualBundle(packName, backpack.ToBackpackId(), modelStyle, overrideBundle, isDefault);
+        }
+    }
+
+    /// <summary>
+    /// Extension methods for Adventure Backpacks client API types.
+    /// </summary>
+    public static class BackpackExtensions
+    {
+        /// <summary>
+        /// Converts the strongly typed BackpackName to its internal canonical identifier string.
+        /// </summary>
+        /// <param name="backpack">The BackpackName enum value.</param>
+        /// <returns>The internal string identifier (e.g. "backpack_meadows").</returns>
+        public static string ToBackpackId(this ABAPIClient.BackpackName backpack)
+        {
+            return backpack switch
+            {
+                ABAPIClient.BackpackName.Meadows => "backpack_meadows",
+                ABAPIClient.BackpackName.BlackForest => "backpack_black_forest",
+                ABAPIClient.BackpackName.Swamp => "backpack_swamp",
+                ABAPIClient.BackpackName.Mountains => "backpack_mountains",
+                ABAPIClient.BackpackName.Plains => "backpack_plains",
+                ABAPIClient.BackpackName.Mistlands => "backpack_mistlands",
+                ABAPIClient.BackpackName.Ashlands => "backpack_ashlands",
+                ABAPIClient.BackpackName.DeepNorth => "backpack_deepnorth",
+                _ => "backpack_meadows"
+            };
         }
     }
 }

@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ReferencesRoot Condition="'$(ReferencesRoot)' == ''">/home/vapok/Modding/References</ReferencesRoot>
+        <TargetFramework>net48</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <AssemblyName>AdventureBackpacksHD</AssemblyName>
+        <RootNamespace>AdventureBackpacks.HD</RootNamespace>
+        <Version>1.0.0</Version>
+        <DevPluginsFolder Condition="'$(DevPluginsFolder)' == ''">/home/vapok/Modding/Gale Profiles/Default/BepInEx/plugins</DevPluginsFolder>
+        <ReleaseRoot Condition="'$(ReleaseRoot)' == ''">/home/vapok/Modding/Releases</ReleaseRoot>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="BepInEx">
+            <HintPath>$(ReferencesRoot)/BepInEx/5.4.2351/BepInEx/core/BepInEx.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine">
+            <HintPath>$(ReferencesRoot)/Valheim/1.0.20/Managed/UnityEngine.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(ReferencesRoot)/Valheim/1.0.20/Managed/UnityEngine.CoreModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="UnityEngine.AssetBundleModule">
+            <HintPath>$(ReferencesRoot)/Valheim/1.0.20/Managed/UnityEngine.AssetBundleModule.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="assembly_guiutils">
+            <HintPath>$(ReferencesRoot)/Valheim/1.0.20/assembly_guiutils_publicized.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="assembly_valheim">
+            <HintPath>$(ReferencesRoot)/Valheim/1.0.20/assembly_valheim_publicized.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+        <None Update="manifest.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="README.md">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="icon.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Assets\**\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <!-- Deploy to Gale Profile -->
+    <Target Name="CopyToDev" AfterTargets="Build" Condition="Exists('$(DevPluginsFolder)')">
+        <ItemGroup>
+            <PluginAssets Include="$(MSBuildProjectDirectory)\Assets\*" />
+            <PackageDocs Include="$(MSBuildProjectDirectory)\manifest.json;$(MSBuildProjectDirectory)\README.md;$(MSBuildProjectDirectory)\icon.png" />
+        </ItemGroup>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DevPluginsFolder)\Vapok-AdventureBackpacks_HD" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(PackageDocs)" DestinationFolder="$(DevPluginsFolder)\Vapok-AdventureBackpacks_HD" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(PluginAssets)" DestinationFolder="$(DevPluginsFolder)\Vapok-AdventureBackpacks_HD\Assets" SkipUnchangedFiles="true" />
+    </Target>
+
+    <!-- Release staging target -->
+    <Target Name="Copy" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+        <ItemGroup>
+            <PluginAssets Include="$(MSBuildProjectDirectory)\Assets\*" />
+            <PackageDocs Include="$(MSBuildProjectDirectory)\manifest.json;$(MSBuildProjectDirectory)\README.md;$(MSBuildProjectDirectory)\icon.png;$(MSBuildProjectDirectory)\CHANGELOG.md;$(MSBuildProjectDirectory)\LICENSE.md" />
+        </ItemGroup>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ReleaseRoot)\AdventureBackpacks_HD-Vapok\plugins" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(PluginAssets)" DestinationFolder="$(ReleaseRoot)\AdventureBackpacks_HD-Vapok\plugins\Assets" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(PackageDocs)" DestinationFolder="$(ReleaseRoot)\AdventureBackpacks_HD-Vapok" SkipUnchangedFiles="true" />
+    </Target>
+
+</Project>

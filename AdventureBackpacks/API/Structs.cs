@@ -5,6 +5,94 @@ using UnityEngine;
 namespace AdventureBackpacks.API;
 
 /// <summary>
+/// Defines the visual model geometry style for a backpack.
+/// </summary>
+public enum ModelStyle
+{
+    /// <summary>
+    /// Modern style with detailed models and accessories.
+    /// </summary>
+    Modern = 0,
+    /// <summary>
+    /// Classic original backpack model.
+    /// </summary>
+    Classic = 1
+}
+
+/// <summary>
+/// Identifies the built-in progression backpacks in Adventure Backpacks.
+/// </summary>
+public enum BackpackName
+{
+    /// <summary>
+    /// Meadows progression backpack.
+    /// </summary>
+    Meadows = 0,
+
+    /// <summary>
+    /// Black Forest progression backpack.
+    /// </summary>
+    BlackForest = 1,
+
+    /// <summary>
+    /// Swamp progression backpack.
+    /// </summary>
+    Swamp = 2,
+
+    /// <summary>
+    /// Mountains progression backpack.
+    /// </summary>
+    Mountains = 3,
+
+    /// <summary>
+    /// Plains progression backpack.
+    /// </summary>
+    Plains = 4,
+
+    /// <summary>
+    /// Mistlands progression backpack.
+    /// </summary>
+    Mistlands = 5,
+
+    /// <summary>
+    /// Ashlands progression backpack.
+    /// </summary>
+    Ashlands = 6,
+
+    /// <summary>
+    /// Deep North progression backpack.
+    /// </summary>
+    DeepNorth = 7
+}
+
+/// <summary>
+/// Extension methods for Adventure Backpacks API enumerations.
+/// </summary>
+public static class BackpackExtensions
+{
+    /// <summary>
+    /// Returns the internal canonical backpack identifier for the specified backpack enumeration value.
+    /// </summary>
+    /// <param name="backpack">The backpack enumeration value.</param>
+    /// <returns>The string identifier (e.g. "backpack_meadows").</returns>
+    public static string ToBackpackId(this BackpackName backpack)
+    {
+        return backpack switch
+        {
+            BackpackName.Meadows => "backpack_meadows",
+            BackpackName.BlackForest => "backpack_black_forest",
+            BackpackName.Swamp => "backpack_swamp",
+            BackpackName.Mountains => "backpack_mountains",
+            BackpackName.Plains => "backpack_plains",
+            BackpackName.Mistlands => "backpack_mistlands",
+            BackpackName.Ashlands => "backpack_ashlands",
+            BackpackName.DeepNorth => "backpack_deepnorth",
+            _ => "backpack_meadows"
+        };
+    }
+}
+
+/// <summary>
 /// This is a Flags enum for determining Backpack Biomes. This is not representative of Heightmap.Biomes.
 /// This is instead a way of creating sets of Effects. Default Adventure Backpacks will utilize Biome names.
 /// Custom External Effects can pick and choose between the Custom Effect flags as well.

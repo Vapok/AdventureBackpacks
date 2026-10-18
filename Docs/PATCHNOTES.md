@@ -1,3 +1,19 @@
+# 2.4.4 - Custom Texture Packs, Visual Overhauls & Controller Fixes
+* **Custom Visual Pack System (`VisualPackRegistry.cs`, `BackpackFactory.cs`, `ConfigRegistry.cs`)**:
+  * Implemented `VisualPackRegistry` to manage external AssetBundle overrides by pack name, backpack identifier, and model style (`Modern` or `Classic`).
+  * Added `Texture Pack` string setting to `ConfigRegistry` per backpack (`Satchel`, `Rugged Backpack`, etc.), populating available options dynamically from `VisualPackRegistry.GetAvailablePacksFor(...)`.
+  * In `BackpackFactory.CreateBackpack<T>`, replaced direct bundle loading with `ResolveModelBundle(...)` to query `VisualPackRegistry.TryGetOverride(...)` before falling back to native embedded assets.
+  * Added game restart notification via `Player.m_localPlayer.Message` when changing texture pack settings.
+* **Public Visual Pack API (`ABAPI.cs`, `Structs.cs`, `Docs/ABAPI_Client.cs`)**:
+  * Added `BackpackName` enum (`Meadows`, `BlackForest`, `Swamp`, `Mountains`, `Plains`, `Mistlands`, `Ashlands`, `DeepNorth`) and `BackpackExtensions.ToBackpackId()` to eliminate string typos.
+  * Added `ABAPI.RegisterVisualBundle(...)`, `ABAPI.HasVisualBundle(...)`, and `ABAPI.GetAvailableVisualPacks(...)` overloads supporting both `BackpackName` enum and raw string identifiers.
+  * Updated zero-dependency client wrapper `Docs/ABAPI_Client.cs` and `AdventureBackpacks.HD/API/ABAPI_Client.cs` with matching delegates and overloads.
+* **Official Reference Texture Pack (`AdventureBackpacks.HD/`)**:
+  * Built `AdventureBackpacks.HD` companion plugin (`vapok.mods.adventurebackpackshd`) registering 14 2K upscaled AssetBundles under the `"Native HD"` pack name.
+  * Added release staging targets and packaging scripts for Thunderstore and Nexus Mods (Optional Files).
+* **Gamepad Right Stick Input Fix (`Vapok.Valheim.Common` 3.1020.2)**:
+  * Updated internalized `Vapok.Valheim.Common` to `3.1020.2`, replacing deprecated `ZInput.GetJoyRightStick()` with `ZInput.GetJoyRightStickX()` / `ZInput.GetJoyRightStickY()` in `SplashGamepadController.HandleRightStickScrolling`, resolving Sentry issue `ADVENTUREBACKPACKS-31`.
+
 # 2.4.3 - API Patcher Resolution & Mod Interop
 * **Internal API Patcher MethodDefinition Invariant (`APIManager/Patcher.cs`)**:
   * In `Patcher.FixupModuleReferences.VisitMethod`, added guard check `!(method is MethodDefinition)` alongside `!(method is MethodSpecification)`.

@@ -33,6 +33,8 @@ Two integration workflows are supported:
 1. **Option A: Repackable API Assembly ([`AdventureBackpacksAPI.dll`](https://github.com/Vapok/AdventureBackpacks/releases))** — Compile against the standalone API assembly and merge it using `ILRepack`.
 2. **Option B: Zero-Dependency Client Wrapper ([`Docs/ABAPI_Client.cs`](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs))** — Drop a single standalone C# file into your project with zero external DLL references.
 
+To create texture or visual overhaul companion packs, see [Creating Visual & Texture Packs Guide](CREATING_TEXTURE_PACKS.md).
+
 For complete class, struct, and method signatures, consult [AdventureBackpacksAPI.md](AdventureBackpacksAPI.md).
 
 ---

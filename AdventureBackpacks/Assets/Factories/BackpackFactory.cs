@@ -38,15 +38,15 @@ internal class BackpackFactory : AssetFactory
     }
 
 
-    private string ResolveModelBundle(string baseBundleName, string itemName, out ConfigEntry<ConfigRegistry.ModelStyle> styleEntry)
+    private string ResolveModelBundle(string baseBundleName, string itemName, out ConfigEntry<ModelStyle> styleEntry, out ConfigEntry<string> texturePackEntry)
     {
         string configSection = $"Backpack: {itemName}";
         string englishSection = BackpackItem.SafeGetTranslation("English", configSection);
         string localizedCategory = Localization.instance?.Localize(configSection) ?? configSection;
 
-        ConfigEntry<ConfigRegistry.ModelStyle> modelStyle = null;
-        ConfigSyncBase.UnsyncedConfig(englishSection, "Model Style", ConfigRegistry.ModelStyle.Modern,
-            new ConfigDescription("Select the visual model style for this backpack. Modern features reworked detailed models. Classic uses the original mod model. (Requires Game Restart)",
+        ConfigEntry<ModelStyle> modelStyle = null;
+        ConfigSyncBase.UnsyncedConfig(englishSection, "Model Style", ModelStyle.Modern,
+            new ConfigDescription("Select the visual model style for this backpack. Modern features detailed models. Classic uses the original mod model. (Requires Game Restart)",
                 null,
                 new ConfigurationManagerAttributes { Category = localizedCategory, Order = 20, DispName = "Model Style (Requires Game Restart)" }), ref modelStyle);
 
@@ -63,16 +63,48 @@ internal class BackpackFactory : AssetFactory
         }
 
         styleEntry = modelStyle;
-        return modelStyle?.Value == ConfigRegistry.ModelStyle.Classic 
-            ? $"classic_{baseBundleName}" 
-            : baseBundleName;
+        ModelStyle activeStyle = modelStyle?.Value ?? ModelStyle.Modern;
+
+        string[] availablePacks = VisualPackRegistry.GetAvailablePacksFor(baseBundleName, activeStyle);
+        string defaultPack = VisualPackRegistry.GetDefaultPackFor(baseBundleName, activeStyle);
+
+        ConfigEntry<string> texturePack = null;
+        ConfigSyncBase.UnsyncedConfig(englishSection, "Texture Pack", defaultPack,
+            new ConfigDescription("Select the active texture/visual pack for this backpack. 'Native' uses default mod assets. (Requires Game Restart)",
+                new AcceptableValueList<string>(availablePacks),
+                new ConfigurationManagerAttributes { Category = localizedCategory, Order = 19, DispName = "Texture Pack (Requires Game Restart)" }), ref texturePack);
+
+        if (texturePack != null)
+        {
+            texturePack.SettingChanged += (_, _) =>
+            {
+                AdventureBackpacks.Log?.Message($"Texture Pack changed for '{englishSection}' to '{texturePack.Value}'. A game restart is required for changes to take effect.");
+                if (Player.m_localPlayer != null)
+                {
+                    Player.m_localPlayer.Message(MessageHud.MessageType.Center, "Adventure Backpacks: Game restart required for texture pack changes to take effect.");
+                }
+            };
+        }
+
+        texturePackEntry = texturePack;
+
+        string selectedPack = texturePack?.Value ?? VisualPackRegistry.Native;
+        string resolvedBundle = VisualPackRegistry.ResolveBundle(selectedPack, baseBundleName, activeStyle);
+
+        if (!string.Equals(selectedPack, VisualPackRegistry.Native, StringComparison.OrdinalIgnoreCase))
+        {
+            AdventureBackpacks.Log?.Message($"[AdventureBackpacks] '{itemName}' using texture pack '{selectedPack}' ({resolvedBundle})");
+        }
+
+        return resolvedBundle;
     }
 
     private T CreateBackpack<T>(string baseBundleName, string prefabName, string itemName, Func<string, string, string, T> factory) where T : BackpackItem
     {
-        string bundleName = ResolveModelBundle(baseBundleName, itemName, out ConfigEntry<ConfigRegistry.ModelStyle> modelStyle);
+        string bundleName = ResolveModelBundle(baseBundleName, itemName, out ConfigEntry<ModelStyle> modelStyle, out ConfigEntry<string> texturePack);
         T backpack = factory(bundleName, prefabName, itemName);
         backpack.ModelStyle = modelStyle;
+        backpack.TexturePack = texturePack;
         return backpack;
     }
 
@@ -96,8 +128,12 @@ internal class BackpackFactory : AssetFactory
         _backpackItems.Add(CreateBackpack("backpack_mistlands", "BackpackMistlands", "$vapok_mod_item_backpack_mistlands",
             (bundle, prefab, item) => new BackpackMistlands(bundle, prefab, item)));
 
-        _backpackItems.Add(new BackpackAshlands("backpack_ashlands", "BackpackAshlands", "$vapok_mod_item_backpack_ashlands"));
-        _backpackItems.Add(new BackpackDeepNorth("backpack_deepnorth", "BackpackDeepNorth", "$vapok_mod_item_backpack_deepnorth"));
+        _backpackItems.Add(CreateBackpack("backpack_ashlands", "BackpackAshlands", "$vapok_mod_item_backpack_ashlands",
+            (bundle, prefab, item) => new BackpackAshlands(bundle, prefab, item)));
+
+        _backpackItems.Add(CreateBackpack("backpack_deepnorth", "BackpackDeepNorth", "$vapok_mod_item_backpack_deepnorth",
+            (bundle, prefab, item) => new BackpackDeepNorth(bundle, prefab, item)));
+
         _backpackItems.Add(new LegacyIronBackpack("vapokbackpacks", "CapeIronBackpack", "$vapok_mod_item_rugged_backpack"));
         _backpackItems.Add(new LegacySilverBackpack("vapokbackpacks", "CapeSilverBackpack", "$vapok_mod_item_arctic_backpack"));
 
