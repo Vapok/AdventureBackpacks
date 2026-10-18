@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "Una mochila para aventuras hecha de piel de Lox, es extremadamente resistente.",
   "vapok_mod_item_backpack_mistlands": "Mochila Magica de Explorador",
   "vapok_mod_item_backpack_mistlands_description": "Una mochila mística finamente elaborada. Completa con su propia caja de almacenamiento. Nadie está muy seguro de cómo funciona.",
+  "vapok_mod_item_backpack_ashlands": "Mochila Guardacenizas",
+  "vapok_mod_item_backpack_ashlands_description": "Refuerzos de metal de llamas y hueso calcinado alejan el calor de tu espalda. No las llamas, solo el calor.",
+  "vapok_mod_item_backpack_deepnorth": "Morral Vinculado a la Escarcha",
+  "vapok_mod_item_backpack_deepnorth_description": "Piel de alce sobre un núcleo de escarcha. Pesado, cálido, y parece saber cuándo estás a punto de caer.",
   "vapok_mod_item_rugged_backpack": "Mochila Antigua",
   "vapok_mod_item_rugged_backpack_description": "Una mochila robusta, completa con hebillas y correas de cuero fino.",
   "vapok_mod_item_arctic_backpack": "Mochila Ártica Antigua",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "Cambiar contenedor",
   "vapok_mod_drop_backpack": "Soltar mochila",
   "vapok_mod_quickdrop_backpack": "Soltar mochila rápidamente",
-  "vapok_mod_quickdrop": "Soltar rápido"
+  "vapok_mod_quickdrop": "Soltar rápido",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Sudario Espectral de Contención"
 }

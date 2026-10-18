@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "Uma mochila de aventureiros, feita com peles de lox bastante resistentes.",
   "vapok_mod_item_backpack_mistlands": "Mochila Wisp de Explorador",
   "vapok_mod_item_backpack_mistlands_description": "Uma mochila mística finamente trabalhada. Completa com sua própria Caixa de Cargas. Nínguem sabe bem como ela funciona.",
+  "vapok_mod_item_backpack_ashlands": "Mochila Guarda-Cinzas",
+  "vapok_mod_item_backpack_ashlands_description": "Costelas de metal flamejante e ossos carbonizados afastam o calor das suas costas. Não as chamas, apenas o calor.",
+  "vapok_mod_item_backpack_deepnorth": "Mochila Vinculada ao Gelo",
+  "vapok_mod_item_backpack_deepnorth_description": "Pele de alce sobre um núcleo congelado. Pesada, quente, e parece saber quando você está prestes a cair.",
   "vapok_mod_item_rugged_backpack": "Mochila Rústica Velha",
   "vapok_mod_item_rugged_backpack_description": "Uma mochila rústica, completa com fivelas e tiras de couro fino.",
   "vapok_mod_item_arctic_backpack": "Mochila do Ártico Velha",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "Alternar recipiente",
   "vapok_mod_drop_backpack": "Largar mochila",
   "vapok_mod_quickdrop_backpack": "Descarte rápido de mochila",
-  "vapok_mod_quickdrop": "Descarte rápido"
+  "vapok_mod_quickdrop": "Descarte rápido",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Manto Espectral de Armazenamento"
 }

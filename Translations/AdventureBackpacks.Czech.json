@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "Dobrodružný batoh vyrobený z extrémně odolné kůže z loxu.",
   "vapok_mod_item_backpack_mistlands": "Mystický batoh",
   "vapok_mod_item_backpack_mistlands_description": "Precizně zpracovaný mystický batoh. S vlastní krabičkou na drobnosti. Nikdo si není jistý, jak funguje.",
+  "vapok_mod_item_backpack_ashlands": "Žáruodolný batoh",
+  "vapok_mod_item_backpack_ashlands_description": "Výztuhy z ohňokovu a ohořelé kosti chrání záda před žárem. Ne před plameny, jen před žárem.",
+  "vapok_mod_item_backpack_deepnorth": "Mrazem svázaná brašna",
+  "vapok_mod_item_backpack_deepnorth_description": "Losí kůže přes mrazivé jádro. Těžká, teplá a zdá se, že ví, kdy se chystáte padnout.",
   "vapok_mod_item_rugged_backpack": "Kožený batoh",
   "vapok_mod_item_rugged_backpack_description": "Kožený batoh s přezkami a jemnými koženými řemínky.",
   "vapok_mod_item_arctic_backpack": "Zimní batoh",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "Přepnout kontejner",
   "vapok_mod_drop_backpack": "Upustit batoh",
   "vapok_mod_quickdrop_backpack": "Rychle upustit batoh",
-  "vapok_mod_quickdrop": "Rychlé upuštění"
+  "vapok_mod_quickdrop": "Rychlé upuštění",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Přízračný rubáš uchování"
 }

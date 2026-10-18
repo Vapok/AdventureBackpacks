@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "Вечный рюкзак для приключений из чрезвычайно прочной шкуры быкоящера.",
   "vapok_mod_item_backpack_mistlands": "Небывалый рюкзак исследователя",
   "vapok_mod_item_backpack_mistlands_description": "Искусно изготовленный загадочный рюкзак. С сундуком. Никто не знает, как именно он работает.",
+  "vapok_mod_item_backpack_ashlands": "Пепельный ранец",
+  "vapok_mod_item_backpack_ashlands_description": "Ребра из огнеметалла и обугленная кость защищают спину от жара. Не от пламени, только от жара.",
+  "vapok_mod_item_backpack_deepnorth": "Хладнокованый ранец",
+  "vapok_mod_item_backpack_deepnorth_description": "Шкура лося поверх морозного ядра. Тяжелый, теплый, и кажется, будто он чувствует, когда вы на грани гибели.",
   "vapok_mod_item_rugged_backpack": "Древний прочный рюкзак",
   "vapok_mod_item_rugged_backpack_description": "Древний прочный рюкзак с пряжками и тонкими кожаными ремнями.",
   "vapok_mod_item_arctic_backpack": "Древний арктический рюкзак",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "Сменить контейнер",
   "vapok_mod_drop_backpack": "Сбросить рюкзак",
   "vapok_mod_quickdrop_backpack": "Быстрый сброс рюкзака",
-  "vapok_mod_quickdrop": "Быстрый сброс"
+  "vapok_mod_quickdrop": "Быстрый сброс",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Призрачный саван вместимости"
 }

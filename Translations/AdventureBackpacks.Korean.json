@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "록스가죽보다 더 튼튼한 가죽은 없습니다. 이시대의 모험가에게 최고의 선물입니다.",
   "vapok_mod_item_backpack_mistlands": "위습 탐험가의 배낭",
   "vapok_mod_item_backpack_mistlands_description": "신들이 감탄합니다! 매우 정교하게 만들어졌습니다. 자체 보관함과 함께 완성됩니다. 어떻게 작동하는지 아무도 모릅니다.",
+  "vapok_mod_item_backpack_ashlands": "재수호자 배낭",
+  "vapok_mod_item_backpack_ashlands_description": "불꽃금속 갈비뼈와 그을린 뼈가 등의 열기를 막아줍니다. 불꽃이 아니라 열기만 막아줍니다.",
+  "vapok_mod_item_backpack_deepnorth": "서리결속 배낭",
+  "vapok_mod_item_backpack_deepnorth_description": "서리 핵을 감싼 말코손바닥사슴 가죽. 무겁고 따뜻하며, 쓰러지기 직전을 감지하는 듯합니다.",
   "vapok_mod_item_rugged_backpack": "오래되고 투박한 배낭",
   "vapok_mod_item_rugged_backpack_description": "버클형 타입으로 고급가죽이 사용되었습니다. 튼튼해 보입니다.",
   "vapok_mod_item_arctic_backpack": "북극 트레킹 배낭",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "보관함 전환",
   "vapok_mod_drop_backpack": "배낭 버리기",
   "vapok_mod_quickdrop_backpack": "배낭 빠른 버리기",
-  "vapok_mod_quickdrop": "빠른 버리기"
+  "vapok_mod_quickdrop": "빠른 버리기",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "수납의 유령 수의"
 }

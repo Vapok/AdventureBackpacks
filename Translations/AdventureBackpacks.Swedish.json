@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "En äventyrarryggsäck gjord av extremt tåligt ödleoxhud.",
   "vapok_mod_item_backpack_mistlands": "Upptäckarens Älvsäck",
   "vapok_mod_item_backpack_mistlands_description": "En mystisk ryggsäck av fint hantverk. Komplett med sin egen Förvaringslåda. Ingen är helt säker på hur den fungerar.",
+  "vapok_mod_item_backpack_ashlands": "Askryggsäck",
+  "vapok_mod_item_backpack_ashlands_description": "Revben av flammametall och förkolnat ben håller värmen borta från din rygg. Inte flammorna, bara värmen.",
+  "vapok_mod_item_backpack_deepnorth": "Frostbunden ränsel",
+  "vapok_mod_item_backpack_deepnorth_description": "Älghud över en frostkärna. Tung, varm och verkar känna på sig när du är nära att falla.",
   "vapok_mod_item_rugged_backpack": "Gammal Robust Ryggsäck",
   "vapok_mod_item_rugged_backpack_description": "En robust ryggsäck, komplett med spännen och fina läderremmar.",
   "vapok_mod_item_arctic_backpack": "Gammal Arktisk Ryggsäck",
@@ -36,5 +40,6 @@
   "vapok_mod_switch_container": "Växla behållare",
   "vapok_mod_drop_backpack": "Släpp ryggsäck",
   "vapok_mod_quickdrop_backpack": "Snabbkasta ryggsäck",
-  "vapok_mod_quickdrop": "Snabbkasta"
+  "vapok_mod_quickdrop": "Snabbkasta",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Spektral förvaringsskrud"
 }

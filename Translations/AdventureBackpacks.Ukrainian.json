@@ -11,6 +11,10 @@
   "vapok_mod_item_backpack_plains_description": "Сумка для авантюристів, виготовлена ​​з надзвичайно міцної шкіри локса.",
   "vapok_mod_item_backpack_mistlands": "Рюкзак дослідника",
   "vapok_mod_item_backpack_mistlands_description": "Містичний рюкзак тонкої роботи. Розроблено з власною бездонною кишенею. Ніхто насправді не знає, як це працює.",
+  "vapok_mod_item_backpack_ashlands": "Попелозахисний наплічник",
+  "vapok_mod_item_backpack_ashlands_description": "Ребра з вогнеметалу та обвуглені кістки захищають спину від жару. Не від полум'я, лише від жару.",
+  "vapok_mod_item_backpack_deepnorth": "Морозоборчий ранець",
+  "vapok_mod_item_backpack_deepnorth_description": "Лосина шкура поверх морозного ядра. Важкий, теплий, і здається, що він знає, коли ви готові впасти.",
   "vapok_mod_item_rugged_backpack": "Стародавній міцний рюкзак",
   "vapok_mod_item_rugged_backpack_description": "Стародавній міцний рюкзак, посилений пряжками і тонкими шкіряними ремінцями.",
   "vapok_mod_item_arctic_backpack": "Стародавній арктичний рюкзак",
@@ -37,5 +41,6 @@
   "vapok_mod_switch_container": "Змінити контейнер",
   "vapok_mod_drop_backpack": "Скинути рюкзак",
   "vapok_mod_quickdrop_backpack": "Швидке скидання рюкзака",
-  "vapok_mod_quickdrop": "Швидке скидання"
+  "vapok_mod_quickdrop": "Швидке скидання",
+  "item_friendlyskeletonwand_spectralshroud_backpack": "Примарний саван місткості"
 }
