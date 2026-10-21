@@ -116,7 +116,7 @@ internal abstract class BackpackItem : AssetItem, IBackpackItem
     {
         try
         {
-            return Localizer.GetTranslation(language, text);
+            return Localizer.GetTranslation(language, text) ?? text;
         }
         catch (System.Exception ex)
         {

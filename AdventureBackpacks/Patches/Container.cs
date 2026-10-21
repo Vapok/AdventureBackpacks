@@ -211,7 +211,7 @@ public static class ContainerPatches
     {
         static bool Prefix(Container __instance, ref bool __result)
         {
-            if (__instance.IsBackpackProxy())
+            if (__instance != null && __instance.IsBackpackProxy())
             {
                 __result = true;
                 return false;
@@ -225,7 +225,7 @@ public static class ContainerPatches
     {
         static bool Prefix(Container __instance, ref bool __result)
         {
-            if (__instance.IsBackpackProxy())
+            if (__instance != null && __instance.IsBackpackProxy())
             {
                 __result = false;
                 return false;
@@ -253,7 +253,7 @@ public static class ContainerPatches
     {
         static bool Prefix(Container __instance, ref bool __result)
         {
-            if (__instance.IsBackpackProxy())
+            if (__instance != null && __instance.IsBackpackProxy())
             {
                 __result = true;
                 return false;
@@ -265,11 +265,14 @@ public static class ContainerPatches
     [HarmonyPatch(typeof(Container), nameof(Container.StackAll))]
     static class ContainerStackAllPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
         static bool Prefix(Container __instance)
         {
-            if (__instance.IsBackpackProxy())
+            if (__instance != null && __instance.IsBackpackProxy())
             {
-                if (Player.m_localPlayer != null && __instance.GetInventory() != null)
+                if (Player.m_localPlayer != null && Player.m_localPlayer.GetInventory() != null && __instance.GetInventory() != null)
                 {
                     __instance.GetInventory().StackAll(Player.m_localPlayer.GetInventory());
                 }

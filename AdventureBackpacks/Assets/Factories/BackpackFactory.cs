@@ -16,10 +16,50 @@ namespace AdventureBackpacks.Assets.Factories;
 internal class BackpackFactory : AssetFactory
 {
     private static HashSet<BackpackItem> _backpackItems = new();
+    private static readonly HashSet<string> _backpackPrefabNames = new();
+    private static readonly HashSet<GameObject> _backpackPrefabObjects = new();
     private static bool _initialized;
     private static List<ABAPI.BackpackDefinition> _externalBackpacks = new();
     
     internal static IEnumerable<BackpackItem> BackpackItems => _backpackItems;
+
+    public static bool IsBackpackPrefab(GameObject prefab)
+    {
+        if (prefab == null)
+            return false;
+
+        if (_backpackPrefabObjects.Contains(prefab))
+            return true;
+
+        EnsurePrefabNamesLoaded();
+
+        string prefabName = prefab.name;
+        if (_backpackPrefabNames.Contains(prefabName))
+        {
+            _backpackPrefabObjects.Add(prefab);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void EnsurePrefabNamesLoaded()
+    {
+        if (_backpackPrefabNames.Count == 0 && _backpackItems.Count > 0)
+        {
+            foreach (BackpackItem item in _backpackItems)
+            {
+                if (!string.IsNullOrEmpty(item.PrefabName))
+                {
+                    _backpackPrefabNames.Add(item.PrefabName);
+                }
+                if (item.Item != null && item.Item.Prefab != null)
+                {
+                    _backpackPrefabObjects.Add(item.Item.Prefab);
+                }
+            }
+        }
+    }
     
 
     internal BackpackFactory(ILogIt logger, ConfigSyncBase configSync) : base(logger, configSync)
@@ -41,8 +81,12 @@ internal class BackpackFactory : AssetFactory
     private string ResolveModelBundle(string baseBundleName, string itemName, out ConfigEntry<ModelStyle> styleEntry, out ConfigEntry<string> texturePackEntry)
     {
         string configSection = $"Backpack: {itemName}";
-        string englishSection = BackpackItem.SafeGetTranslation("English", configSection);
-        string localizedCategory = Localization.instance?.Localize(configSection) ?? configSection;
+        string englishSection = BackpackItem.SafeGetTranslation("English", configSection) ?? configSection;
+        string localizedCategory = Localization.instance != null ? Localization.instance.Localize(configSection) : configSection;
+        if (string.IsNullOrEmpty(localizedCategory))
+        {
+            localizedCategory = configSection;
+        }
 
         ConfigEntry<ModelStyle> modelStyle = null;
         ConfigSyncBase.UnsyncedConfig(englishSection, "Model Style", ModelStyle.Modern,

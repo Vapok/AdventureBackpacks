@@ -1,4 +1,3 @@
-using System.Linq;
 using AdventureBackpacks.Assets;
 using AdventureBackpacks.Assets.Factories;
 using AdventureBackpacks.Components;
@@ -12,10 +11,10 @@ public static class ItemDataExtensions
         if (item == null)
             return false;
 
-        if (item.m_shared?.m_name != null && Backpacks.BackpackTypes != null && Backpacks.BackpackTypes.Contains(item.m_shared.m_name))
+        if (item.m_shared != null && item.m_shared.m_name != null && Backpacks.IsBackpackType(item.m_shared.m_name))
             return true;
 
-        if (item.m_dropPrefab != null && BackpackFactory.BackpackItems != null && BackpackFactory.BackpackItems.Any(x => x.PrefabName.Equals(item.m_dropPrefab.name)))
+        if (item.m_dropPrefab != null && BackpackFactory.IsBackpackPrefab(item.m_dropPrefab))
             return true;
 
         if (item.m_customData != null && (item.m_customData.ContainsKey("AdventureBackpacks#AdventureBackpacks.Components.BackpackComponent") || item.m_customData.ContainsKey(BackpackComponent.OldPluginCustomData)))

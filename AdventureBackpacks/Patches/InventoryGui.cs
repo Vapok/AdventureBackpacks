@@ -208,7 +208,7 @@ internal static class InventoryGuiPatches
         if (player == null || instance == null)
             return;
 
-        if (ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
+        if (ConfigRegistry.OpenWithInventory != null && ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
         {
             _showBackpack = true;
         }
@@ -237,7 +237,8 @@ internal static class InventoryGuiPatches
                     instance.CloseContainer();
                     BackpackIsOpen = false;
                     
-                    if (ConfigRegistry.CloseInventory.Value && !ConfigRegistry.OpenWithHoverInteract.Value)
+                    if (ConfigRegistry.CloseInventory != null && ConfigRegistry.CloseInventory.Value &&
+                        (ConfigRegistry.OpenWithHoverInteract == null || !ConfigRegistry.OpenWithHoverInteract.Value))
                         instance.Hide();
                 }
                 else
@@ -648,7 +649,7 @@ internal static class InventoryGuiPatches
             if (CraftFromBackpack.DisplayTotalIngredientCount != null && !CraftFromBackpack.DisplayTotalIngredientCount.Value)
                 return;
 
-            if (!CraftFromBackpack.CanCraftFromBackpack(player, out _))
+            if (!CraftingContext.CanCraftFromBackpack)
                 return;
 
             Transform resAmountObj = elementRoot.Find("res_amount");
@@ -661,17 +662,11 @@ internal static class InventoryGuiPatches
 
             string currentText = textComponent.text.Trim();
 
-            string pattern = CraftFromBackpack.IngredientCountMatchPattern?.Value;
-            if (!string.IsNullOrEmpty(pattern))
+            Regex patternRegex = CraftFromBackpack.IngredientRegex;
+            if (patternRegex != null)
             {
-                try
-                {
-                    if (Regex.IsMatch(currentText, pattern))
-                        return;
-                }
-                catch (ArgumentException)
-                {
-                }
+                if (patternRegex.IsMatch(currentText))
+                    return;
             }
 
             if (!int.TryParse(currentText, out int requiredAmount))
@@ -811,6 +806,35 @@ internal static class InventoryGuiPatches
         [HarmonyPrepare]
         private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
 
+        [HarmonyPrefix]
+        private static void Prefix(InventoryGui __instance, ref Container container, ref int activeGroup)
+        {
+            if (container == null && activeGroup == 3)
+            {
+                if (ConfigRegistry.OpenWithCraftingStation == null || !ConfigRegistry.OpenWithCraftingStation.Value || (ConfigRegistry.OpenWithHoverInteract != null && ConfigRegistry.OpenWithHoverInteract.Value))
+                    return;
+
+                Player localPlayer = Player.m_localPlayer;
+                if (localPlayer == null || localPlayer.GetCurrentCraftingStation() == null)
+                    return;
+
+                if (BackpackIsOpen || !localPlayer.CanOpenBackpack())
+                    return;
+
+                BackpackComponent backpack = localPlayer.GetEquippedBackpack();
+                if (backpack == null)
+                    return;
+
+                Container backpackContainer = localPlayer.GetBackpackContainerProxy();
+                if (backpackContainer == null)
+                    return;
+
+                backpack.UpdateContainerSizing(ref backpackContainer);
+                BackpackIsOpen = true;
+                container = backpackContainer;
+            }
+        }
+
         [HarmonyPostfix]
         private static void Postfix(InventoryGui __instance, Container container, int activeGroup)
         {
@@ -823,7 +847,7 @@ internal static class InventoryGuiPatches
 
             if (container != null && !container.IsBackpackProxy())
             {
-                if (ConfigRegistry.EnableContainerTabs.Value && localPlayer.CanOpenBackpack())
+                if (ConfigRegistry.EnableContainerTabs != null && ConfigRegistry.EnableContainerTabs.Value && localPlayer.CanOpenBackpack())
                 {
                     ContainerTabs.InitializeWithContainer(container, __instance, localPlayer);
                 }
@@ -845,7 +869,7 @@ internal static class InventoryGuiPatches
 
             if (container == null && activeGroup == 3)
             {
-                if (!ConfigRegistry.OpenWithCraftingStation.Value || ConfigRegistry.OpenWithHoverInteract.Value)
+                if (ConfigRegistry.OpenWithCraftingStation == null || !ConfigRegistry.OpenWithCraftingStation.Value || (ConfigRegistry.OpenWithHoverInteract != null && ConfigRegistry.OpenWithHoverInteract.Value))
                     return;
 
                 if (localPlayer.GetCurrentCraftingStation() == null)

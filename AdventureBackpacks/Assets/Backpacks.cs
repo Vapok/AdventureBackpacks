@@ -23,13 +23,19 @@ namespace AdventureBackpacks.Assets
 
         private static ILogIt _log = AdventureBackpacks.Log;
         private static List<string> _backpackTypes = new();
-        
+        private static HashSet<string> _backpackTypesSet = new();
         
         public static List<string> BackpackTypes => _backpackTypes;
 
         public static void LoadBackpackTypes(List<string> backpackTypes)
         {
-            _backpackTypes = backpackTypes;
+            _backpackTypes = backpackTypes ?? new List<string>();
+            _backpackTypesSet = new HashSet<string>(_backpackTypes);
+        }
+
+        public static bool IsBackpackType(string name)
+        {
+            return !string.IsNullOrEmpty(name) && _backpackTypesSet.Contains(name);
         }
 
         internal static bool TryGetBackpackItem(this ItemDrop.ItemData itemData, out BackpackItem backpack)
