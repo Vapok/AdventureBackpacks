@@ -1,10 +1,16 @@
-# 2.4.5 - Dynamic Portal Restrictions & Inter-Mod Compatibility
-* **Dynamic Portal Restrictions**: Backpacks now dynamically update their teleportability status based on their contents. Carrying untraversable items (such as metals and ores) inside a backpack now marks the backpack as non-teleportable.
-* **Third-Party Portal Mod Compatibility**: Fully respects custom teleportation rules from third-party mods (such as PortalRules, ProperPortals, and BossGatedPortals). If an installed mod allows specific metals through portals, backpacks carrying those items will be allowed through as well.
-* **Visual Portal Ban Indicator**: Carrying restricted items inside a backpack now displays the native red portal restriction icon over the backpack slot in your inventory.
+# 2.4.6 - Crafting Performance & UI Optimization
+* **Crafting Station Performance**: Fixed a severe stutter when opening crafting stations with a backpack equipped. Material requirement checks are now hundreds of times faster and no longer cause frame hitching, especially in bases with many nearby storage containers.
+* **Streamlined Station Opening**: Opening a crafting station with a backpack equipped now sets up the crafting panel and backpack container in a single pass instead of reloading the menu twice.
+* **Stability Fixes**: Fixed a crash when unbinding the quick-drop hotkey, fixed an error on dedicated servers when stacking items, and added safeguards for status effect loading and custom translations.
+* **Dependencies**: Updated internal dependencies for stability.
 
 <details>
 <summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.4.5 - Dynamic Portal Restrictions & Inter-Mod Compatibility
+* **Dynamic Portal Restrictions**: Backpacks now dynamically update their teleportability status based on their contents. Carrying untraversable items (such as metals and ores) inside a backpack now marks the backpack as non-teleportable.
+* **Third-Party Portal Mod Compatibility**: Fully respects custom teleportation rules from third-party mods (such as PortalRules, ProperPortals, and BossGatedPortals). If an installed mod allows specific metals through portals, backpacks carrying those items will be allowed through as well.
+* **Visual Portal Ban Indicator**: Carrying restricted items inside a backpack now displays the native red portal restriction icon over the backpack slot in your inventory.
 
 ### 2.4.4 - Custom Texture Packs, Visual Overhauls & Controller Fixes
 * **Custom Texture Pack Support**: Added built-in support for selectable texture packs! Players can now choose between Native textures and any installed companion texture packs (such as the new official **Adventure Backpacks HD** pack) under each backpack's settings.

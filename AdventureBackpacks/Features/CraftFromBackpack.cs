@@ -62,6 +62,31 @@ public static class CraftFromBackpack
             new ConfigDescription("Regex pattern used to detect if another mod has already formatted the requirement count label (e.g. '123/50' or '50(123)'). If matched, AdventureBackpacks will not overwrite it.",
                 null,
                 new ConfigurationManagerAttributes { Order = 1 }), ref IngredientCountMatchPattern);
+
+        if (IngredientCountMatchPattern != null)
+        {
+            IngredientCountMatchPattern.SettingChanged += (_, _) => _cachedIngredientRegex = null;
+        }
+    }
+
+    private static System.Text.RegularExpressions.Regex _cachedIngredientRegex;
+    public static System.Text.RegularExpressions.Regex IngredientRegex
+    {
+        get
+        {
+            if (_cachedIngredientRegex == null && !string.IsNullOrEmpty(IngredientCountMatchPattern?.Value))
+            {
+                try
+                {
+                    _cachedIngredientRegex = new System.Text.RegularExpressions.Regex(IngredientCountMatchPattern.Value, System.Text.RegularExpressions.RegexOptions.Compiled);
+                }
+                catch (System.ArgumentException)
+                {
+                    _cachedIngredientRegex = null;
+                }
+            }
+            return _cachedIngredientRegex;
+        }
     }
 
     public static bool CanCraftFromBackpack(Player player, out Inventory backpackInventory)

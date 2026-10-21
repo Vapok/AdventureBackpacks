@@ -450,14 +450,14 @@ public static class InventoryPatches
             if (__instance == null || !CraftingContext.IsActive || Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null || __instance != Player.m_localPlayer.GetInventory())
                 return;
 
-            List<ItemDrop.ItemData> equipped = __instance.GetEquippedItems();
-            if (equipped != null)
+            List<ItemDrop.ItemData> allItems = __instance.GetAllItems();
+            if (allItems != null)
             {
                 int equippedCount = 0;
-                for (int i = 0; i < equipped.Count; i++)
+                for (int i = 0; i < allItems.Count; i++)
                 {
-                    ItemDrop.ItemData eq = equipped[i];
-                    if (eq != null && eq.m_shared != null && string.Equals(eq.m_shared.m_name, name) && (quality <= 0 || eq.m_quality == quality))
+                    ItemDrop.ItemData eq = allItems[i];
+                    if (eq != null && eq.m_equipped && eq.m_shared != null && string.Equals(eq.m_shared.m_name, name) && (quality <= 0 || eq.m_quality == quality))
                     {
                         equippedCount += eq.m_stack;
                     }
@@ -468,9 +468,9 @@ public static class InventoryPatches
                 }
             }
 
-            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory bpInventory))
+            if (CraftingContext.CanCraftFromBackpack && CraftingContext.ActiveBackpackInventory != null)
             {
-                int bpCount = quality > 0 ? bpInventory.CountItems(name, quality) : bpInventory.CountItems(name);
+                int bpCount = quality > 0 ? CraftingContext.ActiveBackpackInventory.CountItems(name, quality) : CraftingContext.ActiveBackpackInventory.CountItems(name);
                 if (CraftFromBackpack.LeaveOneItemInBackpack != null && CraftFromBackpack.LeaveOneItemInBackpack.Value && bpCount > 0)
                 {
                     bpCount = Mathf.Max(0, bpCount - 1);
@@ -489,12 +489,12 @@ public static class InventoryPatches
 
         static void Postfix(Inventory __instance, string name, ref bool __result)
         {
-            if (__result || !CraftingContext.IsActive || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+            if (__result || !CraftingContext.IsActive || Player.m_localPlayer == null || Player.m_localPlayer.GetInventory() == null || __instance != Player.m_localPlayer.GetInventory())
                 return;
 
-            if (CraftFromBackpack.CanCraftFromBackpack(Player.m_localPlayer, out Inventory bpInventory))
+            if (CraftingContext.CanCraftFromBackpack && CraftingContext.ActiveBackpackInventory != null)
             {
-                int bpCount = bpInventory.CountItems(name);
+                int bpCount = CraftingContext.ActiveBackpackInventory.CountItems(name);
                 if (CraftFromBackpack.LeaveOneItemInBackpack != null && CraftFromBackpack.LeaveOneItemInBackpack.Value)
                 {
                     if (bpCount > 1)

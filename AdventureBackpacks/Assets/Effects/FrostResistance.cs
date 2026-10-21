@@ -14,12 +14,12 @@ public class FrostResistance : EffectsBase
     }
     private void LoadExternalStatusEffect()
     {
-        if (_externalStatusEffect == null)
+        if (_externalStatusEffect == null && ObjectDB.instance != null)
         {
-            var freezing = ObjectDB.instance.GetStatusEffect("Freezing".GetStableHashCode());
-            var se = new CustomSE(Enums.StatusEffects.Stats, "SE_vapok_ab_frost_resistance");
+            StatusEffect freezing = ObjectDB.instance.GetStatusEffect("Freezing".GetStableHashCode());
+            CustomSE se = new(Enums.StatusEffects.Stats, "SE_vapok_ab_frost_resistance");
             se.Effect.m_name = "$vapok_mod_se_frost_resistance";
-            se.Effect.m_icon = freezing.m_icon;
+            se.Effect.m_icon = freezing != null ? freezing.m_icon : null;
             ((SE_Stats)se.Effect).m_mods = new List<HitData.DamageModPair> { EffectMod };
             _externalStatusEffect = se.Effect;
             SetStatusEffect(_externalStatusEffect);

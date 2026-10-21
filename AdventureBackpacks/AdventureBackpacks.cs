@@ -39,7 +39,7 @@ namespace AdventureBackpacks
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.4.5";
+        private const string _version = "2.4.6";
 
         //Interface Properties
         public string PluginId => _pluginId;
@@ -153,9 +153,10 @@ namespace AdventureBackpacks
                     Backpacks.PerformYardSale(Player.m_localPlayer, backpack.Item);
             }
 
-            if ((ZInput.GetButton("Forward") || ZInput.GetButton("Backward") || ZInput.GetButton("Left") ||
-                 ZInput.GetButton("Right"))
-                && ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey) && ConfigRegistry.OutwardMode.Value)
+            if (ConfigRegistry.HotKeyDrop != null && ConfigRegistry.HotKeyDrop.Value.MainKey != KeyCode.None &&
+                ConfigRegistry.OutwardMode != null && ConfigRegistry.OutwardMode.Value &&
+                (ZInput.GetButton("Forward") || ZInput.GetButton("Backward") || ZInput.GetButton("Left") || ZInput.GetButton("Right")) &&
+                ZInput.GetKeyDown(ConfigRegistry.HotKeyDrop.Value.MainKey))
             {
                 Player.m_localPlayer.QuickDropBackpack();
             }

@@ -17,12 +17,13 @@ public static class PlayerExtensions
         if (player.m_shoulderItem != null && player.m_shoulderItem.IsBackpack())
             return true;
 
-        List<ItemDrop.ItemData> equippedItems = player.GetInventory().GetEquippedItems();
-        if (equippedItems != null)
+        List<ItemDrop.ItemData> allItems = player.GetInventory().GetAllItems();
+        if (allItems != null)
         {
-            foreach (ItemDrop.ItemData item in equippedItems)
+            for (int i = 0; i < allItems.Count; i++)
             {
-                if (item != null && item.IsBackpack())
+                ItemDrop.ItemData item = allItems[i];
+                if (item != null && item.m_equipped && item.IsBackpack())
                     return true;
             }
         }
@@ -38,12 +39,13 @@ public static class PlayerExtensions
         if (player.m_shoulderItem != null && player.m_shoulderItem.IsBackpack() && player.m_shoulderItem.Equals(itemData))
             return true;
 
-        List<ItemDrop.ItemData> equippedItems = player.GetInventory().GetEquippedItems();
-        if (equippedItems != null)
+        List<ItemDrop.ItemData> allItems = player.GetInventory().GetAllItems();
+        if (allItems != null)
         {
-            foreach (ItemDrop.ItemData item in equippedItems)
+            for (int i = 0; i < allItems.Count; i++)
             {
-                if (item != null && item.IsBackpack() && item.Equals(itemData))
+                ItemDrop.ItemData item = allItems[i];
+                if (item != null && item.m_equipped && item.IsBackpack() && item.Equals(itemData))
                     return true;
             }
         }
@@ -61,12 +63,13 @@ public static class PlayerExtensions
             return player.m_shoulderItem.Data().GetOrCreate<BackpackComponent>();
         }
 
-        List<ItemDrop.ItemData> equippedItems = player.GetInventory().GetEquippedItems();
-        if (equippedItems != null)
+        List<ItemDrop.ItemData> allItems = player.GetInventory().GetAllItems();
+        if (allItems != null)
         {
-            foreach (ItemDrop.ItemData item in equippedItems)
+            for (int i = 0; i < allItems.Count; i++)
             {
-                if (item != null && item.IsBackpack())
+                ItemDrop.ItemData item = allItems[i];
+                if (item != null && item.m_equipped && item.IsBackpack())
                 {
                     return item.Data().GetOrCreate<BackpackComponent>();
                 }
