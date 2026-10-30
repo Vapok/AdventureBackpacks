@@ -290,7 +290,7 @@ public static class ContainerTabs
         if (gui.m_containerGrid != null)
         {
             gui.m_containerGrid.ResetView();
-            gui.m_containerGrid.UpdateInventory(bpInventory, null, gui.m_dragItem);
+            gui.m_containerGrid.UpdateInventory(bpInventory, player, gui.m_dragItem);
         }
         if (gui.m_containerName != null)
         {
@@ -298,7 +298,7 @@ public static class ContainerTabs
             gui.m_containerName.text = Localization.instance != null ? Localization.instance.Localize(bpName) : bpName;
         }
 
-        if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
+        if (ZInput.instance != null && ZInput.IsGamepadActive() && gui.m_containerGrid != null)
         {
             gui.m_containerGrid.SetGamepadSelection(new Vector2i(0, 0));
         }
@@ -335,7 +335,7 @@ public static class ContainerTabs
         if (gui.m_containerGrid != null && chestInventory != null)
         {
             gui.m_containerGrid.ResetView();
-            gui.m_containerGrid.UpdateInventory(chestInventory, null, gui.m_dragItem);
+            gui.m_containerGrid.UpdateInventory(chestInventory, player, gui.m_dragItem);
         }
         if (gui.m_containerName != null && chestInventory != null)
         {
@@ -343,7 +343,7 @@ public static class ContainerTabs
             gui.m_containerName.text = Localization.instance != null ? Localization.instance.Localize(chestName) : chestName;
         }
 
-        if (ZInput.IsGamepadActive() && gui.m_containerGrid != null)
+        if (ZInput.instance != null && ZInput.IsGamepadActive() && gui.m_containerGrid != null)
         {
             gui.m_containerGrid.SetGamepadSelection(new Vector2i(0, 0));
         }
@@ -445,7 +445,7 @@ public static class ContainerTabs
 
     public static void CheckGamepadInput(Player player)
     {
-        if (player == null || !ConfigRegistry.EnableContainerTabs.Value || !HasActiveExternalContainer)
+        if (player == null || ConfigRegistry.EnableContainerTabs == null || !ConfigRegistry.EnableContainerTabs.Value || !HasActiveExternalContainer || ZInput.instance == null)
             return;
 
         InventoryGui gui = InventoryGui.instance;
@@ -480,7 +480,7 @@ public static class ContainerTabs
 
     public static void Update(InventoryGui gui, Player player)
     {
-        if (gui == null || player == null || !ConfigRegistry.EnableContainerTabs.Value)
+        if (gui == null || player == null || ConfigRegistry.EnableContainerTabs == null || !ConfigRegistry.EnableContainerTabs.Value)
             return;
 
         if (_cachedExternalContainer == null || !_cachedExternalContainer)
@@ -501,6 +501,9 @@ public static class ContainerTabs
 
         if (_isViewingBackpack)
         {
+            if (_cachedExternalContainer.transform == null || player.transform == null)
+                return;
+
             float distance = Vector3.Distance(_cachedExternalContainer.transform.position, player.transform.position);
             if (distance > gui.m_autoCloseDistance)
             {
@@ -516,6 +519,9 @@ public static class ContainerTabs
             return;
 
         if (gui.m_dragItem != null || gui.m_dragGo != null)
+            return;
+
+        if (ZInput.instance == null)
             return;
 
         if (ZInput.GetButton("JoyLTrigger") || ZInput.GetButton("JoyAltKeys") || ZInput.GetButton("JoyRTrigger") ||

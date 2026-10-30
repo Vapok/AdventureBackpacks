@@ -275,8 +275,8 @@ namespace AdventureBackpacks.Components
             }
             catch (Exception ex)
             {
-                var itemName = Item?.m_shared?.m_name ?? "UnknownBackpack";
-                _log.Error($" - {itemName} Backpack info is corrupt!\n{ex}");
+                string itemName = Item?.m_shared?.m_name ?? "UnknownBackpack";
+                _log.Warning($" - {itemName} Backpack info is corrupt!\n{ex}");
             }
         }
 

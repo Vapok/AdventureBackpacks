@@ -205,7 +205,7 @@ internal static class InventoryGuiPatches
     
     public static void ShowBackpack(Player player, InventoryGui instance)
     {
-        if (player == null || instance == null)
+        if (player == null || instance == null || PlayerExtensions.IsDedicatedOrHeadless())
             return;
 
         if (ConfigRegistry.OpenWithInventory != null && ConfigRegistry.OpenWithInventory.Value && !BackpackIsOpen && player.CanOpenBackpack())
@@ -228,6 +228,9 @@ internal static class InventoryGuiPatches
     
     public static void HideBackpack(InventoryGui instance)
     {
+        if (PlayerExtensions.IsDedicatedOrHeadless())
+            return;
+
         try
         {
             if (BackpackIsOpen)
@@ -615,7 +618,7 @@ internal static class InventoryGuiPatches
             Player localPlayer = Player.m_localPlayer;
             if (localPlayer != null)
             {
-                if (ContainerTabs.HasActiveExternalContainer && ConfigRegistry.EnableContainerTabs.Value)
+                if (ContainerTabs.HasActiveExternalContainer && ConfigRegistry.EnableContainerTabs != null && ConfigRegistry.EnableContainerTabs.Value)
                 {
                     ContainerTabs.Update(__instance, localPlayer);
                 }

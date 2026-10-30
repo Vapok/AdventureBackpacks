@@ -34,12 +34,12 @@ namespace AdventureBackpacks
     [BepInDependency("com.chebgonaz.ChebsNecromancy", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.maxsch.valheim.contentswithin", BepInDependency.DependencyFlags.SoftDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.Patch)]
-    public class AdventureBackpacks : BaseUnityPlugin, IPluginInfo
+    public class AdventureBackpacks : VapokModBase, IPluginInfo
     {
         //Module Constants
         private const string _pluginId = "vapok.mods.adventurebackpacks";
         private const string _displayName = "Adventure Backpacks";
-        private const string _version = "2.4.6";
+        private const string _version = "2.4.7";
 
         //Interface Properties
         public string PluginId => _pluginId;

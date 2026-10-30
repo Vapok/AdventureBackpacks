@@ -71,3 +71,18 @@ If you are an artist or texture creator interested in releasing your own visual 
 - **Source Code**: [AdventureBackpacks.HD Source](https://github.com/Vapok/AdventureBackpacks/tree/main/AdventureBackpacks.HD)
 - **Client Wrapper**: [ABAPI_Client.cs](https://github.com/Vapok/AdventureBackpacks/blob/main/Docs/ABAPI_Client.cs) (drop-in zero-dependency reflection client)
 
+---
+
+## 🤖 AI Disclosure & Transparency Audit
+
+In accordance with mod store's various AI policies, below is the full transparency breakdown for **AdventureBackpacks_HD**:
+
+* **Audit Status**: `AI ASSISTED`
+* **Weighted LLM Score**: `33.0%`
+
+| Category | Evaluated Surface | LLM Score | Status |
+| :--- | :--- | :--- | :--- |
+| **C# Assembly & Logic** | Decompiled C# source (4 files) | `0.0%` | C# codebase consists entirely of standard human-written boilerplate and reflection wrappers for API communication with zero substantive LLM generation. |
+| **Package Manifest & Structure** | Manifest, structure & icon (v1.0.0) | `50.0%` | Manifest.json is clean human authoring, but storefront icon.png is an AI-generated digital illustration composited with overlays and text. |
+| **Documentation & Copywriting** | Package documentation (4047 chars) | `40.0%` | README.md is structured and polished with AI-assisted markdown formatting, feature tables, and clear documentation layout. |
+| **Visual & Audio Media** | In-package Unity & media (14 bundles) | `75.0%` | In-package UnityFS asset bundles contain AI-upscaled 2K PBR textures and normal maps for backpack models. |

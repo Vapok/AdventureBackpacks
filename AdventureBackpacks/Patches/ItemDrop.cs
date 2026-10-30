@@ -120,7 +120,7 @@ public class ItemDropPatches
         [HarmonyPriority(Priority.Low)]
         private static void Postfix(ItemDrop.ItemData item, int qualityLevel, float worldLevel, ref string __result)
         {
-            if (item == null || string.IsNullOrEmpty(__result) || !item.IsBackpack())
+            if (item == null || item.m_shared == null || string.IsNullOrEmpty(__result) || !item.IsBackpack())
                 return;
 
             if (!__result.Contains("$item_armor"))
@@ -169,9 +169,9 @@ public class ItemDropPatches
                 damageMods = seStats.m_mods;
             }
 
-            if ((damageMods == null || damageMods.Count == 0) && item.TryGetBackpackItem(out BackpackItem backpackItem) && backpackItem.BackpackBiome != null)
+            if ((damageMods == null || damageMods.Count == 0) && item.TryGetBackpackItem(out BackpackItem backpackItem) && backpackItem != null && backpackItem.BackpackBiome != null)
             {
-                if (EffectsFactory.EffectList.TryGetValue(BackpackEffect.FrostResistance, out EffectsBase frostEffect) && frostEffect != null)
+                if (EffectsFactory.EffectList != null && EffectsFactory.EffectList.TryGetValue(BackpackEffect.FrostResistance, out EffectsBase frostEffect) && frostEffect != null)
                 {
                     if (frostEffect.EnabledEffect != null && frostEffect.EnabledEffect.Value && frostEffect.BiomeQualityLevels != null)
                     {
@@ -217,7 +217,7 @@ public class ItemDropPatches
                 }
             }
 
-            if (item.m_equipped)
+            if (item.m_equipped && ConfigRegistry.HotKeyOpen != null)
             {
                 bool isBackpackOpen = InventoryGui.instance != null && InventoryGui.instance.m_currentContainer != null && InventoryGui.instance.m_currentContainer.IsBackpackProxy();
                 string openKey = ConfigRegistry.HotKeyOpen.Value.MainKey.ToString();
@@ -227,7 +227,7 @@ public class ItemDropPatches
                     : (isBackpackOpen ? "Close Backpack" : "Open Backpack");
                 string tooltipHint = $"\n[<color=yellow><b>{openKey}</b></color>] {actionText}";
 
-                if (ConfigRegistry.OutwardMode.Value)
+                if (ConfigRegistry.OutwardMode != null && ConfigRegistry.OutwardMode.Value && ConfigRegistry.HotKeyDrop != null)
                 {
                     string dropKey = ConfigRegistry.HotKeyDrop.Value.MainKey.ToString();
                     string quickdropText = Localization.instance != null

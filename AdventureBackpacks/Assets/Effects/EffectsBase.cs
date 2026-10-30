@@ -66,17 +66,17 @@ public abstract class EffectsBase
     
     public virtual bool IsEffectActive(Humanoid human)
     {
-        if (human == null || !(human is Player player) || player == null)
+        if (human == null || !(human is Player player) || player == null || player.IsDead())
             return false;
 
         BackpackComponent equippedBackpack = player.GetEquippedBackpack();
             
-            if (equippedBackpack == null || EnabledEffect == null || !EnabledEffect.Value)
-                return false;
+        if (equippedBackpack == null || EnabledEffect == null || !EnabledEffect.Value)
+            return false;
             
-            ItemDrop.ItemData itemData = equippedBackpack.Item;
-            if (itemData == null || !itemData.TryGetBackpackItem(out BackpackItem backpack) || backpack == null || backpack.BackpackBiome == null)
-                return false;
+        ItemDrop.ItemData itemData = equippedBackpack.Item;
+        if (itemData == null || itemData.m_shared == null || !itemData.TryGetBackpackItem(out BackpackItem backpack) || backpack == null || backpack.BackpackBiome == null)
+            return false;
 
             BackpackBiomes backpackBiome = backpack.BackpackBiome.Value;
 
