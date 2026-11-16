@@ -234,6 +234,22 @@ Looking to integrate your mod with Adventure Backpacks or build compatibility?
 
 ---
 
+## 🤖 AI Disclosure & Transparency Audit
+
+In accordance with mod store's various AI policies, below is the full transparency breakdown for **AdventureBackpacks**:
+
+* **Audit Status**: `AI ASSISTED`
+* **Weighted LLM Score**: `27.0%`
+
+| Category | Evaluated Surface | LLM Score | Status |
+| :--- | :--- | :--- | :--- |
+| **C# Assembly & Logic** | Decompiled C# source (149 files) | `25.0%` | Forensic evaluation reveals that approximately 22.4% of the C# codebase across 6 substantive files contains structured LLM idioms and helper patterns, while core architecture and patching logic remain author-driven. |
+| **Package Manifest & Structure** | Manifest, structure & icon (v2.4.7) | `0.0%` | Storefront package features a human manifest.json and an authentic desktop image-editor composite icon.png containing standard DPI/metadata chunks (CASE A). |
+| **Documentation & Copywriting** | Package documentation (20146 chars) | `85.0%` | Documentation relies on extensive LLM-structured Markdown, including emoji section headers, detailed feature comparison tables, and polished styling. |
+| **Visual & Audio Media** | In-package Unity & media assets | `0.0%` | In-package Unity assets consist entirely of authentic traditional Valheim-style 3D backpack models and standard PBR textures ranging from 8x8 to 128x128 resolution. |
+
+---
+
 ## 🔒 Anonymous Telemetry, Error Reporting & Privacy
 
 Adventure Backpacks includes lightweight, privacy-first telemetry and error reporting to help monitor mod stability, diagnose unhandled bugs, and track active version adoption across game updates.

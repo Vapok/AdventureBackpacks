@@ -1,3 +1,19 @@
+# 2.4.7 - Valheim 1.0.21 Update & Stability Fixes
+* **Bidirectional Model Style Fallback (`VisualPackRegistry.cs`, `BackpackFactory.cs`)**:
+  * Added `VisualPackRegistry.HasNativeBundle`, `HasStyleSupport`, and `ResolveEffectiveStyle` to verify embedded resource and visual pack availability for the requested `ModelStyle` (`Modern` vs `Classic`).
+  * Automatically falls back to `Modern` when a backpack is configured as `Classic` without a classic model (such as `BackpackAshlands` and `BackpackDeepNorth`), and falls back to `Classic` when a `Modern` model does not exist.
+* **Container Tabs & Inventory Grid Compatibility**:
+  * Passed active `Player` instance instead of `null` into `InventoryGrid.UpdateInventory` inside `ContainerTabs.SwitchToBackpack` and `ContainerTabs.SwitchToChest` to prevent `NullReferenceException` in third-party postfixes.
+  * Added defensive null guards for `ZInput.instance`, `ConfigRegistry.EnableContainerTabs`, and container transforms in `ContainerTabs` and `InventoryGuiPatches`.
+* **Tooltip, QuickTransfer & Effect Hardening**:
+  * Hardened `ItemDataGetTooltipPatch.Postfix`, `QuickTransfer.UseItemPatch.Prefix`, `EffectsBase.IsEffectActive`, `Demister.ToggleEffect`, `InventoryGridPatches.UpdateGuiPatch.Prefix`, `Backpacks.PerformYardSale` (`EmtpyInventory`), and `BackpackComponent.Deserialize` against null item/config/grid states, dedicated server null `m_localPlayer` calls, and third-party custom data collisions (`ADVENTUREBACKPACKS-1Z`, `ADVENTUREBACKPACKS-3Q`, `ADVENTUREBACKPACKS-3R`).
+  * Eliminated per-frame native `UnityEngine.Object.name` string allocations in `InventoryGridPatches.UpdateGuiPatch.Prefix` by comparing directly against `InventoryGui.instance.m_containerGrid`.
+  * Added headless/dedicated server guards to `InventoryGuiPatches.ShowBackpack` and `HideBackpack`.
+* **Dependency & Engine Alignment**:
+  * Inherited `VapokModBase` to declare `[BepInIncompatibility("IAmOnTheInternetAndItIsScary.NoPopUpsInMyValheim")]`.
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1021.2.
+  * Aligned game assembly references to Valheim 1.0.21 and BepInEx 5.4.2360.
+
 # 2.4.6 - Crafting Performance & UI Optimization
 * **Hot-Path Crafting Context & Live Backpack Resolution (`Features/CraftingContext.cs`, `Patches/Inventory.cs`)**:
   * Added `ActiveBackpackInventory` and `CanCraftFromBackpack` tracking to `CraftingContext`. On outermost `Enter()` (depth 0 -> 1), resolves the player's equipped backpack `Inventory` reference once and releases it on `Exit()`/`Reset()`.

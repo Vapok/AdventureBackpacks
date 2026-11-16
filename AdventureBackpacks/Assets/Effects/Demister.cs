@@ -20,10 +20,10 @@ public class Demister: EffectsBase
 
     public override void ToggleEffect()
     {
-        if (!Player.m_localPlayer || !ZNetScene.instance)
+        if (Player.m_localPlayer == null || ZNetScene.instance == null || WisplightBiomeLogic == null || WisplightKeyToggle == null)
             return;
 
-        var player = Player.m_localPlayer; 
+        Player player = Player.m_localPlayer; 
         if ((player.m_currentBiome.Equals(Heightmap.Biome.Mistlands) && WisplightBiomeLogic.Value) || !WisplightBiomeLogic.Value)
         {
             if (Player.m_localPlayer.IsBackpackEquipped())
@@ -33,7 +33,7 @@ public class Demister: EffectsBase
                     SetEffectSwitch(true);
                     player.UpdateEquipmentStatusEffects();
                 }
-                if (ZInput.GetKeyDown(WisplightKeyToggle.Value.MainKey))
+                if (ZInput.instance != null && ZInput.GetKeyDown(WisplightKeyToggle.Value.MainKey))
                 {
                     if (IsEffectActive(Player.m_localPlayer))
                     {

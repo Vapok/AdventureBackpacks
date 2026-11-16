@@ -154,7 +154,10 @@ public static class QuickTransfer
                 return true;
 
             _toInventory.MoveItemToThis(_fromInventory, item);
-            _inventoryGuiInstance.m_moveItemEffects.Create(_inventoryGuiInstance.transform.position, Quaternion.identity);
+            if (_inventoryGuiInstance.m_moveItemEffects != null && _inventoryGuiInstance.transform != null)
+            {
+                _inventoryGuiInstance.m_moveItemEffects.Create(_inventoryGuiInstance.transform.position, Quaternion.identity);
+            }
 
             return false;
         }

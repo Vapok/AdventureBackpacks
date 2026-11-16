@@ -1,11 +1,19 @@
-# 2.4.6 - Crafting Performance & UI Optimization
+# 2.4.7 - Valheim 1.0.21 Update & Stability Fixes
+* **Model Style Fallback**: Backpacks now automatically fall back to their Modern or Classic model when the selected Model Style is not available for that bag (fixing Ashlands and Deep North packs failing to load when set to Classic).
+* **Chest & Backpack Tabs**: Improved compatibility with third-party inventory mods when switching between chest and backpack tabs.
+* **Tooltips & Quick Transfer**: Fixed rare errors when hovering over backpacks or right-clicking items between containers.
+* **Documentation**: Added AI transparency audit disclosure to README.
+* **Compatibility**: Updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 2.4.6 - Crafting Performance & UI Optimization
 * **Crafting Station Performance**: Fixed a severe stutter when opening crafting stations with a backpack equipped. Material requirement checks are now hundreds of times faster and no longer cause frame hitching, especially in bases with many nearby storage containers.
 * **Streamlined Station Opening**: Opening a crafting station with a backpack equipped now sets up the crafting panel and backpack container in a single pass instead of reloading the menu twice.
 * **Stability Fixes**: Fixed a crash when unbinding the quick-drop hotkey, fixed an error on dedicated servers when stacking items, and added safeguards for status effect loading and custom translations.
 * **Dependencies**: Updated internal dependencies for stability.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 ### 2.4.5 - Dynamic Portal Restrictions & Inter-Mod Compatibility
 * **Dynamic Portal Restrictions**: Backpacks now dynamically update their teleportability status based on their contents. Carrying untraversable items (such as metals and ores) inside a backpack now marks the backpack as non-teleportable.
