@@ -107,7 +107,13 @@ internal class BackpackFactory : AssetFactory
         }
 
         styleEntry = modelStyle;
-        ModelStyle activeStyle = modelStyle?.Value ?? ModelStyle.Modern;
+        ModelStyle requestedStyle = modelStyle != null ? modelStyle.Value : ModelStyle.Modern;
+        ModelStyle activeStyle = VisualPackRegistry.ResolveEffectiveStyle(baseBundleName, requestedStyle);
+
+        if (activeStyle != requestedStyle)
+        {
+            AdventureBackpacks.Log?.Message($"[AdventureBackpacks] '{englishSection}' has no {requestedStyle} model; falling back to {activeStyle}.");
+        }
 
         string[] availablePacks = VisualPackRegistry.GetAvailablePacksFor(baseBundleName, activeStyle);
         string defaultPack = VisualPackRegistry.GetDefaultPackFor(baseBundleName, activeStyle);

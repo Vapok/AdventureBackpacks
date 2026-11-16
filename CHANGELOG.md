@@ -1,4 +1,5 @@
 # 2.4.7 - Valheim 1.0.21 Update & Stability Fixes
+* **Model Style Fallback**: Backpacks now automatically fall back to their Modern or Classic model when the selected Model Style is not available for that bag (fixing Ashlands and Deep North packs failing to load when set to Classic).
 * **Chest & Backpack Tabs**: Improved compatibility with third-party inventory mods when switching between chest and backpack tabs.
 * **Tooltips & Quick Transfer**: Fixed rare errors when hovering over backpacks or right-clicking items between containers.
 * **Documentation**: Added AI transparency audit disclosure to README.

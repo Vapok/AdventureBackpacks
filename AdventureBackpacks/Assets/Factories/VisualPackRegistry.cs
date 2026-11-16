@@ -15,6 +15,9 @@ internal static class VisualPackRegistry
     private static readonly Dictionary<string, string> _defaultPacks =
         new(StringComparer.OrdinalIgnoreCase);
 
+    private static readonly HashSet<string> _embeddedResources =
+        new(typeof(VisualPackRegistry).Assembly.GetManifestResourceNames(), StringComparer.OrdinalIgnoreCase);
+
     private static string NormalizeId(string backpackId)
     {
         if (string.IsNullOrEmpty(backpackId))
@@ -169,13 +172,69 @@ internal static class VisualPackRegistry
         return modelStyle == ModelStyle.Classic ? $"classic_{cleanId}" : cleanId;
     }
 
+    internal static bool HasNativeBundle(string backpackId, ModelStyle modelStyle)
+    {
+        if (string.IsNullOrEmpty(backpackId))
+        {
+            return false;
+        }
+
+        string bundleName = GetNativeBundleName(backpackId, modelStyle);
+        return _embeddedResources.Contains($"AdventureBackpacks.Assets.Bundles.{bundleName}");
+    }
+
+    internal static bool HasStyleSupport(string backpackId, ModelStyle modelStyle)
+    {
+        if (HasNativeBundle(backpackId, modelStyle))
+        {
+            return true;
+        }
+
+        string key = MakeKey(backpackId, modelStyle);
+        return _bundleOverrides.TryGetValue(key, out Dictionary<string, AssetBundle> packs) && packs.Count > 0;
+    }
+
+    internal static ModelStyle ResolveEffectiveStyle(string backpackId, ModelStyle requestedStyle)
+    {
+        if (HasStyleSupport(backpackId, requestedStyle))
+        {
+            return requestedStyle;
+        }
+
+        ModelStyle fallbackStyle = requestedStyle == ModelStyle.Classic ? ModelStyle.Modern : ModelStyle.Classic;
+        if (HasStyleSupport(backpackId, fallbackStyle))
+        {
+            return fallbackStyle;
+        }
+
+        return requestedStyle;
+    }
+
     internal static string ResolveBundle(string packName, string backpackId, ModelStyle modelStyle)
     {
-        if (TryGetOverride(packName, backpackId, modelStyle, out AssetBundle overrideBundle))
+        ModelStyle effectiveStyle = ResolveEffectiveStyle(backpackId, modelStyle);
+
+        if (TryGetOverride(packName, backpackId, effectiveStyle, out AssetBundle overrideBundle))
         {
             return overrideBundle.name;
         }
 
-        return GetNativeBundleName(backpackId, modelStyle);
+        if (HasNativeBundle(backpackId, effectiveStyle))
+        {
+            return GetNativeBundleName(backpackId, effectiveStyle);
+        }
+
+        ModelStyle fallbackStyle = effectiveStyle == ModelStyle.Classic ? ModelStyle.Modern : ModelStyle.Classic;
+        if (TryGetOverride(packName, backpackId, fallbackStyle, out AssetBundle fallbackOverride))
+        {
+            return fallbackOverride.name;
+        }
+
+        if (HasNativeBundle(backpackId, fallbackStyle))
+        {
+            return GetNativeBundleName(backpackId, fallbackStyle);
+        }
+
+        return GetNativeBundleName(backpackId, effectiveStyle);
     }
 }

@@ -1,4 +1,7 @@
 # 2.4.7 - Valheim 1.0.21 Update & Stability Fixes
+* **Bidirectional Model Style Fallback (`VisualPackRegistry.cs`, `BackpackFactory.cs`)**:
+  * Added `VisualPackRegistry.HasNativeBundle`, `HasStyleSupport`, and `ResolveEffectiveStyle` to verify embedded resource and visual pack availability for the requested `ModelStyle` (`Modern` vs `Classic`).
+  * Automatically falls back to `Modern` when a backpack is configured as `Classic` without a classic model (such as `BackpackAshlands` and `BackpackDeepNorth`), and falls back to `Classic` when a `Modern` model does not exist.
 * **Container Tabs & Inventory Grid Compatibility**:
   * Passed active `Player` instance instead of `null` into `InventoryGrid.UpdateInventory` inside `ContainerTabs.SwitchToBackpack` and `ContainerTabs.SwitchToChest` to prevent `NullReferenceException` in third-party postfixes.
   * Added defensive null guards for `ZInput.instance`, `ConfigRegistry.EnableContainerTabs`, and container transforms in `ContainerTabs` and `InventoryGuiPatches`.
