@@ -42,6 +42,24 @@ public static class InventoryPatches
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
     {
+      // Vanilla only "discovers" items (new item/material messages, recipe unlocks, trophies) in
+      // Player.OnInventoryChanged, i.e. for the player's own inventory. Items that go straight into the
+      // equipped backpack (auto store, overflow, crafting output, moving from a chest) never pass there,
+      // so register them here. AddKnownItem is a cheap HashSet check for already known items and only
+      // rebuilds the recipe list when something is new.
+      private static void LearnBackpackItems(Player player, Inventory backpackInventory)
+      {
+          if (player == null || player.m_isLoading || backpackInventory?.m_inventory == null)
+              return;
+
+          foreach (var item in backpackInventory.m_inventory)
+          {
+              if (item?.m_shared != null)
+                  player.AddKnownItem(item);
+          }
+      }
+        
+        
         static void Postfix(Inventory __instance)
         {
             if (__instance == null || Player.m_localPlayer == null)
@@ -76,6 +94,7 @@ public static class InventoryPatches
                             else
                             {
                                 backpack.Save(__instance);
+                                LearnBackpackItems(player, __instance);
                             }
                             AdventureBackpacks.Log.Debug($"#### After Save BackpackComponent Inventory Count: {bpInventory.m_inventory.Count}");
                         }
