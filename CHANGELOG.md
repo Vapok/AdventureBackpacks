@@ -1,12 +1,16 @@
-# 2.4.7 - Valheim 1.0.21 Update & Stability Fixes
+# 2.4.8 - Backpack Item Discovery & Valheim 1.0.30 Update
+* **Recipe, Trophy & Build Piece Discovery**: Items and trophies that go directly into your equipped backpack (through auto-store, inventory overflow, crafting output, or moving from a chest) now automatically unlock recipes, register trophies, count toward achievements, and unlock new building pieces even if your Hammer is stored inside your backpack.
+* **Compatibility**: Updated dependencies for Valheim 1.0.30.
+
+<details>
+<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 2.4.7 - Valheim 1.0.21 Update & Stability Fixes
 * **Model Style Fallback**: Backpacks now automatically fall back to their Modern or Classic model when the selected Model Style is not available for that bag (fixing Ashlands and Deep North packs failing to load when set to Classic).
 * **Chest & Backpack Tabs**: Improved compatibility with third-party inventory mods when switching between chest and backpack tabs.
 * **Tooltips & Quick Transfer**: Fixed rare errors when hovering over backpacks or right-clicking items between containers.
 * **Documentation**: Added AI transparency audit disclosure to README.
 * **Compatibility**: Updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
-
-<details>
-<summary><b>2.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
 
 
 ### 2.4.6 - Crafting Performance & UI Optimization
