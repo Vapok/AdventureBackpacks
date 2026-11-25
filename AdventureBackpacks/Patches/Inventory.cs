@@ -42,23 +42,114 @@ public static class InventoryPatches
     [HarmonyPatch(typeof(Inventory), nameof(Inventory.Changed))]
     static class InventoryChangedPatch
     {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        private static bool _propagatingInventoryChanged;
+
+        internal static void RegisterBackpackItems(Player player, Inventory backpackInventory)
+        {
+            if (player == null || player.m_isLoading || backpackInventory == null)
+                return;
+
+            List<ItemDrop.ItemData> allItems = backpackInventory.GetAllItems();
+            if (allItems == null)
+                return;
+
+            PlayerProfile playerProfile = Game.instance != null ? Game.instance.GetPlayerProfile() : null;
+            for (int i = 0; i < allItems.Count; i++)
+            {
+                ItemDrop.ItemData item = allItems[i];
+                if (item == null || item.m_shared == null)
+                    continue;
+
+                player.AddKnownItem(item);
+
+                if (playerProfile != null)
+                {
+                    bool isPickedUpTrophy = item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Trophy && item.m_pickedUp;
+                    if (!item.m_pickedUp)
+                    {
+                        item.m_pickedUp = true;
+                        playerProfile.IncrementStat(PlayerStatType.ItemsPickedUp);
+                        playerProfile.IncrementStatItemPickup(item.m_shared.m_name, item.m_stack, item.m_cheated);
+                    }
+                    else if (isPickedUpTrophy && playerProfile.m_playerStats != null)
+                    {
+                        int difficultyIndex = Achievements.GetCurrentAchievementDifficultyIndex();
+                        bool missingInBase = playerProfile.m_playerStats.Length > 1 && playerProfile.m_playerStats[1]?.m_itemPickupStats != null && !playerProfile.m_playerStats[1].m_itemPickupStats.ContainsKey(item.m_shared.m_name);
+                        bool missingInDifficulty = difficultyIndex >= 0 && difficultyIndex < playerProfile.m_playerStats.Length && playerProfile.m_playerStats[difficultyIndex]?.m_itemPickupStats != null && !playerProfile.m_playerStats[difficultyIndex].m_itemPickupStats.ContainsKey(item.m_shared.m_name);
+                        if (missingInBase || missingInDifficulty)
+                        {
+                            playerProfile.IncrementStat(PlayerStatType.ItemsPickedUp);
+                            playerProfile.IncrementStatItemPickup(item.m_shared.m_name, item.m_stack, item.m_cheated);
+                        }
+                    }
+                }
+
+                string itemName = item.m_shared.m_name;
+                if (itemName == "$item_hammer")
+                    player.ShowTutorial("hammer");
+                else if (itemName == "$item_hoe")
+                    player.ShowTutorial("hoe");
+                else if (itemName == "$item_bellfragment")
+                    player.ShowTutorial("bellfragment");
+                else if (itemName == "$item_pickaxe_antler")
+                    player.ShowTutorial("pickaxe");
+                else if (itemName != null && itemName.CustomStartsWith("$item_shield"))
+                    player.ShowTutorial("shield");
+                else if (itemName != null && itemName.CustomStartsWith("$item_mold"))
+                    player.ShowTutorial("mold");
+                else if (itemName == "$item_frozenking_drop")
+                    player.ShowTutorial("sacrificialblood");
+
+                if (itemName == "$item_trophy_eikthyr")
+                    player.ShowTutorial("boss_trophy");
+
+                if (itemName == "$item_wishbone")
+                    player.ShowTutorial("wishbone");
+                else if (itemName == "$item_copperore" || itemName == "$item_tinore")
+                    player.ShowTutorial("ore");
+                else if (item.m_shared.m_food > 0f || item.m_shared.m_foodStamina > 0f)
+                    player.ShowTutorial("food");
+                else if (item.m_shared.m_itemType == ItemDrop.ItemData.ItemType.Trinket)
+                    player.ShowTutorial("trinket");
+            }
+        }
+
+        private static void PropagateOnInventoryChanged(Player player, Inventory backpackInventory)
+        {
+            if (player == null || player.m_isLoading || backpackInventory == null || _propagatingInventoryChanged)
+                return;
+
+            _propagatingInventoryChanged = true;
+            try
+            {
+                RegisterBackpackItems(player, backpackInventory);
+                player.OnInventoryChanged();
+            }
+            finally
+            {
+                _propagatingInventoryChanged = false;
+            }
+        }
+
         static void Postfix(Inventory __instance)
         {
             if (__instance == null || Player.m_localPlayer == null)
                 return;
 
-            var player = Player.m_localPlayer;
-            // If the inventory changed belongs to a backpack...
+            Player player = Player.m_localPlayer;
             if (__instance.IsBackPackInventory())
             {
                 AdventureBackpacks.Log.Debug($"#### Patch Inventory Changed: {__instance.m_name} (HashCode: {__instance.GetHashCode()}, Slots: {__instance.m_inventory.Count})");
                 
                 if (player.IsBackpackEquipped())
                 {
-                    var backpack = player.GetEquippedBackpack();
+                    BackpackComponent backpack = player.GetEquippedBackpack();
                     if (backpack != null)
                     {
-                        var bpInventory = backpack.GetInventory();
+                        Inventory bpInventory = backpack.GetInventory();
                         AdventureBackpacks.Log.Debug($"########################################");
                         AdventureBackpacks.Log.Debug($"####       Inventory.Changed       #####");
                         AdventureBackpacks.Log.Debug($"Changed Inventory: {__instance.m_name} (HashCode: {__instance.GetHashCode()})");
@@ -76,23 +167,28 @@ public static class InventoryPatches
                             else
                             {
                                 backpack.Save(__instance);
+                                PropagateOnInventoryChanged(player, __instance);
                             }
                             AdventureBackpacks.Log.Debug($"#### After Save BackpackComponent Inventory Count: {bpInventory.m_inventory.Count}");
                         }
                         else
                         {
-                            var backpackContainer = player.GetBackpackContainerProxy(false);
+                            Container backpackContainer = player.GetBackpackContainerProxy(false);
                             if (backpackContainer != null && backpackContainer.m_inventory == __instance)
                             {
                                 backpack.SetInventory(__instance);
+                                if (!backpack.IsLoadingInventory)
+                                {
+                                    PropagateOnInventoryChanged(player, __instance);
+                                }
                             }
                             else
                             {
-                                var allItems = player.GetInventory()?.GetAllItems();
-                                var matchingBackpack = allItems?.FirstOrDefault(i => i.IsBackpack() && i.Data().Get<BackpackComponent>()?.GetInventory() == __instance);
+                                List<ItemDrop.ItemData> allItems = player.GetInventory()?.GetAllItems();
+                                ItemDrop.ItemData matchingBackpack = allItems?.FirstOrDefault(i => i.IsBackpack() && i.Data().Get<BackpackComponent>()?.GetInventory() == __instance);
                                 if (matchingBackpack != null)
                                 {
-                                    var comp = matchingBackpack.Data().Get<BackpackComponent>();
+                                    BackpackComponent comp = matchingBackpack.Data().Get<BackpackComponent>();
                                     if (comp != null && !comp.IsLoadingInventory)
                                         comp.Save(__instance);
                                 }
@@ -103,6 +199,36 @@ public static class InventoryPatches
                     {
                         AdventureBackpacks.Log.Warning($"#### Player.IsBackpackEquipped() was true, but GetEquippedBackpack() returned null!");
                     }
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(Inventory), nameof(Inventory.GetAllPieceTables))]
+    static class GetAllPieceTablesPatch
+    {
+        [HarmonyPrepare]
+        private static bool Prepare() => !PlayerExtensions.IsDedicatedOrHeadless();
+
+        static void Postfix(Inventory __instance, List<PieceTable> tables)
+        {
+            if (__instance == null || tables == null || Player.m_localPlayer == null || __instance != Player.m_localPlayer.GetInventory())
+                return;
+
+            if (!Player.m_localPlayer.IsBackpackEquipped())
+                return;
+
+            BackpackComponent backpack = Player.m_localPlayer.GetEquippedBackpack();
+            Inventory bpInventory = backpack != null ? backpack.GetInventory() : null;
+            if (bpInventory == null || bpInventory == __instance || bpInventory.m_inventory == null)
+                return;
+
+            for (int i = 0; i < bpInventory.m_inventory.Count; i++)
+            {
+                ItemDrop.ItemData item = bpInventory.m_inventory[i];
+                if (item != null && item.m_shared != null && item.m_shared.m_buildPieces != null && !tables.Contains(item.m_shared.m_buildPieces))
+                {
+                    tables.Add(item.m_shared.m_buildPieces);
                 }
             }
         }
