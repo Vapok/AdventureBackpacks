@@ -1,3 +1,13 @@
+# 2.4.8 - Backpack Item Discovery & Valheim 1.0.30 Update
+* **Backpack Item Discovery & `Player.OnInventoryChanged` Propagation (`Patches/Inventory.cs`)**:
+  * In `InventoryChangedPatch`, added `RegisterBackpackItems` and `PropagateOnInventoryChanged` when saving the equipped backpack inventory (`!player.m_isLoading`).
+  * Registers all backpack items via `player.AddKnownItem(item)`, records `item.m_pickedUp` and Valheim 1.0 `PlayerStatType.ItemsPickedUp` / `IncrementStatItemPickup` achievement metrics, triggers first-time Hugin tutorials (`player.ShowTutorial`), and invokes `player.OnInventoryChanged()` with re-entrancy protection (resolves [#212](https://github.com/Vapok/AdventureBackpacks/issues/212), [#213](https://github.com/Vapok/AdventureBackpacks/pull/213)).
+  * Added `GetAllPieceTablesPatch.Postfix` on `Inventory.GetAllPieceTables` to include `PieceTable` definitions from tools (such as the Hammer, Hoe, or Cultivator) stored inside the equipped backpack when `Player.UpdateKnownRecipesList()` evaluates build piece unlocks.
+  * Added `[HarmonyPrepare]` headless guards to `InventoryChangedPatch` and `GetAllPieceTablesPatch`.
+* **Dependency & Engine Alignment**:
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1030.1.
+  * Aligned game assembly references to Valheim 1.0.30.
+
 # 2.4.7 - Valheim 1.0.21 Update & Stability Fixes
 * **Bidirectional Model Style Fallback (`VisualPackRegistry.cs`, `BackpackFactory.cs`)**:
   * Added `VisualPackRegistry.HasNativeBundle`, `HasStyleSupport`, and `ResolveEffectiveStyle` to verify embedded resource and visual pack availability for the requested `ModelStyle` (`Modern` vs `Classic`).
